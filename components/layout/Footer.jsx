@@ -20,9 +20,11 @@ import {
   Search,
   ArrowUp,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  Laptop
 } from 'lucide-react';
-import { unitsData, syllabusMeta } from '@/data/syllabusData';
+import { unitsData } from '@/data/syllabusData';
+import { cccChaptersData } from '@/data/cccSyllabusData';
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -32,17 +34,15 @@ export default function Footer() {
   };
 
   const highYieldTopics = [
-    { title: 'HTML DOM Tree', href: '/units/unit-3/topics/head-section-and-elements' },
-    { title: 'CSS Box Model', href: '/units/unit-4/topics/introduction-to-css' },
-    { title: 'HTML5 Semantic Tags', href: '/units/unit-3/topics/html5-new-semantic-elements' },
-    { title: 'W3.CSS 12-Col Grid', href: '/units/unit-5/topics/website-development-using-w3-css' },
-    { title: 'Client-Server Model', href: '/units/unit-1/topics/working-of-websites' },
-    { title: 'JavaScript Event Flow', href: '/units/unit-6/topics/client-side-scripting-intro' },
-    { title: 'AngularJS Directives', href: '/units/unit-6/topics/angular-js-directives-ng-app-model' },
-    { title: 'Web Publishing & FTP', href: '/units/unit-8/topics/overview-of-web-publishing' },
-    { title: '17 Concept Differences', href: '/differences' },
-    { title: '100 Golden Points', href: '/one-liners' },
-    { title: 'Syntax Cheat Sheets', href: '/cheat-sheets' },
+    { title: 'CCC Ch 1: Computer & Hardware', href: '/ccc/chapters/chapter-1' },
+    { title: 'CCC Ch 3: LibreOffice Writer', href: '/ccc/chapters/chapter-3' },
+    { title: 'CCC Ch 4: LibreOffice Calc', href: '/ccc/chapters/chapter-4' },
+    { title: 'CCC Ch 5: LibreOffice Impress', href: '/ccc/chapters/chapter-5' },
+    { title: 'CCC Ch 8: UPI & Digital Banking', href: '/ccc/chapters/chapter-8' },
+    { title: 'CCC 100-Mark Mock Test', href: '/ccc/mock-test' },
+    { title: 'O-Level HTML DOM Tree', href: '/units/unit-3/topics/head-section-and-elements' },
+    { title: 'O-Level CSS Box Model', href: '/units/unit-4/topics/introduction-to-css' },
+    { title: 'O-Level JavaScript Events', href: '/units/unit-6/topics/client-side-scripting-intro' }
   ];
 
   return (
@@ -65,162 +65,140 @@ export default function Footer() {
               </div>
               <div>
                 <span className="font-black text-base tracking-tight text-slate-900 dark:text-white block">
-                  O-Level Learning Studio
+                  NIELIT Learning Studio
                 </span>
                 <span className="text-[11px] font-mono text-brand-600 dark:text-brand-400 font-bold block">
-                  NIELIT MODULE M2-R5.1
+                  O-LEVEL (M2-R5.1) &amp; CCC (REVISION 3)
                 </span>
               </div>
             </div>
 
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-sm">
-              The premier bilingual interactive learning platform for NIELIT O-Level IT 
-              <strong> Module M2-R5.1 (Web Designing &amp; Publishing)</strong>. Complete 18-part notes, digital touchscreen whiteboard, live code sandbox, and 200 MCQ exam questions.
+              The premier bilingual interactive learning platform for 
+              <strong> NIELIT O-Level (Web Designing)</strong> &amp; 
+              <strong> CCC (Course on Computer Concepts)</strong>. Complete 18-part notes, digital whiteboard, live sandbox, and exam simulators.
             </p>
 
-            {/* Accreditation Specification Pills */}
+            {/* Dual Course Badges */}
             <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400">
-              <span className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-lg shadow-2xs font-mono text-[11px]">
+              <Link href="/" className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-lg shadow-2xs font-mono text-[11px] hover:text-brand-600">
                 <GraduationCap className="w-3.5 h-3.5 text-brand-600" />
-                120h Curriculum
-              </span>
-              <span className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-lg shadow-2xs font-mono text-[11px]">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                100 Marks Blueprint
-              </span>
-              <span className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-lg shadow-2xs font-mono text-[11px]">
-                <Award className="w-3.5 h-3.5 text-amber-500" />
-                2026 Edition
-              </span>
+                O-Level M2-R5.1 (120h)
+              </Link>
+              <Link href="/ccc" className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-lg shadow-2xs font-mono text-[11px] hover:text-blue-600">
+                <Laptop className="w-3.5 h-3.5 text-blue-600" />
+                CCC Course (80h)
+              </Link>
             </div>
           </div>
 
-          {/* Syllabus Units 01 - 04 (Span 2) */}
-          <div className="lg:col-span-2 space-y-3">
+          {/* CCC Modules 01 - 09 (Span 3) */}
+          <div className="lg:col-span-3 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5 text-brand-600" />
-              <span>Units 01 — 04</span>
+              <Laptop className="w-3.5 h-3.5 text-blue-600" />
+              <span>CCC Modules (80H)</span>
             </h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-              {unitsData.slice(0, 4).map((unit) => (
-                <li key={unit.slug}>
-                  <Link 
-                    href={`/units/${unit.slug}`} 
-                    className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors block py-0.5"
-                  >
-                    <span className="font-mono text-[11px] text-slate-400 mr-1">U{unit.unitNumber}</span>
-                    {unit.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Syllabus Units 05 - 08 (Span 2) */}
-          <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
-              <span>Units 05 — 08</span>
-            </h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-              {unitsData.slice(4, 8).map((unit) => (
-                <li key={unit.slug}>
-                  <Link 
-                    href={`/units/${unit.slug}`} 
-                    className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors block py-0.5"
-                  >
-                    <span className="font-mono text-[11px] text-slate-400 mr-1">U{unit.unitNumber}</span>
-                    {unit.title}
-                  </Link>
-                </li>
-              ))}
+            <ul className="space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
+              <li>
+                <Link href="/ccc/chapters/chapter-1" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors block">
+                  Ch 1: Intro to Computer &amp; Hardware
+                </Link>
+              </li>
+              <li>
+                <Link href="/ccc/chapters/chapter-2" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors block">
+                  Ch 2: Operating System (Linux/Windows)
+                </Link>
+              </li>
+              <li>
+                <Link href="/ccc/chapters/chapter-3" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors block">
+                  Ch 3: LibreOffice Writer (.odt)
+                </Link>
+              </li>
+              <li>
+                <Link href="/ccc/chapters/chapter-4" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors block">
+                  Ch 4: LibreOffice Calc (.ods)
+                </Link>
+              </li>
+              <li>
+                <Link href="/ccc/chapters/chapter-5" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors block">
+                  Ch 5: LibreOffice Impress (.odp)
+                </Link>
+              </li>
+              <li>
+                <Link href="/ccc/chapters/chapter-8" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors block">
+                  Ch 8: UPI, AEPS &amp; Net Banking
+                </Link>
+              </li>
               <li className="pt-1">
-                <Link 
-                  href="/syllabus" 
-                  className="font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1"
-                >
-                  <span>Marks Blueprint (100M)</span>
+                <Link href="/ccc/syllabus" className="font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">
+                  <span>80H CCC Blueprint</span>
                   <ExternalLink className="w-3 h-3" />
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Interactive Tools & Practice (Span 2) */}
+          {/* O-Level M2-R5.1 Units (Span 2) */}
           <div className="lg:col-span-2 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono flex items-center gap-1.5">
-              <Terminal className="w-3.5 h-3.5 text-sky-600" />
-              <span>Practice &amp; Labs</span>
+              <BookOpen className="w-3.5 h-3.5 text-brand-600" />
+              <span>O-Level Units</span>
             </h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-              <li>
-                <Link href="/classroom" className="hover:text-amber-600 dark:hover:text-amber-400 transition-colors flex items-center gap-1.5">
-                  <Presentation className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                  <span>Digital Board</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/playground" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors flex items-center gap-1.5">
-                  <Terminal className="w-3.5 h-3.5 text-sky-500 shrink-0" />
-                  <span>Code Playground</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/mcqs" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1.5">
-                  <HelpCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                  <span>200 MCQ Bank</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/mock-test" className="hover:text-rose-600 dark:hover:text-rose-400 transition-colors flex items-center gap-1.5">
-                  <Award className="w-3.5 h-3.5 text-rose-500 shrink-0" />
-                  <span>100-Mark Mock Test</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/practical" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors flex items-center gap-1.5">
-                  <FolderGit2 className="w-3.5 h-3.5 text-brand-500 shrink-0" />
-                  <span>Practical Workbook</span>
+            <ul className="space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
+              {unitsData.slice(0, 5).map((unit) => (
+                <li key={unit.slug}>
+                  <Link 
+                    href={`/units/${unit.slug}`} 
+                    className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors block"
+                  >
+                    U0{unit.unitNumber}: {unit.title}
+                  </Link>
+                </li>
+              ))}
+              <li className="pt-1">
+                <Link href="/syllabus" className="font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1">
+                  <span>100M O-Level Blueprint</span>
+                  <ExternalLink className="w-3 h-3" />
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Quick Revision & Utilities (Span 2) */}
-          <div className="lg:col-span-2 space-y-3">
+          {/* Practice, MCQs & Mock Simulators (Span 3) */}
+          <div className="lg:col-span-3 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-purple-600" />
-              <span>Revision Vault</span>
+              <Award className="w-3.5 h-3.5 text-amber-500" />
+              <span>Exams &amp; Simulators</span>
             </h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+            <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-400">
               <li>
-                <Link href="/one-liners" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors flex items-center gap-1.5">
-                  <FileText className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                  <span>100 Golden Points</span>
+                <Link href="/ccc/mock-test" className="hover:text-amber-600 dark:hover:text-amber-400 transition-colors flex items-center gap-1.5">
+                  <Award className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                  <span>CCC 100-Mark Mock Exam</span>
                 </Link>
               </li>
               <li>
-                <Link href="/differences" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors flex items-center gap-1.5">
-                  <Columns className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
-                  <span>17 Differences</span>
+                <Link href="/ccc/mcqs" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1.5">
+                  <HelpCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                  <span>CCC 200+ Chapter MCQs</span>
                 </Link>
               </li>
               <li>
-                <Link href="/cheat-sheets" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors flex items-center gap-1.5">
+                <Link href="/ccc/cheat-sheets" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-1.5">
                   <Code2 className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
-                  <span>Syntax Cheat Sheets</span>
+                  <span>LibreOffice Shortcuts</span>
                 </Link>
               </li>
               <li>
-                <Link href="/one-shot" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors flex items-center gap-1.5">
-                  <Flame className="w-3.5 h-3.5 text-rose-500 shrink-0" />
-                  <span>One-Shot Revision</span>
+                <Link href="/classroom" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors flex items-center gap-1.5">
+                  <Presentation className="w-3.5 h-3.5 text-brand-500 shrink-0" />
+                  <span>Digital Board Classroom</span>
                 </Link>
               </li>
               <li>
-                <Link href="/saved" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors flex items-center gap-1.5">
-                  <BookMarked className="w-3.5 h-3.5 text-purple-500 shrink-0" />
-                  <span>My Saved Notes</span>
+                <Link href="/playground" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors flex items-center gap-1.5">
+                  <Terminal className="w-3.5 h-3.5 text-sky-500 shrink-0" />
+                  <span>Live Code Sandbox</span>
                 </Link>
               </li>
             </ul>
@@ -239,7 +217,7 @@ export default function Footer() {
               <Link
                 key={topic.title}
                 href={topic.href}
-                className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[11px] font-medium text-slate-600 dark:text-slate-400 hover:text-brand-600 hover:border-brand-300 dark:hover:border-brand-700 transition-colors"
+                className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[11px] font-medium text-slate-600 dark:text-slate-400 hover:text-blue-600 hover:border-blue-300 dark:hover:border-blue-700 transition-colors"
               >
                 {topic.title} →
               </Link>
@@ -251,10 +229,10 @@ export default function Footer() {
         <div className="border-t border-slate-200 dark:border-slate-800 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 dark:text-slate-400 gap-4">
           <div className="space-y-1 text-center sm:text-left">
             <p className="font-semibold text-slate-700 dark:text-slate-300">
-              © 2026 NIELIT O-Level (IT) Curriculum • M2-R5.1 Web Designing &amp; Publishing
+              © 2026 NIELIT Standard Learning Portal • O-Level (M2-R5.1) &amp; CCC (Course on Computer Concepts)
             </p>
             <p className="text-[11px] text-slate-400 dark:text-slate-500">
-              National Institute of Electronics &amp; Information Technology (NIELIT) Standard Open Educational Portal.
+              National Institute of Electronics &amp; Information Technology (NIELIT) Open Educational Platform.
             </p>
           </div>
 
