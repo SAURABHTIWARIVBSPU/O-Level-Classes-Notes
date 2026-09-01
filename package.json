@@ -1,0 +1,25 @@
+{
+  "name": "o-level-web-designing-publishing",
+  "version": "1.0.0",
+  "description": "NIELIT O Level (IT) M2-R5.1 Web Designing & Publishing Master Educational Platform",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.9.3",
+    "lucide-react": "^0.441.0",
+    "marked": "^18.0.11",
+    "next": "^14.2.15",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.1"
+  }
+}
