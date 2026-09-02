@@ -1,12 +1,12 @@
 // Aggregated Topics Data for all 8 Units
-import { unit1Topics } from './topics/unit1Topics';
-import { unit2Topics } from './topics/unit2Topics';
-import { unit3Topics } from './topics/unit3Topics';
-import { unit4Topics } from './topics/unit4Topics';
-import { unit5Topics } from './topics/unit5Topics';
-import { unit6Topics } from './topics/unit6Topics';
-import { unit7Topics } from './topics/unit7Topics';
-import { unit8Topics } from './topics/unit8Topics';
+import { unit1Topics } from './topics/unit1Topics.js';
+import { unit2Topics } from './topics/unit2Topics.js';
+import { unit3Topics } from './topics/unit3Topics.js';
+import { unit4Topics } from './topics/unit4Topics.js';
+import { unit5Topics } from './topics/unit5Topics.js';
+import { unit6Topics } from './topics/unit6Topics.js';
+import { unit7Topics } from './topics/unit7Topics.js';
+import { unit8Topics } from './topics/unit8Topics.js';
 
 export const allTopics = [
   ...unit1Topics,

@@ -21,7 +21,7 @@ import { cccTopicsData } from '@/data/cccTopicsData';
 import { useProgress } from '@/lib/progressContext';
 
 export default function CCCChapterPage({ params }) {
-  const { chapterSlug } = params;
+  const chapterSlug = decodeURIComponent(params?.chapterSlug || '');
   const chapter = cccChaptersData.find((c) => c.slug === chapterSlug);
 
   if (!chapter) {

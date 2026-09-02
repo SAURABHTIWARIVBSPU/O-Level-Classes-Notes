@@ -1,12 +1,12 @@
-import { chapter1Topics } from './cccTopics/chapter1Topics';
-import { chapter2Topics } from './cccTopics/chapter2Topics';
-import { chapter3Topics } from './cccTopics/chapter3Topics';
-import { chapter4Topics } from './cccTopics/chapter4Topics';
-import { chapter5Topics } from './cccTopics/chapter5Topics';
-import { chapter6Topics } from './cccTopics/chapter6Topics';
-import { chapter7Topics } from './cccTopics/chapter7Topics';
-import { chapter8Topics } from './cccTopics/chapter8Topics';
-import { chapter9Topics } from './cccTopics/chapter9Topics';
+import { chapter1Topics } from './cccTopics/chapter1Topics.js';
+import { chapter2Topics } from './cccTopics/chapter2Topics.js';
+import { chapter3Topics } from './cccTopics/chapter3Topics.js';
+import { chapter4Topics } from './cccTopics/chapter4Topics.js';
+import { chapter5Topics } from './cccTopics/chapter5Topics.js';
+import { chapter6Topics } from './cccTopics/chapter6Topics.js';
+import { chapter7Topics } from './cccTopics/chapter7Topics.js';
+import { chapter8Topics } from './cccTopics/chapter8Topics.js';
+import { chapter9Topics } from './cccTopics/chapter9Topics.js';
 
 export const cccTopicsData = {
   "chapter-1": chapter1Topics,

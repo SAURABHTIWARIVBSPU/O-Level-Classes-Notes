@@ -28,7 +28,8 @@ import MicroQuiz from '@/components/learning/MicroQuiz';
 import { useProgress } from '@/lib/progressContext';
 
 export default function CCCTopicPage({ params }) {
-  const { chapterSlug, topicSlug } = params;
+  const chapterSlug = decodeURIComponent(params?.chapterSlug || '');
+  const topicSlug = decodeURIComponent(params?.topicSlug || '');
   const chapter = cccChaptersData.find((c) => c.slug === chapterSlug);
 
   if (!chapter) {
@@ -184,7 +185,7 @@ export default function CCCTopicPage({ params }) {
             {topic.importantPoints?.map((pt, i) => (
               <li key={i} className="flex items-start gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
-                <span>{pt}</span>
+                <span>{typeof pt === 'object' && pt !== null ? (pt.text || pt.point || pt.title || pt.desc || '') : pt}</span>
               </li>
             ))}
           </ul>
@@ -200,7 +201,7 @@ export default function CCCTopicPage({ params }) {
             {topic.commonMistakes?.map((m, i) => (
               <li key={i} className="flex items-start gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0 mt-1.5" />
-                <span>{m}</span>
+                <span>{typeof m === 'object' && m !== null ? (m.text || m.mistake || m.title || m.desc || '') : m}</span>
               </li>
             ))}
           </ul>

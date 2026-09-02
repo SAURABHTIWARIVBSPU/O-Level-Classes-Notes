@@ -1,618 +1,639 @@
-// CCC Chapter 4: Spreadsheet (LibreOffice Calc)
+// CCC Chapter 4: Spreadsheet (LibreOffice Calc) - Complete Textbook Content
 export const chapter4Topics = [
   {
-    chapterNumber: 4,
-    topicNumber: 1,
-    slug: "elements-of-spreadsheet-libreoffice-calc",
-    title: "Elements of Spreadsheet & LibreOffice Calc Interface",
-    hindiTitle: "स्प्रेडशीट के मूल तत्व एवं कैल्क इंटरफ़ेस",
-    definitionEnglish: "LibreOffice Calc is an open-source spreadsheet application used for data analysis, calculations, mathematical modeling, and charting organized in a grid of rows and columns.",
-    definitionHindi: "लिब्रेऑफिस कैल्क (LibreOffice Calc) एक ओपन-सोर्स स्प्रेडशीट प्रोग्राम है जिसका उपयोग पंक्तियों और स्तंभों के ग्रिड में डेटा विश्लेषण, गणना, गणितीय मॉडलिंग और चार्ट बनाने के लिए किया जाता है।",
-    simpleWords: "संख्याओं का हिसाब-किताब रखने, बिल बनाने, गणितीय फॉर्मूले लगाने और ग्राफ बनाने वाली डिजिटल बहीखाता (Spreadsheet)।",
-    examImportance: "Extreme (Calc rows/columns count, zoom levels, Name Box, and Formula Bar in CCC)",
-    detailedExplanation: `### 1. लिब्रेऑफिस कैल्क शीट की क्षमता एवं संरचना:
-- **कुल पंक्तियां (Total Rows)**: **10,48,576** (\`2^20\` - संख्या 1 से 1048576 तक)
-- **कुल स्तंभ (Total Columns)**: **1,024** (स्तंभ \`A\` से लेकर \`AMJ\` तक) *(नोट: नवीनतम संस्करणों में 16,384 अर्थात \`XFD\` तक भी समर्थित है, लेकिन CCC में मानक उत्तर **1024 / AMJ** ही माना जाता है)*।
-- **कुल सेल्स (Total Cells)**: **1,07,37,41,824** (Rows × Columns).
-- **डिफॉल्ट शीट संख्या (Default Sheets)**: **1 (Sheet1)**.
-- **अधिकतम शीट्स (Maximum Sheets)**: **10,000 शीट्स**.
-
-### 2. कैल्क इंटरफ़ेस के मुख्य भाग:
-- **Name Box (नेम बॉक्स)**: बाईं ओर स्थित बॉक्स जो वर्तमान सक्रिय सेल का पता (जैसे **\`A1\`**) प्रदर्शित करता है।
-- **Formula Bar / Input Line (फॉर्मूला बार)**: सक्रिय सेल की सामग्री या फॉर्मूला दिखाता है (शॉर्टकट: **\`Ctrl + F2\`** से Function Wizard खुलता है).
-- **Sheet Tabs (शीट टैब्स)**: नीचे बाईं ओर शीट्स के बीच स्विच करने का स्थान (\`+ Button\` से नई शीट जुड़ती है).
-- **Status Bar (स्टेटस बार)**: चयनित सेल्स का औसत, योग (SUM), ज़ूम स्लाइडर प्रदर्शित करता है।
-
-### 3. कैल्क के ज़ूम प्रतिशत:
-- **न्यूनतम ज़ूम (Minimum Zoom)**: **20%**
-- **अधिकतम ज़ूम (Maximum Zoom)**: **400%** (Writer में 600% और Impress में 3000% होता है!)
-- **डिफॉल्ट फाइल एक्सटेंशन**: **\`.ods\`** (OpenDocument Spreadsheet).`,
-    realWorldAnalogy: "कैल्क एक विशाल ग्राफ पेपर या मुनीम जी का डिजिटल खाता है जहां हर खाने का एक निश्चित पता (Address) होता है।",
-    importantPoints: [
-      "LibreOffice Calc में कुल रो **10,48,576** और कुल कॉलम **1,024 (AMJ)** होते हैं।",
-      "Calc का न्यूनतम ज़ूम **20%** और अधिकतम ज़ूम **400%** होता है।",
-      "वर्तमान सक्रिय सेल का एड्रेस **Name Box** में दिखाई देता है।",
-      "पहला सेल **A1** और अंतिम सेल **AMJ1048576** होता है।",
-      "Calc का डिफ़ॉल्ट फाइल एक्सटेंशन **.ods** होता है।"
+    "chapterNumber": 4,
+    "topicNumber": 1,
+    "slug": "elements-of-spreadsheet-libreoffice-calc",
+    "title": "Elements of Spreadsheet & LibreOffice Calc Interface",
+    "hindiTitle": "स्प्रेडशीट के मूल तत्व एवं कैल्क इंटरफ़ेस",
+    "definitionEnglish": "LibreOffice Calc is an open-source, multi-dimensional spreadsheet application developed by The Document Foundation that organizes numerical and textual data into a vast grid matrix of rows and columns to perform calculations, data analysis, and chart visualization.",
+    "definitionHindi": "लिब्रेऑफिस कैल्क (LibreOffice Calc) एक ओपन-सोर्स स्प्रेडशीट सॉफ्टवेयर है जो डेटा को पंक्तियों (Rows) और स्तंभों (Columns) के मैट्रिक्स ग्रिड में व्यवस्थित करके गणितीय गणना, डेटा विश्लेषण और चार्ट निर्माण की सुविधा देता है।",
+    "simpleWords": "लिब्रेऑफिस कैल्क एमएस एक्सेल जैसा स्प्रेडशीट सॉफ्टवेयर है जिसमें कुल 10,48,576 रो और 1024 कॉलम (A से AMJ) होते हैं।",
+    "examImportance": "Very High (5-6 direct questions on total rows, total columns A-AMJ, zoom limits 20%-400%, and default file extension .ods in every CCC exam)",
+    "detailedExplanation": "### 1. LibreOffice Calc Sheet Geometry and System Defaults\nLibreOffice Calc operates with strict structural boundaries essential for the CCC examination:\n- **Default Document Name:** **`Untitled 1`**\n- **Default File Extension:** **`.ods` (OpenDocument Spreadsheet)**\n- **Total Rows per Sheet:** **`1,048,576`** (`2^20` — numbered numerically from `1` to `1048576`)\n- **Total Columns per Sheet:** **`1,024`** (`2^10` — labeled alphabetically from **`A`** to **`AMJ`**)\n- **Total Cells per Sheet:** **`1,073,741,824`** (`1048576 × 1024`)\n- **First Cell Address:** **`A1`** | **Last Cell Address:** **`AMJ1048576`**\n- **Default Number of Sheets in a New Workbook:** **`1 (Sheet1)`**\n- **Maximum Sheets Allowed per Workbook:** **`10,000 Sheets`**\n- **Zoom Range Limits:** Minimum Zoom = **20%**, Maximum Zoom = **400%** (Note: Writer max is 600%, Calc max is 400%, Impress max is 3000%).\n\n### 2. Calc Interface Anatomy\n1. **Name Box:** Located on the left side of the formula strip; displays the **cell address** of the currently active cursor (e.g., `C5`).\n2. **Function Wizard Button (`Ctrl + F2` / `fx`):** Opens the interactive dialog to browse all 300+ built-in financial, statistical, and mathematical functions.\n3. **Formula Bar (Input Line):** Displays the raw formula or underlying text/numbers contained within the active cell.\n4. **Column Headers (A, B, C... AMJ):** Horizontal gray header strip across the top.\n5. **Row Headers (1, 2, 3... 1048576):** Vertical gray header strip down the left margin.\n6. **Sheet Tabs Strip:** Located at the bottom left; allows switching between sheets, renaming sheets (Right Click ➔ Rename Sheet), or adding sheets using the **`+`** button.",
+    "realWorldAnalogy": "A spreadsheet is like a giant digital graph notebook with over a million horizontal lines and a thousand vertical columns where numbers automatically calculate themselves.",
+    "importantPoints": [
+      "Total Rows in LibreOffice Calc = 1,048,576.",
+      "Total Columns in LibreOffice Calc = 1,024 (Last Column Name is AMJ).",
+      "Total Cells in one Calc sheet = 1,073,741,824.",
+      "Default file extension of LibreOffice Calc is .ods (OpenDocument Spreadsheet).",
+      "Minimum zoom in Calc is 20%, maximum zoom is 400%.",
+      "A new Calc workbook contains 1 sheet by default (Maximum allowed is 10,000 sheets).",
+      "The Name Box displays the active cell address."
     ],
-    commonMistakes: [
-      "Calc का अधिकतम ज़ूम 500% या 600% समझना (Calc का अधिकतम ज़ूम **400%** होता है)।",
-      "अंतिम कॉलम का नाम XFD समझना (पुरानी/मानक CCC गाइड में **AMJ** पूछा जाता है)।"
+    "commonMistakes": [
+      "Assuming the last column in Calc is XFD (XFD is in MS Excel; Calc's last column is AMJ).",
+      "Thinking the maximum zoom in Calc is 600% (600% is in Writer; Calc max zoom is 400%)."
     ],
-    examTips: [
-      "Calc Rows = **10,48,576** | Columns = **1,024 (AMJ)**।",
-      "Calc Zoom Range = **20% to 400%**।",
-      "Active Cell Address shows in = **Name Box**।"
+    "examTips": [
+      "Guaranteed CCC Question: 'What is the name of the last column in LibreOffice Calc?' ➔ AMJ.",
+      "Guaranteed CCC Question: 'How many rows are there in LibreOffice Calc?' ➔ 1,048,576.",
+      "Guaranteed CCC Question: 'What is the default number of sheets in LibreOffice Calc?' ➔ 1 Sheet."
     ],
-    quickRevision: "Calc: Rows (1048576), Cols (1024 - AMJ), Zoom (20%-400%), Ext (.ods), Active Cell Address -> Name Box, Max Sheets (10,000).",
-    practiceAssignment: "Calc खोलें, Name Box में 'AMJ1048576' लिखकर Enter दबाएं और सीधे अंतिम सेल पर जाएं।",
-    microQuiz: [
+    "quickRevision": "Calc: Ext=.ods, Rows=1,048,576, Columns=1,024 (A to AMJ), Cells=1,073,741,824, First=A1, Last=AMJ1048576, Default sheets=1 (max 10,000), Zoom=20% to 400%, Name Box=Active Cell.",
+    "practiceAssignment": "Launch Calc, press Ctrl + Down Arrow to reach the last row (1048576), press Ctrl + Right Arrow to reach the last column (AMJ), and press Ctrl + Home to return to A1.",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस कैल्क में कुल कॉलमों (Columns) की संख्या कितनी होती है और अंतिम कॉलम का नाम क्या है?",
-        options: [
-          { id: "A", text: "256, IV" },
-          { id: "B", text: "1024, AMJ" },
-          { id: "C", text: "16384, XFD" },
-          { id: "D", text: "65536, AZ" }
+        "question": "What is the label/name of the LAST column in LibreOffice Calc?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Z"
+          },
+          {
+            "id": "B",
+            "text": "AZ"
+          },
+          {
+            "id": "C",
+            "text": "XFD"
+          },
+          {
+            "id": "D",
+            "text": "AMJ"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "LibreOffice Calc में कुल 1,024 कॉलम होते हैं और अंतिम कॉलम का हेडर 'AMJ' होता है।"
+        "correctAnswer": "D",
+        "explanation": "LibreOffice Calc has 1,024 columns labeled alphabetically from A to AMJ (Column 1024)."
       },
       {
-        question: "लिब्रेऑफिस कैल्क में अधिकतम ज़ूम (Maximum Zoom) प्रतिशत कितना होता है?",
-        options: [
-          { id: "A", text: "300%" },
-          { id: "B", text: "400%" },
-          { id: "C", text: "500%" },
-          { id: "D", text: "600%" }
+        "question": "What is the total number of ROWS present in a single sheet of LibreOffice Calc?",
+        "options": [
+          {
+            "id": "A",
+            "text": "65,536"
+          },
+          {
+            "id": "B",
+            "text": "1,048,576"
+          },
+          {
+            "id": "C",
+            "text": "10,000"
+          },
+          {
+            "id": "D",
+            "text": "1,073,741"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "Calc में अधिकतम ज़ूम 400% होता है (Writer में 600% और Impress में 3000% होता है)।"
+        "correctAnswer": "B",
+        "explanation": "A sheet in LibreOffice Calc contains exactly 1,048,576 rows numbered from 1 to 1048576 (2^20)."
       }
     ]
   },
   {
-    chapterNumber: 4,
-    topicNumber: 2,
-    slug: "concept-of-cell-address-and-data-entry",
-    title: "Cell Address [Row & Column] & Entering Data",
-    hindiTitle: "सेल एड्रेस (Row/Column) एवं डेटा प्रविष्टि (Text, Number, Date)",
-    definitionEnglish: "A cell is the intersection of a column and a row identified by a unique cell reference (e.g., C5). Data entered into cells is auto-aligned: Text (Left), Numbers (Right), and Booleans/Errors (Center).",
-    definitionHindi: "सेल पंक्ति और स्तंभ का प्रतिच्छेदन (Intersection) बिंदु है जिसे अद्वितीय सेल एड्रेस (जैसे C5) से पहचाना जाता है। सेल में डेटा का डिफॉल्ट अलाइनमेंट होता है: टेक्स्ट (बाएं), संख्या (दाएं) और बूलियन (मध्य)।",
-    simpleWords: "रो और कॉलम के मिलने से बनने वाला चौकोर डिब्बा 'सेल' कहलाता है; इसमें नंबर दाईं तरफ और शब्द बाईं तरफ अपने आप सेट होते हैं।",
-    examImportance: "Extreme (Default alignment of text vs numbers in Calc is asked in almost every exam)",
-    detailedExplanation: `### 1. सेल एड्रेस की संरचना (Cell Reference Anatomy):
-- कॉलम लेटर + रो नंबर (उदा. **\`B4\`** = कॉलम B, रो 4).
-- **Cell Range (सेल रेंज)**: दो सेल्स के बीच कोलन (\`:\`) लगाकर व्यक्त किया जाता है; जैसे **\`A1:C10\`** (सेल A1 से C10 तक का पूरा आयताकार ब्लॉक).
-
-### 2. सेल में डेटा के प्रकार एवं डिफॉल्ट अलाइनमेंट (Default Alignment - अति महत्वपूर्ण):
-- **Text / Label (अक्षर/शब्द)**: **Left Aligned (बाईं ओर संरेखित)** (उदा. 'Rahul').
-- **Numbers / Values (संख्याएं)**: **Right Aligned (दाईं ओर संरेखित)** (उदा. 4500, 3.14).
-- **Logical / Boolean (TRUE / FALSE)**: **Center Aligned (मध्य संरेखित)**.
-- **Date & Time (दिनांक एवं समय)**: **Right Aligned (दाईं ओर संरेखित)**.
-- **Formulas**: \`=\` चिन्ह से शुरू होते हैं और गणना के बाद परिणाम के प्रकार के अनुसार अलाइन होते हैं।
-
-### 3. सेल रेफरेंसिंग के 3 प्रकार (Types of Cell Referencing):
-1. **Relative Reference (सापेक्ष संदर्भ - उदा. \`A1\`)**: कॉपी करने पर रो और कॉलम दोनों बदलते हैं (डिफॉल्ट).
-2. **Absolute Reference (निरपेक्ष संदर्भ - उदा. \`$A$1\`)**: डॉलर (\`$\`) चिन्ह लगने से रो और कॉलम दोनों स्थिर रहते हैं।
-3. **Mixed Reference (मिश्रित संदर्भ - उदा. \`$A1\` या \`A$1\`)**: एक भाग स्थिर (Fixed) और दूसरा परिवर्तनशील (Variable).
-- संदर्भ प्रकार बदलने की शॉर्टकट कुंजी: **\`Shift + F4\`** (MS Excel में F4 होता है).`,
-    realWorldAnalogy: "जैसे थिएटर में सीट नंबर 'Row B, Seat 7' (B7) होता है, वैसे ही स्प्रेडशीट में सेल का पता होता है।",
-    importantPoints: [
-      "कैल्क में टेक्स्ट डिफॉल्ट रूप से **Left Align** और संख्याएं **Right Align** होती हैं।",
-      "सेल संदर्भ को Absolute ($) में बदलने की शॉर्टकट कुंजी **Shift + F4** होती है।",
-      "सेल रेंज को अलग करने के लिए कोलन (**`:`**) चिन्ह का उपयोग होता है (जैसे A1:A10)।",
-      "हर फॉर्मूला हमेशा बराबर चिन्ह (**`=`**) से शुरू होना अनिवार्य है।"
+    "chapterNumber": 4,
+    "topicNumber": 2,
+    "slug": "concept-of-cell-address-and-data-entry",
+    "title": "Cell Address [Row & Column] & Entering Data",
+    "hindiTitle": "सेल एड्रेस (Row/Column) एवं डेटा प्रविष्टि (Text, Number, Date)",
+    "definitionEnglish": "A cell is the fundamental atomic data storage unit formed by the intersection of a column and a row, uniquely identified by a Cell Address (Column Letter + Row Number), capable of storing Text, Numbers, Dates, Times, and Formulas.",
+    "definitionHindi": "सेल कॉलम और रो के प्रतिच्छेदन (Intersection) से बनने वाला मूल बॉक्स है जिसका एक अद्वितीय सेल एड्रेस (कॉलम अक्षर + रो नंबर) होता है, जिसमें टेक्स्ट, संख्या, दिनांक, समय और सूत्र दर्ज किए जाते हैं।",
+    "simpleWords": "कॉलम अक्षर (जैसे B) और रो नंबर (जैसे 4) मिलकर सेल एड्रेस (B4) बनाते हैं। टेक्स्ट बाईं तरफ और नंबर दाईं तरफ अपने आप अलाइन होते हैं।",
+    "examImportance": "Very High (3-4 questions on cell address syntax, default text/number alignments, and entering data)",
+    "detailedExplanation": "### 1. Anatomy of a Cell Address\nA cell address represents the unique coordinate location of a cell in the grid:\n- **Formula:** **`[Column Letter][Row Number]`** (e.g., Column `C` and Row `8` = Cell Address **`C8`**).\n- **Valid Cell Addresses:** `A1`, `B10`, `Z50`, `AA100`, `AMJ1048576`.\n- **Invalid Cell Addresses:** `1A` (number cannot precede column letter), `A$1` (mixed reference format), `$A$1` (absolute coordinate).\n- **Active Cell:** The currently focused cell surrounded by a thick black or blue selection border.\n\n### 2. Default Data Types & Automatic Alignments in Calc (Crucial CCC Topic)\nWhen you type data into a cell and press Enter, Calc automatically classifies and aligns the content:\n| Data Type | Example Value | Default Alignment in Cell | Notes |\n| :--- | :--- | :--- | :--- |\n| **Text / Labels** | `NIELIT`, `Name`, `Student` | **Left-Aligned** | Cannot be used directly in arithmetic math |\n| **Numbers / Values** | `100`, `45.75`, `-250` | **Right-Aligned** | Processed by mathematical operators |\n| **Date & Time** | `02/09/2026`, `10:30 AM` | **Right-Aligned** | Internally stored as serial numbers |\n| **Formula / Function** | `=A1+B1`, `=SUM(A1:A5)` | **Right-Aligned** (for numeric results) | Must always start with an **`=`** sign |\n| **Boolean Logic** | `TRUE`, `FALSE` | **Center-Aligned** | Logical comparison outputs |\n\n### 3. Entering Numbers as Text (The Single Quote Prefix)\n- To enter numbers that should NOT be treated as mathematical values (such as Phone Numbers, PIN Codes, Aadhaar Numbers, or Account numbers with leading zeros like `00123`), prefix the input with a **Single Quote (`'`)**:\n- Typing `'00123` stores the value as **Left-Aligned Text** and preserves leading zeros!",
+    "realWorldAnalogy": "A cell address is like a theater seat ticket: 'Row 5, Seat C' means Row 5, Column C = C5.",
+    "importantPoints": [
+      "A cell is formed by the intersection of a row and a column.",
+      "By default, Text is Left-Aligned in a cell.",
+      "By default, Numbers and Dates are Right-Aligned in a cell.",
+      "By default, Boolean values (TRUE/FALSE) are Center-Aligned.",
+      "Prefixing a number with a single quote (') treats the number as text and preserves leading zeros."
     ],
-    commonMistakes: [
-      "संख्याओं को Left Aligned समझना (संख्याएं हमेशा **Right** और टेक्स्ट **Left** अलाइन होता है)।",
-      "Absolute Reference के लिए F4 समझना (LibreOffice Calc में **Shift + F4** होता है)।"
+    "commonMistakes": [
+      "Assuming Numbers are left-aligned by default (Numbers are strictly Right-Aligned; Text is Left-Aligned).",
+      "Writing a cell address as 5B (Column letter must always precede the row number: B5)."
     ],
-    examTips: [
-      "Text Alignment in Calc ➔ **Left**",
-      "Number Alignment in Calc ➔ **Right**",
-      "Formula prefix ➔ **= (Equal to sign)**",
-      "Absolute Reference sign ➔ **$ (Dollar)**"
+    "examTips": [
+      "Guaranteed CCC Question: 'By default, what is the alignment of numbers in LibreOffice Calc?' ➔ Right-Aligned.",
+      "Guaranteed CCC Question: 'By default, what is the alignment of text in LibreOffice Calc?' ➔ Left-Aligned."
     ],
-    quickRevision: "Cell = Row x Col (e.g. B4). Text -> Left, Numbers -> Right, Boolean -> Center. Range: A1:D5. Absolute: $A$1 (Shift+F4).",
-    practiceAssignment: "Calc में सेल A1 में अपना नाम और सेल A2 में अपना रोल नंबर लिखें और देखें कि नाम बाईं ओर और रोल नंबर दाईं ओर कैसे सेट होता है।",
-    microQuiz: [
+    "quickRevision": "Cell address = Column letter + Row number (e.g., B4). Alignments: Text=Left, Numbers/Dates=Right, Booleans=Center. Single quote (') forces numbers to be treated as text.",
+    "practiceAssignment": "In Calc, type 'Hello' in A1 (check left alignment) and '500' in B1 (check right alignment). In C1, type ''007' and verify that leading zeros are preserved.",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस कैल्क में किसी सेल में दर्ज की गई संख्या (Number) का डिफॉल्ट अलाइनमेंट क्या होता है?",
-        options: [
-          { id: "A", text: "Left Aligned" },
-          { id: "B", text: "Right Aligned" },
-          { id: "C", text: "Center Aligned" },
-          { id: "D", text: "Justified" }
+        "question": "By default, what is the horizontal ALIGNMENT of NUMERIC values entered into a cell in LibreOffice Calc?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Left-Aligned"
+          },
+          {
+            "id": "B",
+            "text": "Right-Aligned"
+          },
+          {
+            "id": "C",
+            "text": "Center-Aligned"
+          },
+          {
+            "id": "D",
+            "text": "Justified"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "कैल्क में संख्याएं (Numbers) डिफ़ॉल्ट रूप से दाईं ओर (Right Align) और टेक्स्ट बाईं ओर (Left Align) होता है।"
+        "correctAnswer": "B",
+        "explanation": "In LibreOffice Calc, numbers and dates align to the Right by default, whereas text strings align to the Left."
       },
       {
-        question: "कैल्क में रिलेटिव सेल एड्रेस को एब्सोल्यूट सेल एड्रेस (जैसे $A$1) में बदलने का शॉर्टकट क्या है?",
-        options: [
-          { id: "A", text: "F4" },
-          { id: "B", text: "Shift + F4" },
-          { id: "C", text: "Ctrl + F4" },
-          { id: "D", text: "Alt + F4" }
+        "question": "Which character prefix should be typed before a number to store it as TEXT and retain leading zeros in Calc?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Double Quote (\")"
+          },
+          {
+            "id": "B",
+            "text": "Single Quote (')"
+          },
+          {
+            "id": "C",
+            "text": "Hash (#)"
+          },
+          {
+            "id": "D",
+            "text": "Dollar ($)"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "LibreOffice Calc में सेल रेफरेंस टॉगल करने के लिए 'Shift + F4' का उपयोग किया जाता है।"
+        "correctAnswer": "B",
+        "explanation": "Typing a leading single quote (') forces Calc to treat subsequent characters as literal text."
       }
     ]
   },
   {
-    chapterNumber: 4,
-    topicNumber: 3,
-    slug: "manipulation-of-cells-and-sheets",
-    title: "Editing Cells, Formatting, Cut/Copy/Paste & Cell Sizing",
-    hindiTitle: "सेल संपादन, फॉर्मेटिंग, कट/कॉपी/पेस्ट एवं रो/कॉलम साइजिंग",
-    definitionEnglish: "Cell manipulation involves active cell editing (F2), formatting number styles (Currency Ctrl+Shift+4, Percentage Ctrl+Shift+5, Date Ctrl+Shift+3), inserting line breaks within cells (Ctrl+Enter), and adjusting column width/row height.",
-    definitionHindi: "सेल संपादन में सीधे सेल एडिट करना (F2), नंबर फॉर्मेटिंग (करेंसी Ctrl+Shift+4, प्रतिशत Ctrl+Shift+5), एक ही सेल में नई लाइन बनाना (Ctrl+Enter) और रो की ऊंचाई व कॉलम की चौड़ाई बदलना शामिल है।",
-    simpleWords: "सेल में लिखे नंबर को एडिट करना, करेंसी (₹) या प्रतिशत (%) का चिन्ह लगाना और एक ही सेल में दो लाइनें लिखना।",
-    examImportance: "High (F2 to edit cell, Ctrl+Enter for multiline text in cell, Format Cells Ctrl+1)",
-    detailedExplanation: `### 1. सेल एडिटिंग एवं नेविगेशन शॉर्टकट्स:
-- **Edit Active Cell (सक्रिय सेल को एडिट मोड में खोलना)**: **\`F2\`** (कर्सर सेल के अंदर आ जाता है).
-- **Line Break inside a Cell (एक ही सेल के अंदर नई लाइन)**: **\`Ctrl + Enter\`** (अति महत्वपूर्ण प्रश्न!)
-- **Format Cells Dialog (सेल फॉर्मेटिंग बॉक्स)**: **\`Ctrl + 1\`**
-- **Delete Selected Cell Content**: \`Delete\` या \`Backspace\` (Delete से डायलॉग बॉक्स खुलता है).
-
-### 2. त्वरित संख्या फॉर्मेटिंग शॉर्टकट्स (Number Format Shortcuts):
-- **General Number Format**: \`Ctrl + Shift + 1\`
-- **Scientific / Exponential Format**: \`Ctrl + Shift + 2\`
-- **Date Format (YYYY-MM-DD)**: **\`Ctrl + Shift + 3\`**
-- **Currency Format (₹ / $)**: **\`Ctrl + Shift + 4\`**
-- **Percentage Format (%)**: **\`Ctrl + Shift + 5\`**
-- **Standard Format**: \`Ctrl + Shift + 6\`
-
-### 3. रो और कॉलम का आकार बदलना:
-- कॉलम हेडर के बीच की विभाजक रेखा पर डबल-क्लिक करने से **AutoFit Column Width** हो जाता है (कंटेंट के अनुसार सही चौड़ाई).
-- जब संख्या सेल की चौड़ाई से बड़ी होती है, तो सेल में **\`###\`** प्रदर्शित होता है (कॉलम चौड़ा करने पर संख्या दिखने लगती है).`,
-    realWorldAnalogy: "जैसे लिफाफे पर पता लिखते समय पिन कोड को एक निश्चित बॉक्स में ठीक से बैठाना।",
-    importantPoints: [
-      "सेल को एडिट करने की शॉर्टकट कुंजी **F2** होती है।",
-      "एक ही सेल के अंदर नई लाइन (Multi-line text) बनाने के लिए **Ctrl + Enter** दबाते हैं।",
-      "सेल फॉर्मेटिंग डायलॉग खोलने का शॉर्टकट **Ctrl + 1** होता है।",
-      "करेंसी फॉर्मेट लगाने का शॉर्टकट **Ctrl + Shift + 4** और प्रतिशत का **Ctrl + Shift + 5** होता है।"
+    "chapterNumber": 4,
+    "topicNumber": 3,
+    "slug": "manipulation-of-cells-and-sheets",
+    "title": "Editing Cells, Formatting, Cut/Copy/Paste & Cell Sizing",
+    "hindiTitle": "सेल संपादन, फॉर्मेटिंग, कट/कॉपी/पेस्ट एवं रो/कॉलम साइजिंग",
+    "definitionEnglish": "Cell and sheet manipulation involves in-cell editing, invoking the Format Cells dialog (Ctrl+1), adjusting row heights and column widths, merging cells, wrapping text, and managing multiple worksheet tabs.",
+    "definitionHindi": "सेल और शीट संपादन में सेल में एडिट करना (F2), फॉर्मेट सेल्स डायलॉग (Ctrl+1), रो की ऊंचाई और कॉलम की चौड़ाई बदलना, सेल्स मर्ज करना, टेक्स्ट रैप करना और शीट जोड़ना/नाम बदलना शामिल है।",
+    "simpleWords": "सेल में सुधार करने के लिए F2 दबाएं, सेल फॉर्मेटिंग के लिए Ctrl+1 दबाएं, कॉलम चौड़ाई खींचकर बड़ी करें और शीट का नाम बदलें।",
+    "examImportance": "High (3-4 questions on F2 cell edit, Ctrl+1 Format Cells dialog, and Merge Cells)",
+    "detailedExplanation": "### 1. Cell Editing Modes\n- **Overwriting Cell Contents:** Selecting a cell and typing immediately overwrites and replaces all previous contents.\n- **In-Place Cell Editing (`F2`):** Pressing **`F2`** (or double-clicking the cell) places the cursor directly inside the cell at the end of the text without erasing existing data!\n- **Esc Key:** Cancels current cell edits and restores original content.\n\n### 2. Format Cells Dialog Box (`Ctrl + 1`)\nPressing **`Ctrl + 1`** opens the master **Format Cells** dialog featuring 7 comprehensive configuration tabs:\n1. **Numbers:** Formats values as Currency (`₹`), Percentage (`%`), Decimal places, Scientific notation, Date formats.\n2. **Font:** Typeface, size (pt), and color.\n3. **Alignment:**\n   - **Text Wrap (`Wrap text automatically`):** Expands row height to wrap long text sentences onto multiple lines within a single cell.\n   - **Line Break in Cell (`Ctrl + Enter`):** Inserts a manual line break inside a single cell!\n   - **Merge Cells:** Merges highlighted cells into one.\n4. **Borders:** Grid outlines, cell borders, border shadow effects.\n5. **Background:** Cell fill color.\n6. **Cell Protection:** Hides formulas or locks cells when sheet protection is enabled.\n\n### 3. Adjusting Row Height & Column Width\n- **AutoFit Column Width:** Double-clicking the dividing line between two column header letters (e.g., between `B` and `C`) automatically resizes the column to fit the widest text entry!\n- **AutoFit Row Height:** Double-clicking the dividing line between row header numbers.",
+    "realWorldAnalogy": "Pressing F2 is like using an eraser to fix a single misspelled letter on a chalkboard, while typing without F2 is like wiping the entire board clean with a wet sponge.",
+    "importantPoints": [
+      "F2 is the keyboard shortcut to Edit the active cell in LibreOffice Calc.",
+      "Ctrl + 1 opens the Format Cells dialog box in LibreOffice Calc.",
+      "Ctrl + Enter inserts a manual line break inside a single cell.",
+      "Double-clicking a column border executes AutoFit Column Width.",
+      "Wrap Text expands row height to display multi-line text in a single cell."
     ],
-    commonMistakes: [
-      "सेल में नई लाइन के लिए Enter दबाना (Enter से नीचे के सेल में चले जाते हैं, सेल के अंदर नई लाइन के लिए **Ctrl + Enter** दबाना होता है)।"
+    "commonMistakes": [
+      "Pressing Enter to insert a line break inside a cell (Enter completes the cell and moves down; Ctrl + Enter inserts a line break inside the cell).",
+      "Thinking F2 renames a cell in Calc (F2 edits the cell in Calc; F2 renames files in File Explorer)."
     ],
-    examTips: [
-      "Edit Active Cell ➔ **F2**",
-      "New line within cell ➔ **Ctrl + Enter**",
-      "Format Cells Dialog ➔ **Ctrl + 1**"
+    "examTips": [
+      "Guaranteed CCC Question: 'Which shortcut key is used to edit the active cell in LibreOffice Calc?' ➔ F2.",
+      "Guaranteed CCC Question: 'What is the shortcut key to open the Format Cells dialog box in Calc?' ➔ Ctrl + 1."
     ],
-    quickRevision: "F2: Edit Cell. Ctrl+Enter: Wrap text / new line in cell. Ctrl+1: Format Cells. Ctrl+Shift+4: Currency ($/₹), Ctrl+Shift+5: Percentage (%).",
-    practiceAssignment: "सेल B2 में 'CCC Exam' लिखें, फिर Ctrl+Enter दबाकर उसी सेल में नीचे '2026' टाइप करें।",
-    microQuiz: [
+    "quickRevision": "Edit cell=F2, Format Cells=Ctrl+1, In-cell line break=Ctrl+Enter, AutoFit column=Double-click header border. Sheet operations: Add, Rename, Move, Delete.",
+    "practiceAssignment": "Type a long sentence in cell A1, press Ctrl + 1, enable 'Wrap text automatically' under Alignment, and observe the row expanding.",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस कैल्क में एक ही सेल (Cell) के भीतर नई पंक्ति (Line Break) डालने के लिए क्या दबाया जाता है?",
-        options: [
-          { id: "A", text: "Enter" },
-          { id: "B", text: "Shift + Enter" },
-          { id: "C", text: "Ctrl + Enter" },
-          { id: "D", text: "Alt + Enter" }
+        "question": "Which function key is used to enter EDIT MODE for the active cell in LibreOffice Calc?",
+        "options": [
+          {
+            "id": "A",
+            "text": "F1"
+          },
+          {
+            "id": "B",
+            "text": "F2"
+          },
+          {
+            "id": "C",
+            "text": "F4"
+          },
+          {
+            "id": "D",
+            "text": "F7"
+          }
         ],
-        correctAnswer: "C",
-        explanation: "कैल्क में एक ही सेल के अंदर नई लाइन शुरू करने के लिए 'Ctrl + Enter' का प्रयोग किया जाता है।"
+        "correctAnswer": "B",
+        "explanation": "Pressing F2 activates in-cell editing mode, placing the blinking insertion cursor inside the active cell."
       },
       {
-        question: "कैल्क में सक्रिय सेल को संपादन (Edit) मोड में लाने के लिए किस शॉर्टकट कुंजी का प्रयोग होता है?",
-        options: [
-          { id: "A", text: "F1" },
-          { id: "B", text: "F2" },
-          { id: "C", text: "F3" },
-          { id: "D", text: "F4" }
+        "question": "What is the keyboard shortcut to launch the 'Format Cells' dialog box in LibreOffice Calc?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Ctrl + F"
+          },
+          {
+            "id": "B",
+            "text": "Ctrl + 1"
+          },
+          {
+            "id": "C",
+            "text": "Alt + 1"
+          },
+          {
+            "id": "D",
+            "text": "Shift + F1"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "F2 फंक्शन कुंजी से सक्रिय सेल तुरंत संपादन (Edit Mode) के लिए खुल जाता है।"
+        "correctAnswer": "B",
+        "explanation": "Pressing Ctrl + 1 opens the master Format Cells dialog to configure numbers, borders, fonts, and alignment."
       }
     ]
   },
   {
-    chapterNumber: 4,
-    topicNumber: 4,
-    slug: "inserting-deleting-rows-columns-and-autofill",
-    title: "Inserting/Deleting Rows/Cols & AutoFill Magic",
-    hindiTitle: "रो/कॉलम जोड़ना-हटाना एवं ऑटो-फिल (AutoFill) फीचर",
-    definitionEnglish: "Managing sheet layout involves inserting/deleting cells, rows, and columns using shortcuts (Insert Ctrl+Plus, Delete Ctrl+Minus), and utilizing the AutoFill handle to rapidly generate arithmetic series, dates, and month names.",
-    definitionHindi: "शीट लेआउट प्रबंधन में नई रो/कॉलम जोड़ना (Ctrl + Plus), रो/कॉलम हटाना (Ctrl + Minus) और ऑटो-फिल हैंडल द्वारा गिनती, महीनों के नाम, और तिथियों की स्वचालित श्रृंखला बनाना शामिल है।",
-    simpleWords: "नई लाइन या कॉलम जोड़ना, फालतू लाइन मिटाना, और 1, 2 लिखकर खींचने पर अपने आप 100 तक गिनती लिख जाना (AutoFill)।",
-    examImportance: "Extreme (Insert cell Ctrl++, Delete cell Ctrl+-, AutoFill concept in CCC)",
-    detailedExplanation: `### 1. रो, कॉलम और सेल जोड़ना/हटाना (Insert & Delete Shortcuts):
-- **Insert Cells / Rows / Columns (नया जोड़ना)**: **\`Ctrl + +\`** (Ctrl के साथ प्लस कुंजी).
-- **Delete Cells / Rows / Columns (हटाना)**: **\`Ctrl + -\`** (Ctrl के साथ माइनस कुंजी).
-- **Select Entire Row (पूरी रो सेलेक्ट करना)**: **\`Shift + Space\`**
-- **Select Entire Column (पूरा कॉलम सेलेक्ट करना)**: **\`Ctrl + Space\`**
-- **Select Entire Sheet (पूरी शीट सेलेक्ट करना)**: **\`Ctrl + Shift + Space\`** या \`Ctrl + A\`
-
-### 2. ऑटो-फिल हैंडल (AutoFill Feature):
-- जब आप किसी सेल का चयन करते हैं, तो निचले-दाएं कोने में एक छोटा काला चौकोर बिंदु दिखता है जिसे **Fill Handle** कहते हैं।
-- माउस कर्सर वहां ले जाने पर वह काले \`+\` चिन्ह में बदल जाता है।
-- **उपयोग**:
-  - **Numeric Series**: \`1\` और \`2\` लिखकर दोनों को सेलेक्ट करके ड्रैग करने पर \`3, 4, 5, 6...\` स्वतः भर जाता है।
-  - **Days of Week**: \`Monday\` या \`Mon\` लिखकर खींचने पर \`Tuesday, Wednesday...\` अपने आप आता है।
-  - **Months**: \`Jan\` लिखकर खींचने पर \`Feb, Mar, Apr...\` आता है।
-  - **Formula Replication**: ऊपर के सेल में लगे फॉर्मूले को नीचे के 1000 सेल्स में स्वतः लागू करना।`,
-    realWorldAnalogy: "ऑटो-फिल एक जादुई स्टाम्प की तरह है जो पैटर्न को पहचानकर आगे की सारी गिनती खुद लिख देता है।",
-    importantPoints: [
-      "सेल/रो/कॉलम जोड़ने का शॉर्टकट **Ctrl + '+'** और हटाने का **Ctrl + '-'** होता है।",
-      "पूरी रो सेलेक्ट करने की शॉर्टकट कुंजी **Shift + Space** होती है।",
-      "पूरा कॉलम सेलेक्ट करने की शॉर्टकट कुंजी **Ctrl + Space** होती है।",
-      "ऑटो-फिल हैंडल सेल के **निचले-दाएं कोने (Bottom-Right Corner)** पर स्थित होता है।"
+    "chapterNumber": 4,
+    "topicNumber": 4,
+    "slug": "inserting-deleting-rows-columns-and-autofill",
+    "title": "Inserting/Deleting Rows/Cols & AutoFill Magic",
+    "hindiTitle": "रो/कॉलम जोड़ना-हटाना एवं ऑटो-फिल (AutoFill) फीचर",
+    "definitionEnglish": "Row and column operations allow dynamic structure expansion by inserting and deleting grid elements, while the AutoFill handle automatically detects numerical, date, weekday, and custom patterns to populate contiguous cell ranges instantly.",
+    "definitionHindi": "रो और कॉलम जोड़ने-हटाने से शीट की संरचना बदलती है, जबकि ऑटो-फिल (AutoFill) हैंडल पैटर्न को पहचानकर संख्याओं, दिनों, महीनों और तारीखों की श्रृंखला को स्वतः भर देता है।",
+    "simpleWords": "नई रो/कॉलम जोड़ना (Ctrl + '+'), हटाना (Ctrl + '-'), और सेल के कोने को खींचकर 1, 2, 3... या Mon, Tue, Wed की सीरीज अपने आप भरना (AutoFill)।",
+    "examImportance": "Very High (3-4 questions on Insert Row/Col shortcut Ctrl+'+', Delete Ctrl+'-', and AutoFill behavior)",
+    "detailedExplanation": "### 1. Inserting and Deleting Rows & Columns Shortcuts\n- **Insert Cells / Rows / Columns Dialog:** **`Ctrl + +`** (Ctrl and Plus key).\n- **Delete Cells / Rows / Columns Dialog:** **`Ctrl + -`** (Ctrl and Minus key).\n- **Delete Contents Dialog:** Pressing the **`Delete`** key (or `Backspace`) opens the Delete Contents dialog (allows selectively removing Text, Numbers, Formulas, Date/Time, or Formats).\n\n### 2. The AutoFill Feature & Fill Handle\n- **Fill Handle:** The small solid black square located at the **bottom-right corner** of the active cell selection box.\n- When the mouse hovers over the fill handle, the cursor pointer transforms into a crisp black plus sign (`+`).\n- **Drag and Fill Patterns:**\n  - **Single Number (e.g., `1`):** Dragging simply copies `1, 1, 1, 1...` (holding `Ctrl` while dragging generates an incremental series: `1, 2, 3, 4, 5...`).\n  - **Two Numbers (e.g., `2` and `4`):** Select both cells and drag ➔ Generates an arithmetic series: `6, 8, 10, 12...`!\n  - **Days of the Week:** Type `Monday` (or `Mon`) and drag ➔ Generates `Tuesday, Wednesday, Thursday...`.\n  - **Months of the Year:** Type `January` (or `Jan`) and drag ➔ Generates `February, March, April...`.\n  - **Dates:** Type `01/01/2026` and drag ➔ Increments day by day.",
+    "realWorldAnalogy": "AutoFill is like a smart assistant who notices you wrote 'Monday, Tuesday' and automatically completes the rest of the week for you without being asked.",
+    "importantPoints": [
+      "The shortcut to Insert cells/rows/columns in Calc is Ctrl + Plus (+).",
+      "The shortcut to Delete cells/rows/columns in Calc is Ctrl + Minus (-).",
+      "The Fill Handle is the small square at the bottom-right corner of the active cell.",
+      "AutoFill automatically completes series of numbers, days, months, and dates."
     ],
-    commonMistakes: [
-      "पूरी रो सेलेक्ट करने के लिए Ctrl+Space समझना (कॉलम के लिए **Ctrl+Space** और रो के लिए **Shift+Space** होता है)।"
+    "commonMistakes": [
+      "Typing a single number and expecting it to increment automatically without holding Ctrl (A single number copies; two numbers or Ctrl+drag increments).",
+      "Confusing Ctrl + '+' (Insert) with Ctrl + '-' (Delete)."
     ],
-    examTips: [
-      "Insert Cell/Row ➔ **Ctrl + +**",
-      "Delete Cell/Row ➔ **Ctrl + -**",
-      "Select Entire Row ➔ **Shift + Space**",
-      "Select Entire Column ➔ **Ctrl + Space**"
+    "examTips": [
+      "Direct CCC Question: 'What is the shortcut key to Insert cells/rows in LibreOffice Calc?' ➔ Ctrl + Plus (+).",
+      "Direct CCC Question: 'What is the shortcut key to Delete cells/rows in LibreOffice Calc?' ➔ Ctrl + Minus (-)."
     ],
-    quickRevision: "Insert: Ctrl++, Delete: Ctrl+-. Select Row: Shift+Space, Select Col: Ctrl+Space. AutoFill handle (bottom-right corner) generates series.",
-    practiceAssignment: "सेल A1 में 'Sunday' लिखें और Fill Handle को पकड़कर A7 तक खींचें।",
-    microQuiz: [
+    "quickRevision": "Insert rows/cols=Ctrl+'+', Delete rows/cols=Ctrl+'-'. AutoFill handle (bottom-right square) generates series for Days, Months, Dates, and arithmetic patterns.",
+    "practiceAssignment": "Type 'Jan' in A1 and drag the Fill Handle down to A12. In B1 type '5' and B2 type '10', select both and drag down to B10 to generate the 5 times table.",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस कैल्क में एक नया सेल, रो या कॉलम जोड़ने (Insert) की शॉर्टकट कुंजी क्या है?",
-        options: [
-          { id: "A", text: "Ctrl + I" },
-          { id: "B", text: "Ctrl + +" },
-          { id: "C", text: "Alt + +" },
-          { id: "D", text: "Shift + +" }
+        "question": "What is the keyboard shortcut to INSERT a new cell, row, or column in LibreOffice Calc?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Ctrl + +"
+          },
+          {
+            "id": "B",
+            "text": "Ctrl + -"
+          },
+          {
+            "id": "C",
+            "text": "Alt + I"
+          },
+          {
+            "id": "D",
+            "text": "Shift + +"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "नया सेल, रो या कॉलम जोड़ने के लिए 'Ctrl + +' शॉर्टकट का उपयोग किया जाता है।"
-      },
-      {
-        question: "कैल्क में पूरी पंक्ति (Entire Row) को एक बार में सेलेक्ट करने का शॉर्टकट क्या है?",
-        options: [
-          { id: "A", text: "Ctrl + Space" },
-          { id: "B", text: "Shift + Space" },
-          { id: "C", text: "Alt + Space" },
-          { id: "D", text: "Ctrl + Shift + R" }
-        ],
-        correctAnswer: "B",
-        explanation: "Shift + Space दबाने से वर्तमान पंक्ति (Row) पूरी तरह सेलेक्ट हो जाती है, जबकि Ctrl + Space से कॉलम सेलेक्ट होता है।"
+        "correctAnswer": "A",
+        "explanation": "Pressing Ctrl + Plus (+) brings up the Insert Cells dialog to add cells, entire rows, or entire columns."
       }
     ]
   },
   {
-    chapterNumber: 4,
-    topicNumber: 5,
-    slug: "sorting-filtering-and-freezing-panes",
-    title: "Data Sorting, Filtering & Freezing Panes",
-    hindiTitle: "डेटा सॉर्टिंग, फिल्टरिंग एवं फ्रीज पैन (Freeze Panes)",
-    definitionEnglish: "Data organization tools include Sorting (ascending A-Z / descending Z-A), AutoFilter (Ctrl+Shift+L) for criteria-based record extraction, and Freeze Panes to lock header rows/columns during scrolling.",
-    definitionHindi: "डेटा संगठन टूल्स में सॉर्टिंग (आरोही A-Z / अवरोही Z-A क्रम), ऑटो-फिल्टर (Ctrl+Shift+L) द्वारा आवश्यक रिकॉर्ड छांटना, और फ्रीज पैन द्वारा स्क्रॉल करते समय हेडर रो/कॉलम को स्थिर रखना शामिल है।",
-    simpleWords: "नामों को वर्णमाला (A से Z) में लगाना (Sort), केवल पास होने वाले छात्रों को छांटना (Filter), और नीचे स्क्रॉल करते समय ऊपर की हेडिंग को रोके रखना (Freeze)।",
-    examImportance: "High (AutoFilter shortcut Ctrl+Shift+L, Freeze Panes menu location in CCC)",
-    detailedExplanation: `### 1. डेटा सॉर्टिंग (Data Sorting):
-- **Ascending (आरोही क्रम)**: A से Z या सबसे छोटे नंबर से सबसे बड़े नंबर (0-9) की ओर।
-- **Descending (अवरोही क्रम)**: Z से A या सबसे बड़े नंबर से सबसे छोटे नंबर (9-0) की ओर।
-- मेनू पाथ: **Data Menu ➔ Sort** (या Standard Toolbar से Sort Icons).
-
-### 2. ऑटो-फिल्टर (AutoFilter):
-- **शॉर्टकट कुंजी**: **\`Ctrl + Shift + L\`** (अति महत्वपूर्ण प्रश्न!)
-- मेनू पाथ: **Data Menu ➔ AutoFilter**
-- तालिका के प्रत्येक कॉलम हेडर पर एक ड्रॉपडाउन तीर बन जाता है। इस पर क्लिक करके किसी विशिष्ट शहर, ग्रेड या स्थिति वाले रिकॉर्ड्स को ही स्क्रीन पर दिखाया जा सकता है और बाकी छिप जाते हैं।
-
-### 3. फ्रीज रोज एंड कॉलम्स (Freeze Rows and Columns):
-- मेनू पाथ: **View Menu ➔ Freeze Rows and Columns**
-- जब स्प्रेडशीट में 1000 से अधिक पंक्तियां होती हैं, तो नीचे स्क्रॉल करने पर पहली हेडिंग वाली रो छिप जाती है।
-- Freeze लगाने से पहली पंक्ति या पहला कॉलम स्क्रीन पर **स्थिर (Lock)** हो जाता है, चाहे आप कितना भी नीचे या दाएं स्क्रॉल करें।`,
-    realWorldAnalogy: "फिल्टर चाय की छलनी की तरह है जो पत्ती (अनावश्यक डेटा) रोक लेती है और केवल शुद्ध चाय (इच्छित डेटा) दिखाती है।",
-    importantPoints: [
-      "**AutoFilter** की शॉर्टकट कुंजी **Ctrl + Shift + L** होती है।",
-      "सॉर्टिंग दो प्रकार की होती है: **Ascending (A-Z)** और **Descending (Z-A)**।",
-      "स्क्रॉलिंग के दौरान हेडर को लॉक करने के लिए **Freeze Rows and Columns** (View Menu) का प्रयोग किया जाता है।"
+    "chapterNumber": 4,
+    "topicNumber": 5,
+    "slug": "sorting-filtering-and-freezing-panes",
+    "title": "Data Sorting, Filtering & Freezing Panes",
+    "hindiTitle": "डेटा सॉर्टिंग, फिल्टरिंग एवं फ्रीज पैन (Freeze Panes)",
+    "definitionEnglish": "Data organization tools in Calc arrange data chronologically or alphabetically (Sorting), display records matching specific criteria while hiding others (Filtering Ctrl+Shift+L), and lock header rows/columns in place during scrolling (Freezing Panes).",
+    "definitionHindi": "डेटा संगठन टूल्स में डेटा को आरोही/अवरोही क्रम में लगाना (Sorting), शर्तों के अनुसार डेटा छांटना (AutoFilter Ctrl+Shift+L) और स्क्रॉल करते समय हेडिंग रो/कॉलम को स्थिर रखना (Freeze Panes) शामिल है।",
+    "simpleWords": "डेटा को A से Z क्रम में लगाना (Sort), केवल अपनी पसंद का रिकॉर्ड देखना (Filter Ctrl+Shift+L) और ऊपर की हेडिंग को जमना/रोकना (Freeze Panes)।",
+    "examImportance": "High (3-4 questions on AutoFilter shortcut Ctrl+Shift+L, Ascending/Descending sort, and Freeze Panes)",
+    "detailedExplanation": "### 1. Data Sorting (Data ➔ Sort)\nSorting reorganizes table records based on designated column values:\n- **Ascending Sort (`A ➔ Z` / `0 ➔ 9`):** Orders alphabetically from A to Z, numbers from smallest to largest, dates from oldest to newest.\n- **Descending Sort (`Z ➔ A` / `9 ➔ 0`):** Orders alphabetically from Z to A, numbers from largest to smallest, dates from newest to oldest.\n- **Multi-Level Sort:** Sorts primarily by *Department (A-Z)*, then secondarily by *Salary (Largest to Smallest)*.\n\n### 2. Data Filtering (AutoFilter: `Ctrl + Shift + L`)\n- **AutoFilter Shortcut:** **`Ctrl + Shift + L`** (Data ➔ AutoFilter).\n- Inserts small dropdown filter arrows in the header row of each column.\n- Clicking a dropdown arrow allows users to check/uncheck specific values (e.g., filter only students who scored `Grade = 'A'`).\n- **Standard Filter:** Applies conditional criteria (e.g., `Salary > 50000 AND City = 'Delhi'`).\n- **Reset Filter:** Displays all original records without deleting data.\n\n### 3. Freezing Panes (View ➔ Freeze Rows and Columns)\nWhen scrolling through large datasets containing thousands of rows, the topmost header row disappears off-screen. **Freeze Panes** locks headers permanently:\n- **Freeze Rows and Columns:** Locks all rows above and columns to the left of the active selected cell.\n- **Freeze First Row:** Locks Row 1 permanently at the top of the viewport.\n- **Freeze First Column:** Locks Column A permanently at the left of the viewport.",
+    "realWorldAnalogy": "AutoFilter is like a tea strainer that lets pure tea pass through while catching the tea leaves; Freeze Panes is like pinning the title banner of a long notice board so it stays visible as you scroll down.",
+    "importantPoints": [
+      "The shortcut key to toggle AutoFilter in LibreOffice Calc is Ctrl + Shift + L.",
+      "Ascending sort orders A to Z / 0 to 9; Descending sort orders Z to A / 9 to 0.",
+      "Freeze Panes keeps header rows/columns visible while scrolling.",
+      "AutoFilter is located under the Data menu."
     ],
-    commonMistakes: [
-      "AutoFilter के लिए Ctrl+F समझना (Ctrl+F Find के लिए होता है, AutoFilter के लिए **Ctrl+Shift+L** होता है)।"
+    "commonMistakes": [
+      "Confusing Sorting with Filtering (Sorting reorders all records; Filtering hides records that do not meet criteria).",
+      "Thinking AutoFilter permanently deletes unmatched data (It merely hides unmatched rows temporarily)."
     ],
-    examTips: [
-      "AutoFilter Shortcut in Calc ➔ **Ctrl + Shift + L**।",
-      "Freeze Panes is located in ➔ **View Menu**।"
+    "examTips": [
+      "Guaranteed CCC Question: 'What is the shortcut key for AutoFilter in LibreOffice Calc?' ➔ Ctrl + Shift + L.",
+      "Guaranteed CCC Question: 'Under which menu is Freeze Panes located?' ➔ View Menu."
     ],
-    quickRevision: "Sort (A-Z / Z-A). AutoFilter (Ctrl+Shift+L) in Data Menu. Freeze Rows/Columns (View Menu) locks headers while scrolling.",
-    practiceAssignment: "कैल्क में 5 नाम और उनके प्राप्तांक लिखें, AutoFilter (Ctrl+Shift+L) लगाकर 80 से अधिक अंक वालों को फिल्टर करें।",
-    microQuiz: [
+    "quickRevision": "Sorting: Ascending (A-Z) vs Descending (Z-A). AutoFilter: Ctrl+Shift+L (Data menu). Freeze Panes: View menu (locks headers during scrolling).",
+    "practiceAssignment": "Create a list of 5 students with marks in Calc. Select the table, press Ctrl + Shift + L to apply AutoFilter, and filter students with marks > 75.",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस कैल्क में 'AutoFilter' चालू/बंद करने की शॉर्टकट कुंजी क्या है?",
-        options: [
-          { id: "A", text: "Ctrl + F" },
-          { id: "B", text: "Ctrl + Shift + L" },
-          { id: "C", text: "Alt + D + F" },
-          { id: "D", text: "Ctrl + Alt + F" }
+        "question": "What is the keyboard shortcut to activate or deactivate 'AutoFilter' in LibreOffice Calc?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Ctrl + F"
+          },
+          {
+            "id": "B",
+            "text": "Ctrl + Shift + L"
+          },
+          {
+            "id": "C",
+            "text": "Alt + D + F"
+          },
+          {
+            "id": "D",
+            "text": "Shift + F4"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "LibreOffice Calc में ऑटो-फिल्टर लगाने की शॉर्टकट कुंजी 'Ctrl + Shift + L' होती है।"
+        "correctAnswer": "B",
+        "explanation": "Pressing Ctrl + Shift + L toggles dropdown AutoFilter arrows on the selected table headers."
       }
     ]
   },
   {
-    chapterNumber: 4,
-    topicNumber: 6,
-    slug: "basic-formulas-and-autosum",
-    title: "Using Mathematical Formulas (+, -, *, /) & AutoSum",
-    hindiTitle: "मूल गणितीय सूत्र (+, -, *, /) एवं ऑटो-सम (AutoSum)",
-    definitionEnglish: "Formulas in Calc are user-defined equations performing arithmetic operations using standard mathematical operators (+, -, *, /, ^) that strictly begin with an equal sign (=). AutoSum (Sum icon) provides one-click summation.",
-    definitionHindi: "कैल्क में फॉर्मूले गणितीय ऑपरेटरों (+, -, *, /, ^) का उपयोग करके गणना करने वाले समीकरण हैं जो अनिवार्य रूप से बराबर (=) चिन्ह से शुरू होते हैं। ऑटो-सम (AutoSum) एक क्लिक में योग निकालने की सुविधा देता है।",
-    simpleWords: "जोड़, घटाना, गुणा, भाग करने के सूत्र लिखना, जो हमेशा '=' से शुरू होते हैं।",
-    examImportance: "Extreme (Formula syntax, operator precedence, and basic calculation output questions in CCC)",
-    detailedExplanation: `### 1. फॉर्मूला निर्माण के नियम (Rules for Formulas):
-- प्रत्येक फॉर्मूला हमेशा **\`=\` (Equal to)** चिन्ह से शुरू होना चाहिए। यदि \`=\` नहीं लगाया जाएगा, तो कैल्क उसे सादा टेक्स्ट (Label) मानेगा।
-- **मूल गणितीय ऑपरेटर्स**:
-  - \`+\` : Addition (जोड़) -> \`=A1 + B1\`
-  - \`-\` : Subtraction (घटाव) -> \`=A1 - B1\`
-  - \`*\` : Multiplication (गुणा) -> \`=A1 * B1\`
-  - \`/\` : Division (भाग) -> \`=A1 / B1\`
-  - \`^\` : Exponentiation (घात) -> \`=2^3\` (परिणाम: **8**)
-
-### 2. ऑपरेटर प्राथमिकता नियम (BODMAS in Calc):
-- कोष्ठक (Parentheses) \`()\` ➔ घात \`^\` ➔ गुणा \`*\` एवं भाग \`/\` ➔ जोड़ \`+\` एवं घटाना \`-\`।
-- **CCC परीक्षा का उदाहरण प्रश्न**:
-  - \`=5 + 2 * 3\` का मान क्या होगा? ➔ \`5 + 6\` = **11** (न कि 21!)
-  - \`=(5 + 2) * 3\` का मान क्या होगा? ➔ \`7 * 3\` = **21**
-  - \`=100 / 10 / 2\` का मान क्या होगा? ➔ \`10 / 2\` = **5**
-
-### 3. ऑटो-सम (AutoSum):
-- फॉर्मूला बार के पास स्थित **\`Σ\` (Sigma)** आइकन पर क्लिक करके या शॉर्टकट द्वारा एक पूरी पंक्ति या स्तंभ के अंकों का योग स्वतः निकाला जा सकता है (\`=SUM(A1:A10)\`).`,
-    realWorldAnalogy: "जैसे कैलकुलेटर में नंबर दबाकर '=' दबाते ही उत्तर मिल जाता है, कैल्क में पहले '=' लगाकर सवाल लिखा जाता है।",
-    importantPoints: [
-      "कैल्क में सभी फॉर्मूले अनिवार्य रूप से **'='** चिन्ह से शुरू होते हैं।",
-      "घात (Power) के लिए **`^` (Caret)** चिन्ह का प्रयोग किया जाता है (जैसे `=3^2` = 9)।",
-      "गणना में पहले गुणा/भाग होता है, उसके बाद जोड़/घटाव (BODMAS नियम)।"
+    "chapterNumber": 4,
+    "topicNumber": 6,
+    "slug": "basic-formulas-and-autosum",
+    "title": "Using Mathematical Formulas (+, -, *, /) & AutoSum",
+    "hindiTitle": "मूल गणितीय सूत्र (+, -, *, /) एवं ऑटो-सम (AutoSum)",
+    "definitionEnglish": "A formula is a user-defined mathematical expression entered into a cell that performs calculations using cell references and arithmetic operators, strictly initiated with an equal sign (=), while AutoSum provides one-click aggregation.",
+    "definitionHindi": "फॉर्मूला सेल में दर्ज किया गया एक गणितीय समीकरण है जो सेल संदर्भों और ऑपरेटरों का उपयोग करके गणना करता है और सदैव बराबर चिह्न (=) से शुरू होता है।",
+    "simpleWords": "कैल्क में कोई भी फॉर्मूला हमेशा '=' चिह्न से शुरू होता है (जैसे =A1+B1)। ऑटो-सम (AutoSum) से तुरंत संख्याओं का जोड़ निकाला जाता है।",
+    "examImportance": "Very High (4-5 direct questions on formula starting symbol '=', mathematical operator precedence, and AutoSum)",
+    "detailedExplanation": "### 1. The Fundamental Rule of Calc Formulas\n- **MANDATORY RULE:** Every formula and function in LibreOffice Calc **MUST strictly begin with an EQUAL SIGN (`=`)**!\n- If you type `A1+B1` without an equal sign, Calc treats it as a static **Text Label** and performs zero calculation.\n- Typing `=A1+B1` evaluates the formula and displays the numerical sum result.\n\n### 2. Standard Arithmetic Operators & Operator Precedence (BODMAS / PEMDAS)\n1. **Parentheses `()`:** Evaluated first with highest priority.\n2. **Exponentiation `^`:** Powers (e.g., `=2^3` evaluates to `8`).\n3. **Multiplication `*` & Division `/`:** Evaluated from left to right (e.g., `=10+5*2` evaluates to `20`, NOT 30!).\n4. **Addition `+` & Subtraction `-`:** Evaluated last from left to right.\n5. **Text Concatenation Operator (`&`):** Joins two text strings together (e.g., `=\"NIELIT \" & \"CCC\"` produces `\"NIELIT CCC\"`).\n\n### 3. The AutoSum Feature (`Σ`)\n- Located on the Formula Bar and Standard Toolbar as the Greek capital Sigma icon (**`Σ`**).\n- When clicked below a column of numbers, AutoSum automatically writes the formula `=SUM(A1:A10)` by detecting the adjacent contiguous numerical range and calculates the total sum with 1-click!",
+    "realWorldAnalogy": "The '=' sign in Calc is like turning on the ignition key of a car: without the key, the engine won't start; without '=', the formula won't calculate.",
+    "importantPoints": [
+      "Every formula in LibreOffice Calc MUST start with an equal sign (=).",
+      "The multiplication operator is an asterisk (*); division is a forward slash (/).",
+      "The text concatenation operator is an ampersand (&).",
+      "Formulas follow standard mathematical operator precedence: Parentheses > Exponentiation > Multiply/Divide > Add/Subtract.",
+      "The AutoSum symbol is the Greek letter Sigma (Σ)."
     ],
-    commonMistakes: [
-      "बिना '=' लगाए 10+20 लिखना (कैल्क उसे फॉर्मूला न मानकर केवल 10+20 टेक्स्ट दिखाएगा)।",
-      "5+2*3 को 21 समझना (गुणा पहले होगा, इसलिए 5+6 = 11 होगा)।"
+    "commonMistakes": [
+      "Forgetting to type the '=' sign before writing a formula.",
+      "Calculating =10+5*2 as 30 (Multiplication has higher priority than addition: 5*2=10, then 10+10=20)."
     ],
-    examTips: [
-      "CCC में अक्सर पूछा जाता है: 'Calc में =2^3 का मान क्या होगा?' ➔ **8**।",
-      "'=5+5*2 का मान क्या होगा?' ➔ **15**।"
+    "examTips": [
+      "Guaranteed CCC Question: 'With which symbol must every formula in LibreOffice Calc begin?' ➔ = (Equal Sign).",
+      "Guaranteed CCC Question: 'What is the result of the formula =5+2*3 in Calc?' ➔ 11."
     ],
-    quickRevision: "Formulas start with '='. Operators: +, -, *, /, ^ (Power). BODMAS precedence applies. =2^3 = 8.",
-    practiceAssignment: "कैल्क में किसी खाली सेल में '=10 + 20 * 2' लिखें और Enter दबाकर देखें कि उत्तर 50 आता है।",
-    microQuiz: [
+    "quickRevision": "Formulas MUST start with '='. Operators: +, -, *, /, ^, &. Precedence: () > ^ > * / > + -. AutoSum (Σ) automatically generates =SUM().",
+    "practiceAssignment": "In Calc, enter 10 in A1 and 20 in B1. In C1, type '=A1*2+B1/2' and verify that the result is 30.",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस कैल्क में सूत्र (Formula) किस प्रतीक/चिन्ह से शुरू होना अनिवार्य है?",
-        options: [
-          { id: "A", text: "+" },
-          { id: "B", text: "=" },
-          { id: "C", text: "@" },
-          { id: "D", text: "#" }
+        "question": "With which mandatory mathematical symbol MUST every formula in LibreOffice Calc begin?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Plus (+)"
+          },
+          {
+            "id": "B",
+            "text": "Equal Sign (=)"
+          },
+          {
+            "id": "C",
+            "text": "Hash (#)"
+          },
+          {
+            "id": "D",
+            "text": "At (@)"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "कैल्क में प्रत्येक सूत्र की शुरुआत अनिवार्य रूप से बराबर (=) चिन्ह से होती है।"
+        "correctAnswer": "B",
+        "explanation": "All formulas and functions in spreadsheet applications must begin with an equal sign (=) to trigger evaluation."
       },
       {
-        question: "कैल्क में सूत्र '=20 - 10 / 2' का परिणाम क्या होगा?",
-        options: [
-          { id: "A", text: "5" },
-          { id: "B", text: "15" },
-          { id: "C", text: "10" },
-          { id: "D", text: "#VALUE!" }
+        "question": "What will be the exact mathematical result of the formula '=10+20/2' entered in a Calc cell?",
+        "options": [
+          {
+            "id": "A",
+            "text": "15"
+          },
+          {
+            "id": "B",
+            "text": "20"
+          },
+          {
+            "id": "C",
+            "text": "25"
+          },
+          {
+            "id": "D",
+            "text": "10"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "BODMAS नियम के अनुसार पहले भाग होगा (10/2 = 5), फिर 20 - 5 = 15 परिणाम आएगा।"
+        "correctAnswer": "B",
+        "explanation": "Division takes precedence over addition: 20 / 2 = 10, then 10 + 10 = 20."
       }
     ]
   },
   {
-    chapterNumber: 4,
-    topicNumber: 7,
-    slug: "essential-calc-functions",
-    title: "Core Functions: SUM, COUNT, MAX, MIN, AVERAGE",
-    hindiTitle: "प्रमुख फंक्शन्स: SUM, COUNT, MAX, MIN, AVERAGE",
-    definitionEnglish: "Built-in functions are predefined formulas performing standard statistical and mathematical operations on cell ranges, including SUM (total), AVERAGE (mean), COUNT (numeric cells count), COUNTA (non-empty cells count), MAX (largest value), MIN (smallest value), and ROUND/PRODUCT/MOD.",
-    definitionHindi: "बिल्ट-इन फंक्शन्स पहले से तैयार फॉर्मूले हैं जो सेल रेंज पर गणना करते हैं; जैसे SUM (योग), AVERAGE (औसत), COUNT (संख्या वाले सेल्स की गिनती), COUNTA (भरे हुए सेल्स), MAX (अधिकतम), MIN (न्यूनतम), ROUND, PRODUCT और MOD।",
-    simpleWords: "कैल्क के बने-बनाए जादुई फॉर्मूले जो एक सेकंड में सबसे बड़ा नंबर, सबसे छोटा नंबर, कुल योग और औसत निकाल देते हैं।",
-    examImportance: "Extreme (Direct function questions like ROUND, MOD, COUNT vs COUNTA in every CCC paper)",
-    detailedExplanation: `### 1. सांख्यिकीय फंक्शन्स (Statistical Functions):
-- **\`=SUM(A1:A5)\`**: सभी संख्याओं का कुल जोड़ निकालता है।
-- **\`=AVERAGE(A1:A5)\`**: संख्याओं का औसत निकालता है।
-  - उदा. \`=AVERAGE(10, 20, 30)\` ➔ **20**
-- **\`=MAX(A1:A5)\`**: रेंज में सबसे बड़ी (Maximum) संख्या लौटाता है।
-  - उदा. \`=MAX(15, 85, 42)\` ➔ **85**
-- **\`=MIN(A1:A5)\`**: रेंज में सबसे छोटी (Minimum) संख्या लौटाता है।
-  - उदा. \`=MIN(15, 85, 42)\` ➔ **15**
-- **\`=COUNT(A1:A5)\`**: केवल **संख्याओं (Numbers)** वाले सेल्स की गिनती करता है (टेक्स्ट को छोड़ देता है).
-- **\`=COUNTA(A1:A5)\`**: सभी **भरे हुए (Non-empty)** सेल्स (संख्या + टेक्स्ट दोनों) की गिनती करता है.
-
-### 2. महत्वपूर्ण गणितीय फंक्शन्स (Math Functions - CCC Special):
-- **\`=PRODUCT(2, 3, 4)\`**: सभी संख्याओं का आपस में गुणा (2 × 3 × 4 = **24**).
-- **\`=MOD(17, 5)\`**: शेषफल (Remainder) निकालता है (17 को 5 से भाग देने पर शेष = **2**).
-- **\`=ROUND(175.678, 2)\`**: दशमलव के 2 अंकों तक राउंड करता है (उत्तर: **175.68**).
-  - \`=ROUND(175.678, 0)\` ➔ **176**
-  - \`=ROUND(175.678, -1)\` ➔ **180**
-- **\`=NOW()\`**: वर्तमान सिस्टम दिनांक एवं समय दोनों देता है।
-- **\`=TODAY()\`**: केवल वर्तमान सिस्टम दिनांक देता है।`,
-    realWorldAnalogy: "फंक्शन्स रेडीमेड मसालों के पैकेट की तरह हैं—आपको अलग से सूत्र बनाने की जरूरत नहीं, बस इस्तेमाल करना है।",
-    importantPoints: [
-      "**COUNT** केवल अंकों वाले सेल्स को गिनता है, जबकि **COUNTA** टेक्स्ट और अंक दोनों को गिनता है।",
-      "**MOD** फंक्शन भाग देने के बाद **शेषफल (Remainder)** लौटाता है।",
-      "**NOW()** वर्तमान Date & Time दोनों देता है, जबकि **TODAY()** केवल Date देता है।",
-      "Function Wizard खोलने का शॉर्टकट **Ctrl + F2** होता है।"
+    "chapterNumber": 4,
+    "topicNumber": 7,
+    "slug": "essential-calc-functions",
+    "title": "Core Functions: SUM, COUNT, MAX, MIN, AVERAGE",
+    "hindiTitle": "प्रमुख फंक्शन्स: SUM, COUNT, MAX, MIN, AVERAGE",
+    "definitionEnglish": "Built-in functions in Calc are pre-programmed formula routines that accept arguments inside parentheses and return computed results, while cell referencing modes (Relative, Absolute, Mixed) control address behavior during copy operations.",
+    "definitionHindi": "कैल्क में बिल्ट-इन फंक्शन्स पूर्वनिर्मित सूत्र हैं जो कोष्ठक के अंदर तर्क (Arguments) स्वीकार करते हैं और परिणाम देते हैं, जैसे SUM, AVERAGE, COUNT, MAX, MIN और सेल रेफरेंसिंग ($A$1)।",
+    "simpleWords": "कैल्क के सबसे महत्वपूर्ण फंक्शन्स: जोड़ना (=SUM), औसत (=AVERAGE), सबसे बड़ा (=MAX), सबसे छोटा (=MIN), गिनना (=COUNT) और $ चिह्न से सेल लॉक करना।",
+    "examImportance": "Very High (5-6 direct questions on COUNT vs COUNTA, AVERAGE, MAX/MIN, and Absolute Referencing $A$1)",
+    "detailedExplanation": "### 1. The 5 Essential Statistical & Math Functions\n1. **`=SUM(Range)`:** Calculates the total arithmetic addition of all numbers in the specified cell range.\n   - Example: `=SUM(A1:A5)` or `=SUM(10, 20, 30)` ➔ Returns `60`.\n2. **`=AVERAGE(Range)`:** Computes the arithmetic mean (Sum of values divided by count of numeric cells).\n   - Example: `=AVERAGE(10, 20, 30)` ➔ Returns `20`.\n3. **`=MAX(Range)`:** Returns the highest / maximum numerical value in the range.\n   - Example: `=MAX(45, 92, 18, 67)` ➔ Returns `92`.\n4. **`=MIN(Range)`:** Returns the lowest / minimum numerical value in the range.\n   - Example: `=MIN(45, 92, 18, 67)` ➔ Returns `18`.\n5. **`=COUNT(Range)` vs. `=COUNTA(Range)` (Crucial CCC Distinction!):**\n   - **`=COUNT(A1:A10)`:** Counts ONLY cells that contain **numerical numbers**. (Ignores text strings and blank cells).\n   - **`=COUNTA(A1:A10)`:** Counts all **non-empty cells** (counts cells containing text, numbers, dates, or symbols; ignores only blank cells).\n\n### 2. Essential Date, Time & Math Utilities\n- **`=TODAY()`:** Returns the current system **Date** (e.g., `02/09/2026`).\n- **`=NOW()`:** Returns the current system **Date and Time** (e.g., `02/09/2026 10:30 AM`).\n- **`=ROUND(number, decimals)`:** Rounds a number to specified decimal places (e.g., `=ROUND(45.678, 2)` ➔ `45.68`).\n- **`=SQRT(number)`:** Returns the square root of a positive number (e.g., `=SQRT(64)` ➔ `8`).\n- **`=POWER(base, exp)`:** Calculates base raised to exponent (e.g., `=POWER(2, 4)` ➔ `16`).\n\n### 3. The Three Cell Referencing Modes (Crucial CCC Topic)\n| Referencing Mode | Syntax | Behavior When Copied Across Cells | Shortcut to Toggle |\n| :--- | :--- | :--- | :--- |\n| **Relative Referencing** | **`A1`** | Both column letter and row number shift relatively (e.g., copying from row 1 to row 2 changes `A1` to `A2`) | Default mode |\n| **Absolute Referencing** | **`$A$1`** | Both column and row are **locked permanently** using dollar signs (`$`); address never changes when copied | Press **`Shift + F4`** (or `F4` in Excel) |\n| **Mixed Referencing** | **`$A1`** or **`A$1`** | Either column is locked (`$A1`) or row is locked (`A$1`) while the other remains relative | Press **`Shift + F4`** |",
+    "realWorldAnalogy": "Relative referencing is like giving directions: 'Walk 2 houses to the right' (depends on where you are). Absolute referencing ($A$1) is giving an exact GPS coordinate: 'House #404, Main Street' (never changes).",
+    "importantPoints": [
+      "COUNT counts only cells with numbers; COUNTA counts all non-empty cells.",
+      "=NOW() returns both current Date and Time; =TODAY() returns only Date.",
+      "The dollar sign ($) is used to create Absolute cell references (e.g., $A$1).",
+      "In LibreOffice Calc, Shift + F4 toggles cell reference modes (Relative ➔ Absolute ➔ Mixed).",
+      "=SUM(A1:A5) calculates the sum of cells from A1 through A5."
     ],
-    commonMistakes: [
-      "COUNT से टेक्स्ट भी गिनने की उम्मीद करना (टेक्स्ट गिनने के लिए **COUNTA** का उपयोग होता है)।",
-      "MOD(10, 3) का मान 3 समझना (MOD शेषफल देता है, अतः 10/3 का शेष **1** होगा)।"
+    "commonMistakes": [
+      "Confusing COUNT with COUNTA (COUNT ignores text; COUNTA counts both text and numbers).",
+      "Confusing =TODAY() with =NOW() (=TODAY() gives only date; =NOW() gives date and time)."
     ],
-    examTips: [
-      "Calc में `=MOD(10, 3)` का मान ➔ **1**",
-      "`=PRODUCT(5, 2)` का मान ➔ **10**",
-      "`=NOW()` ➔ Date and Time दोनों",
-      "`=TODAY()` ➔ केवल Date"
+    "examTips": [
+      "Guaranteed CCC Question: 'Which function returns both current date and time in Calc?' ➔ =NOW().",
+      "Guaranteed CCC Question: 'Which symbol is used for Absolute Cell Referencing in Calc?' ➔ $ (Dollar Sign).",
+      "Guaranteed CCC Question: 'Which key combination toggles relative/absolute reference in Calc?' ➔ Shift + F4."
     ],
-    quickRevision: "SUM (total), AVG (mean), MAX/MIN (extremes), COUNT (nums only), COUNTA (all non-blank), MOD(n, d) = remainder, TODAY() = date, NOW() = date+time.",
-    practiceAssignment: "खाली सेल में '=MOD(25, 4)' और '=ROUND(45.786, 1)' लिखकर Enter दबाकर परिणाम जांचें।",
-    microQuiz: [
+    "quickRevision": "Functions: SUM (add), AVERAGE (mean), MAX (highest), MIN (lowest), COUNT (numbers only), COUNTA (non-empty), NOW (date+time), TODAY (date). Referencing: Relative=A1, Absolute=$A$1 (Toggle: Shift+F4).",
+    "practiceAssignment": "In Calc, enter 10, 20, 'Hello', 30 in cells A1:A4. In B1 test =COUNT(A1:A4) [result=3] and in B2 test =COUNTA(A1:A4) [result=4].",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस कैल्क में सूत्र '=MOD(15, 4)' का मान क्या होगा?",
-        options: [
-          { id: "A", text: "3" },
-          { id: "B", text: "3.75" },
-          { id: "C", text: "1" },
-          { id: "D", text: "0" }
+        "question": "Which function in LibreOffice Calc counts ONLY cells that contain NUMERIC data, ignoring text entries?",
+        "options": [
+          {
+            "id": "A",
+            "text": "COUNTA"
+          },
+          {
+            "id": "B",
+            "text": "COUNT"
+          },
+          {
+            "id": "C",
+            "text": "COUNTIF"
+          },
+          {
+            "id": "D",
+            "text": "SUM"
+          }
         ],
-        correctAnswer: "A",
-        explanation: "MOD फंक्शन शेषफल (Remainder) निकालता है। 15 को 4 से भाग देने पर (4×3 = 12) शेषफल 3 बचता है।"
+        "correctAnswer": "B",
+        "explanation": "The =COUNT() function strictly counts cells containing numeric values, whereas =COUNTA() counts all non-empty cells."
       },
       {
-        question: "वर्तमान सिस्टम दिनांक और समय (Date and Time) दोनों प्राप्त करने के लिए किस फंक्शन का प्रयोग किया जाता है?",
-        options: [
-          { id: "A", text: "=TODAY()" },
-          { id: "B", text: "=NOW()" },
-          { id: "C", text: "=TIME()" },
-          { id: "D", text: "=CURRENT()" }
+        "question": "What function should be used to display BOTH the current system Date and current system Time in a cell?",
+        "options": [
+          {
+            "id": "A",
+            "text": "=TODAY()"
+          },
+          {
+            "id": "B",
+            "text": "=NOW()"
+          },
+          {
+            "id": "C",
+            "text": "=TIME()"
+          },
+          {
+            "id": "D",
+            "text": "=DATE()"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "=NOW() फंक्शन सिस्टम की वर्तमान दिनांक और समय दोनों प्रदर्शित करता है।"
+        "correctAnswer": "B",
+        "explanation": "The =NOW() function dynamically returns both the active date and time timestamps."
       }
     ]
   },
   {
-    chapterNumber: 4,
-    topicNumber: 8,
-    slug: "creating-charts-bar-pie-line",
-    title: "Creating and Formatting Charts (Bar, Pie, Line)",
-    hindiTitle: "चार्ट्स बनाना और कस्टमाइज़ करना (Bar, Pie, Line Charts)",
-    definitionEnglish: "Charts visually represent numeric spreadsheet data to identify trends, comparisons, and proportions using Chart Wizard (4 steps), supporting Bar, Column, Pie, Line, Area, and XY Scatter charts.",
-    definitionHindi: "चार्ट्स स्प्रेडशीट के संख्यात्मक डेटा का दृश्य (सचित्र) निरूपण करते हैं जिससे तुलना और रुझान समझना आसान हो जाता है; इसे 4-चरणीय चार्ट विज़ार्ड द्वारा कॉलम, बार, पाई, और लाइन चार्ट के रूप में बनाया जाता है।",
-    simpleWords: "नंबरों को ग्राफ या गोल पाई के रूप में दिखाना ताकि देखते ही पता चल जाए कि किसकी बिक्री ज्यादा हुई।",
-    examImportance: "High (Chart Wizard steps count, types of charts like Pie vs Bar in CCC)",
-    detailedExplanation: `### 1. चार्ट विज़ार्ड के 4 चरण (Chart Wizard - 4 Steps - अति महत्वपूर्ण):
-- मेनू पाथ: **Insert Menu ➔ Chart** (या Standard Toolbar पर Chart आइकन).
-- चार्ट विज़ार्ड में कुल **4 चरण** होते हैं:
-  1. **Step 1: Chart Type** (कॉलम, बार, पाई, लाइन आदि प्रकार चुनना).
-  2. **Step 2: Data Range** (डेटा का सेल विस्तार चुनना).
-  3. **Step 3: Data Series** (श्रेणियों और रंगों को व्यवस्थित करना).
-  4. **Step 4: Chart Elements** (शीर्षक Title, Subtitle, X-Axis, Y-Axis, Legend जोड़ना).
-
-### 2. प्रमुख चार्ट प्रकार (Types of Charts):
-- **Column Chart (कॉलम चार्ट)**: ऊर्ध्वाधर (Vertical) खंभों द्वारा विभिन्न मदों की तुलना (डिफॉल्ट चार्ट प्रकार).
-- **Bar Chart (बार चार्ट)**: क्षैतिज (Horizontal) पट्टियों द्वारा तुलना.
-- **Pie Chart (पाई चार्ट)**: एक गोल वृत्त को टुकड़ों में बांटकर 100% में से आनुपातिक हिस्सेदारी (Proportion) दर्शाना (केवल 1 डेटा सीरीज के लिए सर्वोत्तम).
-- **Line Chart (लाइन चार्ट)**: समय के साथ रुझान और उतार-चढ़ाव (Trends over time, जैसे शेयर बाजार या तापमान).
-- **XY (Scatter) Chart**: दो वैज्ञानिक चरों के बीच सहसंबंध दिखाना.`,
-    realWorldAnalogy: "क्रिकेट मैच में ओवर-दर-ओवर रनों का ग्राफ (Line Chart) या खिलाड़ी के शॉट का वैगन व्हील (Pie Chart)।",
-    importantPoints: [
-      "Chart Wizard में कुल **4 चरण (4 Steps)** होते हैं।",
-      "पाई चार्ट (Pie Chart) पूरे हिस्से में से अनुपातिक प्रतिशत दिखाने के लिए सबसे उपयुक्त होता है।",
-      "चार्ट इंसर्ट करने का विकल्प **Insert Menu** में होता है।"
+    "chapterNumber": 4,
+    "topicNumber": 8,
+    "slug": "creating-charts-bar-pie-line",
+    "title": "Creating and Formatting Charts (Bar, Pie, Line)",
+    "hindiTitle": "चार्ट्स बनाना और कस्टमाइज़ करना (Bar, Pie, Line Charts)",
+    "definitionEnglish": "A chart is a graphical, visual representation of tabular spreadsheet data that facilitates rapid trend analysis, proportion comparison, and statistical visualization through visual elements like bars, slices, and lines.",
+    "definitionHindi": "चार्ट स्प्रेडशीट डेटा का एक दृश्य और ग्राफिकल निरूपण है जो बार, स्लाइस और रेखाओं के माध्यम से डेटा के रुझान, तुलना और सांख्यिकीय विश्लेषण को आसानी से समझने योग्य बनाता है।",
+    "simpleWords": "टेबल के आंकड़ों को आकर्षक ग्राफिक्स (जैसे बार चार्ट, पाई चार्ट, लाइन चार्ट) के रूप में प्रस्तुत करना (Insert ➔ Chart)।",
+    "examImportance": "High (2-3 questions on chart types, Pie chart proportions, and Chart Wizard steps)",
+    "detailedExplanation": "### 1. The 10 Official Chart Types in LibreOffice Calc\nAccessed via **Insert ➔ Chart** (or the Chart icon on the Standard Toolbar):\n1. **Column Chart:** Vertical vertical rectangular bars; standard for comparing discrete categories over time.\n2. **Bar Chart:** Horizontal rectangular bars; best when category labels are long text descriptions.\n3. **Pie Chart:** A circular disk divided into proportional slices; **shows parts of a whole (100% percentage distribution)** for a single data series.\n4. **Donut Chart:** A circular ring variation of a pie chart with an open center hole.\n5. **Line Chart:** Connects sequential data points with continuous lines; best for displaying continuous trends over chronological time (e.g., monthly temperature or stock prices).\n6. **Area Chart:** Emphasizes the magnitude of change over time by filling the area below lines with color.\n7. **XY (Scatter) Chart:** Plots individual coordinate points `(X, Y)`; standard in scientific and engineering correlation analysis.\n8. **Bubble Chart:** Extends XY scatter charts by representing a third variable via the radius size of the bubble.\n9. **Net (Radar) Chart:** Plots multivariate data along radial axes radiating from a central point.\n10. **Stock Chart:** Specialized financial chart displaying High, Low, Open, and Closing market prices.\n\n### 2. The 4-Step Chart Wizard\n- **Step 1: Chart Type:** Select from the 10 chart categories (and 2D / 3D look).\n- **Step 2: Data Range:** Defines cell range (e.g., `$A$1:$B$10`) and whether series are in rows or columns.\n- **Step 3: Data Series:** Customizes individual series names and data categories.\n- **Step 4: Chart Elements:** Configures Title, Subtitle, X-Axis Title, Y-Axis Title, Display Legend, and Gridlines.",
+    "realWorldAnalogy": "A Pie Chart is like a physical round pizza sliced among friends: each slice represents an individual's share of the whole 100% pizza.",
+    "importantPoints": [
+      "Insert Chart is located under the Insert menu (Insert ➔ Chart).",
+      "Pie Charts are used to represent parts of a whole (proportions of 100%).",
+      "Line Charts are best for showing continuous trends over time.",
+      "LibreOffice Calc provides 10 official chart types.",
+      "The Chart Wizard consists of 4 sequential steps."
     ],
-    commonMistakes: [
-      "Chart Wizard के 4 चरणों की जगह 5 या 6 चरण समझना।"
+    "commonMistakes": [
+      "Using a Pie Chart for multiple complex data series (Pie charts can only represent a single data series).",
+      "Confusing Column Chart (Vertical bars) with Bar Chart (Horizontal bars in Calc terminology)."
     ],
-    examTips: [
-      "Chart Wizard में कितने चरण होते हैं? ➔ **4 Steps**।",
-      "Proportions / Percentages के लिए सबसे अच्छा चार्ट कौन सा है? ➔ **Pie Chart**।"
+    "examTips": [
+      "Direct CCC Question: 'Which chart type is best for showing parts of a whole or percentage shares?' ➔ Pie Chart.",
+      "Direct CCC Question: 'How many steps are in the Chart Wizard in Calc?' ➔ 4 Steps."
     ],
-    quickRevision: "Chart Wizard has 4 steps: Chart Type -> Data Range -> Data Series -> Chart Elements. Pie (proportions), Line (trends), Column (comparisons).",
-    practiceAssignment: "कैल्क में 3 महीनों का खर्च लिखें और Insert मेनू से Pie Chart बनाकर उसका 3D दृश्य देखें।",
-    microQuiz: [
+    "quickRevision": "10 Chart Types in Calc: Column (vertical), Bar (horizontal), Pie (parts of whole), Line (trends), Area, XY Scatter, Bubble, Net, Stock, Column/Line. Chart Wizard has 4 steps.",
+    "practiceAssignment": "In Calc, create a simple table of Monthly Expenses (Rent, Food, Electricity) and insert a 3D Pie Chart to visualize the percentage breakdown.",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस कैल्क के चार्ट विज़ार्ड (Chart Wizard) में कुल कितने चरण (Steps) होते हैं?",
-        options: [
-          { id: "A", text: "3" },
-          { id: "B", text: "4" },
-          { id: "C", text: "5" },
-          { id: "D", text: "6" }
+        "question": "Which chart type in LibreOffice Calc is most effective for visualizing the percentage proportion of 'parts to a whole' (100% total)?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Line Chart"
+          },
+          {
+            "id": "B",
+            "text": "Pie Chart"
+          },
+          {
+            "id": "C",
+            "text": "XY Scatter Chart"
+          },
+          {
+            "id": "D",
+            "text": "Stock Chart"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "कैल्क में चार्ट विज़ार्ड के कुल 4 चरण (Chart Type, Data Range, Data Series, Chart Elements) होते हैं।"
-      },
-      {
-        question: "डेटा के आनुपातिक वितरण (Proportions / Percentages) को 100% के रूप में दिखाने के लिए कौन सा चार्ट सबसे उपयुक्त है?",
-        options: [
-          { id: "A", text: "Line Chart" },
-          { id: "B", text: "Pie Chart" },
-          { id: "C", text: "Scatter Chart" },
-          { id: "D", text: "Bubble Chart" }
-        ],
-        correctAnswer: "B",
-        explanation: "पाई चार्ट (Pie Chart) एक वृत्ताकार चार्ट है जो संपूर्ण में से विभिन्न भागों के प्रतिशत अनुपात को दर्शाता है।"
+        "correctAnswer": "B",
+        "explanation": "A Pie Chart divides a circle into proportional slices representing percentage distributions of a single whole entity."
       }
     ]
   },
   {
-    chapterNumber: 4,
-    topicNumber: 9,
-    slug: "libreoffice-calc-shortcut-keys-and-errors",
-    title: "Calc Shortcut Keys & Common Formula Error Codes",
-    hindiTitle: "कैल्क शॉर्टकट कीज एवं फॉर्मूला एरर कोड्स (###, #DIV/0!)",
-    definitionEnglish: "A consolidated master reference of essential LibreOffice Calc shortcut keys and common formula error codes (#DIV/0!, ###, #NAME?, #VALUE!, #REF!) encountered during spreadsheet processing.",
-    definitionHindi: "लिब्रेऑफिस कैल्क की सभी महत्वपूर्ण शॉर्टकट कीज और फॉर्मूला एरर कोड्स (###, #DIV/0!, #NAME?, #REF!) का संपूर्ण मास्टर संग्रह।",
-    simpleWords: "कैल्क के शॉर्टकट बटन और फॉर्मूला गलत होने पर स्क्रीन पर दिखने वाली गलतियों के संकेत।",
-    examImportance: "Extreme (Error codes like ###, #DIV/0! and shortcuts like Insert Date/Time in CCC)",
-    detailedExplanation: `### 1. सामान्य फॉर्मूला एरर कोड्स (Common Error Codes):
-- **\`###\` (हैश चिन्ह)**: जब सेल की चौड़ाई कम हो और संख्या या दिनांक उसमें न समा रही हो (कॉलम को चौड़ा करने पर ठीक हो जाता है).
-- **\`#DIV/0!\`**: जब किसी संख्या को **शून्य (0)** से या किसी खाली सेल से भाग दिया जाए (Division by Zero).
-- **\`#NAME?\`**: जब फॉर्मूले में फंक्शन की स्पेलिंग गलत लिखी हो (जैसे \`=SUMM(A1:A5)\`).
-- **\`#VALUE!\`**: जब गलत प्रकार का डेटा दिया जाए (जैसे संख्या में टेक्स्ट जोड़ना: \`=5 + "Ram"\`).
-- **\`#REF!\`**: जब फॉर्मूले में दिया गया सेल संदर्भ डिलीट हो चुका हो (Invalid Cell Reference).
-
-### 2. कैल्क की महत्वपूर्ण शॉर्टकट कीज (Calc Master Shortcuts):
-
-| कार्य (Operation) | शॉर्टकट कुंजी (Shortcut Key) |
-|---|---|
-| Edit Cell (सेल संपादन) | **\`F2\`** |
-| Line Break in Cell (सेल में नई लाइन) | **\`Ctrl + Enter\`** |
-| Insert Current Date (वर्तमान दिनांक) | **\`Ctrl + ;\`** (कंट्रोल + सेमीकोलन) |
-| Insert Current Time (वर्तमान समय) | **\`Ctrl + Shift + ;\`** |
-| Insert Cells / Rows (नया जोड़ना) | **\`Ctrl + +\`** |
-| Delete Cells / Rows (हटाना) | **\`Ctrl + -\`** |
-| Select Entire Row (पूरी रो चुनना) | **\`Shift + Space\`** |
-| Select Entire Column (पूरा कॉलम चुनना) | **\`Ctrl + Space\`** |
-| AutoFilter (ऑटो-फिल्टर) | **\`Ctrl + Shift + L\`** |
-| Toggle Cell Reference ($) | **\`Shift + F4\`** |
-| Function Wizard | **\`Ctrl + F2\`** |
-| Format Cells Dialog | **\`Ctrl + 1\`** |
-| Currency Format ($ / ₹) | **\`Ctrl + Shift + 4\`** |
-| Percentage Format (%) | **\`Ctrl + Shift + 5\`** |
-| Show/Hide Formulas in sheet | **\`Ctrl + ~\`** (कंट्रोल + टिल्डे / बैकटिक) |`,
-    realWorldAnalogy: "जैसे कार के डैशबोर्ड पर 'इंजन चेक' की लाइट जलती है, वैसे ही गलत फॉर्मूले पर #DIV/0! एरर आता है।",
-    importantPoints: [
-      "**Current Date** डालने की शॉर्टकट कुंजी **Ctrl + ;** होती है।",
-      "**Current Time** डालने की शॉर्टकट कुंजी **Ctrl + Shift + ;** होती है।",
-      "**`###`** एरर कॉलम की अपर्याप्त चौड़ाई के कारण आता है।",
-      "**`#DIV/0!`** एरर किसी संख्या को शून्य से भाग देने पर आता है।"
+    "chapterNumber": 4,
+    "topicNumber": 9,
+    "slug": "libreoffice-calc-shortcut-keys-and-errors",
+    "title": "Calc Shortcut Keys & Common Formula Error Codes",
+    "hindiTitle": "कैल्क शॉर्टकट कीज एवं फॉर्मूला एरर कोड्स (###, #DIV/0!)",
+    "definitionEnglish": "Formula error codes indicate specific computational or syntax failures encountered by the Calc engine, while Calc shortcut keys accelerate workbook navigation, cell formatting, formula evaluation, and sheet operations.",
+    "definitionHindi": "फॉर्मूला एरर कोड्स (जैसे ###, #DIV/0!, #NAME?) गणना या सिंटैक्स में होने वाली विशिष्ट गलतियों को दर्शाते हैं, जबकि शॉर्टकट कीज कैल्क में तेजी से काम करने में मदद करती हैं।",
+    "simpleWords": "जब सेल छोटा हो तो '###' आता है, 0 से भाग देने पर '#DIV/0!' आता है, और नाम गलत होने पर '#NAME?' आता है। साथ ही कैल्क के सभी महत्वपूर्ण शॉर्टकट।",
+    "examImportance": "Very High (5-6 direct questions on error codes like ###, #DIV/0!, #VALUE!, and Calc shortcuts in every CCC exam)",
+    "detailedExplanation": "### 1. Common Formula Error Codes in LibreOffice Calc (Crucial CCC Topic)\nWhen a formula cannot be resolved properly, Calc displays a diagnostic error code:\n| Error Code | Root Cause / Meaning | Practical Example | Resolution |\n| :--- | :--- | :--- | :--- |\n| **`###`** | **Column Width Too Narrow** to display the formatted number, date, or currency | Number `123456789` in a tiny 5mm column | **Widen the column** by double-clicking the column header border |\n| **`#DIV/0!`** | **Division by Zero** | `=100/0` or `=A1/B1` where B1 is empty/0 | Correct the divisor to a non-zero number |\n| **`#NAME?`** | **Unrecognized Function Name** or invalid text in formula | Typing `=SUMM(A1:A5)` or `=AVERG(A1:A5)` | Correct spelling of function name |\n| **`#VALUE!`** | **Wrong Argument Data Type** (Mathematical operation on text) | `=\"Hello\" + 50` | Ensure mathematical operands are numbers |\n| **`#REF!`** | **Invalid Cell Reference** (Referenced cell was deleted) | Cell referenced in `=A1+B1` had column B deleted | Re-establish valid cell reference |\n| **`#N/A`** | **Value Not Available** | Lookup function fails to find match | Provide matching search term |\n\n### 2. Master Reference Table: Essential LibreOffice Calc Shortcuts\n| Command / Operation | Shortcut Key | Functional Description |\n| :--- | :--- | :--- |\n| **Edit Active Cell** | **`F2`** | Activates in-cell cursor editing mode |\n| **Format Cells Dialog** | **`Ctrl + 1`** | Opens master Format Cells dialog |\n| **Insert Cells / Rows** | **`Ctrl + +`** | Opens Insert Cells / Rows dialog |\n| **Delete Cells / Rows** | **`Ctrl + -`** | Opens Delete Cells / Rows dialog |\n| **Toggle AutoFilter** | **`Ctrl + Shift + L`** | Toggles dropdown filter buttons |\n| **Function Wizard** | **`Ctrl + F2`** | Opens Function Wizard dialog |\n| **Toggle Reference Mode** | **`Shift + F4`** | Toggles Relative ($) and Absolute |\n| **Insert Date Stamp** | **`Ctrl + ;`** (Semicolon) | Inserts current static date |\n| **Insert Time Stamp** | **`Ctrl + Shift + ;`** | Inserts current static time |\n| **In-Cell Line Break** | **`Ctrl + Enter`** | Adds manual newline inside active cell |\n| **Move to First Cell (A1)**| **`Ctrl + Home`** | Jumps instantly to cell A1 |\n| **Move to Last Used Cell**| **`Ctrl + End`** | Jumps to bottom-right active cell |\n| **Select Entire Row** | **`Shift + Space`** | Highlights the entire active row |\n| **Select Entire Column** | **`Ctrl + Space`** | Highlights the entire active column |\n| **Select Entire Sheet** | **`Ctrl + A`** or **`Ctrl + Shift + Space`** | Selects all 1,073,741,824 cells |\n| **Save As** | **`Ctrl + Shift + S`** | Saves sheet with new name/format |\n| **Print Preview** | **`Ctrl + Shift + O`** | Opens Print Preview layout canvas |",
+    "realWorldAnalogy": "Error codes are like warning lights on a car dashboard: '###' means your suitcase is too wide for the trunk (widen it), '#DIV/0!' means trying to divide a pizza among zero people (impossible).",
+    "importantPoints": [
+      "The '###' error means the column is too narrow to display the number (Fixed by widening column).",
+      "The '#DIV/0!' error occurs when a formula attempts to divide by zero.",
+      "The '#NAME?' error occurs when a function name is misspelled (e.g., =SUMM).",
+      "The '#VALUE!' error occurs when mathematical operators are applied to text.",
+      "Shift + Space selects an entire Row; Ctrl + Space selects an entire Column.",
+      "Ctrl + ; (Semicolon) inserts the current Date."
     ],
-    commonMistakes: [
-      "### को कोई भयानक गणना दोष समझना (यह केवल कॉलम चौड़ाई बढ़ाने से तुरंत ठीक हो जाता है)।"
+    "commonMistakes": [
+      "Believing '###' means the formula is mathematically wrong (It simply means column width is narrow; the math is correct).",
+      "Thinking #DIV/0! can be resolved by widening the column (It requires fixing the zero divisor in the formula)."
     ],
-    examTips: [
-      "Insert Date Shortcut ➔ **Ctrl + ;**",
-      "Insert Time Shortcut ➔ **Ctrl + Shift + ;**",
-      "Error on Division by Zero ➔ **#DIV/0!**",
-      "Error on insufficient column width ➔ **###**"
+    "examTips": [
+      "Guaranteed CCC Question: 'What does the ### error symbol in LibreOffice Calc indicate?' ➔ Column width is too narrow.",
+      "Guaranteed CCC Question: 'What error occurs when dividing a number by 0 in Calc?' ➔ #DIV/0!.",
+      "Guaranteed CCC Question: 'Which shortcut selects an entire row in Calc?' ➔ Shift + Space."
     ],
-    quickRevision: "Insert Date (Ctrl+;), Insert Time (Ctrl+Shift+;), ### (width issue), #DIV/0! (divide by 0), #NAME? (spelling error).",
-    practiceAssignment: "सेल में '=10/0' लिखकर Enter दबाएं और देखें कि #DIV/0! एरर कैसे प्रदर्शित होता है।",
-    microQuiz: [
+    "quickRevision": "Errors: ###=Column narrow, #DIV/0!=Divide by 0, #NAME?=Wrong formula name, #VALUE!=Wrong data type, #REF!=Deleted cell. Shortcuts: Edit=F2, Format=Ctrl+1, Filter=Ctrl+Shift+L, Row=Shift+Space, Col=Ctrl+Space, Date=Ctrl+;.",
+    "practiceAssignment": "In Calc, enter '=100/0' in A1 to observe '#DIV/0!'. In B1 type 123456789 and shrink column B width to see '###'. Double-click column border to fix it.",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस कैल्क में वर्तमान दिनांक (Current Date) डालने की शॉर्टकट कुंजी क्या है?",
-        options: [
-          { id: "A", text: "Ctrl + ;" },
-          { id: "B", text: "Ctrl + Shift + ;" },
-          { id: "C", text: "Ctrl + D" },
-          { id: "D", text: "Alt + Shift + D" }
+        "question": "What does the error symbol '###' displayed inside a LibreOffice Calc cell signify?",
+        "options": [
+          {
+            "id": "A",
+            "text": "The formula syntax is completely wrong"
+          },
+          {
+            "id": "B",
+            "text": "The column width is too narrow to display the number"
+          },
+          {
+            "id": "C",
+            "text": "The computer has run out of memory"
+          },
+          {
+            "id": "D",
+            "text": "A division by zero was attempted"
+          }
         ],
-        correctAnswer: "A",
-        explanation: "कैल्क में 'Ctrl + ;' (सेमीकोलन) दबाने से वर्तमान सिस्टम डेट सीधे सेल में दर्ज हो जाती है।"
+        "correctAnswer": "B",
+        "explanation": "When a number or date exceeds the visible width of a cell, Calc renders '###' until the column is widened."
       },
       {
-        question: "यदि कैल्क में किसी सेल में '###' प्रदर्शित हो रहा है, तो इसका क्या अर्थ है?",
-        options: [
-          { id: "A", text: "फॉर्मूला गलत है" },
-          { id: "B", text: "सेल की चौड़ाई कंटेंट के लिए कम है" },
-          { id: "C", text: "डेटा नष्ट हो चुका है" },
-          { id: "D", text: "शून्य से विभाजन हुआ है" }
+        "question": "Which keyboard shortcut selects an ENTIRE ROW in LibreOffice Calc?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Ctrl + Space"
+          },
+          {
+            "id": "B",
+            "text": "Shift + Space"
+          },
+          {
+            "id": "C",
+            "text": "Alt + Space"
+          },
+          {
+            "id": "D",
+            "text": "Ctrl + Shift + R"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "जब सेल में संख्या या दिनांक उस सेल की चौड़ाई से बड़ी होती है, तो स्थान की कमी के कारण '###' दिखाई देता है।"
+        "correctAnswer": "B",
+        "explanation": "Pressing Shift + Space highlights the entire active horizontal row (Ctrl + Space selects the column)."
       }
     ]
   }

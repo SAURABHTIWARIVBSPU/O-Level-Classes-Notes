@@ -1,661 +1,766 @@
-// CCC Chapter 3: Word Processing (LibreOffice Writer)
+// CCC Chapter 3: Word Processing (LibreOffice Writer) - Complete Textbook Content
 export const chapter3Topics = [
   {
-    chapterNumber: 3,
-    topicNumber: 1,
-    slug: "word-processing-basics-libreoffice-writer",
-    title: "Word Processing Basics & LibreOffice Writer Interface",
-    hindiTitle: "वर्ड प्रोसेसिंग बेसिक्स एवं लिब्रेऑफिस राइटर इंटरफ़ेस",
-    definitionEnglish: "LibreOffice Writer is a full-featured open-source word processor used to create letters, books, reports, newsletters, and brochures with rich typography and formatting capabilities.",
-    definitionHindi: "लिब्रेऑफिस राइटर (LibreOffice Writer) एक शक्तिशाली ओपन-सोर्स वर्ड प्रोसेसिंग सॉफ्टवेयर है जिसका उपयोग पत्र, किताबें, रिपोर्ट्स, ब्रोशर और दस्तावेज़ तैयार करने और फॉर्मेट करने के लिए किया जाता है।",
-    simpleWords: "कंप्यूटर पर पत्र, एप्लीकेशन, नोट्स या किताब टाइप करने और सुंदर तरीके से सजाने वाला सॉफ्टवेयर।",
-    examImportance: "Extreme (Writer zoom levels, default font, title bar, and sidebar shortcuts in CCC)",
-    detailedExplanation: `### 1. लिब्रेऑफिस राइटर स्क्रीन के मुख्य भाग:
-- **Title Bar (शीर्षक पट्टी)**: सबसे ऊपर स्थित, जिसमें दस्तावेज़ का नाम (डिफॉल्ट: **Untitled 1**) और प्रोग्राम का नाम (\`LibreOffice Writer\`) दिखाई देता है।
-- **Menu Bar (मेनू पट्टी)**: कुल **11 मेनू** होते हैं (File, Edit, View, Insert, Format, Styles, Table, Form, Tools, Window, Help).
-- **Standard & Formatting Toolbars**: अक्सर उपयोग होने वाले टूल्स (Save, Print, Cut, Font, Size).
-- **Sidebar (साइडबार)**: दाईं ओर स्थित पेन (शॉर्टकट: **\`Ctrl + F5\`**), जिसमें Properties, Styles, Gallery, Navigator होते हैं।
-- **Status Bar (स्टेटस बार)**: सबसे नीचे स्थित पट्टी, जो पेज नंबर (\`Page 1 of 5\`), कुल शब्द एवं वर्ण (Word & Character count), भाषा (English/Hindi) और ज़ूम स्लाइडर प्रदर्शित करती है।
-
-### 2. राइटर के महत्वपूर्ण ज़ूम प्रतिशत (Zoom Limits):
-- **न्यूनतम ज़ूम (Minimum Zoom)**: **20%**
-- **अधिकतम ज़ूम (Maximum Zoom)**: **600%** (CCC का सबसे प्रसिद्ध प्रश्न!)
-
-### 3. डिफॉल्ट सेटिंग्स (Default Settings):
-- **डिफॉल्ट फॉन्ट नेम (Default Font Name)**: **Liberation Serif**
-- **डिफॉल्ट फॉन्ट साइज (Default Font Size)**: **12 pt**
-- **डिफॉल्ट फाइल नेम (Default File Name)**: **Untitled 1**
-- **डिफॉल्ट फाइल एक्सटेंशन**: **\`.odt\`** (OpenDocument Text)`,
-    realWorldAnalogy: "राइटर एक डिजिटल टाइपराइटर और प्रिंटिंग प्रेस का मिला-जुला आधुनिक रूप है।",
-    importantPoints: [
-      "LibreOffice Writer का न्यूनतम ज़ूम **20%** और अधिकतम ज़ूम **600%** होता है।",
-      "डिफॉल्ट फॉन्ट **Liberation Serif** और साइज **12 pt** होता है।",
-      "मेनू बार में कुल **11 मेनू** होते हैं।",
-      "साइडबार (Sidebar) को खोलने या बंद करने का शॉर्टकट **Ctrl + F5** होता है।"
+    "chapterNumber": 3,
+    "topicNumber": 1,
+    "slug": "word-processing-basics-libreoffice-writer",
+    "title": "Word Processing Basics & LibreOffice Writer Interface",
+    "hindiTitle": "वर्ड प्रोसेसिंग बेसिक्स एवं लिब्रेऑफिस राइटर इंटरफ़ेस",
+    "definitionEnglish": "LibreOffice Writer is a free, open-source, feature-rich word processor and desktop publishing application developed by The Document Foundation that enables users to create, format, edit, and publish digital text documents.",
+    "definitionHindi": "लिब्रेऑफिस राइटर (LibreOffice Writer) द डॉक्यूमेंट फाउंडेशन द्वारा विकसित एक फ्री और ओपन-सोर्स वर्ड प्रोसेसिंग सॉफ्टवेयर है जिसका उपयोग पत्र, रिपोर्ट, पुस्तकें और डिजिटल दस्तावेज तैयार व प्रारूपित करने के लिए किया जाता है।",
+    "simpleWords": "लिब्रेऑफिस राइटर एमएस वर्ड जैसा एक ओपन सोर्स वर्ड प्रोसेसर है जिसमें टाइपिंग, लेटर राइटिंग, टेबल और बुक फॉर्मेटिंग की जाती है।",
+    "examImportance": "Very High (4-5 direct questions on default name, zoom limits, font, and interface bars in every CCC exam)",
+    "detailedExplanation": "### 1. LibreOffice Writer Interface Specifications\nLibreOffice Writer is the official word processor taught in the NIELIT CCC curriculum. Essential system defaults include:\n- **Default Document Name:** **`Untitled 1`**\n- **Default File Extension:** **`.odt` (OpenDocument Text)**\n- **Default Font Name:** **`Liberation Serif`**\n- **Default Font Size:** **`12 pt`**\n- **Default Page Orientation:** **Portrait**\n- **Default Page Margins:** **0.75 inch (1.9 cm / 19 mm)** on Top, Bottom, Left, and Right.\n- **Zoom Percentage Limits:** Minimum Zoom = **20%**, Maximum Zoom = **600%**.\n\n### 2. Anatomy of the Writer Screen Workspace\n1. **Title Bar:** Topmost horizontal strip displaying the document filename (`Untitled 1 - LibreOffice Writer`) and standard Window Control Buttons (Minimize, Maximize/Restore, Close).\n2. **Menu Bar:** Displays 11 standard functional menus: *File, Edit, View, Insert, Format, Styles, Table, Form, Tools, Window, Help*.\n3. **Standard Toolbar:** Contains graphical shortcut buttons for file and clipboard tasks: *New (Ctrl+N), Open (Ctrl+O), Save (Ctrl+S), Export Direct as PDF, Print (Ctrl+P), Cut, Copy, Paste*.\n4. **Formatting Toolbar:** Contains typography buttons: *Font Name, Font Size, Bold (Ctrl+B), Italic (Ctrl+I), Underline (Ctrl+U), Font Color, Highlight Color, Alignment buttons, Bullets (Shift+F12), Numbering (F12)*.\n5. **Horizontal & Vertical Rulers (`Ctrl + Shift + R`):** Displays visual measurements in inches/centimeters and manages paragraph margin tab-stops.\n6. **Sidebar Deck (`Ctrl + F5`):** Collapsible right-hand panel hosting 7 specialized utility decks: *Properties, Page, Styles (F11), Gallery, Navigator (F5), Shapes, Style Inspector*.\n7. **Status Bar (Bottom Strip):** Displays real-time document metrics: *Page Number (e.g., Page 1 of 5), Total Word Count & Character Count, Page Style (Default Page Style), Document Language (English USA), View Layout (Single Page, Multiple Pages, Book View), and the Zoom Slider (20%–600%)*.",
+    "realWorldAnalogy": "LibreOffice Writer is like a modern digital typewriter equipped with an endless roll of paper, automatic spell-checking assistants, multiple colorful pens, and instant printing presses.",
+    "importantPoints": [
+      "The default file extension of LibreOffice Writer is .odt (OpenDocument Text).",
+      "The default document title on opening is Untitled 1.",
+      "The minimum zoom in LibreOffice Writer is 20%, and the maximum zoom is 600%.",
+      "The default font in LibreOffice Writer is Liberation Serif with a size of 12 pt.",
+      "The shortcut key to open the Styles and Formatting deck is F11.",
+      "Ruler can be toggled on/off using Ctrl + Shift + R."
     ],
-    commonMistakes: [
-      "अधिकतम ज़ूम 500% समझना (MS Word में 500% होता है, लेकिन LibreOffice Writer में **600%** होता है)।",
-      "डिफॉल्ट फॉन्ट Times New Roman समझना (LibreOffice में **Liberation Serif** होता है)।"
+    "commonMistakes": [
+      "Thinking the maximum zoom in Writer is 400% (Writer zoom is 600%; Calc zoom is 400%; Impress is 3000%).",
+      "Assuming the default font is Times New Roman or Calibri (LibreOffice uses Liberation Serif by default)."
     ],
-    examTips: [
-      "Writer का न्यूनतम ज़ूम: **20%**, अधिकतम ज़ूम: **600%**।",
-      "डिफॉल्ट फॉन्ट: **Liberation Serif**, साइज: **12**।"
+    "examTips": [
+      "Guaranteed CCC Question: 'What is the maximum zoom percentage in LibreOffice Writer?' ➔ 600%.",
+      "Guaranteed CCC Question: 'What is the default font size in LibreOffice Writer?' ➔ 12 pt.",
+      "Guaranteed CCC Question: 'Which key opens Styles sidebar in Writer?' ➔ F11."
     ],
-    quickRevision: "Writer: Zoom 20%-600%, Default Font: Liberation Serif (12pt), Default Name: Untitled 1 (.odt), Sidebar: Ctrl+F5, Menus: 11.",
-    practiceAssignment: "LibreOffice Writer खोलें, नीचे स्टेटस बार में ज़ूम स्लाइडर को खींचकर न्यूनतम 20% और अधिकतम 600% तक टेस्ट करें।",
-    microQuiz: [
+    "quickRevision": "LibreOffice Writer: Ext=.odt, Default name=Untitled 1, Default font=Liberation Serif 12pt, Zoom=20% to 600%, Styles=F11, Navigator=F5, Ruler=Ctrl+Shift+R.",
+    "practiceAssignment": "Launch LibreOffice Writer, locate the Status Bar at the bottom, change the zoom slider from 20% to 600%, and verify the default font name.",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस राइटर में अधिकतम ज़ूम (Maximum Zoom) प्रतिशत कितना होता है?",
-        options: [
-          { id: "A", text: "400%" },
-          { id: "B", text: "500%" },
-          { id: "C", text: "600%" },
-          { id: "D", text: "3000%" }
+        "question": "What is the MAXIMUM zoom percentage permitted in LibreOffice Writer?",
+        "options": [
+          {
+            "id": "A",
+            "text": "400%"
+          },
+          {
+            "id": "B",
+            "text": "500%"
+          },
+          {
+            "id": "C",
+            "text": "600%"
+          },
+          {
+            "id": "D",
+            "text": "3000%"
+          }
         ],
-        correctAnswer: "C",
-        explanation: "LibreOffice Writer में अधिकतम ज़ूम 600% और न्यूनतम ज़ूम 20% होता है (जबकि Calc में 400% और Impress में 3000% होता है)।"
+        "correctAnswer": "C",
+        "explanation": "LibreOffice Writer supports a maximum zoom magnification of 600% (Minimum is 20%)."
       },
       {
-        question: "लिब्रेऑफिस राइटर में साइडबार (Sidebar) को हाइड/अनहाइड करने की शॉर्टकट कुंजी क्या है?",
-        options: [
-          { id: "A", text: "Ctrl + F1" },
-          { id: "B", text: "Ctrl + F5" },
-          { id: "C", text: "F5" },
-          { id: "D", text: "Shift + F5" }
+        "question": "What is the default font family and font size in a newly created LibreOffice Writer document?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Times New Roman, 12 pt"
+          },
+          {
+            "id": "B",
+            "text": "Liberation Serif, 12 pt"
+          },
+          {
+            "id": "C",
+            "text": "Calibri, 11 pt"
+          },
+          {
+            "id": "D",
+            "text": "Arial, 10 pt"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "Ctrl + F5 शॉर्टकट की सहायता से राइटर में साइडबार को दिखाया या छिपाया जा सकता है।"
+        "correctAnswer": "B",
+        "explanation": "The standard default font in LibreOffice Writer is Liberation Serif at a size of 12 points."
       }
     ]
   },
   {
-    chapterNumber: 3,
-    topicNumber: 2,
-    slug: "opening-closing-saving-and-pdf-export",
-    title: "Document Operations: Save, Print Preview & PDF Export",
-    hindiTitle: "दस्तावेज़ ऑपरेशन्स: सेव, प्रिंट प्रीव्यू एवं पीडीएफ एक्सपोर्ट",
-    definitionEnglish: "Document management in Writer includes creating new documents (Ctrl+N), saving (Ctrl+S), Save As (Ctrl+Shift+S), closing (Ctrl+W), Direct PDF Export, and Print Preview (Ctrl+Shift+O).",
-    definitionHindi: "राइटर में डॉक्यूमेंट प्रबंधन के अंतर्गत नया डॉक्यूमेंट बनाना (Ctrl+N), सेव करना (Ctrl+S), सेव ऐज़ (Ctrl+Shift+S), बंद करना (Ctrl+W), प्रिंट प्रीव्यू (Ctrl+Shift+O) और सीधे PDF एक्सपोर्ट करना शामिल है।",
-    simpleWords: "फाइल को कंप्यूटर में सुरक्षित रखना, प्रिंट से पहले चेक करना और मोबाइल में आसानी से पढ़ने के लिए PDF में बदलना।",
-    examImportance: "Extreme (Save As and Print Preview shortcuts in Writer are guaranteed CCC questions)",
-    detailedExplanation: `### 1. फाइल ऑपरेशन्स एवं उनकी शॉर्टकट कुंजियां:
-- **New Document (नया दस्तावेज़)**: \`Ctrl + N\`
-- **Open Document (पहले से बनी फाइल खोलना)**: \`Ctrl + O\`
-- **Save Document (सुरक्षित करना)**: \`Ctrl + S\`
-- **Save As (नये नाम या स्थान पर सेव करना)**: **\`Ctrl + Shift + S\`** (अत्यंत महत्वपूर्ण!)
-- **Save Remote (क्लाउड सर्वर पर सेव करना)**: File Menu ➔ Save Remote
-- **Close Document (सक्रिय डॉक्यूमेंट बंद करना)**: \`Ctrl + W\`
-- **Exit LibreOffice (पूरा लिब्रेऑफिस बंद करना)**: \`Ctrl + Q\`
-
-### 2. प्रिंट एवं प्रिंट प्रीव्यू (Print & Print Preview):
-- **Print Preview (प्रिंट पूर्वावलोकन)**: **\`Ctrl + Shift + O\`** (कागज पर छपने से पहले देखना).
-- **Print Document (प्रिंट करना)**: \`Ctrl + P\`
-
-### 3. एक्सपोर्ट ऐज़ पीडीएफ (Export Directly as PDF):
-- लिब्रेऑफिस राइटर में स्टैंडर्ड टूलबार पर एक क्लिक में **Export Directly as PDF** का आइकन होता है।
-- इसके द्वारा डॉक्यूमेंट को बिना किसी बाहरी सॉफ्टवेयर के सुरक्षित PDF फॉर्मेट में बदला जा सकता है।
-- इसमें पासवर्ड सुरक्षा (PDF Encryption & Permissions) जोड़ने की सुविधा भी उपलब्ध होती है।`,
-    realWorldAnalogy: "सेव करना मतलब लिखी हुई डायरी को अलमारी में ताला लगाकर रखना ताकि खो न जाए।",
-    importantPoints: [
-      "Save As की शॉर्टकट कुंजी **Ctrl + Shift + S** होती है (MS Word में F12 होती है)।",
-      "Print Preview की शॉर्टकट कुंजी **Ctrl + Shift + O** होती है (MS Word में Ctrl+F2 होती है)।",
-      "पूरा LibreOffice बंद करने की शॉर्टकट **Ctrl + Q** और केवल वर्तमान फाइल बंद करने की **Ctrl + W** है।"
+    "chapterNumber": 3,
+    "topicNumber": 2,
+    "slug": "opening-closing-saving-and-pdf-export",
+    "title": "Document Operations: Save, Print Preview & PDF Export",
+    "hindiTitle": "दस्तावेज़ ऑपरेशन्स: सेव, प्रिंट प्रीव्यू एवं पीडीएफ एक्सपोर्ट",
+    "definitionEnglish": "Document management operations encompass creating new documents, opening existing files, saving, saving with new parameters (Save As), generating print previews, printing, and exporting directly into cross-platform PDF format.",
+    "definitionHindi": "दस्तावेज़ प्रबंधन में नया डॉक्यूमेंट बनाना, फाइलों को खोलना, सेव करना, दूसरे नाम से सेव करना (Save As), प्रिंट प्रीव्यू देखना, प्रिंट करना और सीधे पीडीएफ में एक्सपोर्ट करना शामिल है।",
+    "simpleWords": "फाइल को सेव करना (Ctrl+S), नए नाम से सेव करना (Ctrl+Shift+S), प्रिंट प्रीव्यू (Ctrl+Shift+O) और PDF बनाकर सुरक्षित करना।",
+    "examImportance": "Very High (3-4 questions on Save As shortcut Ctrl+Shift+S, Print Preview Ctrl+Shift+O, and PDF export)",
+    "detailedExplanation": "### 1. Document Lifecycle Commands and Shortcuts\n1. **New Document (`Ctrl + N`):** Creates a fresh blank document (`Untitled 2`).\n2. **Open Existing Document (`Ctrl + O`):** Opens file selection dialog to browse and load `.odt`, `.docx`, or `.rtf` files.\n3. **Save (`Ctrl + S`):** Writes current modifications to disk. If the document is unsaved, prompts for filename and directory.\n4. **Save As (`Ctrl + Shift + S`):** Saves an exact duplicate copy of the active document under a **new filename, different directory, or alternate file format** (such as saving an `.odt` document as `.docx` or `.txt`).\n5. **Save a Copy:** Saves a clone of the document without switching the active editing window to the new file.\n6. **Close Document (`Ctrl + W`):** Closes the active document tab while keeping the LibreOffice suite running.\n7. **Exit LibreOffice Suite (`Ctrl + Q`):** Shuts down all open LibreOffice modules entirely.\n\n### 2. Print Preview & Printing\n- **Print Preview (`Ctrl + Shift + O`):** Displays a high-fidelity visual layout simulation of exactly how the pages will look when printed on physical paper. Enables multi-page grid views (2 pages, 4 pages, book mode).\n- **Print Dialog (`Ctrl + P`):** Configures target physical printer, number of copies, page ranges (e.g., `1-5, 8, 12`), and duplex two-sided printing.\n\n### 3. Direct Export to PDF (Portable Document Format)\n- **Direct PDF Export Icon:** Located on the Standard Toolbar; exports the document instantly to a `.pdf` file with 1-click using default compression.\n- **Export As PDF Dialog (File ➔ Export As ➔ Export as PDF):** Allows advanced configuration including **Lossless image compression**, **PDF/A-1a ISO archive compliance**, **Password Encryption (Open Password and Permission Password)**, and digital watermark overlays.",
+    "realWorldAnalogy": "Save As is like photocopying your handwritten notebook and writing a friend's name on the new copy, leaving your original notebook untouched.",
+    "importantPoints": [
+      "In LibreOffice Writer, the shortcut key for 'Save As' is Ctrl + Shift + S (In MS Word it is F12).",
+      "The shortcut key for 'Print Preview' in LibreOffice Writer is Ctrl + Shift + O (In MS Word it is Ctrl + F2).",
+      "The shortcut key to close the current document window is Ctrl + W.",
+      "The shortcut key to exit the entire LibreOffice application is Ctrl + Q.",
+      "PDF files created via Export as PDF can be password protected."
     ],
-    commonMistakes: [
-      "Save As के लिए F12 समझना (LibreOffice में Save As = **Ctrl + Shift + S** होता है)।",
-      "Print Preview के लिए Ctrl+F2 समझना (LibreOffice में Print Preview = **Ctrl + Shift + O** होता है)।"
+    "commonMistakes": [
+      "Pressing F12 for Save As in LibreOffice Writer (F12 in LibreOffice activates Numbered Lists; Save As is strictly Ctrl + Shift + S).",
+      "Confusing Print Preview shortcut with MS Word (LibreOffice Print Preview is Ctrl + Shift + O)."
     ],
-    examTips: [
-      "LibreOffice Writer में Save As: **Ctrl + Shift + S**।",
-      "LibreOffice Writer में Print Preview: **Ctrl + Shift + O**।",
-      "Exit LibreOffice: **Ctrl + Q**।"
+    "examTips": [
+      "Guaranteed CCC Question: 'What is the shortcut key for Save As in LibreOffice Writer?' ➔ Ctrl + Shift + S.",
+      "Guaranteed CCC Question: 'What is the shortcut key for Print Preview in LibreOffice Writer?' ➔ Ctrl + Shift + O.",
+      "Guaranteed CCC Question: 'What is the shortcut key to exit LibreOffice?' ➔ Ctrl + Q."
     ],
-    quickRevision: "New: Ctrl+N, Save: Ctrl+S, Save As: Ctrl+Shift+S, Print Preview: Ctrl+Shift+O, Print: Ctrl+P, Close File: Ctrl+W, Exit App: Ctrl+Q.",
-    practiceAssignment: "राइटर में 'Ctrl + Shift + O' दबाकर प्रिंट प्रीव्यू खोलें और Esc दबाकर वापस आएं।",
-    microQuiz: [
+    "quickRevision": "Document operations: New=Ctrl+N, Open=Ctrl+O, Save=Ctrl+S, Save As=Ctrl+Shift+S, Close=Ctrl+W, Exit=Ctrl+Q, Print Preview=Ctrl+Shift+O, Print=Ctrl+P, Direct PDF export button on Standard Toolbar.",
+    "practiceAssignment": "Type a paragraph in LibreOffice Writer, press Ctrl + Shift + S to save it as 'MyNotes.odt', press Ctrl + Shift + O to inspect Print Preview, and export it as a PDF.",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस राइटर में 'Save As' करने की शॉर्टकट कुंजी क्या है?",
-        options: [
-          { id: "A", text: "F12" },
-          { id: "B", text: "Ctrl + S" },
-          { id: "C", text: "Ctrl + Shift + S" },
-          { id: "D", text: "Alt + S" }
+        "question": "What is the keyboard shortcut key for 'Save As' in LibreOffice Writer?",
+        "options": [
+          {
+            "id": "A",
+            "text": "F12"
+          },
+          {
+            "id": "B",
+            "text": "Ctrl + Shift + S"
+          },
+          {
+            "id": "C",
+            "text": "Ctrl + S"
+          },
+          {
+            "id": "D",
+            "text": "Alt + S"
+          }
         ],
-        correctAnswer: "C",
-        explanation: "LibreOffice Writer में 'Save As' की शॉर्टकट कुंजी 'Ctrl + Shift + S' होती है।"
+        "correctAnswer": "B",
+        "explanation": "In LibreOffice Writer, Save As is executed using Ctrl + Shift + S (whereas F12 is reserved for toggling Numbered Lists)."
       },
       {
-        question: "लिब्रेऑफिस राइटर में 'Print Preview' देखने की शॉर्टकट कुंजी कौन सी है?",
-        options: [
-          { id: "A", text: "Ctrl + F2" },
-          { id: "B", text: "Ctrl + Shift + O" },
-          { id: "C", text: "Ctrl + P" },
-          { id: "D", text: "Alt + P" }
+        "question": "Which keyboard shortcut activates 'Print Preview' mode in LibreOffice Writer?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Ctrl + F2"
+          },
+          {
+            "id": "B",
+            "text": "Ctrl + Shift + O"
+          },
+          {
+            "id": "C",
+            "text": "Ctrl + P"
+          },
+          {
+            "id": "D",
+            "text": "Alt + P"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "LibreOffice Writer में प्रिंट पूर्वावलोकन (Print Preview) के लिए 'Ctrl + Shift + O' दबाया जाता है।"
+        "correctAnswer": "B",
+        "explanation": "Pressing Ctrl + Shift + O toggles the full Print Preview layout canvas in LibreOffice Writer."
       }
     ]
   },
   {
-    chapterNumber: 3,
-    topicNumber: 3,
-    slug: "text-creation-editing-and-selection",
-    title: "Text Creation, Editing, Cut/Copy/Paste & Undo/Redo",
-    hindiTitle: "टेक्स्ट निर्माण, संपादन, कट/कॉपी/पेस्ट एवं अनडू/रीडू",
-    definitionEnglish: "Text editing in Writer covers text entry, cursor navigation, selection techniques, clipboard operations (Cut Ctrl+X, Copy Ctrl+C, Paste Ctrl+V, Paste Special Ctrl+Shift+V), and revision recovery (Undo Ctrl+Z, Redo Ctrl+Y).",
-    definitionHindi: "राइटर में टेक्स्ट संपादन के अंतर्गत टाइपिंग, कर्सर मूवमेंट, टेक्स्ट का चयन, क्लिपबोर्ड क्रियाएं (कट, कॉपी, पेस्ट, पेस्ट स्पेशल) तथा अनडू (Ctrl+Z) और रीडू (Ctrl+Y) शामिल हैं।",
-    simpleWords: "लिखे हुए शब्दों को मिटाना, दूसरी जगह ले जाना, दोहराना या गलती होने पर तुरंत पहले जैसा करना (Undo)।",
-    examImportance: "High (Paste Special, Selection shortcuts, Undo/Redo in CCC)",
-    detailedExplanation: `### 1. क्लिपबोर्ड एवं संपादन शॉर्टकट्स (Clipboard Operations):
-- **Cut (काटना)**: \`Ctrl + X\` (चयनित टेक्स्ट मूल स्थान से हटकर क्लिपबोर्ड में जाता है).
-- **Copy (प्रतिलिपि)**: \`Ctrl + C\` (मूल टेक्स्ट वहीं रहता है और क्लिपबोर्ड में कॉपी होता है).
-- **Paste (चिपकाना)**: \`Ctrl + V\` (क्लिपबोर्ड से टेक्स्ट वर्तमान कर्सर स्थान पर आता है).
-- **Paste Special (विशेष पेस्ट)**: **\`Ctrl + Shift + V\`** या **\`Ctrl + Alt + Shift + V\`** (Unformatted Text).
-- **Undo (पिछली क्रिया रद्द करना)**: \`Ctrl + Z\`
-- **Redo (रद्द क्रिया को पुनः लागू करना)**: \`Ctrl + Y\`
-
-### 2. टेक्स्ट सिलेक्शन तकनीकें (Text Selection Techniques):
-- **Double Click (डबल क्लिक)**: एक पूरा **शब्द (Word)** सेलेक्ट करने के लिए।
-- **Triple Click (ट्रिपल क्लिक)**: पूरा **वाक्य (Sentence)** सेलेक्ट करने के लिए।
-- **Quadruple Click (चार बार क्लिक)**: पूरा **पैराग्राफ (Paragraph)** सेलेक्ट करने के लिए।
-- **Ctrl + A**: पूरे डॉक्यूमेंट का सारा टेक्स्ट सेलेक्ट करने के लिए।
-- **Shift + Arrow Keys**: एक-एक अक्षर या लाइन सेलेक्ट करने के लिए।
-
-### 3. कर्सर नेविगेशन (Cursor Movement):
-- \`Home\`: लाइन की शुरुआत में जाना।
-- \`End\`: लाइन के अंत में जाना।
-- \`Ctrl + Home\`: डॉक्यूमेंट के सबसे पहले पेज के पहले अक्षर पर जाना।
-- \`Ctrl + End\`: डॉक्यूमेंट के बिल्कुल अंत में जाना।`,
-    realWorldAnalogy: "Undo कंप्यूटर की टाइम मशीन है जो आपको 1 सेकंड पीछे ले जाकर गलती सुधार देती है।",
-    importantPoints: [
-      "**Paste Special** की शॉर्टकट कुंजी **Ctrl + Shift + V** होती है।",
-      "बिना फॉर्मेटिंग के टेक्स्ट पेस्ट करने (Unformatted Text) का शॉर्टकट **Ctrl + Alt + Shift + V** होता है।",
-      "माउस से **डबल क्लिक** करने पर एक शब्द और **ट्रिपल क्लिक** करने पर पूरा वाक्य सेलेक्ट होता है।"
+    "chapterNumber": 3,
+    "topicNumber": 3,
+    "slug": "text-creation-editing-and-selection",
+    "title": "Text Creation, Editing, Cut/Copy/Paste & Undo/Redo",
+    "hindiTitle": "टेक्स्ट निर्माण, संपादन, कट/कॉपी/पेस्ट एवं अनडू/रीडू",
+    "definitionEnglish": "Text creation and editing encompasses text typing, cursor navigation, character/word/paragraph selection techniques, clipboard operations (Cut, Copy, Paste, Paste Special), and chronological command reversal (Undo and Redo).",
+    "definitionHindi": "टेक्स्ट निर्माण एवं संपादन में टेक्स्ट टाइपिंग, कर्सर नेविगेशन, टेक्स्ट सिलेक्शन तकनीक, क्लिपबोर्ड ऑपरेशन्स (कट, कॉपी, पेस्ट, पेस्ट स्पेशल) और अनडू/रीडू कमांड शामिल हैं।",
+    "simpleWords": "टेक्स्ट टाइप करना, सेलेक्ट करना, कट (Ctrl+X), कॉपी (Ctrl+C), पेस्ट (Ctrl+V), अनडू (Ctrl+Z) और रीडू (Ctrl+Y) करना।",
+    "examImportance": "High (2-3 questions on mouse text selection tricks, Paste Special Ctrl+Shift+V, and Undo/Redo)",
+    "detailedExplanation": "### 1. Mouse Text Selection Techniques (Essential CCC Exam Shortcuts)\n- **Single Click:** Places the flashing text insertion cursor at that exact character position.\n- **Double-Click:** Instantly selects the **entire single word**.\n- **Triple-Click:** Instantly selects the **entire sentence**.\n- **Quadruple-Click (4 Clicks):** Instantly selects the **entire paragraph**.\n- **Select All (`Ctrl + A`):** Highlights the entire document from start to finish.\n\n### 2. Clipboard Operations: Cut, Copy, Paste & Paste Special\nThe Windows/Linux Clipboard is a temporary RAM holding buffer for text and media:\n1. **Copy (`Ctrl + C`):** Duplicates selected text to clipboard without removing it from document.\n2. **Cut (`Ctrl + X`):** Removes selected text from document and stores it in clipboard.\n3. **Paste (`Ctrl + V`):** Inserts clipboard contents at the active cursor position.\n4. **Paste Special (`Ctrl + Shift + V`):** Opens an options dialog allowing the user to paste text as **Unformatted Text** (stripping all colors, fonts, and HTML styles), RTF, or GDI Bitmap.\n5. **Paste Unformatted Text (`Ctrl + Alt + Shift + V`):** Directly pastes pure raw text with zero external formatting.\n\n### 3. Undo, Redo & Repeat\n- **Undo (`Ctrl + Z`):** Reverses the most recent editing action (e.g., accidental deletion).\n- **Redo (`Ctrl + Y`):** Re-applies the action that was just reversed by Undo.\n- **Repeat (`Ctrl + Shift + Y`):** Re-executes the last formatting action.",
+    "realWorldAnalogy": "Undo is like a time machine taking you one step backward before an accident happened; Redo takes you forward again.",
+    "importantPoints": [
+      "Double-click selects a Word; Triple-click selects a Sentence; Quadruple-click selects a Paragraph.",
+      "Paste Special shortcut key is Ctrl + Shift + V.",
+      "Undo is Ctrl + Z; Redo is Ctrl + Y.",
+      "Select All is Ctrl + A.",
+      "Cut is Ctrl + X (moves text); Copy is Ctrl + C (duplicates text)."
     ],
-    commonMistakes: [
-      "ट्रिपल क्लिक से पूरा पैराग्राफ सेलेक्ट होना समझना (ट्रिपल क्लिक से वाक्य और 4 बार क्लिक से पैराग्राफ सेलेक्ट होता है)।"
+    "commonMistakes": [
+      "Confusing Triple-click in LibreOffice Writer (In Writer: 2 clicks = Word, 3 clicks = Sentence, 4 clicks = Paragraph).",
+      "Thinking Paste Special is Ctrl + Alt + V (In LibreOffice Writer, Paste Special is Ctrl + Shift + V)."
     ],
-    examTips: [
-      "Paste Special की शॉर्टकट: **Ctrl + Shift + V**।",
-      "Unformatted Text Paste: **Ctrl + Alt + Shift + V**।"
+    "examTips": [
+      "Direct CCC Question: 'How many mouse clicks select an entire sentence in LibreOffice Writer?' ➔ Triple-Click (3 clicks).",
+      "Direct CCC Question: 'What is the shortcut key for Paste Special in LibreOffice Writer?' ➔ Ctrl + Shift + V."
     ],
-    quickRevision: "Cut (Ctrl+X), Copy (Ctrl+C), Paste (Ctrl+V), Paste Special (Ctrl+Shift+V), Undo (Ctrl+Z), Redo (Ctrl+Y). Double-click = Word, Triple-click = Sentence.",
-    practiceAssignment: "राइटर में एक पैराग्राफ लिखें, उस पर डबल क्लिक करके शब्द और तीन बार क्लिक करके वाक्य सेलेक्ट करने का अभ्यास करें।",
-    microQuiz: [
+    "quickRevision": "Text selection: 2 clicks=Word, 3 clicks=Sentence, 4 clicks=Paragraph, Ctrl+A=All. Clipboard: Cut=Ctrl+X, Copy=Ctrl+C, Paste=Ctrl+V, Paste Special=Ctrl+Shift+V. Reversal: Undo=Ctrl+Z, Redo=Ctrl+Y.",
+    "practiceAssignment": "Type three sentences in Writer. Test selecting a word with 2 clicks, a sentence with 3 clicks, and a paragraph with 4 clicks.",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस राइटर में 'Paste Special' की शॉर्टकट कुंजी क्या है?",
-        options: [
-          { id: "A", text: "Ctrl + V" },
-          { id: "B", text: "Ctrl + Shift + V" },
-          { id: "C", text: "Alt + V" },
-          { id: "D", text: "Ctrl + Alt + V" }
+        "question": "In LibreOffice Writer, how many consecutive mouse clicks are required to select an entire SENTENCE?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Single Click"
+          },
+          {
+            "id": "B",
+            "text": "Double-Click"
+          },
+          {
+            "id": "C",
+            "text": "Triple-Click"
+          },
+          {
+            "id": "D",
+            "text": "Quadruple-Click"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "Paste Special डायलॉग बॉक्स खोलने के लिए 'Ctrl + Shift + V' शॉर्टकट का प्रयोग किया जाता है।"
+        "correctAnswer": "C",
+        "explanation": "In LibreOffice Writer, a triple-click selects the entire sentence up to the ending full stop/punctuation mark."
       },
       {
-        question: "राइटर में किसी शब्द पर माउस से 'Double Click' करने पर क्या चयनित होता है?",
-        options: [
-          { id: "A", text: "एक अक्षर (Character)" },
-          { id: "B", text: "वह पूरा शब्द (Word)" },
-          { id: "C", text: "पूरा वाक्य (Sentence)" },
-          { id: "D", text: "पूरा पैराग्राफ (Paragraph)" }
+        "question": "What is the keyboard shortcut for 'Paste Special' in LibreOffice Writer?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Ctrl + V"
+          },
+          {
+            "id": "B",
+            "text": "Ctrl + Shift + V"
+          },
+          {
+            "id": "C",
+            "text": "Alt + V"
+          },
+          {
+            "id": "D",
+            "text": "Shift + Insert"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "माउस से डबल क्लिक करने पर वह पूरा शब्द (Word) सेलेक्ट हो जाता है।"
+        "correctAnswer": "B",
+        "explanation": "Pressing Ctrl + Shift + V launches the Paste Special dialog to paste text as unformatted text or specific formats."
       }
     ]
   },
   {
-    chapterNumber: 3,
-    topicNumber: 4,
-    slug: "font-color-style-and-case-conversion",
-    title: "Font Formatting: Color, Style, Size & Change Case",
-    hindiTitle: "फॉन्ट फॉर्मेटिंग: रंग, शैली, आकार एवं चेंज केस",
-    definitionEnglish: "Font formatting controls character appearance including typeface, size (Ctrl+[ / Ctrl+]), styles (Bold Ctrl+B, Italic Ctrl+I, Underline Ctrl+U, Double Underline Ctrl+D), Superscript (Ctrl+Shift+P), Subscript (Ctrl+Shift+B), and Case conversions (Shift+F3).",
-    definitionHindi: "फॉन्ट फॉर्मेटिंग अक्षरों के रूप-रंग और शैली को नियंत्रित करती है; जैसे बोल्ड (Ctrl+B), इटैलिक (Ctrl+I), अंडरलाइन (Ctrl+U), डबल अंडरलाइन (Ctrl+D), सुपरस्क्रिप्ट (Ctrl+Shift+P), सबस्क्रिप्ट (Ctrl+Shift+B) और चेंज केस (Shift+F3)।",
-    simpleWords: "अक्षरों को मोटा, तिरछा, रंगीन, छोटा-बड़ा करना या रासायनिक सूत्र (H2O) और गणितीय घात (X2) लिखना।",
-    examImportance: "Extreme (Superscript, Subscript, Double Underline, and Clear Formatting shortcuts in CCC)",
-    detailedExplanation: `### 1. फॉन्ट स्टाइल्स एवं महत्वपूर्ण शॉर्टकट्स:
-- **Bold (मोटा)**: \`Ctrl + B\`
-- **Italic (तिरछा)**: \`Ctrl + I\`
-- **Underline (निचली रेखा)**: \`Ctrl + U\`
-- **Double Underline (दोहरी रेखा)**: **\`Ctrl + D\`** (अति महत्वपूर्ण प्रश्न!)
-- **Strikethrough (शब्द के बीच से रेखा खींचना)**: Format ➔ Text ➔ Strikethrough
-
-### 2. सुपरस्क्रिप्ट एवं सबस्क्रिप्ट (Superscript vs Subscript):
-- **Superscript (अक्षर के ऊपर घात लगाना, जैसे x²)**: **\`Ctrl + Shift + P\`** (P for Power!)
-- **Subscript (अक्षर के नीचे आधार लिखना, जैसे H₂O)**: **\`Ctrl + Shift + B\`** (B for Base/Bottom!)
-
-### 3. फॉन्ट साइज नियंत्रण (Font Size Controls):
-- **Increase Font Size (फॉन्ट बढ़ाना)**: **\`Ctrl + ]\`** या \`Ctrl + Alt + ]\`
-- **Decrease Font Size (फॉन्ट घटाना)**: **\`Ctrl + [\`** या \`Ctrl + Alt + [\`
-- राइटर के फॉन्ट साइज ड्रॉपडाउन में न्यूनतम डिफॉल्ट साइज **6 pt** और अधिकतम **96 pt** होता है (मैन्युअली 2 से 999.9 pt तक दिया जा सकता है)।
-
-### 4. चेंज केस एवं क्लियर फॉर्मेटिंग (Change Case & Clear Formatting):
-- **Cycle Case (अपरकेस/लोअरकेस/टाइटल केस बदलना)**: **\`Shift + F3\`**
-- **Clear Direct Formatting (सभी फॉर्मेटिंग हटाकर सादा टेक्स्ट बनाना)**: **\`Ctrl + M\`** (अत्यंत महत्वपूर्ण प्रश्न!)`,
-    realWorldAnalogy: "फॉन्ट फॉर्मेटिंग कपड़ों पर प्रेस करने और मेकअप करने जैसी है जिससे साधारण लिखावट भी आकर्षक लगने लगती है।",
-    importantPoints: [
-      "**Superscript** की शॉर्टकट कुंजी **Ctrl + Shift + P** होती है।",
-      "**Subscript** की शॉर्टकट कुंजी **Ctrl + Shift + B** होती है।",
-      "**Double Underline** की शॉर्टकट कुंजी **Ctrl + D** होती है।",
-      "**Clear Direct Formatting** की शॉर्टकट कुंजी **Ctrl + M** होती है।",
-      "**Cycle Case** बदलने की शॉर्टकट कुंजी **Shift + F3** होती है।"
+    "chapterNumber": 3,
+    "topicNumber": 4,
+    "slug": "font-color-style-and-case-conversion",
+    "title": "Font Formatting: Color, Style, Size & Change Case",
+    "hindiTitle": "फॉन्ट फॉर्मेटिंग: रंग, शैली, आकार एवं चेंज केस",
+    "definitionEnglish": "Font formatting controls the visual typographic presentation of text characters, including typeface family, font size, bold, italic, single/double underline, strikethrough, subscript, superscript, font color, highlighting, and case conversions.",
+    "definitionHindi": "फॉन्ट फॉर्मेटिंग टेक्स्ट वर्णों के दृश्य स्वरूप को नियंत्रित करती है, जिसमें फॉन्ट शैली, आकार, बोल्ड, इटैलिक, सिंगल/डबल अंडरलाइन, सबस्क्रिप्ट, सुपरस्क्रिप्ट और चेंज केस शामिल हैं।",
+    "simpleWords": "अक्षरों का रंग, साइज, बोल्ड (Ctrl+B), इटैलिक (Ctrl+I), अंडरलाइन (Ctrl+U), डबल अंडरलाइन (Ctrl+D), H2O के लिए सबस्क्रिप्ट और X2 के लिए सुपरस्क्रिप्ट लगाना।",
+    "examImportance": "Very High (4-5 questions on Subscript Ctrl+Shift+B, Superscript Ctrl+Shift+P, Double Underline Ctrl+D, and Change Case options)",
+    "detailedExplanation": "### 1. Character Formatting Styles and Shortcuts\n- **Bold (`Ctrl + B`):** Increases stroke weight to make text thicker and prominent.\n- **Italic (`Ctrl + I`):** Slants text forward for stylistic emphasis.\n- **Underline (`Ctrl + U`):** Adds a single horizontal line underneath text.\n- **Double Underline (`Ctrl + D`):** Adds two parallel horizontal lines beneath text (Note: In MS Word Ctrl+D opens Font dialog; in LibreOffice Writer Ctrl+D applies Double Underline!).\n- **Strikethrough:** Draws a horizontal line directly through the middle of text (e.g., ~Obsolete~).\n\n### 2. Subscript vs. Superscript (Crucial CCC Topic)\n| Feature | Subscript (`Ctrl + Shift + B`) | Superscript (`Ctrl + Shift + P`) |\n| :--- | :--- | :--- |\n| **Position** | Drops character slightly **below the baseline** in smaller type | Raises character slightly **above the baseline** in smaller type |\n| **Typical Use** | Chemical molecular formulas (e.g., `H<sub>2</sub>O`, `CO<sub>2</sub>`), math bases | Mathematical powers, exponents, footnotes (e.g., `X<sup>2</sup> + Y<sup>2</sup>`, `1<sup>st</sup>`) |\n| **Writer Shortcut** | **`Ctrl + Shift + B`** (B for Below / Base) | **`Ctrl + Shift + P`** (P for Power) |\n\n### 3. Font Size Increments & Clear Formatting\n- **Increase Font Size:** **`Ctrl + ]`** or **`Ctrl + >`**\n- **Decrease Font Size:** **`Ctrl + [`** or **`Ctrl + <`**\n- **Clear Direct Formatting (`Ctrl + M`):** Resets highlighted text back to default paragraph style, stripping all manual bold, colors, and font overrides.\n\n### 4. The 5 Change Case Modes (Format ➔ Text)\n1. **Sentence case:** Capitalizes only the first letter of the first word in every sentence.\n2. **lowercase:** Converts all highlighted characters to small letters (`ccc examination`).\n3. **UPPERCASE:** Converts all highlighted characters to capital letters (`CCC EXAMINATION`).\n4. **Capitalize Every Word (Title Case):** Capitalizes the first letter of every individual word (`Course On Computer Concepts`).\n5. **tOGGLE cASE:** Inverts the casing of every character; uppercase becomes lowercase and vice versa.\n6. **Cycle Case Shortcut:** Pressing **`Shift + F3`** toggles highlighted text sequentially through *lowercase ➔ UPPERCASE ➔ Capitalize Every Word*.",
+    "realWorldAnalogy": "Formatting is like dressing up text: regular text is casual clothes, Bold is a heavy winter jacket, Italic is leaning into the wind, and Change Case is swapping between small badges and big banners.",
+    "importantPoints": [
+      "In LibreOffice Writer, Double Underline shortcut is Ctrl + D.",
+      "Superscript shortcut is Ctrl + Shift + P (e.g., X²).",
+      "Subscript shortcut is Ctrl + Shift + B (e.g., H₂O).",
+      "Clear Direct Formatting shortcut is Ctrl + M.",
+      "Cycle Case shortcut key is Shift + F3."
     ],
-    commonMistakes: [
-      "Subscript के लिए Ctrl+= समझना (MS Word में Ctrl+= होता है, LibreOffice में **Ctrl+Shift+B** होता है)।",
-      "Clear Formatting के लिए Ctrl+Space समझना (LibreOffice में **Ctrl+M** होता है)।"
+    "commonMistakes": [
+      "Confusing Subscript and Superscript shortcuts (P = Power = Superscript = Ctrl+Shift+P; B = Below = Subscript = Ctrl+Shift+B).",
+      "Thinking Ctrl + D opens the Font Dialog in Writer (Ctrl + D in LibreOffice Writer directly applies Double Underline)."
     ],
-    examTips: [
-      "Superscript = **Ctrl + Shift + P** (Power)",
-      "Subscript = **Ctrl + Shift + B** (Base)",
-      "Double Underline = **Ctrl + D**",
-      "Clear Direct Formatting = **Ctrl + M**"
+    "examTips": [
+      "Guaranteed CCC Question: 'What is the shortcut key for Superscript in LibreOffice Writer?' ➔ Ctrl + Shift + P.",
+      "Guaranteed CCC Question: 'What is the shortcut key for Subscript in LibreOffice Writer?' ➔ Ctrl + Shift + B.",
+      "Guaranteed CCC Question: 'What does Ctrl + D do in LibreOffice Writer?' ➔ Double Underline."
     ],
-    quickRevision: "Bold (Ctrl+B), Italic (Ctrl+I), Underline (Ctrl+U), Double Underline (Ctrl+D), Super (Ctrl+Shift+P), Sub (Ctrl+Shift+B), Clear Formatting (Ctrl+M), Case (Shift+F3).",
-    practiceAssignment: "राइटर में 'H2O' और 'A2 + B2' लिखें और Subscript (Ctrl+Shift+B) व Superscript (Ctrl+Shift+P) लगाकर सही फॉर्मेट करें।",
-    microQuiz: [
+    "quickRevision": "Font formatting: Bold=Ctrl+B, Italic=Ctrl+I, Underline=Ctrl+U, Double Underline=Ctrl+D, Superscript=Ctrl+Shift+P, Subscript=Ctrl+Shift+B, Clear Direct Formatting=Ctrl+M, Cycle Case=Shift+F3.",
+    "practiceAssignment": "Type the chemical formula 'H2O' and make the '2' a subscript using Ctrl + Shift + B. Type 'A2 + B2' and make the '2's superscripts using Ctrl + Shift + P.",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस राइटर में सुपरस्क्रिप्ट (Superscript - जैसे X²) करने की शॉर्टकट कुंजी क्या है?",
-        options: [
-          { id: "A", text: "Ctrl + Shift + P" },
-          { id: "B", text: "Ctrl + Shift + B" },
-          { id: "C", text: "Ctrl + P" },
-          { id: "D", text: "Alt + Shift + P" }
+        "question": "What is the keyboard shortcut for 'Superscript' in LibreOffice Writer?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Ctrl + Shift + S"
+          },
+          {
+            "id": "B",
+            "text": "Ctrl + Shift + P"
+          },
+          {
+            "id": "C",
+            "text": "Ctrl + Shift + B"
+          },
+          {
+            "id": "D",
+            "text": "Ctrl + Plus (+)"
+          }
         ],
-        correctAnswer: "A",
-        explanation: "LibreOffice Writer में सुपरस्क्रिप्ट (ऊपर घात) लगाने के लिए 'Ctrl + Shift + P' का प्रयोग किया जाता है।"
+        "correctAnswer": "B",
+        "explanation": "Pressing Ctrl + Shift + P formats selected characters as Superscript (raised above baseline for powers/exponents)."
       },
       {
-        question: "लिब्रेऑफिस राइटर में सभी डायरेक्ट फॉर्मेटिंग को हटाने (Clear Direct Formatting) का शॉर्टकट क्या है?",
-        options: [
-          { id: "A", text: "Ctrl + Space" },
-          { id: "B", text: "Ctrl + Shift + C" },
-          { id: "C", text: "Ctrl + M" },
-          { id: "D", text: "Ctrl + D" }
+        "question": "What formatting action is executed when pressing 'Ctrl + D' in LibreOffice Writer?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Deletes the current paragraph"
+          },
+          {
+            "id": "B",
+            "text": "Applies Double Underline to selected text"
+          },
+          {
+            "id": "C",
+            "text": "Opens the Font Dialog Box"
+          },
+          {
+            "id": "D",
+            "text": "Duplicates the active page"
+          }
         ],
-        correctAnswer: "C",
-        explanation: "LibreOffice Writer में 'Clear Direct Formatting' की शॉर्टकट कुंजी 'Ctrl + M' होती है।"
+        "correctAnswer": "B",
+        "explanation": "In LibreOffice Writer, Ctrl + D applies a Double Underline beneath selected characters."
       }
     ]
   },
   {
-    chapterNumber: 3,
-    topicNumber: 5,
-    slug: "paragraph-indentation-alignment-and-bullets",
-    title: "Paragraph Alignment, Indentation, Bullets & Numbering",
-    hindiTitle: "पैराग्राफ अलाइनमेंट, इंडेंटेशन, बुलेट्स एवं नंबरिंग",
-    definitionEnglish: "Paragraph formatting dictates text positioning across margins, including alignment (Left Ctrl+L, Right Ctrl+R, Center Ctrl+E, Justify Ctrl+J), indentation, line spacing, bullets (Shift+F12), and numbering (F12).",
-    definitionHindi: "पैराग्राफ फॉर्मेटिंग पृष्ठ पर टेक्स्ट के संरेखण और फैलाव को तय करती है; जैसे अलाइनमेंट (बाएं Ctrl+L, दाएं Ctrl+R, मध्य Ctrl+E, जस्टिफाई Ctrl+J), इंडेंट, लाइन स्पेसिंग, बुलेट्स (Shift+F12) और नंबरिंग (F12)।",
-    simpleWords: "पैराग्राफ को पन्ने के बीच में या दोनों तरफ बराबर लाइन में सेट करना और लिस्ट में बिंदु या 1, 2, 3 लगाना।",
-    examImportance: "Extreme (Alignment shortcuts, Bullets F12 vs Shift+F12 in CCC)",
-    detailedExplanation: `### 1. टेक्स्ट अलाइनमेंट (Text Alignment & Shortcuts):
-- **Align Left (बायां संरेखण - डिफॉल्ट)**: \`Ctrl + L\` (टेक्स्ट बाईं ओर एक सीध में होता है).
-- **Align Right (दायां संरेखण)**: \`Ctrl + R\` (टेक्स्ट दाईं ओर एक सीध में होता है, जैसे दिनांक या हस्ताक्षर).
-- **Align Center (मध्य संरेखण)**: \`Ctrl + E\` (टेक्स्ट पृष्ठ के ठीक बीच में संरेखित होता है, जैसे शीर्षक).
-- **Justify (दोनों तरफ बराबर संरेखण)**: \`Ctrl + J\` (बाएं और दाएं दोनों किनारों पर टेक्स्ट बिल्कुल सीधा व बराबर रहता है, जैसे समाचार पत्रों और किताबों में).
-
-### 2. बुलेट्स एवं नंबरिंग (Bullets & Numbering):
-- **Numbering On/Off (क्रमांकन सूची 1, 2, 3)**: **\`F12\`** (अति महत्वपूर्ण प्रश्न!)
-- **Bullets On/Off (बिंदुवार सूची •, ■)**: **\`Shift + F12\`** (अति महत्वपूर्ण प्रश्न!)
-
-### 3. लाइन स्पेसिंग एवं इंडेंटेशन (Line Spacing & Indentation):
-- **Line Spacing 1 (Single)**: \`Ctrl + 1\`
-- **Line Spacing 2 (Double)**: \`Ctrl + 2\`
-- **Line Spacing 1.5**: \`Ctrl + 5\`
-- **Increase Indent (पैराग्राफ दाईं ओर खिसकाना)**: \`Ctrl + ]\` या Tab
-- **Decrease Indent (पैराग्राफ बाईं ओर खिसकाना)**: \`Ctrl + [\` या Shift + Tab`,
-    realWorldAnalogy: "जैसे अखबार की खबरें दोनों तरफ से सीधी और बराबर (Justified) कतारों में छपी होती हैं।",
-    importantPoints: [
-      "**Justify Alignment** की शॉर्टकट कुंजी **Ctrl + J** होती है।",
-      "**Center Alignment** की शॉर्टकट कुंजी **Ctrl + E** होती है।",
-      "**Numbering** की शॉर्टकट कुंजी **F12** और **Bullets** की **Shift + F12** होती है।",
-      "1.5 लाइन स्पेसिंग देने के लिए **Ctrl + 5** दबाया जाता है।"
+    "chapterNumber": 3,
+    "topicNumber": 5,
+    "slug": "paragraph-indentation-alignment-and-bullets",
+    "title": "Paragraph Alignment, Indentation, Bullets & Numbering",
+    "hindiTitle": "पैराग्राफ अलाइनमेंट, इंडेंटेशन, बुलेट्स एवं नंबरिंग",
+    "definitionEnglish": "Paragraph formatting controls the alignment of text blocks relative to page margins, line spacing, paragraph before/after spacing, tab stop indents, unordered bulleted lists, and ordered numbered sequences.",
+    "definitionHindi": "पैराग्राफ फॉर्मेटिंग पृष्ठ के किनारों (Margins) के सापेक्ष टेक्स्ट के संरेखण (Alignment), लाइन स्पेसिंग, इंडेंटेशन, बुलेटेड सूची और क्रमांकित (Numbered) सूचियों को नियंत्रित करती है।",
+    "simpleWords": "पैराग्राफ को लेफ्ट (Ctrl+L), सेंटर (Ctrl+E), राइट (Ctrl+R), या दोनों तरफ बराबर (Justify Ctrl+J) करना, बुलेट्स (Shift+F12) और नंबरिंग (F12) लगाना।",
+    "examImportance": "Very High (3-4 questions on 4 alignment types, line spacing shortcuts Ctrl+1/2/5, and Bullets Shift+F12 vs Numbering F12)",
+    "detailedExplanation": "### 1. The Four Paragraph Alignment Modes\nAlignment defines how text lines are positioned horizontally between the left and right page margins:\n1. **Align Left (`Ctrl + L`):** Default alignment in LibreOffice Writer; aligns text cleanly along the left margin with a ragged right edge.\n2. **Center Alignment (`Ctrl + E`):** Centers every line equidistant from left and right margins; ideal for document titles, poems, and certificates.\n3. **Align Right (`Ctrl + R`):** Aligns text cleanly along the right margin with a ragged left edge; ideal for dates, formal sign-offs, and addresses.\n4. **Justify (`Ctrl + J`):** Automatically adjusts micro-spacing between words so that text lines align flush against **both left and right margins** simultaneously, producing a clean rectangular newspaper/book column appearance.\n\n### 2. Line Spacing Shortcuts\n- **Single Line Spacing (1.0):** **`Ctrl + 1`**\n- **Double Line Spacing (2.0):** **`Ctrl + 2`**\n- **1.5 Line Spacing:** **`Ctrl + 5`** (Note: Pressing 5 applies 1.5 spacing!).\n\n### 3. Bullets and Numbering (Crucial CCC Shortcuts)\n- **Toggle Bullets (Unordered List):** **`Shift + F12`** (Adds round circular dots/discs).\n- **Toggle Numbering (Ordered List):** **`F12`** (Adds numbers 1, 2, 3 or A, B, C).\n- **Demote / Indent List Level:** Press **`Tab`**.\n- **Promote / Outdent List Level:** Press **`Shift + Tab`**.\n\n### 4. Paragraph Indentation Types\n- **Left Indent & Right Indent:** Distance offsetting the entire paragraph away from page margins.\n- **First Line Indent:** Indents only the first line of a paragraph inward (standard in novels and essays).\n- **Hanging Indent (`Ctrl + T` in MS Word):** Leaves the first line at margin while indenting all subsequent lines inward (standard in bibliographies and references).",
+    "realWorldAnalogy": "Justified text is like bricks neatly stacked in a rectangular wall; left-aligned text is like a staircase with uneven steps on the right.",
+    "importantPoints": [
+      "Align Left = Ctrl + L | Center = Ctrl + E | Align Right = Ctrl + R | Justify = Ctrl + J.",
+      "Line Spacing: Single = Ctrl + 1 | Double = Ctrl + 2 | 1.5 Lines = Ctrl + 5.",
+      "Numbering shortcut is F12 in LibreOffice Writer.",
+      "Bullets shortcut is Shift + F12 in LibreOffice Writer.",
+      "Tab increases list indent level; Shift + Tab decreases list indent level."
     ],
-    commonMistakes: [
-      "Center Alignment के लिए Ctrl+C समझना (Ctrl+C कॉपी के लिए है, Center के लिए **Ctrl+E** है)।",
-      "Bullets के लिए F12 समझना (F12 Numbering के लिए है, Bullets के लिए **Shift+F12** है)।"
+    "commonMistakes": [
+      "Assuming Center alignment is Ctrl + C (Ctrl + C is Copy; Center is Ctrl + E).",
+      "Confusing F12 in Writer (F12 is Numbering in Writer, whereas in MS Word it is Save As)."
     ],
-    examTips: [
-      "Align Center = **Ctrl + E**",
-      "Justify = **Ctrl + J**",
-      "Numbering List = **F12**",
-      "Bullet List = **Shift + F12**"
+    "examTips": [
+      "Guaranteed CCC Question: 'What is the shortcut key for Numbering in LibreOffice Writer?' ➔ F12.",
+      "Guaranteed CCC Question: 'What is the shortcut key for Bullets in LibreOffice Writer?' ➔ Shift + F12.",
+      "Guaranteed CCC Question: 'What is the shortcut key for 1.5 Line Spacing?' ➔ Ctrl + 5."
     ],
-    quickRevision: "Left (Ctrl+L), Right (Ctrl+R), Center (Ctrl+E), Justify (Ctrl+J). Numbering: F12, Bullets: Shift+F12, Spacing: Ctrl+1/2/5.",
-    practiceAssignment: "राइटर में 3 लाइनें लिखें और F12 दबाकर नंबरिंग लगाएं, फिर Shift+F12 दबाकर उन्हें बुलेट्स में बदलें।",
-    microQuiz: [
+    "quickRevision": "Alignments: Left=Ctrl+L, Center=Ctrl+E, Right=Ctrl+R, Justify=Ctrl+J. Line spacing: 1=Ctrl+1, 2=Ctrl+2, 1.5=Ctrl+5. Lists: Numbering=F12, Bullets=Shift+F12.",
+    "practiceAssignment": "Type a 4-line paragraph in Writer. Test applying Left (Ctrl+L), Center (Ctrl+E), Right (Ctrl+R), and Justify (Ctrl+J), then apply Numbering with F12.",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस राइटर में नंबरिंग लिस्ट (Numbering List) चालू/बंद करने की शॉर्टकट कुंजी क्या है?",
-        options: [
-          { id: "A", text: "F12" },
-          { id: "B", text: "Shift + F12" },
-          { id: "C", text: "Ctrl + F12" },
-          { id: "D", text: "Alt + F12" }
+        "question": "What is the shortcut key to toggle 'Numbered Lists' (Numbering On/Off) in LibreOffice Writer?",
+        "options": [
+          {
+            "id": "A",
+            "text": "F11"
+          },
+          {
+            "id": "B",
+            "text": "F12"
+          },
+          {
+            "id": "C",
+            "text": "Shift + F12"
+          },
+          {
+            "id": "D",
+            "text": "Ctrl + F12"
+          }
         ],
-        correctAnswer: "A",
-        explanation: "राइटर में नंबरिंग (1, 2, 3...) लगाने के लिए F12 और बुलेट्स लगाने के लिए Shift + F12 दबाते हैं।"
+        "correctAnswer": "B",
+        "explanation": "In LibreOffice Writer, pressing the F12 function key toggles automatic Numbering on or off."
       },
       {
-        question: "टेक्स्ट को दोनों तरफ (बाएं और दाएं) समान रूप से संरेखित (Justify) करने की शॉर्टकट कुंजी क्या है?",
-        options: [
-          { id: "A", text: "Ctrl + J" },
-          { id: "B", text: "Ctrl + E" },
-          { id: "C", text: "Ctrl + L" },
-          { id: "D", text: "Ctrl + R" }
+        "question": "Which keyboard shortcut applies '1.5 Line Spacing' to a selected paragraph in LibreOffice Writer?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Ctrl + 1.5"
+          },
+          {
+            "id": "B",
+            "text": "Ctrl + 5"
+          },
+          {
+            "id": "C",
+            "text": "Alt + 5"
+          },
+          {
+            "id": "D",
+            "text": "Shift + 5"
+          }
         ],
-        correctAnswer: "A",
-        explanation: "टेक्स्ट को दोनों किनारों पर बराबर संरेखित करने के लिए 'Ctrl + J' (Justify) का उपयोग किया जाता है।"
+        "correctAnswer": "B",
+        "explanation": "Pressing Ctrl + 5 applies 1.5 line spacing (Ctrl+1 is single spacing, Ctrl+2 is double spacing)."
       }
     ]
   },
   {
-    chapterNumber: 3,
-    topicNumber: 6,
-    slug: "header-footer-and-page-setup",
-    title: "Headers, Footers, Page Numbers & Page Setup",
-    hindiTitle: "हेडर, फुटर, पेज नंबर एवं पेज सेटअप",
-    definitionEnglish: "Page setup configures document layout including Page Orientation (Portrait/Landscape), Margins, Page Breaks (Ctrl+Enter), Headers (top margin text), Footers (bottom margin text), and dynamic Page Numbers.",
-    definitionHindi: "पेज सेटअप डॉक्यूमेंट के भौतिक स्वरूप को निर्धारित करता है; जिसमें ओरिएंटेशन (पोर्ट्रेट/लैंडस्केप), मार्जिन, पेज ब्रेक (Ctrl+Enter), हेडर (शीर्ष नोट), फुटर (पाद टिप्पणी) और पेज नंबरिंग शामिल हैं।",
-    simpleWords: "पन्ने के चारों तरफ खाली जगह (Margin) छोड़ना, पेज के ऊपर किताब का नाम (Header) और नीचे पेज नंबर (Footer) लगाना।",
-    examImportance: "High (Page break shortcut Ctrl+Enter, Portrait vs Landscape in CCC)",
-    detailedExplanation: `### 1. पेज ओरिएंटेशन एवं मार्जिन (Page Orientation & Margins):
-- **Page Orientation (पेज दिशा)**:
-  - **Portrait (ऊर्ध्वाधर/खड़ा)**: ऊंचाई अधिक, चौड़ाई कम (डिफॉल्ट ओरिएंटेशन).
-  - **Landscape (क्षैतिज/आड़ा)**: चौड़ाई अधिक, ऊंचाई कम (सर्टिफिकेट, बड़े टेबल्स के लिए).
-- **Margins (हाशिया)**: पेज के किनारों पर छोड़ी गई खाली जगह (Top, Bottom, Left, Right).
-- **Page Size**: डिफॉल्ट साइज **A4** (21.0 x 29.7 cm) या Letter.
-
-### 2. हेडर एवं फुटर (Header & Footer):
-- **Header (हेडर)**: प्रत्येक पृष्ठ के शीर्ष मार्जिन क्षेत्र में दोहराई जाने वाली सूचना (जैसे पुस्तक का शीर्षक, अध्याय का नाम).
-- **Footer (फुटर)**: प्रत्येक पृष्ठ के निचले मार्जिन क्षेत्र में दोहराई जाने वाली सूचना (जैसे पेज नंबर, कॉपीराइट, लेखक का नाम).
-- हेडर/फुटर जोड़ने का रास्ता: **Insert Menu ➔ Header and Footer ➔ Header / Footer ➔ Default Style**.
-
-### 3. पेज ब्रेक एवं लाइन ब्रेक (Breaks):
-- **Page Break (नया पेज शुरू करना)**: **\`Ctrl + Enter\`** (अति महत्वपूर्ण प्रश्न!)
-- **Manual Line Break (बिना पैराग्राफ बदले नई लाइन)**: \`Shift + Enter\`
-- **Column Break (अगले कॉलम में जाना)**: \`Ctrl + Shift + Enter\``,
-    realWorldAnalogy: "हेडर हर पन्ने पर छपा स्कूल का लेटरहेड है और फुटर नीचे छपा ऑफिस का पता और पेज नंबर है।",
-    importantPoints: [
-      "**Page Break** डालने की शॉर्टकट कुंजी **Ctrl + Enter** होती है।",
-      "राइटर में डिफॉल्ट पेज ओरिएंटेशन **Portrait** होता है।",
-      "हेडर और फुटर प्रत्येक पेज पर अपने आप दोहराए जाते हैं।"
+    "chapterNumber": 3,
+    "topicNumber": 6,
+    "slug": "header-footer-and-page-setup",
+    "title": "Headers, Footers, Page Numbers & Page Setup",
+    "hindiTitle": "हेडर, फुटर, पेज नंबर एवं पेज सेटअप",
+    "definitionEnglish": "Page setup establishes document layout geometry including page size, orientation, and margins, while Headers and Footers provide designated repeating zones at the top and bottom margins of every page for titles, chapter names, dates, and dynamic page numbering fields.",
+    "definitionHindi": "पेज सेटअप दस्तावेज़ के आकार, ओरिएंटेशन (Portrait/Landscape) और मार्जिन को तय करता है, जबकि हेडर और फुटर प्रत्येक पृष्ठ के शीर्ष और तल पर शीर्षक, दिनांक और पेज नंबर दोहराने वाले विशेष क्षेत्र हैं।",
+    "simpleWords": "पेज का साइज (A4) और ओरिएंटेशन सेट करना, तथा हर पेज के ऊपर हेडर (शीर्षक) और नीचे फुटर (पेज नंबर) लगाना।",
+    "examImportance": "High (2-3 questions on Portrait vs Landscape, default margins, and dynamic Page Number insertion)",
+    "detailedExplanation": "### 1. Page Orientation & Paper Dimensions\nPage orientation defines the layout direction of the printable sheet:\n- **Portrait (Vertical / Tall):** Height is greater than width (e.g., standard A4: `210 mm × 297 mm` / `8.27\" × 11.69\"`). Default orientation for letters and books.\n- **Landscape (Horizontal / Wide):** Width is greater than height (e.g., `297 mm × 210 mm` / `11.69\" × 8.27\"`). Ideal for wide tables, spreadsheets, and certificates.\n- **Standard Paper Sizes:** **A4** (Global office standard), **Letter** (`8.5\" × 11\"`), **Legal** (`8.5\" × 14\"`).\n\n### 2. Headers and Footers Architecture\n1. **Header Zone:** Located in the top margin area above the main text boundary. Repeats automatically on every page within that Page Style. Used for Book Title, Chapter Name, and Author.\n2. **Footer Zone:** Located in the bottom margin area below the main text boundary. Used for Dynamic Page Numbers, Date of Publication, and Confidentiality Disclaimers.\n3. **Inserting Headers/Footers:** Via **Insert ➔ Header and Footer ➔ Header / Footer ➔ Default Page Style**.\n\n### 3. Inserting Dynamic Page Number Fields\n- Never type page numbers manually (typing \"1\" manually prints \"1\" on all 100 pages!).\n- Correct Procedure: Click inside Footer, navigate to **Insert ➔ Field ➔ Page Number** (inserts dynamic variable field showing `1`, `2`, `3`...).\n- Insert **Page Count Field** via **Insert ➔ Field ➔ Page Count** to display formatting like *\"Page 3 of 12\"*.",
+    "realWorldAnalogy": "Headers and footers are like the pre-printed company letterhead at the top and the registered office address and page number at the bottom of official stationery.",
+    "importantPoints": [
+      "The two types of page orientation are Portrait (Vertical) and Landscape (Horizontal).",
+      "Default page orientation in LibreOffice Writer is Portrait.",
+      "Page numbers must be inserted as dynamic Fields via Insert ➔ Field ➔ Page Number.",
+      "A4 paper dimensions are 210 mm × 297 mm (8.27 inches × 11.69 inches).",
+      "Default page margins in LibreOffice Writer are 0.75 inches on all 4 sides."
     ],
-    commonMistakes: [
-      "Page Break के लिए बार-बार Enter दबाना (सही तरीका **Ctrl + Enter** दबाना है)।"
+    "commonMistakes": [
+      "Typing a static digit '1' in the footer instead of inserting the dynamic Page Number field.",
+      "Assuming Landscape is the default orientation in Writer (Portrait is default in Writer; Landscape is default in Impress)."
     ],
-    examTips: [
-      "Insert Page Break Shortcut ➔ **Ctrl + Enter**।",
-      "Default Page Orientation in Writer ➔ **Portrait**।"
+    "examTips": [
+      "Direct CCC Question: 'What are the two types of page orientation?' ➔ Portrait and Landscape.",
+      "Direct CCC Question: 'What is the default orientation in LibreOffice Writer?' ➔ Portrait."
     ],
-    quickRevision: "Orientation: Portrait (default) vs Landscape. Page Break: Ctrl+Enter, Line Break: Shift+Enter. Header (top), Footer (bottom).",
-    practiceAssignment: "राइटर में Ctrl+Enter दबाकर 3 नए पेज बनाएं और Insert मेनू से Footer में Page Number जोड़ें।",
-    microQuiz: [
+    "quickRevision": "Page Setup: Portrait (Vertical, default in Writer) vs Landscape (Horizontal, default in Impress). Standard size=A4 (210x297mm). Header/Footer repeat on every page; page numbers inserted via Insert ➔ Field ➔ Page Number.",
+    "practiceAssignment": "In Writer, open Format ➔ Page Style, change orientation to Landscape, insert a Header with your name and a Footer with the dynamic Page Number field.",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस राइटर में मैनुअल पेज ब्रेक (Page Break) डालने की शॉर्टकट कुंजी क्या है?",
-        options: [
-          { id: "A", text: "Ctrl + Enter" },
-          { id: "B", text: "Shift + Enter" },
-          { id: "C", text: "Alt + Enter" },
-          { id: "D", text: "Ctrl + Space" }
+        "question": "What is the DEFAULT page orientation in LibreOffice Writer?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Landscape"
+          },
+          {
+            "id": "B",
+            "text": "Portrait"
+          },
+          {
+            "id": "C",
+            "text": "Square"
+          },
+          {
+            "id": "D",
+            "text": "Booklet"
+          }
         ],
-        correctAnswer: "A",
-        explanation: "पेज ब्रेक डालने और कर्सर को तुरंत अगले नए पेज पर भेजने के लिए 'Ctrl + Enter' दबाया जाता है।"
+        "correctAnswer": "B",
+        "explanation": "LibreOffice Writer creates documents in Portrait (vertical height > width) orientation by default."
       }
     ]
   },
   {
-    chapterNumber: 3,
-    topicNumber: 7,
-    slug: "table-manipulation-rows-columns-borders",
-    title: "Table Manipulation: Insert Rows/Cols, Merge/Split & Borders",
-    hindiTitle: "टेबल मैनिपुलेशन: रो/कॉलम जोड़ना, मर्ज/स्प्लिट एवं बॉर्डर",
-    definitionEnglish: "Tables in Writer arrange data into rows and columns using Table Insert (Ctrl+F12), cell navigation (Tab/Shift+Tab), Merge Cells, Split Cells, and border formatting.",
-    definitionHindi: "राइटर में तालिका (Table) डेटा को पंक्तियों (Rows) और स्तंभों (Columns) में व्यवस्थित करती है; जिसे इंसर्ट टेबल (Ctrl+F12), सेल नेविगेशन (Tab), सेल मर्ज (Merge) और स्प्लिट (Split) द्वारा प्रबंधित किया जाता है।",
-    simpleWords: "पन्ने पर खानों वाली तालिका (Table) बनाना, दो खानों को जोड़ना (Merge) या एक खाने को बांटना (Split)।",
-    examImportance: "Extreme (Table Insert shortcut Ctrl+F12, Table menu in CCC)",
-    detailedExplanation: `### 1. टेबल बनाना एवं शॉर्टकट (Inserting Tables):
-- **Insert Table Shortcut**: **\`Ctrl + F12\`** (अत्यंत प्रसिद्ध CCC प्रश्न!)
-- मेनू पाथ: **Table Menu ➔ Insert Table** (या Standard Toolbar से ग्रिड चुनना).
-- टेबल में कम से कम 1 Row और 1 Column होना अनिवार्य है।
-
-### 2. टेबल में नेविगेशन (Table Navigation):
-- \`Tab\`: अगले सेल (Next Cell) में जाना। अंतिम सेल में Tab दबाने पर **स्वतः एक नई पंक्ति (New Row)** जुड़ जाती है।
-- \`Shift + Tab\`: पिछले सेल (Previous Cell) में वापस जाना।
-- Arrow Keys (\`↑ ↓ ← →\`): चारों दिशाओं के सेल्स में घूमना।
-
-### 3. टेबल मैनिपुलेशन क्रियाएं:
-- **Merge Cells (सेल मिलाना)**: दो या अधिक चयनित खानों को जोड़कर एक बड़ा सेल बनाना।
-- **Split Cells (सेल बांटना)**: एक सेल को कई पंक्तियों या स्तंभों में विभाजित करना।
-- **Insert Rows / Columns**: चयनित सेल के ऊपर, नीचे, दाएं या बाएं नई रो/कॉलम जोड़ना।
-- **Delete Rows / Columns**: रो या कॉलम हटाना।
-- **Borders & Background**: टेबल के चारों ओर विभिन्न मोटाई के बॉर्डर और बैकग्राउंड रंग लगाना।`,
-    realWorldAnalogy: "टेबल एक चेसबोर्ड या समय सारणी (Time Table) की तरह खानों का ढांचा है।",
-    importantPoints: [
-      "टेबल इंसर्ट करने की शॉर्टकट कुंजी **Ctrl + F12** होती है।",
-      "टेबल के आखिरी सेल में **Tab** दबाने से एक नई रो (Row) बन जाती है।",
-      "दो सेल्स को एक करने की क्रिया को **Merge Cells** कहते हैं।"
+    "chapterNumber": 3,
+    "topicNumber": 7,
+    "slug": "table-manipulation-rows-columns-borders",
+    "title": "Table Manipulation: Insert Rows/Cols, Merge/Split & Borders",
+    "hindiTitle": "टेबल मैनिपुलेशन: रो/कॉलम जोड़ना, मर्ज/स्प्लिट एवं बॉर्डर",
+    "definitionEnglish": "A table is a structured two-dimensional grid composed of horizontal rows and vertical columns intersecting into individual cells used to organize, format, align, and calculate tabular data within word processor documents.",
+    "definitionHindi": "टेबल क्षैतिज पंक्तियों (Rows) और लंबवत स्तंभों (Columns) का एक दो-आयामी ग्रिड है जो खानों (Cells) में विभाजित होता है, जिसका उपयोग डेटा को व्यवस्थित रूप से प्रस्तुत करने के लिए किया जाता है।",
+    "simpleWords": "डॉक्यूमेंट में टेबल डालना (Ctrl+F12), रो और कॉलम जोड़ना/हटाना, सेल्स को आपस में जोड़ना (Merge) या तोड़ना (Split), और फॉर्मूला (F2) लगाना।",
+    "examImportance": "Very High (3-4 questions on Insert Table shortcut Ctrl+F12, Table Formula bar F2, and Merge/Split)",
+    "detailedExplanation": "### 1. Inserting Tables in LibreOffice Writer\n- **Insert Table Shortcut:** **`Ctrl + F12`** (or Table ➔ Insert Table).\n- Prompts dialog to specify Number of Columns (default: 2) and Number of Rows (default: 2).\n- **Minimum Grid Size:** 1 Row × 1 Column.\n\n### 2. Table Navigation & Keyboard Movement\n- **`Tab`:** Moves cursor forward to the next cell to the right. If pressed in the **very last cell**, automatically inserts a **new blank row** at the bottom of the table!\n- **`Shift + Tab`:** Moves cursor backward to the previous cell to the left.\n- **`Arrow Keys` (`↑`, `↓`, `←`, `→`):** Navigates cell by cell across grid boundaries.\n\n### 3. Core Table Manipulation Operations\n1. **Insert / Delete Rows & Columns:**\n   - Right-click ➔ Insert ➔ Rows Above / Rows Below.\n   - Right-click ➔ Insert ➔ Columns Before / Columns After.\n   - Delete Rows / Delete Columns / Delete Table.\n2. **Merge Cells vs. Split Cells:**\n   - **Merge Cells:** Combines two or more highlighted adjacent cells into a single larger unified cell.\n   - **Split Cells:** Divides a single cell horizontally into rows or vertically into columns.\n3. **Table Borders and Background Shading:**\n   - Configures border line style (Solid, Dashed, Double), border thickness (pt), border color, and cell background fill palette.\n\n### 4. Performing Calculations inside Writer Tables (`F2`)\n- LibreOffice Writer includes an integrated Mini-Formula calculation engine:\n- Pressing **`F2`** inside any table cell opens the **Table Formula Bar**.\n- Type mathematical formulas such as `=SUM(<A1:A5>)` or `=<B1>*<C1>` to perform calculations directly inside Writer without opening Calc!",
+    "realWorldAnalogy": "A table is like an ice cube tray or a medicine pill organizer with individual compartments (cells) arranged neatly in rows and columns.",
+    "importantPoints": [
+      "The shortcut key to Insert a Table in LibreOffice Writer is Ctrl + F12.",
+      "Pressing Tab in the last cell of a table automatically inserts a new row.",
+      "Pressing F2 inside a table cell opens the Formula calculation bar.",
+      "Merge Cells combines multiple cells into one; Split Cells divides one cell into multiple cells.",
+      "Shift + Tab navigates backward to the preceding cell."
     ],
-    commonMistakes: [
-      "Table इंसर्ट करने के लिए Insert Menu ढूंढना (LibreOffice में इसके लिए एक अलग समर्पित **Table Menu** होता है)।"
+    "commonMistakes": [
+      "Confusing Ctrl + F12 with F12 (F12 is Numbering; Ctrl + F12 is Insert Table).",
+      "Thinking table calculations can only be done in Calc (Writer supports basic table formulas using F2)."
     ],
-    examTips: [
-      "LibreOffice Writer में Table Insert Shortcut ➔ **Ctrl + F12**।"
+    "examTips": [
+      "Guaranteed CCC Question: 'What is the shortcut key to Insert a Table in LibreOffice Writer?' ➔ Ctrl + F12.",
+      "Guaranteed CCC Question: 'What happens when you press Tab key in the last cell of a table?' ➔ A new row is inserted.",
+      "Guaranteed CCC Question: 'Which key opens Formula bar in Writer table?' ➔ F2."
     ],
-    quickRevision: "Insert Table: Ctrl+F12. Next Cell: Tab (creates new row at end), Prev Cell: Shift+Tab. Merge (combine) vs Split (divide).",
-    practiceAssignment: "Ctrl+F12 दबाकर 3x3 की एक टेबल बनाएं और अंतिम सेल में Tab दबाकर नई रो जोड़ें।",
-    microQuiz: [
+    "quickRevision": "Insert Table=Ctrl+F12, Table Formula=F2, Last cell Tab=New Row, Shift+Tab=Prev cell. Operations: Merge (join cells), Split (divide cells), Borders, Shading.",
+    "practiceAssignment": "Press Ctrl + F12 to create a 3x3 table in Writer. In the last cell, enter numbers and press F2 to calculate the sum using =SUM.",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस राइटर में टेबल (Table) इंसर्ट करने की शॉर्टकट कुंजी क्या है?",
-        options: [
-          { id: "A", text: "Ctrl + T" },
-          { id: "B", text: "Ctrl + F12" },
-          { id: "C", text: "Shift + F12" },
-          { id: "D", text: "Alt + F12" }
+        "question": "What is the keyboard shortcut to INSERT A TABLE in LibreOffice Writer?",
+        "options": [
+          {
+            "id": "A",
+            "text": "F12"
+          },
+          {
+            "id": "B",
+            "text": "Shift + F12"
+          },
+          {
+            "id": "C",
+            "text": "Ctrl + F12"
+          },
+          {
+            "id": "D",
+            "text": "Alt + F12"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "LibreOffice Writer में टेबल बनाने/इंसर्ट करने के लिए 'Ctrl + F12' शॉर्टकट दबाया जाता है।"
-      }
-    ]
-  },
-  {
-    chapterNumber: 3,
-    topicNumber: 8,
-    slug: "mail-merge-in-libreoffice-writer",
-    title: "Mail Merge in LibreOffice Writer (Step-by-Step)",
-    hindiTitle: "मेल मर्ज की संपूर्ण कार्यविधि (Mail Merge Step-by-Step)",
-    definitionEnglish: "Mail Merge is a powerful feature that combines a main document template with a structured data source (database/spreadsheet) to generate personalized bulk letters, certificates, envelopes, or mailing labels.",
-    definitionHindi: "मेल मर्ज (Mail Merge) एक शक्तिशाली सुविधा है जो मुख्य पत्र (Main Document) को डेटा स्रोत (Data Source) के साथ जोड़कर एक साथ सैकड़ों लोगों के व्यक्तिगत पत्र, प्रवेश पत्र, लिफाफे या लेबल तैयार करती है।",
-    simpleWords: "एक ही पत्र को अलग-अलग लोगों के नाम-पते के साथ एक क्लिक में सैकड़ों प्रतियों में तैयार करना।",
-    examImportance: "Extreme (Mail Merge Wizard location, steps, and components in CCC)",
-    detailedExplanation: `### 1. मेल मर्ज के तीन मुख्य घटक (Three Components):
-1. **Main Document (मुख्य दस्तावेज़)**: वह मूल पत्र जिसमें सामान्य संदेश लिखा होता है (Common Text).
-2. **Data Source (डेटा स्रोत)**: प्राप्तकर्ताओं के नाम, पते, मोबाइल नंबर आदि की तालिका (Spreadsheet .ods, Database .odb, or Text file).
-3. **Merged Document (मर्ज किया गया परिणाम)**: मुख्य पत्र में डेटा जोड़कर तैयार किए गए सभी व्यक्तिगत पत्र।
-
-### 2. मेल मर्ज विज़ार्ड के चरण (Mail Merge Wizard Steps):
-- मेनू पाथ: **Tools Menu ➔ Mail Merge Wizard**
-- मेल मर्ज विज़ार्ड में कुल **5 से 8 चरण** होते हैं:
-  1. *Select Starting Document* (वर्तमान डॉक्यूमेंट या नया डॉक्यूमेंट चुनना)
-  2. *Select Document Type* (Letter या E-mail Message)
-  3. *Insert Address Block* (पता सूची और डेटा सोर्स जोड़ना)
-  4. *Create Salutation* (अभिवादन जैसे Dear Mr./Ms. जोड़ना)
-  5. *Adjust Layout* (मार्जिन और स्थिति सेट करना)
-  6. *Edit Document & Personalize* (व्यक्तिगत बदलाव)
-  7. *Save, Print or Send* (प्रिंट करना या ईमेल द्वारा भेजना).`,
-    realWorldAnalogy: "शादी का निमंत्रण कार्ड एक ही होता है (Main Document), लेकिन उस पर मेहमानों के नाम की पर्चियां (Data Source) चिपकाकर सबको अलग-अलग भेजा जाता है।",
-    importantPoints: [
-      "Mail Merge विकल्प **Tools Menu** में स्थित होता है।",
-      "मेल मर्ज के लिए दो चीजों की आवश्यकता होती है: **Main Document** और **Data Source**।",
-      "मेल मर्ज से पत्र (Letters), लिफाफे (Envelopes) और लेबल्स (Labels) बनाए जा सकते हैं।"
-    ],
-    commonMistakes: [
-      "Mail Merge को File Menu में खोजना (यह **Tools Menu** में होता है)।"
-    ],
-    examTips: [
-      "Mail Merge Wizard किस मेनू में होता है? ➔ **Tools Menu**।"
-    ],
-    quickRevision: "Mail Merge = Main Doc + Data Source -> Merged Letters. Located in Tools Menu -> Mail Merge Wizard.",
-    practiceAssignment: "Tools मेनू में जाकर Mail Merge Wizard खोलें और उसके विभिन्न चरणों का अवलोकन करें।",
-    microQuiz: [
-      {
-        question: "लिब्रेऑफिस राइटर में 'Mail Merge Wizard' किस मेनू के अंतर्गत पाया जाता है?",
-        options: [
-          { id: "A", text: "File Menu" },
-          { id: "B", text: "Insert Menu" },
-          { id: "C", text: "Tools Menu" },
-          { id: "D", text: "Format Menu" }
-        ],
-        correctAnswer: "C",
-        explanation: "मेल मर्ज विज़ार्ड LibreOffice Writer के 'Tools Menu' में स्थित होता है।"
-      }
-    ]
-  },
-  {
-    chapterNumber: 3,
-    topicNumber: 9,
-    slug: "autocorrect-spelling-and-grammar-find-replace",
-    title: "AutoCorrect, Spelling & Grammar, Find and Replace",
-    hindiTitle: "ऑटो-करेक्ट, स्पेलिंग-ग्रामर चेक एवं फाइंड-रिप्लेस",
-    definitionEnglish: "Proofing tools in Writer ensure typographical correctness via Spelling & Grammar check (F7), Automatic Spellcheck (Shift+F7), Thesaurus (Ctrl+F7), Find (Ctrl+F), and Find & Replace (Ctrl+H).",
-    definitionHindi: "राइटर के प्रूफिंग टूल्स वर्तनी और व्याकरण की शुद्धता जांचते हैं; जैसे स्पेलिंग चेक (F7), ऑटोमैटिक स्पेलचेक (Shift+F7), थिसॉरस (Ctrl+F7), फाइंड (Ctrl+F) और फाइंड एवं रिप्लेस (Ctrl+H)।",
-    simpleWords: "टाइपिंग की गलत स्पेलिंग ठीक करना (लाल वेवी लाइन), पर्यायवाची शब्द खोजना (Thesaurus), और किसी शब्द को खोजकर बदलना (Find & Replace)।",
-    examImportance: "Extreme (F7, Shift+F7, Ctrl+F7, and wavy line colors are classic CCC questions)",
-    detailedExplanation: `### 1. स्पेलिंग और ग्रामर टूल्स (Spelling & Proofing Shortcuts):
-- **Spelling Check (स्पेलिंग जांच डायलॉग)**: **\`F7\`** (अति महत्वपूर्ण!)
-- **Automatic Spell Checking (लाल रेखा ऑन/ऑफ)**: **\`Shift + F7\`**
-- **Thesaurus / Synonyms (पर्यायवाची शब्द कोष)**: **\`Ctrl + F7\`**
-- मेनू पाथ: **Tools Menu ➔ Spelling (F7)**
-
-### 2. तरंगित रेखाओं के रंग (Wavy Line Colors):
-- **Red Wavy Line (लाल टेढ़ी-मेढ़ी रेखा)**: **Spelling Error** (गलत स्पेलिंग या डिक्शनरी में शब्द न होना).
-- **Blue Wavy Line (नीली टेढ़ी-मेढ़ी रेखा)**: **Grammar Error** (व्याकरण संबंधी त्रुटि).
-
-### 3. फाइंड एवं रिप्लेस (Find & Replace):
-- **Find Bar (खोज बार खोलना)**: \`Ctrl + F\` (स्क्रीन के नीचे सर्च बॉक्स).
-- **Find and Replace Dialog (खोजकर बदलना)**: **\`Ctrl + H\`** (दस्तावेज़ में किसी शब्द को दूसरे शब्द से एक साथ बदलना).`,
-    realWorldAnalogy: "F7 एक सख्त हिंदी/इंग्लिश टीचर की तरह है जो लाल कलम से कॉपी में गलत वर्तनी पर गोला लगाता है।",
-    importantPoints: [
-      "**Spelling Check** की शॉर्टकट कुंजी **F7** होती है।",
-      "**Automatic Spell Checking** की शॉर्टकट कुंजी **Shift + F7** होती है।",
-      "**Thesaurus (पर्यायवाची कोष)** की शॉर्टकट कुंजी **Ctrl + F7** होती है।",
-      "**Find and Replace** की शॉर्टकट कुंजी **Ctrl + H** होती है।",
-      "लाल रेखा **स्पेलिंग** और नीली रेखा **व्याकरण** की गलती दर्शाती है।"
-    ],
-    commonMistakes: [
-      "Thesaurus के लिए Shift+F7 समझना (MS Word में Shift+F7 होता है, LibreOffice में **Ctrl+F7** होता है)।",
-      "लाल रेखा को व्याकरण की गलती समझना (लाल = स्पेलिंग, नीली = व्याकरण)।"
-    ],
-    examTips: [
-      "Spelling Check = **F7**",
-      "Thesaurus = **Ctrl + F7**",
-      "Find and Replace = **Ctrl + H**",
-      "Red Line = Spelling Error | Blue Line = Grammar Error"
-    ],
-    quickRevision: "F7: Spelling. Shift+F7: Auto Spell Check. Ctrl+F7: Thesaurus. Ctrl+H: Find & Replace. Red line = Spelling, Blue line = Grammar.",
-    practiceAssignment: "राइटर में जानबूझकर 'computr' लिखें, F7 दबाकर स्पेलिंग चेक डायलॉग से उसे 'computer' में सुधारें।",
-    microQuiz: [
-      {
-        question: "लिब्रेऑफिस राइटर में स्पेलिंग जांच (Spelling Check) करने की शॉर्टकट कुंजी क्या है?",
-        options: [
-          { id: "A", text: "F5" },
-          { id: "B", text: "F7" },
-          { id: "C", text: "F9" },
-          { id: "D", text: "F11" }
-        ],
-        correctAnswer: "B",
-        explanation: "स्पेलिंग और ग्रामर जांचने के लिए मानक शॉर्टकट कुंजी 'F7' होती है।"
+        "correctAnswer": "C",
+        "explanation": "Pressing Ctrl + F12 opens the Insert Table dialog box in LibreOffice Writer."
       },
       {
-        question: "टेक्स्ट के नीचे लाल रंग की टेढ़ी-मेढ़ी रेखा (Red Wavy Line) क्या दर्शाती है?",
-        options: [
-          { id: "A", text: "व्याकरण की गलती (Grammar Error)" },
-          { id: "B", text: "वर्तनी की गलती (Spelling Error)" },
-          { id: "C", text: "प्रिंटिंग त्रुटि" },
-          { id: "D", text: "फॉन्ट मिसिंग" }
+        "question": "What occurs when the user presses the 'Tab' key while situated in the very LAST cell of a table in LibreOffice Writer?",
+        "options": [
+          {
+            "id": "A",
+            "text": "The table is deleted"
+          },
+          {
+            "id": "B",
+            "text": "The cursor exits the table"
+          },
+          {
+            "id": "C",
+            "text": "A new row is automatically created at the bottom"
+          },
+          {
+            "id": "D",
+            "text": "All cell contents are erased"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "लाल रंग की रेखा वर्तनी (Spelling) की गलती को दर्शाती है।"
+        "correctAnswer": "C",
+        "explanation": "Pressing Tab in the bottom-right final cell automatically appends a new empty row to the table."
       }
     ]
   },
   {
-    chapterNumber: 3,
-    topicNumber: 10,
-    slug: "libreoffice-writer-shortcut-keys",
-    title: "Essential LibreOffice Writer Shortcut Keys",
-    hindiTitle: "लिब्रेऑफिस राइटर के महत्वपूर्ण शॉर्टकट कीज",
-    definitionEnglish: "A consolidated master reference of all high-yield shortcut keys in LibreOffice Writer essential for day-to-day productivity and cracking the NIELIT CCC exam.",
-    definitionHindi: "लिब्रेऑफिस राइटर के सभी अत्यंत महत्वपूर्ण और बार-बार पूछे जाने वाले शॉर्टकट कीज का संपूर्ण मास्टर चार्ट जो सीसीसी परीक्षा के लिए अनिवार्य है।",
-    simpleWords: "कीबोर्ड के जादुई बटन जिन्हें दबाते ही बिना माउस छुए सारे काम पलक झपकते हो जाते हैं।",
-    examImportance: "Extreme (5-8 shortcut questions directly from Writer appear in every CCC paper)",
-    detailedExplanation: `### 1. संपूर्ण राइटर शॉर्टकट मास्टर तालिका:
-
-| कार्य (Operation) | शॉर्टकट कुंजी (Shortcut Key) |
-|---|---|
-| New Document (नया डॉक्यूमेंट) | \`Ctrl + N\` |
-| Save As (नये नाम से सेव) | **\`Ctrl + Shift + S\`** |
-| Print Preview (प्रिंट प्रीव्यू) | **\`Ctrl + Shift + O\`** |
-| Exit LibreOffice (पूरा बंद करना) | **\`Ctrl + Q\`** |
-| Close Document (वर्तमान फाइल बंद) | \`Ctrl + W\` |
-| Double Underline (दोहरी अंडरलाइन) | **\`Ctrl + D\`** |
-| Superscript (घात लगाना x²) | **\`Ctrl + Shift + P\`** |
-| Subscript (आधार लिखना H₂O) | **\`Ctrl + Shift + B\`** |
-| Clear Direct Formatting | **\`Ctrl + M\`** |
-| Cycle Case (अपर/लोअर केस) | **\`Shift + F3\`** |
-| Align Center (मध्य संरेखण) | \`Ctrl + E\` |
-| Align Justify (दोनों तरफ बराबर) | \`Ctrl + J\` |
-| Insert Page Break | **\`Ctrl + Enter\`** |
-| Insert Table (टेबल बनाना) | **\`Ctrl + F12\`** |
-| Numbering List On/Off | **\`F12\`** |
-| Bullets List On/Off | **\`Shift + F12\`** |
-| Spelling Check | **\`F7\`** |
-| Automatic Spell Checking | **\`Shift + F7\`** |
-| Thesaurus (पर्यायवाची) | **\`Ctrl + F7\`** |
-| Manage Styles (स्टाइल साइडबार) | **\`F11\`** |
-| Navigator (नेविगेटर खोलना) | **\`F5\`** |
-| Sidebar (साइडबार ऑन/ऑफ) | **\`Ctrl + F5\`** |
-| Full Screen (पूर्ण स्क्रीन) | **\`Ctrl + Shift + J\`** |`,
-    realWorldAnalogy: "जैसे टीवी का रिमोट सारे चैनल और वॉल्यूम एक बटन दबाकर बदल देता है।",
-    importantPoints: [
-      "**Full Screen** की शॉर्टकट कुंजी **Ctrl + Shift + J** होती है।",
-      "**Manage Styles** खोलने की शॉर्टकट कुंजी **F11** होती है।",
-      "**Navigator** खोलने की शॉर्टकट कुंजी **F5** होती है (Impress में Slide Show के लिए F5 होता है)।"
+    "chapterNumber": 3,
+    "topicNumber": 8,
+    "slug": "mail-merge-in-libreoffice-writer",
+    "title": "Mail Merge in LibreOffice Writer (Step-by-Step)",
+    "hindiTitle": "मेल मर्ज की संपूर्ण कार्यविधि (Mail Merge Step-by-Step)",
+    "definitionEnglish": "Mail Merge is an automated batch-processing feature in LibreOffice Writer that merges a primary form letter template with an external structured recipient database to generate personalized letters, envelopes, or email messages for multiple recipients simultaneously.",
+    "definitionHindi": "मेल मर्ज लिब्रेऑफिस राइटर का एक स्वचालित टूल है जो एक मुख्य पत्र (Main Document) को एड्रेस लिस्ट (Data Source) के साथ जोड़कर सैकड़ों प्राप्तकर्ताओं के लिए व्यक्तिगत पत्र, लिफाफे या ई-मेल एक साथ तैयार करता है।",
+    "simpleWords": "एक ही लेटर या एडमिट कार्ड को सैकड़ों अलग-अलग छात्रों के नाम और पते के साथ एक क्लिक में तैयार करने की तकनीक को मेल मर्ज कहते हैं।",
+    "examImportance": "Very High (3-4 questions on Mail Merge components, Wizard menu location Tools ➔ Mail Merge, and 5 Wizard steps)",
+    "detailedExplanation": "### 1. The 3 Fundamental Pillars of Mail Merge\nMail Merge requires three distinct data components to operate:\n1. **Main Document (Form Letter Template):** The primary document containing standard static body text along with variable placeholder fields called **Merge Fields** (e.g., `«Title» «First_Name» «City»`).\n2. **Data Source (Address List Database):** The structured data table containing individual recipient records. Can be a LibreOffice Calc spreadsheet (`.ods`), Base database (`.odb`), CSV text file, or system address book.\n3. **Merged Output Document:** The final batch-generated document where each page represents a customized personalized letter ready for printing or direct emailing.\n\n### 2. The 5-Step Mail Merge Wizard Workflow\nLocated under the menu: **Tools ➔ Mail Merge Wizard**:\n\n- **Step 1: Select Starting Document:**\n  - Choose between *Use the current document*, *Create a new document*, or *Start from existing template*.\n- **Step 2: Select Document Type:**\n  - Choose between **Letter** (printed paper letters) or **E-mail message** (direct SMTP electronic dispatch).\n- **Step 3: Insert Address Block / Select Address List:**\n  - Connect to the Data Source address list and map field names (Name, Address, PIN Code).\n- **Step 4: Create Salutation:**\n  - Define formal salutations (e.g., *\"Dear Mr. Sharma,\"* or *\"Dear Sir/Madam\"*).\n- **Step 5: Adjust Layout, Edit Document & Save/Print:**\n  - Preview personalized letters, exclude specific recipients if needed, and execute final batch printing or saving.",
+    "realWorldAnalogy": "Mail Merge is like filling pre-printed wedding invitation cards where the invitation text is identical on all cards, but the guest's name is customized on each individual envelope.",
+    "importantPoints": [
+      "Mail Merge Wizard is located under the Tools menu (Tools ➔ Mail Merge Wizard).",
+      "Mail Merge requires 3 components: Main Document, Data Source, and Merged Document.",
+      "The two document types supported in Mail Merge are Letter and E-mail message.",
+      "Calc spreadsheets (.ods) and CSV files can serve as Data Sources for Mail Merge."
     ],
-    commonMistakes: [
-      "Full Screen के लिए F11 समझना (ब्राउज़र में F11 होता है, लेकिन Writer में **Ctrl+Shift+J** होता है और F11 से Styles खुलता है)।"
+    "commonMistakes": [
+      "Looking for Mail Merge in the File or Edit menu (Mail Merge is strictly under Tools ➔ Mail Merge Wizard).",
+      "Thinking Mail Merge can only generate printed letters (It can also generate electronic e-mail messages directly)."
     ],
-    examTips: [
-      "Full Screen in Writer ➔ **Ctrl + Shift + J**",
-      "Manage Styles in Writer ➔ **F11**",
-      "Navigator in Writer ➔ **F5**"
+    "examTips": [
+      "Guaranteed CCC Question: 'In which menu is Mail Merge Wizard found in LibreOffice Writer?' ➔ Tools Menu.",
+      "Guaranteed CCC Question: 'How many primary components are involved in Mail Merge?' ➔ 3 Components."
     ],
-    quickRevision: "Memorize: Save As (Ctrl+Shift+S), Print Preview (Ctrl+Shift+O), Table (Ctrl+F12), Full Screen (Ctrl+Shift+J), Styles (F11), Navigator (F5).",
-    practiceAssignment: "राइटर में Ctrl+Shift+J दबाकर फुल स्क्रीन मोड ऑन करें और दोबारा दबाकर सामान्य मोड में आएं।",
-    microQuiz: [
+    "quickRevision": "Mail Merge (Tools ➔ Mail Merge Wizard) automates batch letters/emails by combining Main Document + Data Source into Merged Document through a 5-step wizard.",
+    "practiceAssignment": "In Writer, create a 3-line invitation letter, open Tools ➔ Mail Merge Wizard, and explore the 5 wizard steps.",
+    "microQuiz": [
       {
-        question: "लिब्रेऑफिस राइटर में फुल स्क्रीन (Full Screen) करने की शॉर्टकट कुंजी क्या है?",
-        options: [
-          { id: "A", text: "F11" },
-          { id: "B", text: "Ctrl + Shift + J" },
-          { id: "C", text: "Ctrl + F11" },
-          { id: "D", text: "Alt + Enter" }
+        "question": "In LibreOffice Writer, under which top-level menu is the 'Mail Merge Wizard' located?",
+        "options": [
+          {
+            "id": "A",
+            "text": "File Menu"
+          },
+          {
+            "id": "B",
+            "text": "Edit Menu"
+          },
+          {
+            "id": "C",
+            "text": "Insert Menu"
+          },
+          {
+            "id": "D",
+            "text": "Tools Menu"
+          }
         ],
-        correctAnswer: "B",
-        explanation: "LibreOffice Writer में 'Full Screen' मोड चालू/बंद करने की शॉर्टकट 'Ctrl + Shift + J' होती है।"
+        "correctAnswer": "D",
+        "explanation": "The Mail Merge Wizard is accessed via Tools ➔ Mail Merge Wizard in LibreOffice Writer."
       },
       {
-        question: "राइटर में 'Manage Styles' (स्टाइल मेनू/साइडबार) खोलने की फंक्शन कुंजी कौन सी है?",
-        options: [
-          { id: "A", text: "F5" },
-          { id: "B", text: "F7" },
-          { id: "C", text: "F11" },
-          { id: "D", text: "F12" }
+        "question": "Which of the following represents the correct set of the 3 primary components required for Mail Merge?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Hardware, Software, Firmware"
+          },
+          {
+            "id": "B",
+            "text": "Main Document, Data Source, Merged Document"
+          },
+          {
+            "id": "C",
+            "text": "Header, Footer, Margin"
+          },
+          {
+            "id": "D",
+            "text": "Keyboard, Mouse, Monitor"
+          }
         ],
-        correctAnswer: "C",
-        explanation: "LibreOffice Writer में स्टाइल विंडो (Manage Styles) खोलने के लिए 'F11' दबाते हैं।"
+        "correctAnswer": "B",
+        "explanation": "Mail Merge combines a Main Document template with an external Data Source address list to produce the final Merged Document."
+      }
+    ]
+  },
+  {
+    "chapterNumber": 3,
+    "topicNumber": 9,
+    "slug": "autocorrect-spelling-and-grammar-find-replace",
+    "title": "AutoCorrect, Spelling & Grammar, Find and Replace",
+    "hindiTitle": "ऑटो-करेक्ट, स्पेलिंग-ग्रामर चेक एवं फाइंड-रिप्लेस",
+    "definitionEnglish": "Proofreading and search utilities in LibreOffice Writer automate typing correction (AutoCorrect), detect linguistic spelling errors and grammatical anomalies (Spelling & Grammar F7), provide synonyms (Thesaurus Ctrl+F7), and locate/substitute text strings (Find Ctrl+F, Find & Replace Ctrl+H).",
+    "definitionHindi": "प्रूफरीडिंग और खोज टूल्स में टाइपिंग गलतियों को स्वतः सुधारना (AutoCorrect), वर्तनी व व्याकरण त्रुटियां जांचना (F7), पर्यायवाची खोजना (Thesaurus Ctrl+F7) और टेक्स्ट को खोजना/बदलना (Ctrl+H) शामिल है।",
+    "simpleWords": "स्पेलिंग चेक (F7), थिसॉरस/पर्यायवाची (Ctrl+F7), टेक्स्ट खोजना (Ctrl+F) और एक शब्द को दूसरे शब्द से बदलना (Ctrl+H)।",
+    "examImportance": "Very High (4-5 direct questions on F7, Shift+F7, Ctrl+F7, Ctrl+F, and Ctrl+H shortcuts)",
+    "detailedExplanation": "### 1. Spelling and Grammar Checking (F7)\n- **Spelling and Grammar Dialog:** **`F7`** (Scans document from cursor and prompts suggestions for misspelled words).\n- **Automatic Spell Checking (Live Squiggly Underlines):** **`Shift + F7`** (Toggles real-time red squiggly underlines).\n- **Visual Error Indicators:**\n  - **Red Wavy Underline:** Indicates a **Spelling error** (word not found in the standard dictionary).\n  - **Blue Wavy Underline:** Indicates a **Grammatical or Punctuation error** (e.g., double spaces, subject-verb disagreement).\n\n### 2. Thesaurus / Synonym Lookup (`Ctrl + F7`)\n- **Thesaurus Shortcut:** **`Ctrl + F7`**\n- Provides a built-in dictionary dictionary of **Synonyms** (words with similar meanings) and **Antonyms** (opposite meanings) to enrich vocabulary without leaving Writer.\n\n### 3. AutoCorrect vs. AutoText\n- **AutoCorrect (Tools ➔ AutoCorrect):** Automatically fixes common typing errors in real-time as you type (e.g., typing `teh` automatically corrects to `the`, and `(c)` converts to `©`).\n- **AutoText (`Ctrl + F3`):** Inserts pre-stored formatted paragraphs or signatures upon typing a shorthand acronym and pressing **`F3`** (e.g., typing `fn` and pressing `F3` inserts your full corporate signature block).\n\n### 4. Find vs. Find and Replace\n- **Find Toolbar (`Ctrl + F`):** Opens a compact search bar at the bottom of the window to locate text strings.\n- **Find and Replace Dialog (`Ctrl + H`):**\n  - **Find Field:** Text to search for.\n  - **Replace Field:** Replacement text to substitute.\n  - **Match Case:** Enforces strict case-sensitive search.\n  - **Whole Words Only:** Prevents matching substrings (e.g., searching for \"cat\" won't match \"catalog\").\n  - **Replace All:** Instantly substitutes every occurrence across the entire document in milliseconds.",
+    "realWorldAnalogy": "Spelling check is like a proofreader marking red ink on misspelled words; Thesaurus is like an English professor suggesting richer vocabulary.",
+    "importantPoints": [
+      "Spelling & Grammar Check shortcut key is F7.",
+      "Automatic Spell Check toggle shortcut is Shift + F7.",
+      "Thesaurus (Synonyms) shortcut key is Ctrl + F7.",
+      "Find shortcut is Ctrl + F; Find & Replace shortcut is Ctrl + H.",
+      "AutoText shortcut key is Ctrl + F3 (executed with F3 key).",
+      "Red squiggly line indicates Spelling error; Blue squiggly line indicates Grammar error."
+    ],
+    "commonMistakes": [
+      "Confusing F7 with Ctrl + F7 (F7 is Spelling & Grammar; Ctrl + F7 is Thesaurus).",
+      "Confusing Ctrl + F with Ctrl + H (Ctrl + F only finds text; Ctrl + H finds and replaces text)."
+    ],
+    "examTips": [
+      "Guaranteed CCC Question: 'What is the shortcut key for Spelling & Grammar check in LibreOffice Writer?' ➔ F7.",
+      "Guaranteed CCC Question: 'What is the shortcut key for Thesaurus in LibreOffice Writer?' ➔ Ctrl + F7.",
+      "Guaranteed CCC Question: 'What is the shortcut key for Find and Replace in LibreOffice Writer?' ➔ Ctrl + H."
+    ],
+    "quickRevision": "Spelling Check=F7, Auto Spell Check=Shift+F7, Thesaurus (Synonyms)=Ctrl+F7, Find=Ctrl+F, Find & Replace=Ctrl+H, AutoText=Ctrl+F3. Red line=Spelling, Blue line=Grammar.",
+    "practiceAssignment": "Type a misspelled word 'computr' in Writer. Observe the red squiggly line, press F7 to fix it, and press Ctrl + F7 to inspect Thesaurus synonyms for 'happy'.",
+    "microQuiz": [
+      {
+        "question": "What is the shortcut key to launch 'Spelling and Grammar Check' in LibreOffice Writer?",
+        "options": [
+          {
+            "id": "A",
+            "text": "F5"
+          },
+          {
+            "id": "B",
+            "text": "F7"
+          },
+          {
+            "id": "C",
+            "text": "Ctrl + F7"
+          },
+          {
+            "id": "D",
+            "text": "Shift + F7"
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "The F7 function key initiates the comprehensive Spelling and Grammar dialog check."
+      },
+      {
+        "question": "Which keyboard shortcut opens the 'Thesaurus' (Synonyms lookup) utility in LibreOffice Writer?",
+        "options": [
+          {
+            "id": "A",
+            "text": "F7"
+          },
+          {
+            "id": "B",
+            "text": "Shift + F7"
+          },
+          {
+            "id": "C",
+            "text": "Ctrl + F7"
+          },
+          {
+            "id": "D",
+            "text": "Alt + F7"
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "Pressing Ctrl + F7 opens the Thesaurus to find synonyms and antonyms for highlighted words."
+      }
+    ]
+  },
+  {
+    "chapterNumber": 3,
+    "topicNumber": 10,
+    "slug": "libreoffice-writer-shortcut-keys",
+    "title": "Essential LibreOffice Writer Shortcut Keys",
+    "hindiTitle": "लिब्रेऑफिस राइटर के महत्वपूर्ण शॉर्टकट कीज",
+    "definitionEnglish": "Shortcut keys in LibreOffice Writer are specific keyboard combinations that execute commands directly without navigating through nested menu items, dramatically accelerating document creation and formatting productivity.",
+    "definitionHindi": "लिब्रेऑफिस राइटर में शॉर्टकट कीज वे विशेष कुंजी संयोजन (Key Combinations) हैं जो मेनू में जाए बिना सीधे कमांड्स को निष्पादित करते हैं और कार्य गति को बढ़ाते हैं।",
+    "simpleWords": "लिब्रेऑफिस राइटर की सभी महत्वपूर्ण शॉर्टकट कुंजियों (जैसे Ctrl+S, F7, F11, F12, Ctrl+F12) की संपूर्ण परीक्षा तालिका।",
+    "examImportance": "Very High (5-6 direct shortcut questions in every CCC examination)",
+    "detailedExplanation": "### 1. Master Reference Table: LibreOffice Writer Shortcuts\n| Command / Operation | Shortcut Key | Functional Description |\n| :--- | :--- | :--- |\n| **New Document** | **`Ctrl + N`** | Creates a new blank text document |\n| **Open Document** | **`Ctrl + O`** | Opens existing document from storage |\n| **Save Document** | **`Ctrl + S`** | Saves active modifications to disk |\n| **Save As** | **`Ctrl + Shift + S`** | Saves document with new name or format |\n| **Print Preview** | **`Ctrl + Shift + O`** | Toggles full visual Print Preview mode |\n| **Print Document** | **`Ctrl + P`** | Opens the Print dialogue box |\n| **Close Document** | **`Ctrl + W`** | Closes the current document window |\n| **Exit Application** | **`Ctrl + Q`** | Exits the entire LibreOffice suite |\n| **Cut** | **`Ctrl + X`** | Moves selected text to clipboard |\n| **Copy** | **`Ctrl + C`** | Duplicates selected text to clipboard |\n| **Paste** | **`Ctrl + V`** | Pastes clipboard contents at cursor |\n| **Paste Special** | **`Ctrl + Shift + V`** | Opens Paste Special options dialog |\n| **Undo** | **`Ctrl + Z`** | Reverses the last action |\n| **Redo** | **`Ctrl + Y`** | Re-executes the last undone action |\n| **Select All** | **`Ctrl + A`** | Selects entire document content |\n| **Find** | **`Ctrl + F`** | Opens the Find search bar |\n| **Find and Replace** | **`Ctrl + H`** | Opens Find & Replace dialog box |\n| **Bold** | **`Ctrl + B`** | Applies heavy stroke weight |\n| **Italic** | **`Ctrl + I`** | Applies slanted text emphasis |\n| **Underline** | **`Ctrl + U`** | Applies single underline |\n| **Double Underline** | **`Ctrl + D`** | Applies double underline |\n| **Superscript** | **`Ctrl + Shift + P`** | Raises characters (e.g., X²) |\n| **Subscript** | **`Ctrl + Shift + B`** | Drops characters (e.g., H₂O) |\n| **Align Left** | **`Ctrl + L`** | Flushes text along left margin |\n| **Center Alignment** | **`Ctrl + E`** | Centers text between margins |\n| **Align Right** | **`Ctrl + R`** | Flushes text along right margin |\n| **Justify Alignment** | **`Ctrl + J`** | Aligns text along both margins |\n| **Single Line Spacing** | **`Ctrl + 1`** | Sets 1.0 line spacing |\n| **Double Line Spacing** | **`Ctrl + 2`** | Sets 2.0 line spacing |\n| **1.5 Line Spacing** | **`Ctrl + 5`** | Sets 1.5 line spacing |\n| **Insert Table** | **`Ctrl + F12`** | Launches Insert Table dialog |\n| **Numbered List (Numbering)** | **`F12`** | Toggles ordered number sequence |\n| **Bulleted List (Bullets)** | **`Shift + F12`** | Toggles unordered bullet points |\n| **Spelling & Grammar Check** | **`F7`** | Runs proofreading dialog |\n| **Auto Spell Check** | **`Shift + F7`** | Toggles live spell checking |\n| **Thesaurus (Synonyms)** | **`Ctrl + F7`** | Opens Synonyms dictionary |\n| **Navigator** | **`F5`** | Opens document Navigator tree |\n| **Styles Deck** | **`F11`** | Opens Styles & Formatting sidebar |\n| **Clear Direct Formatting** | **`Ctrl + M`** | Strips manual formatting overrides |\n| **Insert Page Break** | **`Ctrl + Enter`** | Forces text to next new page |\n| **Insert Hyperlink** | **`Ctrl + K`** | Opens Hyperlink insertion dialog |",
+    "realWorldAnalogy": "Using shortcut keys is like using direct highway expressways instead of stopping at every local traffic light.",
+    "importantPoints": [
+      "F12 = Numbering | Shift + F12 = Bullets | Ctrl + F12 = Insert Table.",
+      "F7 = Spelling Check | Shift + F7 = Auto Spell Check | Ctrl + F7 = Thesaurus.",
+      "F11 = Styles Deck | F5 = Navigator | Ctrl + M = Clear Direct Formatting.",
+      "Ctrl + Shift + S = Save As | Ctrl + Shift + O = Print Preview | Ctrl + Q = Exit.",
+      "Ctrl + D = Double Underline | Ctrl + Shift + P = Superscript | Ctrl + Shift + B = Subscript."
+    ],
+    "commonMistakes": [
+      "Memorizing MS Word shortcuts for LibreOffice without checking differences (e.g., Save As is Ctrl+Shift+S in Writer, not F12; Double Underline is Ctrl+D in Writer, not Ctrl+Shift+D).",
+      "Confusing F11 (Styles) with F12 (Numbering)."
+    ],
+    "examTips": [
+      "This single shortcut table covers ~5-6 direct questions in every official CCC exam paper.",
+      "Review the F1 to F12 functional key mapping specifically for LibreOffice."
+    ],
+    "quickRevision": "Master the 40 core shortcuts: Save As=Ctrl+Shift+S, Print Preview=Ctrl+Shift+O, Table=Ctrl+F12, Numbering=F12, Bullets=Shift+F12, Spell=F7, Thesaurus=Ctrl+F7, Styles=F11, Page Break=Ctrl+Enter.",
+    "practiceAssignment": "Open Writer and create a 1-page sample document utilizing at least 10 different shortcut keys from the table without touching the mouse.",
+    "microQuiz": [
+      {
+        "question": "Which shortcut key combination inserts a manual PAGE BREAK in LibreOffice Writer?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Shift + Enter"
+          },
+          {
+            "id": "B",
+            "text": "Ctrl + Enter"
+          },
+          {
+            "id": "C",
+            "text": "Alt + Enter"
+          },
+          {
+            "id": "D",
+            "text": "F12"
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "Pressing Ctrl + Enter inserts a hard Page Break, terminating the current page and moving the cursor to the top of the next page."
+      },
+      {
+        "question": "What is the shortcut key to toggle the 'Navigator' dialog window in LibreOffice Writer?",
+        "options": [
+          {
+            "id": "A",
+            "text": "F2"
+          },
+          {
+            "id": "B",
+            "text": "F5"
+          },
+          {
+            "id": "C",
+            "text": "F7"
+          },
+          {
+            "id": "D",
+            "text": "F11"
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "The F5 function key opens the Navigator panel to quickly jump between headings, tables, and bookmarks."
       }
     ]
   }

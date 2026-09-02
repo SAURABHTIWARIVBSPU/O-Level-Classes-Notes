@@ -184,6 +184,15 @@ export default function Navbar() {
                 </Link>
 
                 <Link
+                  href="/ccc/notes"
+                  className={`px-3 py-1.5 rounded-md transition-all ${
+                    pathname.startsWith('/ccc/notes') ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                  }`}
+                >
+                  Notes &amp; PDF
+                </Link>
+
+                <Link
                   href="/ccc/mcqs"
                   className={`px-3 py-1.5 rounded-md transition-all ${
                     pathname.startsWith('/ccc/mcqs') ? 'bg-slate-100 dark:bg-slate-800 text-emerald-600 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
@@ -280,6 +289,15 @@ export default function Navbar() {
                 </div>
 
                 <Link
+                  href="/notes"
+                  className={`px-3 py-1.5 rounded-md transition-all ${
+                    pathname.startsWith('/notes') ? 'bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                  }`}
+                >
+                  Notes &amp; PDF
+                </Link>
+
+                <Link
                   href="/classroom"
                   className={`px-3 py-1.5 rounded-md transition-all ${
                     pathname === '/classroom' ? 'bg-amber-50 dark:bg-amber-950 text-amber-600 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
@@ -374,6 +392,9 @@ export default function Navbar() {
                 <Link href="/ccc/syllabus" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
                   80-Hour Syllabus Blueprint
                 </Link>
+                <Link href="/ccc/notes" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-blue-600 font-bold">
+                  Unit-Wise Notes &amp; PDF Library
+                </Link>
                 <Link href="/ccc/mcqs" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
                   200+ Chapter MCQs
                 </Link>
@@ -394,6 +415,9 @@ export default function Navbar() {
                 </Link>
                 <Link href="/syllabus" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
                   100M Syllabus Blueprint
+                </Link>
+                <Link href="/notes" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-blue-600 font-bold">
+                  Unit-Wise Notes &amp; PDF Library
                 </Link>
                 <Link href="/classroom" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
                   Digital Board Classroom

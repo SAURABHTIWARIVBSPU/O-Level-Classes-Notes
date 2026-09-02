@@ -419,7 +419,7 @@ export default function TopicContent({ topic, prevTopic, nextTopic }) {
               {topic.importantPoints.map((pt, idx) => (
                 <li key={idx} className="flex items-start gap-2">
                   <span className="text-emerald-600 font-bold shrink-0">•</span>
-                  <span>{pt}</span>
+                  <span>{typeof pt === 'object' && pt !== null ? (pt.text || pt.point || pt.title || pt.desc || '') : pt}</span>
                 </li>
               ))}
             </ul>
@@ -443,7 +443,7 @@ export default function TopicContent({ topic, prevTopic, nextTopic }) {
               {topic.commonMistakes.map((mistake, idx) => (
                 <li key={idx} className="flex items-start gap-2">
                   <X className="w-3.5 h-3.5 text-rose-600 shrink-0 mt-0.5" />
-                  <span>{mistake}</span>
+                  <span>{typeof mistake === 'object' && mistake !== null ? (mistake.text || mistake.mistake || mistake.title || mistake.desc || '') : mistake}</span>
                 </li>
               ))}
             </ul>

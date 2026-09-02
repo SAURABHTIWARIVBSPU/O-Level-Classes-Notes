@@ -130,11 +130,19 @@ export default function CCCLandingPage() {
               </Link>
 
               <Link
+                href="/ccc/notes"
+                className="px-5 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm transition-all flex items-center gap-2 shadow-sm"
+              >
+                <FileText className="w-4 h-4" />
+                <span>Unit Notes &amp; PDF Library</span>
+              </Link>
+
+              <Link
                 href="/ccc/syllabus"
                 className="px-5 py-3.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-bold text-xs sm:text-sm transition-all flex items-center gap-2 shadow-2xs"
               >
                 <BookOpen className="w-4 h-4 text-blue-600" />
-                <span>80H Syllabus Blueprint</span>
+                <span>80H Syllabus</span>
               </Link>
 
               <Link
@@ -142,7 +150,7 @@ export default function CCCLandingPage() {
                 className="px-5 py-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-100 dark:hover:bg-amber-900/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 font-bold text-xs sm:text-sm transition-all flex items-center gap-2 shadow-2xs"
               >
                 <Award className="w-4 h-4 text-amber-500" />
-                <span>100-Mark Mock Simulator</span>
+                <span>100M Mock Test</span>
               </Link>
             </div>
 

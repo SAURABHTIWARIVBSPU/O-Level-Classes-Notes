@@ -2,13 +2,14 @@
 
 import React, { useEffect } from 'react';
 import { notFound } from 'next/navigation';
-import { topicsBySlug, getAdjacentTopics } from '@/data/topicsData';
+import { allTopics, topicsBySlug, getAdjacentTopics } from '@/data/topicsData';
 import TopicContent from '@/components/learning/TopicContent';
 import { useProgress } from '@/lib/progressContext';
 
 export default function TopicPage({ params }) {
-  const { topicSlug } = params;
-  const topic = topicsBySlug[topicSlug];
+  const rawSlug = params?.topicSlug || '';
+  const topicSlug = decodeURIComponent(rawSlug);
+  const topic = topicsBySlug[topicSlug] || allTopics.find((t) => t.slug === topicSlug);
 
   if (!topic) {
     notFound();
