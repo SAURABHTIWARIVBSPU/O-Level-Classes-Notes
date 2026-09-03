@@ -174,21 +174,34 @@ export const unitsData = [
     marksGroup: "Group 2",
     color: "from-teal-600 to-emerald-600",
     badgeColor: "bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-300",
-    description: "Design and visually style web pages using CSS rulesets, inline/internal/external approaches, universal/ID/class/attribute/sub selectors, box model properties, borders, positioning, CSS tables, navigation menus, and galleries.",
+    description: "Design and visually style responsive web pages using CSS rulesets, selectors, the Box Model, typography, colors, borders, positioning, modern Flexbox and Grid layouts, navigation menus, data tables, responsive media queries, CSS variables, and transitions.",
     learningObjectives: [
-      "Understand the purpose of CSS.",
-      "Understand the role of CSS in web sites.",
-      "Understand roles of effects in web site."
+      "Understand the purpose, cascading mechanics, and syntax of CSS rulesets.",
+      "Master CSS selectors, specificity hierarchy, and inheritance.",
+      "Implement the CSS Box Model with border-box sizing and understand margin collapsing.",
+      "Build modern, responsive web layouts using CSS Flexbox and CSS Grid.",
+      "Design interactive navigation bars, styled data tables, and responsive card galleries.",
+      "Apply responsive media queries, relative units (rem, em, vh, vw, clamp), and CSS custom properties."
     ],
     topics: [
-      { id: "u4-t1", slug: "introduction-to-css", title: "Introduction to CSS", hindiTitle: "CSS का परिचय" },
-      { id: "u4-t2", slug: "types-of-css", title: "Types of CSS (Inline, Internal, External)", hindiTitle: "CSS के प्रकार (Inline, Internal, External)" },
-      { id: "u4-t3", slug: "css-selectors", title: "CSS Selectors: Universal, ID, Tag, Class, Sub Selector, Attribute, Group", hindiTitle: "CSS चयनकर्ता (Selectors)" },
-      { id: "u4-t4", slug: "css-properties-background-block-box-list-border-positioning", title: "CSS Properties: Background, Block, Box, List, Border, Positioning Properties", hindiTitle: "CSS प्रॉपर्टीज (Background, Block, Box Model, List, Border, Positioning)" },
-      { id: "u4-t5", slug: "css-lists", title: "CSS Lists", hindiTitle: "CSS लिस्ट स्टाइलिंग" },
-      { id: "u4-t6", slug: "css-tables", title: "CSS Tables", hindiTitle: "CSS टेबल डिजाइन" },
-      { id: "u4-t7", slug: "css-menu-design", title: "CSS Menu Design", hindiTitle: "CSS नेविगेशन मेन्यू डिजाइन" },
-      { id: "u4-t8", slug: "css-image-gallery", title: "CSS Image Gallery", hindiTitle: "CSS इमेज गैलरी" }
+      { id: "u4-t1", slug: "introduction-to-css", title: "Introduction to CSS & Syntax Ruleset", hindiTitle: "CSS का परिचय, इतिहास एवं सिंटैक्स रूल्स" },
+      { id: "u4-t2", slug: "types-of-css", title: "Types of CSS (Inline, Internal, External) & Cascade", hindiTitle: "CSS के प्रकार एवं कैस्केड प्राथमिकता" },
+      { id: "u4-t3", slug: "css-selectors", title: "CSS Selectors: Universal, Type, Class, ID, Combinators & Attributes", hindiTitle: "CSS चयनकर्ता (यूनिवर्सल, टैग, क्लास, ID, कॉम्बिनेटर्स एवं एट्रिब्यूट्स)" },
+      { id: "u4-t4", slug: "css-colors-and-backgrounds", title: "CSS Colors, Color Models, Gradients & Backgrounds", hindiTitle: "CSS कलर्स, हेक्स, RGB, HSL, ग्रेडिएंट्स एवं बैकग्राउंड्स" },
+      { id: "u4-t5", slug: "css-typography-and-fonts", title: "CSS Typography, Text Formatting & Web Fonts", hindiTitle: "CSS टाइपोग्राफी, टेक्स्ट फॉर्मेटिंग एवं वेब फोंट्स" },
+      { id: "u4-t6", slug: "css-box-model", title: "The CSS Box Model & box-sizing: border-box", hindiTitle: "CSS बॉक्स मॉडल (Content, Padding, Border, Margin एवं box-sizing)" },
+      { id: "u4-t7", slug: "css-borders-and-outlines", title: "CSS Borders, Rounded Corners, Shadows & Outlines", hindiTitle: "CSS बॉर्डर्स, राउंडेड कॉर्नर्स, बॉक्स शैडो एवं आउटलाइन्स" },
+      { id: "u4-t8", slug: "css-display-and-visibility", title: "CSS Display (Block, Inline, Inline-Block) & Visibility", hindiTitle: "CSS डिस्प्ले प्रॉपर्टी (Block, Inline, Inline-Block) बनाम विजिबिलिटी" },
+      { id: "u4-t9", slug: "css-positioning-and-z-index", title: "CSS Positioning (Static, Relative, Absolute, Fixed, Sticky) & Z-Index", hindiTitle: "CSS पोजीशनिंग (Static, Relative, Absolute, Fixed, Sticky) एवं Z-Index" },
+      { id: "u4-t10", slug: "css-float-clear-and-overflow", title: "CSS Float, Clear, Clearfix & Overflow Handling", hindiTitle: "CSS फ्लोट, क्लियर, क्लियरफिक्स एवं ओवरफ्लो प्रबंधन" },
+      { id: "u4-t11", slug: "css-lists", title: "CSS Lists & Custom Bullet Styling", hindiTitle: "CSS लिस्ट स्टाइलिंग एवं कस्टम बुलेट्स" },
+      { id: "u4-t12", slug: "css-tables", title: "CSS Table Design: Borders, Zebra Striping & Hover", hindiTitle: "CSS टेबल डिजाइन (Borders, Zebra Striping एवं Hover)" },
+      { id: "u4-t13", slug: "css-menu-design", title: "CSS Navigation Menu Design (Horizontal & Dropdown)", hindiTitle: "CSS नेविगेशन मेन्यू डिजाइन (Horizontal एवं Dropdown)" },
+      { id: "u4-t14", slug: "css-image-gallery", title: "CSS Image Gallery & Card Layouts", hindiTitle: "CSS इमेज गैलरी एवं रिस्पॉन्सिव कार्ड्स" },
+      { id: "u4-t15", slug: "css-flexbox-layout", title: "Modern 1D Layout with CSS Flexbox", hindiTitle: "CSS फ्लेक्सबॉक्स (Flexbox) 1D लेआउट सिस्टम" },
+      { id: "u4-t16", slug: "css-grid-layout", title: "Modern 2D Layout with CSS Grid", hindiTitle: "CSS ग्रिड (Grid) 2D लेआउट सिस्टम" },
+      { id: "u4-t17", slug: "css-responsive-design-and-units", title: "Responsive Web Design, Media Queries & Modern Units", hindiTitle: "रिस्पॉन्सिव वेब डिजाइनिंग, मीडिया क्वेरीज एवं आधुनिक यूनिट्स" },
+      { id: "u4-t18", slug: "css-variables-transitions-and-transforms", title: "CSS Custom Properties (Variables), Transitions & Transforms", hindiTitle: "CSS वेरिएबल्स, 2D/3D ट्रांसफॉर्म्स एवं ट्रांजिशन्स" }
     ]
   },
   {

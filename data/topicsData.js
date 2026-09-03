@@ -25,6 +25,11 @@ export const topicsBySlug = allTopics.reduce((acc, topic) => {
   return acc;
 }, {});
 
+// Backward compatibility alias for legacy merged slug
+if (topicsBySlug['css-box-model']) {
+  topicsBySlug['css-properties-background-block-box-list-border-positioning'] = topicsBySlug['css-box-model'];
+}
+
 // Map by unit number
 export const topicsByUnit = {
   1: unit1Topics,
