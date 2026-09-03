@@ -114,9 +114,9 @@ export default function MicroQuiz({ topicSlug, questions = [] }) {
                       key={opt.id}
                       onClick={() => handleSelect(qIdx, opt.id)}
                       disabled={submitted}
-                      className={`p-2.5 rounded-lg border text-left flex items-start gap-2 text-xs transition-all ${optStyle}`}
+                      className={`p-3 min-h-[44px] rounded-xl border text-left flex items-start gap-2.5 text-xs transition-all cursor-pointer ${optStyle}`}
                     >
-                      <span className="w-4 h-4 rounded-full border flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">
+                      <span className="w-5 h-5 rounded-full border flex items-center justify-center text-[11px] font-bold shrink-0 mt-0.5">
                         {opt.id}
                       </span>
                       <span className="flex-1 leading-snug">{opt.text}</span>

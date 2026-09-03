@@ -42,18 +42,13 @@ export default function CCCNotesLibraryPage() {
       {/* =========================================================================
           1. HERO BANNER: CCC Unit-Wise Detailed Notes & PDF Library
       ========================================================================= */}
-      <section className="relative p-6 sm:p-10 rounded-3xl bg-gradient-to-br from-blue-900 via-slate-900 to-indigo-950 text-white shadow-xl overflow-hidden border border-blue-800/40 space-y-6">
-        
-        {/* Glow backdrop */}
-        <div className="absolute top-0 right-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-10 w-80 h-80 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
-
+      <section className="relative p-6 sm:p-8 rounded-xl bg-navy text-white shadow-sm overflow-hidden border border-navy-800 space-y-6">
         <div className="relative z-10 space-y-4 max-w-4xl">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/40 text-blue-200 font-mono text-xs font-bold shadow-2xs">
+            <span className="px-3 py-1 rounded-full bg-accent-blue/20 border border-accent-blue/30 text-sky-200 font-mono text-xs font-bold shadow-2xs">
               OFFICIAL NIELIT CCC (80 HOURS)
             </span>
-            <span className="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 font-mono text-xs font-bold">
+            <span className="px-3 py-1 rounded-full bg-brand-500/20 border border-brand-400/30 text-brand-300 font-mono text-xs font-bold">
               9 UNIT STUDY NOTES • PDF LIBRARY
             </span>
           </div>
@@ -138,9 +133,9 @@ export default function CCCNotesLibraryPage() {
           3. UNIT NOTES CARDS GRID (All 9 Units)
       ========================================================================= */}
       <section className="space-y-6">
-        <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+        <div className="flex items-center justify-between border-b border-appborder pb-3">
           <div className="flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-blue-600" />
+            <BookOpen className="w-5 h-5 text-accent-blue" />
             <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
               Official Unit Notes Modules ({filteredUnits.length} of {cccUnitNotesList.length})
             </h2>
@@ -150,17 +145,17 @@ export default function CCCNotesLibraryPage() {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredUnits.map((unit) => (
             <div
               key={unit.slug}
-              className="flex flex-col justify-between p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500/80 transition-all shadow-xs hover:shadow-md group"
+              className="flex flex-col justify-between p-5 sm:p-6 rounded-xl bg-white dark:bg-slate-900 border border-appborder hover:border-brand-500/80 transition-all shadow-xs group"
             >
               <div className="space-y-4">
                 
                 {/* Top Badge Strip */}
                 <div className="flex items-center justify-between">
-                  <span className={`px-2.5 py-1 rounded-xl text-xs font-mono font-bold border ${unit.badgeColor}`}>
+                  <span className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider border ${unit.badgeColor}`}>
                     UNIT {unit.unitNumberPadded}
                   </span>
                   <span className="text-[11px] font-mono text-slate-500 font-bold">
@@ -170,16 +165,16 @@ export default function CCCNotesLibraryPage() {
 
                 {/* Unit Titles */}
                 <div>
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors leading-snug">
                     {unit.title}
                   </h3>
-                  <p className="text-xs font-bold text-blue-600 dark:text-blue-400 hindi-text mt-0.5">
+                  <p className="text-xs font-semibold text-brand-600 dark:text-brand-400 hindi-text mt-0.5">
                     {unit.hindiTitle}
                   </p>
                 </div>
 
                 {/* Specs Pill Strip */}
-                <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono text-slate-500">
+                <div className="flex flex-wrap items-center gap-1.5 text-[11px] font-mono text-slate-500">
                   <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800">
                     {unit.topicCount} Topics
                   </span>
@@ -189,13 +184,13 @@ export default function CCCNotesLibraryPage() {
                   <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800">
                     {unit.totalHours}h Duration
                   </span>
-                  <span className="px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 font-bold">
+                  <span className="px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 font-semibold">
                     {unit.marksWeight}
                   </span>
                 </div>
 
                 {/* Description */}
-                <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
                   {unit.description}
                 </p>
 
@@ -217,10 +212,10 @@ export default function CCCNotesLibraryPage() {
               </div>
 
               {/* Bottom Action Buttons */}
-              <div className="pt-6 mt-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
+              <div className="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
                 <Link
                   href={`/ccc/notes/${unit.slug}`}
-                  className="flex-1 px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950 text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 font-bold text-xs transition-all flex items-center justify-center gap-1.5"
+                  className="flex-1 px-3 py-2 rounded-lg bg-brand-500 hover:bg-brand-600 text-white font-bold text-xs transition-all flex items-center justify-center gap-1.5 shadow-2xs"
                 >
                   <BookOpen className="w-3.5 h-3.5" />
                   <span>Read Notes</span>
@@ -229,10 +224,10 @@ export default function CCCNotesLibraryPage() {
                 <a
                   href={unit.pdfUrl}
                   download={unit.pdfFileName}
-                  className="px-2.5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-1 shadow-sm"
+                  className="px-2.5 py-2 rounded-lg border border-appborder hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs transition-all flex items-center justify-center gap-1 shadow-2xs"
                   title={`Download English PDF (${unit.pdfFileName})`}
                 >
-                  <Download className="w-3.5 h-3.5" />
+                  <Download className="w-3.5 h-3.5 text-navy dark:text-brand-400" />
                   <span>EN</span>
                 </a>
 
@@ -240,10 +235,10 @@ export default function CCCNotesLibraryPage() {
                   <a
                     href={unit.hiPdfUrl}
                     download={unit.hiPdfFileName}
-                    className="px-2.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-1 shadow-sm"
+                    className="px-2.5 py-2 rounded-lg border border-emerald-300 dark:border-emerald-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-bold text-xs transition-all flex items-center justify-center gap-1 shadow-2xs"
                     title={`Download Hindi PDF (${unit.hiPdfFileName})`}
                   >
-                    <Download className="w-3.5 h-3.5" />
+                    <Download className="w-3.5 h-3.5 text-emerald-500" />
                     <span>हिन्दी</span>
                   </a>
                 )}
@@ -257,9 +252,9 @@ export default function CCCNotesLibraryPage() {
       {/* =========================================================================
           4. SYLLABUS COMPLIANCE & EXAM READINESS GUARANTEE
       ========================================================================= */}
-      <section className="p-6 sm:p-8 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
+      <section className="p-5 sm:p-6 rounded-xl bg-slate-50 dark:bg-slate-900 border border-appborder space-y-4 shadow-xs">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-6 h-6 text-emerald-500" />
+          <ShieldCheck className="w-5 h-5 text-emerald-500" />
           <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
             100% Official NIELIT CCC Syllabus Traceability
           </h3>
@@ -270,14 +265,14 @@ export default function CCCNotesLibraryPage() {
         <div className="pt-2 flex flex-wrap items-center gap-3">
           <Link
             href="/ccc/syllabus"
-            className="px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 hover:text-blue-600 flex items-center gap-1.5 transition-all shadow-2xs"
+            className="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-appborder text-xs font-bold text-slate-800 dark:text-slate-200 hover:text-brand-600 flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer"
           >
             <span>View 80-Hour Syllabus Blueprint</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </Link>
           <Link
             href="/ccc/mcqs"
-            className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm"
+            className="px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer"
           >
             <span>Practice Chapter MCQs</span>
             <ArrowRight className="w-3.5 h-3.5" />

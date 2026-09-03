@@ -10,7 +10,7 @@ import { Presentation, Columns2, Terminal, School } from 'lucide-react';
 export default function SplitClassroom({ initialTemplate = null }) {
   // Whiteboard controls
   const [activeTool, setActiveTool] = useState('pen');
-  const [strokeColor, setStrokeColor] = useState('#0284c7');
+  const [strokeColor, setStrokeColor] = useState('#F19A27');
   const [strokeWidth, setStrokeWidth] = useState(4);
   const [bgType, setBgType] = useState('grid');
   const [isDarkBoard, setIsDarkBoard] = useState(false);

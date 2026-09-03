@@ -193,10 +193,10 @@ export default function ExamEngine({ questions, examTitle = 'Full Syllabus Mock 
                     <button
                       key={opt.id}
                       onClick={() => handleSelectOption(opt.id)}
-                      className={`w-full flex items-start gap-3 p-3.5 rounded-lg border text-left text-sm transition-all ${
+                      className={`w-full min-h-[44px] flex items-start gap-3 p-3.5 rounded-lg border text-left text-sm transition-all cursor-pointer ${
                         isSelected
-                          ? 'border-brand-600 bg-brand-50 dark:bg-brand-950/60 text-brand-900 dark:text-brand-100 font-semibold shadow-sm'
-                          : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+                          ? 'border-brand-600 bg-brand-50 dark:bg-brand-950/60 text-brand-900 dark:text-brand-100 font-semibold shadow-xs'
+                          : 'border-appborder bg-slate-50 dark:bg-slate-800/40 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
                       }`}
                     >
                       <span className={`w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold shrink-0 ${

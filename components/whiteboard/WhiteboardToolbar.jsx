@@ -59,12 +59,12 @@ export default function WhiteboardToolbar({
 
   const colors = [
     { name: isDarkBoard ? 'White' : 'Black', hex: isDarkBoard ? '#ffffff' : '#0f172a' },
-    { name: 'Sky Blue', hex: '#0284c7' },
+    { name: 'Primary Orange', hex: '#F19A27' },
+    { name: 'Secondary Blue', hex: '#1F64C9' },
     { name: 'Emerald', hex: '#10b981' },
     { name: 'Amber', hex: '#f59e0b' },
     { name: 'Rose', hex: '#f43f5e' },
     { name: 'Purple', hex: '#a855f7' },
-    { name: 'Cyan', hex: '#06b6d4' },
   ];
 
   const widths = [
@@ -208,7 +208,7 @@ export default function WhiteboardToolbar({
         {/* Export to PNG */}
         <button
           onClick={onExport}
-          className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 font-bold transition-all hover:scale-105 shadow-sm"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 font-bold text-xs transition-all hover:bg-slate-800 dark:hover:bg-white shadow-2xs cursor-pointer"
           title="Export Notes as PNG Image"
         >
           <Download className="w-3.5 h-3.5" />

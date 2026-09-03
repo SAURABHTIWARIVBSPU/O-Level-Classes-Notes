@@ -25,13 +25,20 @@ import {
 } from 'lucide-react';
 import { unitsData } from '@/data/syllabusData';
 import { cccChaptersData } from '@/data/cccSyllabusData';
+import { useFullscreen } from '@/lib/fullscreenContext';
 
 export default function Footer() {
+  const { isFullscreen } = useFullscreen();
+
   const scrollToTop = () => {
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
+
+  if (isFullscreen) {
+    return null;
+  }
 
   const highYieldTopics = [
     { title: 'CCC Ch 1: Computer & Hardware', href: '/ccc/chapters/chapter-1' },
@@ -46,7 +53,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-700 dark:text-slate-300 transition-colors duration-200 mt-20">
+    <footer className="border-t border-appborder bg-white dark:bg-darkbg text-slate-700 dark:text-slate-300 transition-colors duration-200 mt-20">
       
       {/* ================= 1. PRIMARY MULTI-COLUMN NAVIGATION ================= */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
@@ -81,12 +88,12 @@ export default function Footer() {
 
             {/* Dual Course Badges */}
             <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400">
-              <Link href="/" className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-lg shadow-2xs font-mono text-[11px] hover:text-brand-600">
+              <Link href="/" className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-appborder px-2.5 py-1 rounded-lg shadow-2xs font-mono text-[11px] hover:text-brand-600">
                 <GraduationCap className="w-3.5 h-3.5 text-brand-600" />
                 O-Level M2-R5.1 (120h)
               </Link>
-              <Link href="/ccc" className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-lg shadow-2xs font-mono text-[11px] hover:text-blue-600">
-                <Laptop className="w-3.5 h-3.5 text-blue-600" />
+              <Link href="/ccc" className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-appborder px-2.5 py-1 rounded-lg shadow-2xs font-mono text-[11px] hover:text-brand-600">
+                <Laptop className="w-3.5 h-3.5 text-accent-blue" />
                 CCC Course (80h)
               </Link>
             </div>
@@ -95,42 +102,42 @@ export default function Footer() {
           {/* CCC Modules 01 - 09 (Span 3) */}
           <div className="lg:col-span-3 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono flex items-center gap-1.5">
-              <Laptop className="w-3.5 h-3.5 text-blue-600" />
+              <Laptop className="w-3.5 h-3.5 text-accent-blue" />
               <span>CCC Modules (80H)</span>
             </h4>
             <ul className="space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
               <li>
-                <Link href="/ccc/chapters/chapter-1" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors block">
+                <Link href="/ccc/chapters/chapter-1" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors block">
                   Ch 1: Intro to Computer &amp; Hardware
                 </Link>
               </li>
               <li>
-                <Link href="/ccc/chapters/chapter-2" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors block">
+                <Link href="/ccc/chapters/chapter-2" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors block">
                   Ch 2: Operating System (Linux/Windows)
                 </Link>
               </li>
               <li>
-                <Link href="/ccc/chapters/chapter-3" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors block">
+                <Link href="/ccc/chapters/chapter-3" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors block">
                   Ch 3: LibreOffice Writer (.odt)
                 </Link>
               </li>
               <li>
-                <Link href="/ccc/chapters/chapter-4" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors block">
+                <Link href="/ccc/chapters/chapter-4" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors block">
                   Ch 4: LibreOffice Calc (.ods)
                 </Link>
               </li>
               <li>
-                <Link href="/ccc/chapters/chapter-5" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors block">
+                <Link href="/ccc/chapters/chapter-5" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors block">
                   Ch 5: LibreOffice Impress (.odp)
                 </Link>
               </li>
               <li>
-                <Link href="/ccc/chapters/chapter-8" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors block">
+                <Link href="/ccc/chapters/chapter-8" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors block">
                   Ch 8: UPI, AEPS &amp; Net Banking
                 </Link>
               </li>
               <li className="pt-1">
-                <Link href="/ccc/syllabus" className="font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">
+                <Link href="/ccc/syllabus" className="font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1">
                   <span>80H CCC Blueprint</span>
                   <ExternalLink className="w-3 h-3" />
                 </Link>
@@ -217,7 +224,7 @@ export default function Footer() {
               <Link
                 key={topic.title}
                 href={topic.href}
-                className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[11px] font-medium text-slate-600 dark:text-slate-400 hover:text-blue-600 hover:border-blue-300 dark:hover:border-blue-700 transition-colors"
+                className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 border border-appborder text-[11px] font-medium text-slate-600 dark:text-slate-400 hover:text-brand-600 hover:border-brand-500 transition-colors shadow-2xs"
               >
                 {topic.title} →
               </Link>

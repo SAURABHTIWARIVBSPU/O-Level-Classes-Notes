@@ -21,10 +21,10 @@ export default function CheatSheetsPage() {
     <div className="space-y-8 max-w-5xl mx-auto py-4">
       
       {/* Header */}
-      <div className="border-b border-slate-200 dark:border-slate-800 pb-6 flex flex-wrap items-center justify-between gap-4">
+      <div className="border-b border-appborder pb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold mb-3">
-            <FileText className="w-3.5 h-3.5" /> High-Density Quick Reference
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 text-xs font-bold mb-3">
+            <FileText className="w-3.5 h-3.5 text-brand-600" /> High-Density Quick Reference
           </div>
           <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
             Master Cheat Sheets &amp; Syntax Reference
@@ -37,7 +37,7 @@ export default function CheatSheetsPage() {
 
         <Link
           href="/playground"
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-sm transition-all"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold shadow-sm transition-all"
         >
           <Code2 className="w-4 h-4" />
           Test Syntax in Playground
@@ -52,8 +52,8 @@ export default function CheatSheetsPage() {
             onClick={() => setActiveCategory(sheet.id)}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm ${
               sheet.id === activeSheet.id
-                ? 'bg-brand-600 text-white shadow-brand-500/20'
-                : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50'
+                ? 'bg-brand-500 text-white shadow-brand-500/20'
+                : 'bg-white dark:bg-slate-900 border border-appborder text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
             }`}
           >
             {sheet.title}

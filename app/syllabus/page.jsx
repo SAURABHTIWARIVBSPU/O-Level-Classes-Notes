@@ -120,7 +120,7 @@ export default function SyllabusPage() {
         </div>
 
         {/* Primary Official Table */}
-        <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm bg-white dark:bg-slate-900">
+        <div className="border border-appborder rounded-xl overflow-hidden shadow-xs bg-white dark:bg-slate-900">
           <div className="table-responsive">
             <table className="w-full text-left text-xs sm:text-sm">
               <thead className="bg-[#1e293b] text-white font-bold">
@@ -192,7 +192,7 @@ export default function SyllabusPage() {
           {syllabusMeta.marksDistribution.map((group, idx) => (
             <div
               key={group.id || idx}
-              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs flex flex-col justify-between space-y-4 hover:border-brand-400 dark:hover:border-brand-500 transition-all"
+              className="p-5 rounded-xl border border-appborder bg-white dark:bg-slate-900 shadow-xs flex flex-col justify-between space-y-4 hover:border-brand-500/80 transition-all"
             >
               <div className="space-y-2.5">
                 <div className="flex items-center justify-between">
@@ -254,16 +254,16 @@ export default function SyllabusPage() {
             return (
               <div
                 key={unit.slug}
-                className="border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 bg-white dark:bg-slate-900 shadow-xs space-y-4"
+                className="border border-appborder rounded-xl p-5 sm:p-6 bg-white dark:bg-slate-900 shadow-xs space-y-4"
               >
                 {/* Unit Header */}
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300">
+                      <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
                         UNIT {unit.unitNumber}
                       </span>
-                      <span className="text-xs font-bold px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300">
+                      <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
                         {unit.marksWeight}
                       </span>
                     </div>
@@ -271,7 +271,7 @@ export default function SyllabusPage() {
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                       {unit.title}
                     </h3>
-                    <p className="text-xs font-bold text-brand-600 dark:text-brand-400 hindi-text">
+                    <p className="text-xs font-semibold text-brand-600 dark:text-brand-400 hindi-text">
                       {unit.hindiTitle}
                     </p>
                   </div>
@@ -288,7 +288,7 @@ export default function SyllabusPage() {
 
                     <Link
                       href={`/units/${unit.slug}`}
-                      className="px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1"
+                      className="px-3.5 py-1.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold transition-all shadow-2xs flex items-center gap-1"
                     >
                       <span>Study Unit</span>
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -303,10 +303,10 @@ export default function SyllabusPage() {
                     return (
                       <div
                         key={topic.slug}
-                        className={`p-2.5 rounded-xl border flex items-start gap-2.5 transition-all ${
+                        className={`p-2.5 rounded-lg border flex items-start gap-2.5 transition-all ${
                           isDone
                             ? 'border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/40 dark:bg-emerald-950/20'
-                            : 'border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/40 hover:border-slate-300'
+                            : 'border-appborder bg-slate-50/50 dark:bg-slate-800/40 hover:border-brand-400'
                         }`}
                       >
                         <button

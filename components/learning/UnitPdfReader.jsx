@@ -38,11 +38,11 @@ export default function UnitPdfReader({ unitNotes }) {
     <div className={`space-y-4 transition-all ${isFullscreen ? 'fixed inset-0 z-50 bg-slate-950 p-4 overflow-hidden flex flex-col' : ''}`}>
       
       {/* Top Controls Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 sm:p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 sm:p-4 rounded-2xl bg-white dark:bg-slate-900 border border-appborder shadow-xs">
         
         {/* Unit Info */}
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center font-mono font-bold text-xs shadow-2xs">
+          <div className="w-9 h-9 rounded-xl bg-accent-blue/10 text-accent-blue border border-accent-blue/20 flex items-center justify-center font-mono font-bold text-xs shadow-2xs">
             U{unitNotes.unitNumberPadded}
           </div>
           <div>
@@ -59,11 +59,11 @@ export default function UnitPdfReader({ unitNotes }) {
         <div className="flex items-center gap-2">
           
           {/* Zoom Controls */}
-          <div className="hidden sm:flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-mono">
+          <div className="hidden sm:flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-appborder text-xs font-mono">
             <button
               onClick={handleZoomOut}
               title="Zoom Out"
-              className="p-1 rounded-lg hover:bg-white dark:hover:bg-slate-900 text-slate-600 dark:text-slate-300 transition-colors"
+              className="p-1 rounded-lg hover:bg-white dark:hover:bg-slate-900 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
             >
               <ZoomOut className="w-3.5 h-3.5" />
             </button>
@@ -73,7 +73,7 @@ export default function UnitPdfReader({ unitNotes }) {
             <button
               onClick={handleZoomIn}
               title="Zoom In"
-              className="p-1 rounded-lg hover:bg-white dark:hover:bg-slate-900 text-slate-600 dark:text-slate-300 transition-colors"
+              className="p-1 rounded-lg hover:bg-white dark:hover:bg-slate-900 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
             >
               <ZoomIn className="w-3.5 h-3.5" />
             </button>
@@ -83,7 +83,7 @@ export default function UnitPdfReader({ unitNotes }) {
           <button
             onClick={toggleFullscreen}
             title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Viewer"}
-            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 border border-slate-200 dark:border-slate-700 transition-all text-xs font-bold flex items-center gap-1.5"
+            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-brand-950 text-slate-700 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 border border-appborder transition-all text-xs font-bold flex items-center gap-1.5 cursor-pointer"
           >
             {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
             <span className="hidden md:inline">{isFullscreen ? "Exit Fullscreen" : "Fullscreen"}</span>
@@ -93,7 +93,7 @@ export default function UnitPdfReader({ unitNotes }) {
           <a
             href={unitNotes.pdfUrl}
             download={unitNotes.pdfFileName}
-            className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition-all flex items-center gap-1.5 shadow-sm"
+            className="px-3.5 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold text-xs transition-all flex items-center gap-1.5 shadow-xs"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Download PDF</span>
@@ -103,20 +103,20 @@ export default function UnitPdfReader({ unitNotes }) {
 
       {/* Embedded PDF Canvas Frame */}
       <div 
-        className={`relative rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950 overflow-hidden shadow-inner ${
+        className={`relative rounded-xl border border-appborder bg-slate-100 dark:bg-slate-950 overflow-hidden shadow-inner ${
           isFullscreen ? 'flex-1 h-full' : 'h-[650px] sm:h-[750px] lg:h-[850px]'
         }`}
       >
         <iframe
           src={`${unitNotes.pdfUrl}#toolbar=1&navpanes=1&scrollbar=1&zoom=${zoomLevel}`}
           title={`${unitNotes.title} PDF Notes`}
-          className="w-full h-full border-none rounded-3xl"
+          className="w-full h-full border-none rounded-xl"
         />
 
         {/* Fallback overlay if browser blocks inline iframe rendering */}
         <noscript>
           <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-white dark:bg-slate-900">
-            <FileText className="w-12 h-12 text-blue-600 mb-3" />
+            <FileText className="w-12 h-12 text-brand-600 mb-3" />
             <h4 className="text-base font-bold text-slate-900 dark:text-white mb-1">
               Download {unitNotes.pdfFileName}
             </h4>
@@ -126,7 +126,7 @@ export default function UnitPdfReader({ unitNotes }) {
             <a
               href={unitNotes.pdfUrl}
               download={unitNotes.pdfFileName}
-              className="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold shadow-sm"
+              className="px-4 py-2 rounded-xl bg-brand-500 text-white text-xs font-bold shadow-sm"
             >
               Download PDF Document
             </a>
@@ -148,7 +148,7 @@ export default function UnitPdfReader({ unitNotes }) {
             href={unitNotes.pdfUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-bold text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1 shrink-0"
+            className="font-bold text-brand-600 dark:text-brand-400 hover:underline inline-flex items-center gap-1 shrink-0"
           >
             <span>Open in New Browser Tab</span>
             <ExternalLink className="w-3.5 h-3.5" />

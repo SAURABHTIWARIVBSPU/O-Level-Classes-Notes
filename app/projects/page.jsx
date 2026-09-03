@@ -21,10 +21,10 @@ export default function ProjectsPage() {
     <div className="space-y-8 max-w-5xl mx-auto py-4">
       
       {/* Header */}
-      <div className="border-b border-slate-200 dark:border-slate-800 pb-6 flex flex-wrap items-center justify-between gap-4">
+      <div className="border-b border-appborder pb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 text-xs font-bold mb-3">
-            <FolderGit2 className="w-3.5 h-3.5" /> 8 Progressive Guided Capstones
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 text-xs font-bold mb-3">
+            <FolderGit2 className="w-3.5 h-3.5 text-brand-600" /> 8 Progressive Guided Capstones
           </div>
           <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
             Hands-on Web Projects (प्रोजेक्ट्स)
@@ -37,7 +37,7 @@ export default function ProjectsPage() {
 
         <Link
           href="/playground"
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shadow-sm transition-all"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold shadow-sm transition-all"
         >
           <Play className="w-4 h-4 fill-current" />
           Open Code Playground
@@ -53,10 +53,10 @@ export default function ProjectsPage() {
             <button
               key={proj.id}
               onClick={() => setActiveProjectId(proj.id)}
-              className={`w-full text-left p-3.5 rounded-xl border text-xs font-bold transition-all ${
+              className={`w-full text-left p-3.5 rounded-lg border text-xs font-semibold transition-all cursor-pointer ${
                 proj.id === activeProject.id
-                  ? 'border-purple-500 bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-200 shadow-sm'
-                  : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-slate-300'
+                  ? 'border-brand-500 bg-brand-50 dark:bg-brand-950/60 text-brand-800 dark:text-brand-200 shadow-2xs font-bold'
+                  : 'border-appborder bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-brand-400'
               }`}
             >
               <div className="flex items-center justify-between mb-1">
@@ -74,13 +74,13 @@ export default function ProjectsPage() {
 
         {/* Right Active Project Details (Cols 2-3) */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="border border-slate-200 dark:border-slate-800 rounded-2xl p-6 bg-white dark:bg-slate-900 shadow-sm space-y-4">
+          <div className="border border-appborder rounded-xl p-5 sm:p-6 bg-white dark:bg-slate-900 shadow-xs space-y-4">
             
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="text-xs font-bold text-purple-600 dark:text-purple-400 font-mono">
+              <span className="text-xs font-bold text-brand-600 dark:text-brand-400 font-mono">
                 CAPSTONE PROJECT #{activeProject.id}
               </span>
-              <span className="text-xs font-semibold px-2.5 py-1 rounded bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300">
+              <span className="text-xs font-semibold px-2.5 py-1 rounded bg-brand-100 dark:bg-brand-950 text-brand-800 dark:text-brand-300">
                 {activeProject.level || activeProject.difficulty} Level
               </span>
             </div>
@@ -118,7 +118,7 @@ export default function ProjectsPage() {
               <ul className="space-y-1.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
                 {(activeProject.learningOutcomes || []).map((out, idx) => (
                   <li key={idx} className="flex items-start gap-2">
-                    <span className="text-purple-600 font-bold">•</span>
+                    <span className="text-emerald-500 font-bold">•</span>
                     <span>{out}</span>
                   </li>
                 ))}
@@ -127,23 +127,23 @@ export default function ProjectsPage() {
 
           </div>
 
-          {/* Project Starter Code */}
-          <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-md bg-slate-950">
+          {/* Full Solution Sandbox Preview Card */}
+          <div className="border border-slate-800 rounded-xl overflow-hidden shadow-xs bg-slate-950">
             <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800 text-xs">
               <span className="font-mono text-slate-300 font-bold flex items-center gap-1.5">
-                <FileCode className="w-4 h-4 text-purple-400" /> Starter Code Template
+                <FileCode className="w-4 h-4 text-brand-400" /> Starter Project Code Template
               </span>
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleCopyCode}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition-colors"
+                  className="flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition-colors cursor-pointer"
                 >
                   {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                   <span>{copied ? 'Copied' : 'Copy'}</span>
                 </button>
                 <Link
                   href="/playground"
-                  className="flex items-center gap-1 px-2.5 py-1 rounded bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-colors"
+                  className="flex items-center gap-1 px-2.5 py-1 rounded bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold transition-colors cursor-pointer"
                 >
                   <Play className="w-3.5 h-3.5 fill-current" />
                   <span>Run in Playground</span>

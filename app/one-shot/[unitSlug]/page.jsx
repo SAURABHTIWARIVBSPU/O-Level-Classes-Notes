@@ -50,7 +50,7 @@ export default function UnitOneShotPage({ params }) {
       </div>
 
       {/* Table of Contents Pill Bar */}
-      <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+      <div className="p-4 rounded-xl border border-appborder bg-white dark:bg-slate-900 shadow-xs">
         <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
           Jump to Topic:
         </h4>
@@ -59,7 +59,7 @@ export default function UnitOneShotPage({ params }) {
             <a
               key={t.slug}
               href={`#topic-${t.slug}`}
-              className="text-[11px] font-semibold px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-brand-50 hover:text-brand-600 transition-colors"
+              className="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-brand-50 hover:text-brand-600 transition-colors"
             >
               {idx + 1}. {t.title.split(' ')[0]}
             </a>
@@ -68,12 +68,12 @@ export default function UnitOneShotPage({ params }) {
       </div>
 
       {/* Topics Rapid-Revision Stream */}
-      <div className="space-y-8">
+      <div className="space-y-6 sm:space-y-8">
         {topics.map((topic, idx) => (
           <div
             key={topic.slug}
             id={`topic-${topic.slug}`}
-            className="border border-slate-200 dark:border-slate-800 rounded-2xl p-6 bg-white dark:bg-slate-900 shadow-sm space-y-4 scroll-mt-20"
+            className="border border-appborder rounded-xl p-5 sm:p-6 bg-white dark:bg-slate-900 shadow-xs space-y-4 scroll-mt-20"
           >
             {/* Topic Header */}
             <div className="flex items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">

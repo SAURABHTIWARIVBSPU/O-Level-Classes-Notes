@@ -5,19 +5,29 @@
 @tailwind utilities;
 
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --border-color: #e2e8f0;
+  --bg-primary: #FFF8F3;    /* Background */
+  --bg-secondary: #FFFFFF;  /* Surface */
+  --bg-surface: #FFFFFF;    /* Surface */
+  --text-primary: #111827;  /* Text */
+  --text-secondary: #6B7280;/* Muted Text */
+  --border-color: #E5E7EB;  /* Border */
+  --primary: #F19A27;       /* Primary Orange */
+  --primary-dark: #D97706;  /* Primary Dark */
+  --navy: #232850;          /* Navy */
+  --accent-blue: #1F64C9;   /* Blue Accent */
 }
 
 .dark {
-  --bg-primary: #070d1e;
-  --bg-secondary: #0f172a;
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --border-color: #1e293b;
+  --bg-primary: #232D36;    /* Dark */
+  --bg-secondary: #1C242C;  /* Surface Dark */
+  --bg-surface: #232850;    /* Navy Surface */
+  --text-primary: #F9FAFB;  /* Text Light */
+  --text-secondary: #9CA3AF;/* Muted Text Light */
+  --border-color: #374151;  /* Border Dark */
+  --primary: #F19A27;       /* Primary Orange */
+  --primary-dark: #D97706;  /* Primary Dark */
+  --navy: #232850;          /* Navy */
+  --accent-blue: #3B82F6;   /* Blue Accent Light */
 }
 
 body {
@@ -64,10 +74,11 @@ body {
   border: 1px solid rgba(30, 41, 59, 0.8);
 }
 
-/* Hindi Typography Accent */
+/* Hindi Typography Accent with generous line-height to prevent diacritic clipping */
 .hindi-text {
   font-feature-settings: "kern";
   letter-spacing: 0.01em;
+  line-height: 1.75;
 }
 
 /* Code Blocks */
@@ -80,4 +91,176 @@ pre, code {
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  border-radius: 0.75rem;
 }
+
+.table-responsive table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Educational Semantic Callouts */
+.callout-box {
+  margin: 1.25rem 0;
+  border-radius: 0.875rem;
+  border-left-width: 4px;
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  transition: border-color 0.2s;
+}
+
+.callout-note {
+  border-left-color: #1F64C9;
+  background-color: rgba(31, 100, 201, 0.06);
+}
+.dark .callout-note {
+  border-left-color: #3b82f6;
+  background-color: rgba(31, 100, 201, 0.12);
+}
+
+.callout-tip {
+  border-left-color: #d97706;
+  background-color: rgba(217, 119, 6, 0.06);
+}
+.dark .callout-tip {
+  border-left-color: #f59e0b;
+  background-color: rgba(245, 158, 11, 0.08);
+}
+
+.callout-warning {
+  border-left-color: #e11d48;
+  background-color: rgba(225, 29, 72, 0.06);
+}
+.dark .callout-warning {
+  border-left-color: #f43f5e;
+  background-color: rgba(244, 63, 94, 0.08);
+}
+
+.callout-important {
+  border-left-color: #059669;
+  background-color: rgba(5, 150, 105, 0.06);
+}
+.dark .callout-important {
+  border-left-color: #10b981;
+  background-color: rgba(16, 185, 129, 0.08);
+}
+
+.callout-analogy {
+  border-left-color: #6366f1;
+  background-color: rgba(99, 102, 241, 0.06);
+}
+.dark .callout-analogy {
+  border-left-color: #818cf8;
+  background-color: rgba(129, 140, 248, 0.08);
+}
+
+/* Step-by-Step Educational Process */
+.step-process-list {
+  counter-reset: step-counter;
+  position: relative;
+  margin: 1.5rem 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.step-process-item {
+  counter-increment: step-counter;
+  position: relative;
+  padding-left: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.step-process-item::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background-color: #0270c3;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.dark .step-process-item::before {
+  background-color: #36a9f6;
+  color: #040711;
+}
+
+.step-process-item::after {
+  content: '';
+  position: absolute;
+  left: 0.9375rem;
+  top: 2.25rem;
+  bottom: -0.75rem;
+  width: 2px;
+  background-color: #e2e8f0;
+}
+
+.dark .step-process-item::after {
+  background-color: #1e293b;
+}
+
+.step-process-item:last-child::after {
+  display: none;
+}
+
+/* Definition highlight term */
+.def-term {
+  font-weight: 700;
+  color: #0f172a;
+}
+.dark .def-term {
+  color: #f8fafc;
+}
+
+/* =========================================================================
+   EDUCATIONAL CARD DESIGN SYSTEM UTILITIES
+   Consistent radius (12px), subtle border, and structured hierarchy
+   ========================================================================= */
+.edu-card {
+  border-radius: 0.75rem; /* 12px (rounded-xl) */
+  border-width: 1px;
+  border-color: var(--border-color);
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.dark .edu-card {
+  background-color: #0f172a;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+}
+
+.edu-card-interactive {
+  cursor: pointer;
+}
+.edu-card-interactive:hover {
+  border-color: rgba(241, 154, 39, 0.8);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+}
+.dark .edu-card-interactive:hover {
+  border-color: rgba(241, 154, 39, 0.7);
+}
+
+.edu-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.375rem; /* 6px */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.625rem; /* 10px */
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-width: 1px;
+}
+
+

@@ -96,7 +96,7 @@ export default function Navbar() {
                   {isCccCourse ? "CCC Studio" : "O-Level Studio"}
                 </span>
                 <span className={`text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded text-white tracking-wider ${
-                  isCccCourse ? "bg-blue-600" : "bg-brand-600"
+                  isCccCourse ? "bg-accent-blue" : "bg-brand-600"
                 }`}>
                   {isCccCourse ? "CCC (80H)" : "M2-R5.1"}
                 </span>
@@ -122,11 +122,11 @@ export default function Navbar() {
               href="/ccc"
               className={`px-3 py-1 rounded-lg transition-all flex items-center gap-1 ${
                 isCccCourse 
-                  ? "bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-2xs font-extrabold" 
+                  ? "bg-white dark:bg-slate-900 text-accent-blue dark:text-blue-400 shadow-2xs font-extrabold" 
                   : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+              <span className="w-1.5 h-1.5 rounded-full bg-accent-blue" />
               <span>CCC Computer Concepts</span>
             </Link>
           </div>
@@ -142,9 +142,9 @@ export default function Navbar() {
                   <button
                     onClick={() => toggleDropdown('cccChapters')}
                     onMouseEnter={() => setActiveDropdown('cccChapters')}
-                    className={`flex items-center gap-1 px-3 py-1.5 rounded-md transition-all ${
+                    className={`flex items-center gap-1 px-3 py-1.5 rounded-md transition-all cursor-pointer ${
                       activeDropdown === 'cccChapters' || pathname.startsWith('/ccc/chapters')
-                        ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold'
+                        ? 'bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 font-bold'
                         : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
                     }`}
                   >
@@ -155,16 +155,16 @@ export default function Navbar() {
                   {activeDropdown === 'cccChapters' && (
                     <div 
                       onMouseLeave={() => setActiveDropdown(null)}
-                      className="absolute left-0 top-[48px] w-[360px] rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl p-3 z-50 animate-in fade-in slide-in-from-top-1 duration-150 space-y-1"
+                      className="absolute left-0 top-[48px] w-[360px] rounded-xl bg-white dark:bg-slate-900 border border-appborder shadow-xl p-3 z-50 animate-in fade-in slide-in-from-top-1 duration-150 space-y-1"
                     >
-                      <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 pb-1 mb-1 border-b border-slate-100 dark:border-slate-800">
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 pb-1 mb-1 border-b border-appborder">
                         Official CCC Modules (80 Hours)
                       </div>
                       {cccChaptersData.map((ch) => (
                         <Link
                           key={ch.slug}
                           href={`/ccc/chapters/${ch.slug}`}
-                          className="block px-2.5 py-1.5 rounded-lg text-xs text-slate-700 dark:text-slate-300 hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-slate-800 dark:hover:text-blue-300 transition-colors"
+                          className="block px-2.5 py-1.5 rounded-lg text-xs text-slate-700 dark:text-slate-300 hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-slate-800 dark:hover:text-brand-300 transition-colors"
                         >
                           <span className="font-mono text-[10px] text-slate-400 mr-1.5">Ch {ch.chapterNumber}</span>
                           <span>{ch.title}</span>
@@ -177,7 +177,7 @@ export default function Navbar() {
                 <Link
                   href="/ccc/syllabus"
                   className={`px-3 py-1.5 rounded-md transition-all ${
-                    pathname === '/ccc/syllabus' ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                    pathname === '/ccc/syllabus' ? 'bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
                   }`}
                 >
                   80H Syllabus
@@ -186,7 +186,7 @@ export default function Navbar() {
                 <Link
                   href="/ccc/notes"
                   className={`px-3 py-1.5 rounded-md transition-all ${
-                    pathname.startsWith('/ccc/notes') ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                    pathname.startsWith('/ccc/notes') ? 'bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
                   }`}
                 >
                   Notes &amp; PDF
@@ -291,7 +291,7 @@ export default function Navbar() {
                 <Link
                   href="/notes"
                   className={`px-3 py-1.5 rounded-md transition-all ${
-                    pathname.startsWith('/notes') ? 'bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                    pathname.startsWith('/notes') ? 'bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
                   }`}
                 >
                   Notes &amp; PDF
@@ -378,7 +378,7 @@ export default function Navbar() {
               </Link>
               <Link
                 href="/ccc"
-                className={`flex-1 py-1.5 text-center rounded-lg ${isCccCourse ? 'bg-white dark:bg-slate-900 text-blue-600 font-bold shadow-2xs' : 'text-slate-600'}`}
+                className={`flex-1 py-1.5 text-center rounded-lg ${isCccCourse ? 'bg-white dark:bg-slate-900 text-brand-600 font-bold shadow-2xs' : 'text-slate-600'}`}
               >
                 CCC Course
               </Link>
@@ -392,7 +392,7 @@ export default function Navbar() {
                 <Link href="/ccc/syllabus" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
                   80-Hour Syllabus Blueprint
                 </Link>
-                <Link href="/ccc/notes" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-blue-600 font-bold">
+                <Link href="/ccc/notes" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-brand-600 font-bold">
                   Unit-Wise Notes &amp; PDF Library
                 </Link>
                 <Link href="/ccc/mcqs" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
@@ -416,7 +416,7 @@ export default function Navbar() {
                 <Link href="/syllabus" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
                   100M Syllabus Blueprint
                 </Link>
-                <Link href="/notes" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-blue-600 font-bold">
+                <Link href="/notes" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-brand-600 font-bold">
                   Unit-Wise Notes &amp; PDF Library
                 </Link>
                 <Link href="/classroom" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">

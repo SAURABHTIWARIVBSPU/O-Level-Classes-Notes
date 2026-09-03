@@ -25,13 +25,16 @@ export default function CCCSyllabusPage() {
     <div className="space-y-12 py-4 max-w-7xl mx-auto">
       
       {/* Header Banner */}
-      <div className="space-y-4 border-b border-slate-200 dark:border-slate-800 pb-8">
+      <div className="space-y-4 border-b border-appborder pb-8">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 font-mono text-xs font-bold">
-            {cccSyllabusMeta.courseCode} • {cccSyllabusMeta.revision}
+          <span className="px-3 py-1 rounded-full bg-accent-blue/10 border border-accent-blue/30 text-accent-blue font-mono text-xs font-bold">
+            {cccSyllabusMeta.organization}
+          </span>
+          <span className="px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-600 dark:text-brand-400 font-mono text-xs font-bold">
+            {cccSyllabusMeta.courseCode} • {cccSyllabusMeta.revision} (w.e.f. {cccSyllabusMeta.implementationDate})
           </span>
           <span className="px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-mono text-xs font-bold">
-            {cccSyllabusMeta.durationTotalHours} Hours Curriculum
+            {cccSyllabusMeta.durationTotalHours} Hours (32 Theory + 48 Practical)
           </span>
         </div>
 
@@ -39,7 +42,7 @@ export default function CCCSyllabusPage() {
           {cccSyllabusMeta.courseName}
         </h1>
         
-        <p className="text-lg sm:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-600 dark:from-teal-300 dark:via-sky-300 dark:to-indigo-300 hindi-text">
+        <p className="text-lg sm:text-xl font-extrabold text-navy dark:text-brand-400 hindi-text">
           {cccSyllabusMeta.hindiCourseName}
         </p>
 
@@ -47,27 +50,43 @@ export default function CCCSyllabusPage() {
           {cccSyllabusMeta.purpose}
         </p>
 
+        {/* Target Job Roles & Practical Platform Strip */}
+        <div className="flex flex-wrap items-center gap-3 pt-1 text-xs">
+          <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+            <span className="font-bold text-slate-700 dark:text-slate-300">Target Job Roles:</span>
+            {cccSyllabusMeta.jobRoles.map((role) => (
+              <span key={role} className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 font-medium text-slate-700 dark:text-slate-300 border border-appborder">
+                {role}
+              </span>
+            ))}
+          </div>
+          <span className="text-slate-300 dark:text-slate-600 hidden sm:inline">•</span>
+          <div className="flex items-center gap-1 text-emerald-700 dark:text-emerald-400 font-medium">
+            <span>Practical Lab: <strong>Ubuntu Linux &amp; LibreOffice</strong></span>
+          </div>
+        </div>
+
         {/* 4 Key Badges */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-          <div className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
+          <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-appborder shadow-2xs">
             <span className="text-[11px] font-bold text-slate-400 uppercase block">Total Duration</span>
             <strong className="text-base font-black text-slate-900 dark:text-white">80 Hours</strong>
             <span className="text-[10px] text-slate-500 block">32h Theory + 48h Lab</span>
           </div>
 
-          <div className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
+          <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-appborder shadow-2xs">
             <span className="text-[11px] font-bold text-slate-400 uppercase block">Exam Pattern</span>
             <strong className="text-base font-black text-slate-900 dark:text-white">100 Questions</strong>
             <span className="text-[10px] text-slate-500 block">Online MCQs &amp; True/False</span>
           </div>
 
-          <div className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
+          <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-appborder shadow-2xs">
             <span className="text-[11px] font-bold text-slate-400 uppercase block">Exam Duration</span>
             <strong className="text-base font-black text-slate-900 dark:text-white">90 Minutes</strong>
             <span className="text-[10px] text-slate-500 block">No Negative Marking</span>
           </div>
 
-          <div className="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
+          <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-appborder shadow-2xs">
             <span className="text-[11px] font-bold text-slate-400 uppercase block">Passing Grade</span>
             <strong className="text-base font-black text-slate-900 dark:text-white">50% Marks</strong>
             <span className="text-[10px] text-slate-500 block">Grade S (85%+) to D</span>
@@ -78,7 +97,7 @@ export default function CCCSyllabusPage() {
       {/* Official 9 Chapters Table */}
       <section className="space-y-6">
         <div className="space-y-1">
-          <span className="text-xs font-mono font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">
+          <span className="text-xs font-mono font-bold uppercase tracking-widest text-brand-600 dark:text-brand-400">
             OFFICIAL NIELIT BLUEPRINT
           </span>
           <h2 className="text-2xl font-black text-slate-900 dark:text-white">
@@ -89,9 +108,9 @@ export default function CCCSyllabusPage() {
           </p>
         </div>
 
-        <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm bg-white dark:bg-slate-900">
+        <div className="table-responsive rounded-xl border border-appborder shadow-xs bg-white dark:bg-slate-900">
           <table className="w-full text-left text-xs sm:text-sm">
-            <thead className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold border-b border-slate-200 dark:border-slate-700">
+            <thead className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold border-b border-appborder">
               <tr>
                 <th className="p-4 w-16 text-center">Ch. No.</th>
                 <th className="p-4">Chapter Title &amp; Hindi Name</th>
@@ -102,17 +121,17 @@ export default function CCCSyllabusPage() {
                 <th className="p-4 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200 dark:divide-slate-800 text-slate-600 dark:text-slate-300">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-600 dark:text-slate-300">
               {cccChaptersData.map((ch) => (
                 <tr key={ch.slug} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="p-4 text-center font-mono font-bold text-blue-600 dark:text-blue-400">
+                  <td className="p-4 text-center font-mono font-bold text-accent-blue">
                     {ch.chapterNumber}
                   </td>
                   <td className="p-4 space-y-0.5">
                     <strong className="text-slate-900 dark:text-white block font-bold">
                       {ch.title}
                     </strong>
-                    <span className="text-xs text-blue-600 dark:text-blue-400 hindi-text font-medium block">
+                    <span className="text-xs text-brand-600 dark:text-brand-400 hindi-text font-medium block">
                       {ch.hindiTitle}
                     </span>
                   </td>
@@ -127,7 +146,7 @@ export default function CCCSyllabusPage() {
                   <td className="p-4 text-right">
                     <Link
                       href={`/ccc/chapters/${ch.slug}`}
-                      className="px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold text-xs hover:bg-blue-600 hover:text-white transition-all inline-flex items-center gap-1"
+                      className="px-3 py-1.5 rounded-lg bg-brand-50 hover:bg-brand-500 hover:text-white text-brand-700 dark:bg-brand-950/60 dark:text-brand-300 font-bold text-xs transition-all inline-flex items-center gap-1 shadow-2xs"
                     >
                       <span>Study</span>
                       <ArrowRight className="w-3 h-3" />
@@ -141,7 +160,7 @@ export default function CCCSyllabusPage() {
                 </td>
                 <td className="p-4 text-center font-mono">32h</td>
                 <td className="p-4 text-center font-mono">48h</td>
-                <td className="p-4 text-center font-mono text-blue-600 dark:text-blue-400 font-black">
+                <td className="p-4 text-center font-mono text-accent-blue font-black">
                   80h
                 </td>
                 <td className="p-4 text-center font-mono text-amber-500 font-black">
@@ -159,7 +178,7 @@ export default function CCCSyllabusPage() {
       {/* Chapter Checklists */}
       <section className="space-y-6">
         <div className="space-y-1">
-          <span className="text-xs font-mono font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">
+          <span className="text-xs font-mono font-bold uppercase tracking-widest text-brand-600 dark:text-brand-400">
             INTERACTIVE TOPIC DIRECTORY
           </span>
           <h2 className="text-2xl font-black text-slate-900 dark:text-white">
@@ -167,15 +186,15 @@ export default function CCCSyllabusPage() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {cccChaptersData.map((ch) => (
             <div
               key={ch.slug}
-              className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-4 shadow-xs"
+              className="p-5 sm:p-6 rounded-xl border border-appborder bg-white dark:bg-slate-900 space-y-4 shadow-xs"
             >
               <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                 <div>
-                  <span className="text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400 block">
+                  <span className="text-[10px] font-mono font-bold text-accent-blue block">
                     CHAPTER {ch.chapterNumber}
                   </span>
                   <h3 className="font-bold text-base text-slate-900 dark:text-white">
@@ -184,9 +203,10 @@ export default function CCCSyllabusPage() {
                 </div>
                 <Link
                   href={`/ccc/chapters/${ch.slug}`}
-                  className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1"
+                  className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1"
                 >
-                  View All <ArrowRight className="w-3.5 h-3.5" />
+                  <span>View All</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
 
@@ -194,11 +214,11 @@ export default function CCCSyllabusPage() {
                 {ch.topics.map((t, idx) => (
                   <div
                     key={t.slug}
-                    className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs"
+                    className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-appborder flex items-center justify-between text-xs"
                   >
                     <Link
                       href={`/ccc/chapters/${ch.slug}/topics/${t.slug}`}
-                      className="font-medium text-slate-700 dark:text-slate-300 hover:text-blue-600 transition-colors flex items-center gap-2"
+                      className="font-medium text-slate-700 dark:text-slate-300 hover:text-brand-600 transition-colors flex items-center gap-2"
                     >
                       <span className="font-mono text-[10px] text-slate-400">{idx + 1}.</span>
                       <span>{t.title}</span>

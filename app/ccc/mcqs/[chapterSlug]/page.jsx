@@ -26,16 +26,16 @@ export default function CCCChapterMCQsPage({ params }) {
     <div className="space-y-8 py-4 max-w-4xl mx-auto">
       
       {/* Top Back Link */}
-      <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+      <div className="flex items-center justify-between border-b border-appborder pb-4">
         <Link
           href="/ccc/mcqs"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-brand-600 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
           <span>Back to All Chapter MCQs</span>
         </Link>
 
-        <span className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">
+        <span className="text-xs font-mono font-bold text-brand-600 dark:text-brand-400">
           Chapter {chapter.chapterNumber} Practice
         </span>
       </div>
@@ -43,10 +43,10 @@ export default function CCCChapterMCQsPage({ params }) {
       {/* Header Info */}
       <div className="space-y-2">
         <div className="flex items-center gap-2">
-          <span className="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-mono text-xs font-bold">
+          <span className="px-2.5 py-1 rounded-lg bg-accent-blue/10 text-accent-blue border border-accent-blue/20 font-mono text-xs font-bold">
             CHAPTER {chapter.chapterNumber}
           </span>
-          <span className="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-xs font-bold">
+          <span className="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-bold">
             {mcqs.length} Questions
           </span>
         </div>
@@ -55,7 +55,7 @@ export default function CCCChapterMCQsPage({ params }) {
           {chapter.title} — Practice MCQs
         </h1>
         
-        <p className="text-sm font-bold text-blue-600 dark:text-blue-400 hindi-text">
+        <p className="text-sm font-bold text-brand-600 dark:text-brand-400 hindi-text">
           {chapter.hindiTitle}
         </p>
       </div>

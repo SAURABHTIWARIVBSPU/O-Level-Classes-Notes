@@ -1,12 +1,20 @@
 // CCC Complete Syllabus & Chapter-Wise Topic Mapping (NIELIT Official Curriculum)
 export const cccSyllabusMeta = {
   courseCode: "CCC (Revision 3)",
-  revision: "Latest NIELIT Curriculum",
+  organization: "National Institute of Electronics and Information Technology (NIELIT)",
+  revision: "Revision 3",
+  implementationDate: "01 June 2019",
   courseName: "Course on Computer Concepts (CCC)",
   hindiCourseName: "कंप्यूटर अवधारणाओं पर पाठ्यक्रम (सी.सी.सी.)",
   durationTotalHours: 80,
   theoryHours: 32,
   practicalHours: 48,
+  jobRoles: [
+    "Computer Operator",
+    "Data Entry Operator",
+    "Social Media Operator"
+  ],
+  practicalEnvironment: "Free Open Source Ubuntu Linux & LibreOffice (Writer, Calc, Impress)",
   purpose: "An end-to-end curriculum designed by NIELIT to equip learners with essential digital literacy, office productivity (LibreOffice Writer, Calc, Impress), internet safety, digital financial services, and Industry 4.0 FutureSkills.",
   eligibility: "No minimum qualification required. Open to all learners and job aspirants.",
   passingCriteria: "Minimum 50% marks in the online examination (Grade D or higher).",

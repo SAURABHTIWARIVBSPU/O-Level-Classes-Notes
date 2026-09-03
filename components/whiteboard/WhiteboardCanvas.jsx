@@ -5,7 +5,7 @@ import { boardTemplates } from './BoardTemplates';
 
 export default function WhiteboardCanvas({
   activeTool = 'pen',
-  strokeColor = '#0284c7',
+  strokeColor = '#F19A27',
   strokeWidth = 4,
   bgType = 'grid', // 'blank' | 'grid' | 'ruled' | 'dot'
   isDarkBoard = true,

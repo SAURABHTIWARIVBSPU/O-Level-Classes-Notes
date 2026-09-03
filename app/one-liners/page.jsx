@@ -29,9 +29,9 @@ export default function OneLinersPage() {
     <div className="space-y-8 max-w-5xl mx-auto py-4">
       
       {/* Header */}
-      <div className="border-b border-slate-200 dark:border-slate-800 pb-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 text-xs font-bold mb-3">
-          <FileText className="w-3.5 h-3.5 text-rose-500" /> High-Yield Revision Bank
+      <div className="border-b border-appborder pb-6">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 text-xs font-bold mb-3">
+          <FileText className="w-3.5 h-3.5 text-brand-600" /> High-Yield Revision Bank
         </div>
         <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
           100 Golden One-Liners (गोल्डन वन-लाइनर्स)
@@ -43,7 +43,7 @@ export default function OneLinersPage() {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm flex flex-wrap items-center gap-3">
+      <div className="p-4 rounded-xl border border-appborder bg-white dark:bg-slate-900 shadow-sm flex flex-wrap items-center gap-3">
         
         {/* Search */}
         <div className="flex-1 min-w-[240px] relative">
@@ -53,7 +53,7 @@ export default function OneLinersPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search keywords (e.g. Doctype, Box model, Brendan Eich)..."
-            className="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-brand-500"
+            className="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border border-appborder rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-brand-500"
           />
         </div>
 

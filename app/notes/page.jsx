@@ -40,15 +40,15 @@ export default function OLevelNotesHubPage() {
     <div className="space-y-8 py-4 max-w-6xl mx-auto">
       
       {/* 1. Header Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 text-white p-6 sm:p-8 shadow-xl border border-blue-800/40">
+      <div className="relative overflow-hidden rounded-2xl bg-navy text-white p-6 sm:p-8 shadow-xl border border-navy-800">
         <div className="relative z-10 space-y-4 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-semibold uppercase tracking-wider backdrop-blur-sm">
-            <GraduationCap className="w-4 h-4 text-blue-300" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/20 border border-brand-400/30 text-brand-300 text-xs font-semibold uppercase tracking-wider backdrop-blur-sm">
+            <GraduationCap className="w-4 h-4 text-brand-400" />
             <span>NIELIT O-Level {oLevelNotesMeta.courseCode} Official Curriculum</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
-            Unit-Wise Detailed Notes & Digital PDF Library
+            Unit-Wise Detailed Notes &amp; Digital PDF Library
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
@@ -60,15 +60,15 @@ export default function OLevelNotesHubPage() {
           {/* Quick Metrics Strip */}
           <div className="flex flex-wrap gap-4 pt-2 text-xs text-slate-300">
             <div className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">
-              <Layers className="w-4 h-4 text-blue-400" />
+              <Layers className="w-4 h-4 text-brand-400" />
               <span><strong>8</strong> Curriculum Units</span>
             </div>
             <div className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">
-              <FileText className="w-4 h-4 text-cyan-400" />
+              <FileText className="w-4 h-4 text-accent-blue" />
               <span><strong>87</strong> Topics (100% Covered)</span>
             </div>
             <div className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">
-              <Clock className="w-4 h-4 text-indigo-400" />
+              <Clock className="w-4 h-4 text-emerald-400" />
               <span><strong>120</strong> Hours (48T + 72P)</span>
             </div>
             <div className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">
@@ -77,16 +77,10 @@ export default function OLevelNotesHubPage() {
             </div>
           </div>
         </div>
-
-        {/* Decorative backdrop elements */}
-        <div className="absolute right-0 top-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
-        <div className="absolute right-10 bottom-0 opacity-10 text-white pointer-events-none hidden lg:block">
-          <BookOpen className="w-64 h-64" />
-        </div>
       </div>
 
       {/* 2. Controls & Search Toolbar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-xl border border-appborder shadow-xs">
         {/* Search Field */}
         <div className="relative w-full sm:w-80">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -95,7 +89,7 @@ export default function OLevelNotesHubPage() {
             placeholder="Search units, topics, HTML, CSS..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+            className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-appborder bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-colors"
           />
         </div>
 
@@ -105,9 +99,9 @@ export default function OLevelNotesHubPage() {
             <button
               key={grp}
               onClick={() => setSelectedGroup(grp)}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap ${
+              className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                 selectedGroup === grp
-                  ? 'bg-blue-600 text-white shadow-sm'
+                  ? 'bg-brand-500 text-white shadow-2xs'
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
               }`}
             >
@@ -118,18 +112,18 @@ export default function OLevelNotesHubPage() {
       </div>
 
       {/* 3. Units Notes Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
         {filteredUnits.map((unit) => (
           <div
             key={unit.slug}
-            className="group flex flex-col justify-between bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-200"
+            className="group flex flex-col justify-between bg-white dark:bg-slate-900 rounded-xl border border-appborder p-5 sm:p-6 shadow-xs hover:border-brand-500/80 transition-all duration-150"
           >
             <div className="space-y-4">
               {/* Unit Header Bar */}
               <div className="flex items-start justify-between gap-3">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="px-2 py-0.5 text-[10px] font-black rounded uppercase tracking-wider bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300">
+                    <span className="px-2 py-0.5 text-[10px] font-black rounded uppercase tracking-wider bg-brand-50 text-brand-700 dark:bg-brand-950/60 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
                       Unit {unit.unitNumberPadded}
                     </span>
                     <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
@@ -139,7 +133,7 @@ export default function OLevelNotesHubPage() {
                       {unit.marksWeight}
                     </span>
                   </div>
-                  <h2 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-brand-600 transition-colors">
                     {unit.title}
                   </h2>
                   <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
@@ -150,7 +144,7 @@ export default function OLevelNotesHubPage() {
                 {/* PDF Badge */}
                 <div className="text-right shrink-0">
                   <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">
-                    <FileText className="w-3.5 h-3.5 text-blue-500" />
+                    <FileText className="w-3.5 h-3.5 text-navy dark:text-brand-400" />
                     <span>{unit.pageCount} Pages</span>
                   </span>
                   <p className="text-[10px] text-slate-400 mt-0.5">{unit.fileSizeKb}</p>
@@ -182,7 +176,7 @@ export default function OLevelNotesHubPage() {
             <div className="flex items-center gap-2 pt-5 mt-4 border-t border-slate-100 dark:border-slate-800">
               <Link
                 href={`/notes/${unit.slug}`}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors shadow-sm"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white font-semibold text-xs transition-colors shadow-sm"
               >
                 <BookOpen className="w-4 h-4" />
                 <span>Read Notes</span>

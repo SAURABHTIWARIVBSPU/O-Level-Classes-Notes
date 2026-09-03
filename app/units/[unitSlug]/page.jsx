@@ -58,7 +58,7 @@ export default function UnitOverviewPage({ params }) {
       </div>
 
       {/* ================= 2. Hero Banner ================= */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white shadow-xl border border-slate-700/60 relative overflow-hidden">
+      <div className="p-6 sm:p-8 rounded-xl bg-navy text-white shadow-sm border border-navy-800 relative overflow-hidden">
         <div className="max-w-3xl space-y-3 relative z-10">
           <div className="flex flex-wrap items-center gap-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-500/20 border border-brand-400/30 text-brand-300 text-xs font-mono font-bold tracking-wider">
@@ -118,7 +118,7 @@ export default function UnitOverviewPage({ params }) {
 
       {/* ================= 3. Unit Metrics & Progress Bar ================= */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs">
+        <div className="p-4 rounded-xl border border-appborder bg-white dark:bg-slate-900 shadow-xs">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-500 mb-1">
             <Clock className="w-4 h-4 text-brand-600" /> Allocated Duration
           </div>
@@ -130,7 +130,7 @@ export default function UnitOverviewPage({ params }) {
           </span>
         </div>
 
-        <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs">
+        <div className="p-4 rounded-xl border border-appborder bg-white dark:bg-slate-900 shadow-xs">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-500 mb-1">
             <Award className="w-4 h-4 text-emerald-600" /> Exam Weightage
           </div>
@@ -142,12 +142,12 @@ export default function UnitOverviewPage({ params }) {
           </span>
         </div>
 
-        <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs">
+        <div className="p-4 rounded-xl border border-appborder bg-white dark:bg-slate-900 shadow-xs">
           <div className="flex items-center justify-between text-xs font-bold text-slate-500 mb-1">
             <span>Unit Progress</span>
             <span className="text-brand-600 font-bold">{unitProgress}%</span>
           </div>
-          <div className="w-full h-2.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden mt-2">
+          <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden mt-2">
             <div
               className="h-full bg-emerald-500 transition-all duration-300 rounded-full"
               style={{ width: `${unitProgress}%` }}
@@ -161,7 +161,7 @@ export default function UnitOverviewPage({ params }) {
 
       {/* ================= 4. Official Learning Objectives ================= */}
       {unit.learningObjectives && unit.learningObjectives.length > 0 && (
-        <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 space-y-2.5">
+        <div className="p-5 rounded-xl border border-appborder bg-slate-50 dark:bg-slate-900/60 space-y-2.5">
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-brand-600" /> Official NIELIT Learning Objectives
           </h3>
@@ -195,10 +195,10 @@ export default function UnitOverviewPage({ params }) {
             return (
               <div
                 key={t.slug}
-                className={`p-4 rounded-2xl border transition-all flex items-start gap-3 group ${
+                className={`p-4 rounded-xl border transition-all flex items-start gap-3 group ${
                   isDone
                     ? 'border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/30 dark:bg-emerald-950/20'
-                    : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-brand-500 shadow-xs'
+                    : 'border-appborder bg-white dark:bg-slate-900 hover:border-brand-500/80 shadow-xs'
                 }`}
               >
                 <button

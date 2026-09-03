@@ -74,12 +74,12 @@ export default function SearchPage() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search by topic, keyword, HTML tag, CSS selector, or Hindi term..."
           autoFocus
-          className="w-full pl-11 pr-10 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-xs"
+          className="w-full pl-11 pr-10 py-3 rounded-xl border border-appborder bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-xs"
         />
         {query && (
           <button
             onClick={() => setQuery('')}
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
             aria-label="Clear search"
           >
             <X className="w-4 h-4" />
@@ -89,7 +89,7 @@ export default function SearchPage() {
 
       {/* Results or Prompts */}
       {!query.trim() ? (
-        <div className="p-8 text-center rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-2">
+        <div className="p-8 text-center rounded-xl border border-dashed border-appborder bg-slate-50 dark:bg-slate-900/40 space-y-2">
           <p className="text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-400">
             Type a term like <span className="font-mono text-brand-600 dark:text-brand-400 font-bold">HTML5</span>, <span className="font-mono text-brand-600 dark:text-brand-400 font-bold">CSS Flexbox</span>, <span className="font-mono text-brand-600 dark:text-brand-400 font-bold">W3.CSS</span>, or <span className="font-mono text-brand-600 dark:text-brand-400 font-bold">JavaScript</span> to find notes.
           </p>
@@ -98,7 +98,7 @@ export default function SearchPage() {
               <button
                 key={suggest}
                 onClick={() => setQuery(suggest)}
-                className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-300 hover:border-brand-500"
+                className="px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 border border-appborder text-xs text-slate-700 dark:text-slate-300 hover:border-brand-500 cursor-pointer"
               >
                 {suggest}
               </button>
@@ -106,7 +106,7 @@ export default function SearchPage() {
           </div>
         </div>
       ) : totalMatches === 0 ? (
-        <div className="p-8 text-center rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+        <div className="p-8 text-center rounded-xl border border-appborder bg-white dark:bg-slate-900">
           <p className="text-sm font-bold text-slate-800 dark:text-slate-200">
             No results found for &ldquo;{query}&rdquo;
           </p>
@@ -127,7 +127,7 @@ export default function SearchPage() {
                   <Link
                     key={unit.slug}
                     href={`/units/${unit.slug}`}
-                    className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-brand-500 flex items-center justify-between transition-colors"
+                    className="p-3 rounded-lg border border-appborder bg-white dark:bg-slate-900 hover:border-brand-500/80 flex items-center justify-between transition-colors cursor-pointer"
                   >
                     <div>
                       <span className="text-[10px] font-bold font-mono text-slate-400 mr-1">
@@ -157,8 +157,8 @@ export default function SearchPage() {
                 {filteredResults.topics.map((topic) => (
                   <Link
                     key={topic.slug}
-                    href={`/units/unit-${topic.unit || 1}?topic=${topic.slug}`}
-                    className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-brand-500 flex items-center justify-between transition-colors"
+                    href={`/units/unit-${topic.unit || 1}/topics/${topic.slug}`}
+                    className="p-3 rounded-lg border border-appborder bg-white dark:bg-slate-900 hover:border-brand-500/80 flex items-center justify-between transition-colors shadow-2xs cursor-pointer"
                   >
                     <div>
                       <strong className="text-xs text-slate-900 dark:text-white block">
@@ -186,9 +186,9 @@ export default function SearchPage() {
                   <Link
                     key={ol.id}
                     href="/one-liners"
-                    className="p-3 rounded-xl border border-rose-100 dark:border-rose-950/60 bg-rose-50/40 dark:bg-rose-950/20 hover:border-rose-500 block transition-colors"
+                    className="p-3 rounded-lg border border-appborder bg-white dark:bg-slate-900 hover:border-brand-500/80 block transition-colors shadow-2xs cursor-pointer"
                   >
-                    <div className="flex items-center gap-2 mb-1 text-[10px] font-bold text-rose-600 dark:text-rose-400">
+                    <div className="flex items-center gap-2 mb-1 text-[10px] font-bold text-brand-600 dark:text-brand-400 font-mono">
                       <span>POINT #{ol.id}</span>
                       <span>•</span>
                       <span>{ol.unitName} ({ol.tag})</span>

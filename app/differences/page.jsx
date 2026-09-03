@@ -19,9 +19,9 @@ export default function DifferencesPage() {
     <div className="space-y-8 max-w-5xl mx-auto py-4">
       
       {/* Header */}
-      <div className="border-b border-slate-200 dark:border-slate-800 pb-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-cyan-50 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 text-xs font-bold mb-3">
-          <Columns className="w-3.5 h-3.5" /> 17 Side-by-Side Comparison Tables
+      <div className="border-b border-appborder pb-6">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 text-xs font-bold mb-3">
+          <Columns className="w-3.5 h-3.5 text-brand-600" /> 17 Side-by-Side Comparison Tables
         </div>
         <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
           Concept Comparison &amp; Differences Cards
@@ -53,14 +53,14 @@ export default function DifferencesPage() {
               <button
                 key={d.id}
                 onClick={() => setSelectedId(d.id)}
-                className={`w-full text-left p-3 rounded-xl border text-xs font-bold transition-all ${
+                className={`w-full text-left p-3 rounded-lg border text-xs font-semibold transition-all cursor-pointer ${
                   d.id === activeDiff.id
-                    ? 'border-brand-500 bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 shadow-sm'
-                    : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-slate-300'
+                    ? 'border-brand-500 bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 shadow-2xs'
+                    : 'border-appborder bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-brand-400'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="truncate">{d.title}</span>
+                  <span className="truncate font-bold">{d.title}</span>
                   <span className="text-[10px] text-slate-400 font-mono shrink-0 ml-2">
                     Unit {d.unit}
                   </span>
@@ -75,10 +75,10 @@ export default function DifferencesPage() {
 
         {/* Right Content Table (Cols 2-3) */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-md">
+          <div className="border border-appborder rounded-xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
             
             {/* Table Header Banner */}
-            <div className="p-5 sm:p-6 bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800">
+            <div className="p-5 sm:p-6 bg-slate-50 dark:bg-slate-800/60 border-b border-appborder">
               <span className="text-[11px] font-bold text-brand-600 dark:text-brand-400 block mb-1">
                 UNIT {activeDiff.unit} COMPARATIVE ANALYSIS
               </span>
@@ -100,11 +100,11 @@ export default function DifferencesPage() {
               return (
                 <div className="table-responsive">
                   <table className="w-full text-left text-xs sm:text-sm">
-                    <thead className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold border-b border-slate-200 dark:border-slate-700">
+                    <thead className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold border-b border-appborder">
                       <tr>
                         <th className="p-3.5 w-1/4">Feature / Aspect</th>
-                        <th className="p-3.5 text-brand-700 dark:text-brand-300">{colA}</th>
-                        <th className="p-3.5 text-indigo-700 dark:text-indigo-300">{colB}</th>
+                        <th className="p-3.5 text-brand-600 dark:text-brand-400">{colA}</th>
+                        <th className="p-3.5 text-navy dark:text-brand-300">{colB}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800">

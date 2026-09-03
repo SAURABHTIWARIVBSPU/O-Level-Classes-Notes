@@ -22,7 +22,7 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-white text-slate-900 antialiased min-h-screen flex flex-col selection:bg-brand-500 selection:text-white dark:bg-[#070d1e] dark:text-slate-100">
+      <body className="bg-[#FFF8F3] text-[#111827] antialiased min-h-screen flex flex-col selection:bg-brand-500 selection:text-white dark:bg-[#232D36] dark:text-slate-100">
         <ThemeProvider>
           <LanguageProvider>
             <ProgressProvider>

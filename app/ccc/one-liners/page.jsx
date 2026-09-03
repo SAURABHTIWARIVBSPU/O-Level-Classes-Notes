@@ -22,20 +22,20 @@ export default function CCCOneLinersPage() {
     <div className="space-y-8 py-4 max-w-5xl mx-auto">
       
       {/* Header */}
-      <div className="space-y-4 border-b border-slate-200 dark:border-slate-800 pb-6">
+      <div className="space-y-4 border-b border-appborder pb-6">
         <Link
           href="/ccc"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-brand-600 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
           <span>Back to CCC Hub</span>
         </Link>
 
         <div className="flex items-center gap-2">
-          <span className="px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-mono text-xs font-bold">
+          <span className="px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 font-mono text-xs font-bold">
             HIGH-YIELD REVISION VAULT
           </span>
-          <span className="px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-mono text-xs font-bold">
+          <span className="px-3 py-1 rounded-full bg-accent-blue/10 text-accent-blue border border-accent-blue/30 font-mono text-xs font-bold">
             {cccOneLinersData.length} Golden Facts
           </span>
         </div>
@@ -57,17 +57,17 @@ export default function CCCOneLinersPage() {
               placeholder="Search facts, shortcuts, or terms..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-appborder bg-white dark:bg-slate-900 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
             />
           </div>
 
-          <div className="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-3 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-                  activeCategory === cat ? 'bg-blue-600 text-white shadow-xs' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                  activeCategory === cat ? 'bg-brand-500 text-white shadow-2xs font-bold' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 {cat}
@@ -82,10 +82,10 @@ export default function CCCOneLinersPage() {
         {filteredPoints.map((item) => (
           <div
             key={item.id}
-            className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 transition-all space-y-2 shadow-2xs group"
+            className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-appborder hover:border-brand-500/80 transition-all space-y-2 shadow-xs group"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-md font-mono text-[10px] font-bold uppercase tracking-wider border bg-accent-blue/10 text-accent-blue border-accent-blue/20">
                 POINT #{item.id}
               </span>
               <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase font-mono">

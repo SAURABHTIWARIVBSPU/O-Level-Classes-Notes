@@ -27,7 +27,7 @@ export default function QuizCard({ mcq, questionIndex, totalQuestions, onNext })
   };
 
   return (
-    <div className="border border-slate-200 dark:border-slate-800 rounded-xl p-5 md:p-6 bg-white dark:bg-slate-900 shadow-sm transition-all">
+    <div className="border border-appborder rounded-xl p-5 md:p-6 bg-white dark:bg-slate-900 shadow-xs transition-all">
       
       {/* Header Badges */}
       <div className="flex items-center justify-between gap-2 mb-4">
@@ -36,10 +36,10 @@ export default function QuizCard({ mcq, questionIndex, totalQuestions, onNext })
           {totalQuestions ? ` of ${totalQuestions}` : ''}
         </span>
         <div className="flex items-center gap-2">
-          <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${difficultyColors[mcq.difficulty] || difficultyColors.Medium}`}>
+          <span className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${difficultyColors[mcq.difficulty] || difficultyColors.Medium}`}>
             {mcq.difficulty}
           </span>
-          <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+          <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
             Unit {mcq.unit}
           </span>
         </div>
@@ -56,7 +56,7 @@ export default function QuizCard({ mcq, questionIndex, totalQuestions, onNext })
           const isSelected = selectedOption === opt.id;
           const isTargetCorrect = opt.id === mcq.correctAnswer;
 
-          let btnStyle = 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 hover:border-brand-400 hover:bg-brand-50/50 dark:hover:bg-brand-950/30';
+          let btnStyle = 'border-appborder bg-slate-50/60 dark:bg-slate-800/40 text-slate-800 dark:text-slate-200 hover:border-brand-400 hover:bg-brand-50/30';
           
           if (isAnswered) {
             if (isTargetCorrect) {
@@ -64,7 +64,7 @@ export default function QuizCard({ mcq, questionIndex, totalQuestions, onNext })
             } else if (isSelected && !isTargetCorrect) {
               btnStyle = 'border-rose-500 bg-rose-50 dark:bg-rose-950/60 text-rose-900 dark:text-rose-200';
             } else {
-              btnStyle = 'opacity-50 border-slate-200 dark:border-slate-800 text-slate-500';
+              btnStyle = 'opacity-50 border-appborder text-slate-500';
             }
           }
 
@@ -73,7 +73,7 @@ export default function QuizCard({ mcq, questionIndex, totalQuestions, onNext })
               key={opt.id}
               onClick={() => handleSelect(opt.id)}
               disabled={isAnswered}
-              className={`w-full flex items-start gap-3 p-3.5 rounded-lg border text-left text-sm transition-all ${btnStyle}`}
+              className={`w-full flex items-start gap-3 p-3.5 rounded-lg border text-left text-sm transition-all min-h-[44px] cursor-pointer ${btnStyle}`}
             >
               <span className={`w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold shrink-0 ${
                 isSelected ? 'bg-brand-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200'

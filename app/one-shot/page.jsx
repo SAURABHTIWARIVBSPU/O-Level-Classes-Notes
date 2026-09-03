@@ -24,34 +24,34 @@ export default function OneShotHubPage() {
       </div>
 
       {/* Units Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
         {unitsData.map((unit) => (
           <Link
             key={unit.unitNumber}
             href={`/one-shot/${unit.slug}`}
-            className="group p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-brand-500 shadow-sm transition-all flex flex-col justify-between"
+            className="group p-5 sm:p-6 rounded-xl border border-appborder bg-white dark:bg-slate-900 hover:border-brand-500/80 shadow-xs transition-all flex flex-col justify-between cursor-pointer"
           >
             <div>
-              <div className="flex items-center justify-between text-xs font-bold mb-2">
-                <span className="text-brand-600 dark:text-brand-400 font-mono">
+              <div className="flex items-center justify-between text-xs font-bold mb-2.5">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-md font-mono text-[10px] font-bold uppercase tracking-wider border bg-brand-50 text-brand-700 dark:bg-brand-950/80 dark:text-brand-300 border-brand-200 dark:border-brand-800">
                   UNIT 0{unit.unitNumber} ONE-SHOT
                 </span>
-                <span className="text-slate-400 font-medium">
+                <span className="text-slate-400 font-medium text-[11px]">
                   {unit.totalHours} Hours • {unit.topics.length} Topics
                 </span>
               </div>
 
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-brand-600 transition-colors">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-brand-600 transition-colors leading-snug">
                 {unit.title}
               </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 hindi-text">
+              <p className="text-xs font-semibold text-brand-600 dark:text-brand-400 mt-1 hindi-text">
                 {unit.hindiTitle}
               </p>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-brand-600 dark:text-brand-400">
+            <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-brand-600 dark:text-brand-400">
               <span>Read Full Unit in 1-Shot</span>
-              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </div>
           </Link>
         ))}

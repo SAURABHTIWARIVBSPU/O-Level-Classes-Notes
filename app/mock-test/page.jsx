@@ -53,37 +53,37 @@ export default function MockTestPage() {
       </div>
 
       {/* Mode Selection Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         
         {/* Full 100-Mark Mode */}
         <div 
           onClick={() => setExamType('full')}
-          className={`p-6 rounded-2xl border cursor-pointer transition-all ${
+          className={`p-5 sm:p-6 rounded-xl border cursor-pointer transition-all ${
             examType === 'full'
-              ? 'border-brand-500 bg-brand-50/40 dark:bg-brand-950/40 ring-2 ring-brand-500/20 shadow-md'
-              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300'
+              ? 'border-brand-500 bg-brand-50/40 dark:bg-brand-950/40 ring-1 ring-brand-500/40 shadow-xs'
+              : 'border-appborder bg-white dark:bg-slate-900 hover:border-brand-400'
           }`}
         >
-          <div className="flex items-center justify-between mb-4">
-            <span className="px-2.5 py-1 rounded bg-brand-600 text-white text-xs font-extrabold">
+          <div className="flex items-center justify-between mb-3">
+            <span className="px-2 py-0.5 rounded-md bg-brand-600 text-white text-[10px] font-mono font-bold uppercase tracking-wider">
               RECOMMENDED
             </span>
             <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-              examType === 'full' ? 'border-brand-600 bg-brand-600 text-white' : 'border-slate-300'
+              examType === 'full' ? 'border-brand-600 bg-brand-600 text-white' : 'border-slate-300 dark:border-slate-600'
             }`}>
-              {examType === 'full' && <CheckCircle2 className="w-4 h-4" />}
+              {examType === 'full' && <CheckCircle2 className="w-3.5 h-3.5" />}
             </div>
           </div>
           
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
             Full 100-Mark Grand Mock
           </h3>
-          <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
             100 questions covering all 8 units with official weightages: 25 marks (Units 1-3), 
             20 marks (Unit 4), 15 marks (Unit 5), 20 marks (Unit 6), 20 marks (Units 7-8).
           </p>
 
-          <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-500">
+          <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
             <span>Duration: 90 Minutes</span>
             <span>Pass Marks: 50/100</span>
           </div>
@@ -92,32 +92,32 @@ export default function MockTestPage() {
         {/* 25-Question Speed Mode */}
         <div 
           onClick={() => setExamType('speed')}
-          className={`p-6 rounded-2xl border cursor-pointer transition-all ${
+          className={`p-5 sm:p-6 rounded-xl border cursor-pointer transition-all ${
             examType === 'speed'
-              ? 'border-brand-500 bg-brand-50/40 dark:bg-brand-950/40 ring-2 ring-brand-500/20 shadow-md'
-              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300'
+              ? 'border-brand-500 bg-brand-50/40 dark:bg-brand-950/40 ring-1 ring-brand-500/40 shadow-xs'
+              : 'border-appborder bg-white dark:bg-slate-900 hover:border-brand-400'
           }`}
         >
-          <div className="flex items-center justify-between mb-4">
-            <span className="px-2.5 py-1 rounded bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-extrabold">
+          <div className="flex items-center justify-between mb-3">
+            <span className="px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-bold uppercase tracking-wider">
               EXPRESS
             </span>
             <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-              examType === 'speed' ? 'border-brand-600 bg-brand-600 text-white' : 'border-slate-300'
+              examType === 'speed' ? 'border-brand-600 bg-brand-600 text-white' : 'border-slate-300 dark:border-slate-600'
             }`}>
-              {examType === 'speed' && <CheckCircle2 className="w-4 h-4" />}
+              {examType === 'speed' && <CheckCircle2 className="w-3.5 h-3.5" />}
             </div>
           </div>
           
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
             25-Question Speed Test
           </h3>
-          <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
             A quick diagnostic check when you have limited time. Instant assessment of weak areas 
             across key HTML, CSS, W3.CSS, and JavaScript concepts.
           </p>
 
-          <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-500">
+          <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
             <span>Duration: 25 Minutes</span>
             <span>Pass Marks: 13/25</span>
           </div>
@@ -126,7 +126,7 @@ export default function MockTestPage() {
       </div>
 
       {/* Rules & Guidelines Card */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-2xl p-6 bg-white dark:bg-slate-900 shadow-sm space-y-4">
+      <div className="border border-appborder rounded-xl p-5 sm:p-6 bg-white dark:bg-slate-900 shadow-xs space-y-4">
         <h4 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
           <AlertCircle className="w-4 h-4 text-amber-500" />
           Examination Rules &amp; Guidelines (NIELIT Official Pattern)
@@ -156,7 +156,7 @@ export default function MockTestPage() {
       <div className="text-center pt-2">
         <button
           onClick={() => setTestStarted(true)}
-          className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-extrabold text-sm shadow-glow transition-all hover:scale-105"
+          className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-extrabold text-sm shadow-md hover:shadow-lg transition-all cursor-pointer"
         >
           <Play className="w-4 h-4 fill-current" />
           Start Examination ({examType === 'full' ? '100 Questions' : '25 Questions'})

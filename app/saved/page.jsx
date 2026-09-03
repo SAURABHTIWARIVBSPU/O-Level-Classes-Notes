@@ -50,9 +50,9 @@ export default function SavedContentPage() {
     <div className="space-y-8 max-w-5xl mx-auto py-4">
       
       {/* Header */}
-      <div className="border-b border-slate-200 dark:border-slate-800 pb-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 text-xs font-bold mb-3">
-          <BookMarked className="w-3.5 h-3.5" /> Personal Study Workspace
+      <div className="border-b border-appborder pb-6">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 text-xs font-bold mb-3">
+          <BookMarked className="w-3.5 h-3.5 text-brand-600" /> Personal Study Workspace
         </div>
         <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
           My Saved Content (सहेजी गई अध्ययन सामग्री)
@@ -63,12 +63,12 @@ export default function SavedContentPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800">
+      <div className="flex items-center gap-2 border-b border-appborder">
         <button
           onClick={() => setActiveTab('topics')}
-          className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition-all ${
+          className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition-all cursor-pointer ${
             activeTab === 'topics'
-              ? 'border-brand-600 text-brand-600 dark:text-brand-400'
+              ? 'border-brand-500 text-brand-600 dark:text-brand-400'
               : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
@@ -78,9 +78,9 @@ export default function SavedContentPage() {
 
         <button
           onClick={() => setActiveTab('notes')}
-          className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition-all ${
+          className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition-all cursor-pointer ${
             activeTab === 'notes'
-              ? 'border-purple-600 text-purple-600 dark:text-purple-400'
+              ? 'border-navy text-navy dark:border-brand-400 dark:text-brand-400'
               : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
@@ -90,7 +90,7 @@ export default function SavedContentPage() {
 
         <button
           onClick={() => setActiveTab('mcqs')}
-          className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition-all ${
+          className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition-all cursor-pointer ${
             activeTab === 'mcqs'
               ? 'border-emerald-600 text-emerald-600 dark:text-emerald-400'
               : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white'
@@ -105,7 +105,7 @@ export default function SavedContentPage() {
       {activeTab === 'topics' && (
         <div className="space-y-4">
           {bookmarkedTopics.length === 0 ? (
-            <div className="p-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl space-y-3">
+            <div className="p-12 text-center border-2 border-dashed border-appborder rounded-xl space-y-3">
               <Bookmark className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto" />
               <h3 className="text-base font-bold text-slate-700 dark:text-slate-300">
                 No Bookmarked Topics Yet
@@ -115,7 +115,7 @@ export default function SavedContentPage() {
               </p>
               <Link
                 href="/syllabus"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-bold shadow-sm hover:bg-brand-500"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-500 text-white text-xs font-bold shadow-2xs hover:bg-brand-600 cursor-pointer"
               >
                 <BookOpen className="w-4 h-4" />
                 <span>Explore Syllabus Topics</span>
@@ -126,16 +126,16 @@ export default function SavedContentPage() {
               {bookmarkedTopics.map((t) => (
                 <div
                   key={t.slug}
-                  className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm flex flex-col justify-between group hover:border-brand-500 transition-all"
+                  className="p-5 rounded-xl border border-appborder bg-white dark:bg-slate-900 shadow-xs flex flex-col justify-between group hover:border-brand-500/80 transition-all"
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300">
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
                         Unit {t.unit}
                       </span>
                       <button
                         onClick={() => toggleBookmark(t.slug)}
-                        className="text-slate-400 hover:text-rose-500 p-1"
+                        className="text-slate-400 hover:text-rose-500 p-1 cursor-pointer"
                         title="Remove bookmark"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -145,14 +145,14 @@ export default function SavedContentPage() {
                     <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-brand-600 transition-colors">
                       {t.title}
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 hindi-text line-clamp-2">
+                    <p className="text-xs font-semibold text-brand-600 dark:text-brand-400 hindi-text line-clamp-2">
                       {t.hindiTitle}
                     </p>
                   </div>
 
                   <Link
                     href={`/units/${t.unitSlug}/topics/${t.slug}`}
-                    className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-brand-600 dark:text-brand-400 group-hover:underline"
+                    className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-600 dark:text-brand-400 group-hover:underline"
                   >
                     <span>Read Full Topic Lesson</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -168,7 +168,7 @@ export default function SavedContentPage() {
       {activeTab === 'notes' && (
         <div className="space-y-4">
           {notesList.length === 0 ? (
-            <div className="p-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl space-y-3">
+            <div className="p-12 text-center border-2 border-dashed border-appborder rounded-xl space-y-3">
               <BookMarked className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto" />
               <h3 className="text-base font-bold text-slate-700 dark:text-slate-300">
                 No Personal Notes Written
@@ -182,7 +182,7 @@ export default function SavedContentPage() {
               {notesList.map((item) => (
                 <div
                   key={item.slug}
-                  className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm space-y-3"
+                  className="p-5 rounded-xl border border-appborder bg-white dark:bg-slate-900 shadow-xs space-y-3"
                 >
                   <div className="flex items-center justify-between">
                     <div>
@@ -212,7 +212,7 @@ export default function SavedContentPage() {
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-100 dark:border-purple-900/40 text-xs text-slate-800 dark:text-slate-200 whitespace-pre-wrap font-sans leading-relaxed">
+                  <div className="p-3.5 rounded-lg bg-purple-50/50 dark:bg-purple-950/20 border border-purple-100 dark:border-purple-900/40 text-xs text-slate-800 dark:text-slate-200 whitespace-pre-wrap font-sans leading-relaxed">
                     {item.note}
                   </div>
                 </div>
@@ -226,7 +226,7 @@ export default function SavedContentPage() {
       {activeTab === 'mcqs' && (
         <div className="space-y-4">
           {savedMcqList.length === 0 ? (
-            <div className="p-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl space-y-3">
+            <div className="p-12 text-center border-2 border-dashed border-appborder rounded-xl space-y-3">
               <HelpCircle className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto" />
               <h3 className="text-base font-bold text-slate-700 dark:text-slate-300">
                 No Challenging MCQs Saved
@@ -236,7 +236,7 @@ export default function SavedContentPage() {
               </p>
               <Link
                 href="/mcqs"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow-sm hover:bg-emerald-500"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 text-white text-xs font-bold shadow-2xs hover:bg-emerald-500"
               >
                 <span>Go to 200 MCQ Bank</span>
               </Link>
@@ -246,15 +246,15 @@ export default function SavedContentPage() {
               {savedMcqList.map((m) => (
                 <div
                   key={m.id}
-                  className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm space-y-3"
+                  className="p-5 rounded-xl border border-appborder bg-white dark:bg-slate-900 shadow-xs space-y-3"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                       Unit {m.unit} • #{m.id}
                     </span>
                     <button
                       onClick={() => toggleSavedMcq(m.id)}
-                      className="text-slate-400 hover:text-rose-500 p-1"
+                      className="text-slate-400 hover:text-rose-500 p-1 cursor-pointer"
                       title="Remove from saved"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -272,7 +272,7 @@ export default function SavedContentPage() {
                         className={`p-2 rounded-lg border ${
                           opt.id === m.correctAnswer
                             ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-200 font-bold'
-                            : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                            : 'border-appborder bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
                         }`}
                       >
                         <span className="font-bold mr-2">({opt.id})</span>
@@ -281,7 +281,7 @@ export default function SavedContentPage() {
                     ))}
                   </div>
 
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 text-xs text-slate-600 dark:text-slate-300 flex items-start gap-1.5">
+                  <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 text-xs text-slate-600 dark:text-slate-300 flex items-start gap-1.5 border border-appborder">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
                     <span><strong className="text-emerald-600">Explanation:</strong> {m.explanation}</span>
                   </div>
