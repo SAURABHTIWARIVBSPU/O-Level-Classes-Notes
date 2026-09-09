@@ -202,15 +202,15 @@ export default function CCCTopicPage({ params, topic }) {
 
             {topic.detailedExplanation ? (
               <>
-                <h2 id="explanation">Detailed explanation</h2>
-                <MarkdownRenderer content={topic.detailedExplanation} />
+                <h2 id="explanation">Understanding it properly</h2>
+                <MarkdownRenderer content={topic.detailedExplanation} className="prose-flow" />
               </>
             ) : null}
 
             {topic.realWorldAnalogy ? (
               <>
-                <h2 id="analogy">Real-world analogy</h2>
-                <Callout kind="analogy" label="Think of it like this">
+                <h2 id="analogy">Think of it like this</h2>
+                <Callout kind="analogy" label="Analogy">
                   <p>{topic.realWorldAnalogy}</p>
                 </Callout>
               </>
@@ -218,7 +218,7 @@ export default function CCCTopicPage({ params, topic }) {
 
             {points.length ? (
               <>
-                <h2 id="key-points">Key points to remember</h2>
+                <h2 id="key-points">Remember these</h2>
                 <ul>
                   {points.map((point, i) => (
                     <li key={i}>{point}</li>
@@ -229,7 +229,7 @@ export default function CCCTopicPage({ params, topic }) {
 
             {mistakes.length ? (
               <>
-                <h2 id="common-mistakes">Common mistakes</h2>
+                <h2 id="common-mistakes">Where students slip</h2>
                 <Callout kind="danger" label="Common mistake">
                   <ul>
                     {mistakes.map((mistake, i) => (
@@ -242,7 +242,7 @@ export default function CCCTopicPage({ params, topic }) {
 
             {topic.examImportance || examTips.length ? (
               <>
-                <h2 id="exam">In the exam</h2>
+                <h2 id="exam">How the exam asks it</h2>
                 <Callout kind="exam" label="Exam point">
                   {topic.examImportance ? <p>{topic.examImportance}</p> : null}
                   {examTips.length ? (
@@ -268,7 +268,7 @@ export default function CCCTopicPage({ params, topic }) {
 
             {topic.practiceAssignment ? (
               <>
-                <h2 id="practice">Practice task</h2>
+                <h2 id="practice">Try it yourself</h2>
                 <div className="well p-4 sm:p-5">
                   <p className="eyebrow mb-1.5">Do this before moving on</p>
                   <p className="text-prose text-ink-2">{topic.practiceAssignment}</p>

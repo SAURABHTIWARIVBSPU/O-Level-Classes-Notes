@@ -1,535 +1,695 @@
-// CCC Chapter 1: Introduction to Computer - Complete Textbook Content
+// CCC Chapter 1: Introduction to Computer — topic notes
+// Written to CONTENT_STYLE.md. Beginner level: the reader may be using a
+// computer seriously for the first time. Each fact lives in one topic.
+
+const q = (question, options, correctAnswer, explanation) => ({
+  question,
+  options: options.map((text, i) => ({ id: 'ABCD'[i], text })),
+  correctAnswer,
+  explanation,
+});
+
 export const chapter1Topics = [
+  /* ============================================ 1. What a computer is ==== */
   {
-    "chapterNumber": 1,
-    "topicNumber": 1,
-    "slug": "introduction-to-computer-and-gadgets",
-    "title": "Computer and Latest IT Gadgets",
-    "hindiTitle": "कंप्यूटर एवं नवीनतम आईटी गैजेट्स",
-    "definitionEnglish": "A computer is an electronic data processing machine that accepts raw data as input, processes it logically and arithmetically according to stored program instructions, and produces meaningful, accurate information as output.",
-    "definitionHindi": "कंप्यूटर एक इलेक्ट्रॉनिक डेटा प्रोसेसिंग मशीन है जो इनपुट के रूप में कच्चा डेटा (Raw Data) स्वीकार करती है, निर्देशों के अनुसार इसे प्रोसेस करती है और सार्थक सूचना (Information) आउटपुट के रूप में प्रदान करती है।",
-    "simpleWords": "कंप्यूटर एक अत्यंत तीव्र गति से गणना और डेटा प्रोसेसिंग करने वाला इलेक्ट्रॉनिक उपकरण है जो IPO (Input-Process-Output) चक्र पर काम करता है।",
-    "examImportance": "Very High (3-4 questions on IPO cycle, characteristics, and modern gadgets)",
-    "detailedExplanation": "### 1. The 4 Fundamental Steps of the Computer (The IPO Cycle)\nEvery computer system operates on the universal **IPO (Input-Process-Output)** architectural cycle:\n1. **Input:** The process of entering raw facts, numbers, characters, images, or audio signals into the computer system using input peripherals (Keyboard, Mouse, Scanner, Microphone, Touchscreen).\n2. **Processing:** The Central Processing Unit (CPU) executes logical comparisons, arithmetic computations, data transformations, and sequencing based on user instructions.\n3. **Output:** Displaying or presenting processed, meaningful information to the user via visual screens (Monitors), paper printouts (Printers), or audio waves (Speakers).\n4. **Storage:** Persisting digital data and program instructions permanently or temporarily in storage media (RAM, SSD, HDD, Optical Discs) for subsequent retrieval.\n\n### 2. Core Characteristics of Modern Computers\n- **Speed:** Computers perform millions of calculations per second, measured in **MIPS (Million Instructions Per Second)** and **FLOPS (Floating-Point Operations Per Second)** for supercomputers.\n- **Accuracy (The GIGO Principle):** Computers produce 100% accurate calculations based on the **GIGO (Garbage In, Garbage Out)** principle — errors occur only due to incorrect human input or faulty programming.\n- **Diligence:** Unlike human beings, computers never suffer from physical fatigue, tiredness, boredom, or loss of concentration even after running 24/7 for months.\n- **Versatility:** Capable of executing diverse tasks simultaneously (e.g., streaming high-definition video while compiling code and downloading files).\n- **Storage Capacity:** Ability to store vast amounts of digital information in compact solid-state and magnetic drives.\n- **Zero IQ & Lack of Feelings:** A computer has no independent thought, emotional consciousness, or heuristic judgment; it depends entirely on instructions supplied by humans.\n\n### 3. Latest IT Gadgets & Smart Digital Devices\nModern Information Technology (IT) gadgets have miniaturized computing power into specialized portable devices:\n- **Smartphones:** Handheld touchscreen microcomputers integrating 5G cellular modems, biometric fingerprint/facial recognition, GPS navigation, mobile banking (UPI), and camera sensors.\n- **Smartwatches & Fitness Bands:** Wearable wrist computers with photoplethysmography (PPG) optical sensors monitoring heart rate, blood oxygen (SpO2), sleep cycles, and daily pedometer steps.\n- **Tablet Computers:** Ultra-portable slates offering high-resolution capacitive touch screens, stylus digital pen input, and cellular connectivity for digital art, e-learning, and reading.\n- **Drone Cameras (Unmanned Aerial Vehicles - UAV):** Remote-controlled flying robotics equipped with 4K video gimbals, GPS autopilots, and obstacle avoidance sensors used in aerial mapping, agriculture, filmmaking, and defense surveillance.",
-    "realWorldAnalogy": "Think of an electric fruit juicer: Dropping fresh oranges into the juicer is Input, the spinning blade crushing and filtering the pulp is Processing, and the fresh juice pouring into your glass is Output.",
-    "importantPoints": [
-      "The fundamental cycle of computer operations is IPO (Input -> Process -> Output).",
-      "GIGO stands for Garbage In, Garbage Out, which governs computer accuracy.",
-      "Computer processing speed is measured in MIPS (Million Instructions Per Second) or FLOPS.",
-      "A computer possesses Zero IQ and has no intrinsic emotional consciousness.",
-      "Father of the Computer is Charles Babbage (inventor of the Analytical Engine in 1837)."
+    chapterNumber: 1,
+    topicNumber: 1,
+    slug: 'introduction-to-computer-and-gadgets',
+    title: 'Computer and Latest IT Gadgets',
+    hindiTitle: 'कंप्यूटर एवं नवीनतम आईटी गैजेट्स',
+    definitionEnglish:
+      'A computer is an electronic machine that takes in data (input), processes it according to instructions, and gives out useful information (output), which it can also store.',
+    definitionHindi:
+      'कंप्यूटर एक electronic मशीन है जो data लेती है (input), दिए गए निर्देशों के अनुसार उसे process करती है, और उपयोगी जानकारी देती है (output), जिसे वह store भी कर सकती है।',
+    simpleWords:
+      'Calculator में आप 25 × 4 दबाते हैं (input), वह हिसाब लगाता है (process), और 100 दिखाता है (output)। कंप्यूटर यही काम हर तरह के data — text, photo, video, आवाज़ — के साथ करता है, और नतीजा याद भी रखता है।',
+    examImportance: 'Very high (3–4 questions in every paper on the IPO cycle and characteristics)',
+    detailedExplanation: `### Input → Process → Output
+
+Everything a computer does follows one pattern, called the **IPO cycle**:
+
+1. **Input** — data goes in. You type on a keyboard, click a mouse, speak into a microphone, or scan a document.
+2. **Process** — the CPU works on the data as the program instructs: adds, compares, sorts, converts.
+3. **Output** — the result comes out on the screen, from a printer, or through speakers.
+
+Modern books add a fourth step, **Storage**: the computer keeps data and results in memory so they are not lost and can be used again. Remember the order — Input, Process, Output, Storage — because the exam asks for it.
+
+### Data and information — not the same thing
+
+**Data** is raw facts with no meaning by themselves: 72, 85, 91. **Information** is data after processing, arranged so it means something: "Average marks: 82.6". The computer's whole job is turning data into information.
+
+### Why a computer is worth using — the characteristics
+
+The exam asks for these by name, so learn the names:
+
+| Characteristic | What it means |
+|---|---|
+| **Speed** | Millions of instructions in a second. A task that takes you an hour takes it a fraction of a second. |
+| **Accuracy** | It does not make calculation mistakes. If the answer is wrong, the input or the program was wrong — **GIGO: Garbage In, Garbage Out**. |
+| **Diligence** | It does not get tired or bored. The ten-thousandth calculation is as accurate as the first. |
+| **Versatility** | The same machine can play music, type a letter, do accounts and make a video call. |
+| **Storage** | It keeps huge amounts of data in a small space and finds any of it in an instant. |
+| **No intelligence** | It cannot think or decide on its own. It only follows instructions — a computer has *zero IQ*. |
+
+### Where you meet computers today
+
+A desktop or laptop is the obvious computer. But a smartphone, a smartwatch, an ATM, a ticket machine at the metro station and the box behind a shop's billing counter are all computers too — the same IPO cycle in a different shape. The next two topics look at these gadgets and at how computers got here.`,
+    realWorldAnalogy:
+      'Juicer में संतरे डालना input है, blade का घूमना process, और glass में जूस आना output — कंप्यूटर भी बिल्कुल इसी तरह data से information बनाता है।',
+    importantPoints: [
+      'Computer का हर काम IPO cycle पर चलता है: Input → Process → Output (→ Storage)।',
+      'Data = raw facts; Information = process किया हुआ, meaningful data।',
+      'GIGO = Garbage In, Garbage Out — गलत input देंगे तो गलत output मिलेगा।',
+      'Characteristics: Speed, Accuracy, Diligence, Versatility, Storage, No IQ।',
+      'Diligence = बिना थके, बिना बोर हुए लगातार एक जैसा काम।',
     ],
-    "commonMistakes": [
-      "Confusing 'Data' with 'Information' — Data is unorganized raw facts; Information is processed, meaningful, and structured data.",
-      "Believing GIGO stands for 'General In General Out' (The correct term is 'Garbage In, Garbage Out')."
+    commonMistakes: [
+      'Data और information को एक ही चीज़ समझना — data raw है, information उसका process किया हुआ रूप।',
+      'GIGO का full form "General In General Out" लिख देना — सही है Garbage In, Garbage Out।',
+      '"Computer खुद सोच सकता है" — नहीं। वह सिर्फ instructions मानता है; इसीलिए कहा जाता है कि उसका IQ zero है।',
     ],
-    "examTips": [
-      "When asked in CCC: 'Which characteristic describes a computer's ability to work continuously without tiredness?' ➔ Diligence.",
-      "Remember that Charles Babbage designed the Difference Engine (1822) and Analytical Engine (1837)."
+    examTips: [
+      '"Computer की किस विशेषता के कारण वह बिना थके लगातार काम करता है?" → Diligence।',
+      '"GIGO का full form" → Garbage In, Garbage Out।',
+      '"Computer operations का सही क्रम" → Input, Process, Output, Storage।',
     ],
-    "quickRevision": "Computers follow the IPO (Input-Process-Output) cycle. Key traits include Speed (MIPS), Accuracy (GIGO), Diligence, Versatility, Large Storage, and Zero IQ. Charles Babbage is the Father of Computer.",
-    "practiceAssignment": "List 5 digital gadgets in your household, identify their primary input methods (touch, buttons, voice) and explain how output is presented.",
-    "microQuiz": [
-      {
-        "question": "What is the correct logical sequence of computer operations?",
-        "options": [
-          {
-            "id": "A",
-            "text": "Process -> Input -> Output -> Storage"
-          },
-          {
-            "id": "B",
-            "text": "Input -> Process -> Output -> Storage"
-          },
-          {
-            "id": "C",
-            "text": "Output -> Input -> Storage -> Process"
-          },
-          {
-            "id": "D",
-            "text": "Storage -> Output -> Process -> Input"
-          }
-        ],
-        "correctAnswer": "B",
-        "explanation": "A computer first accepts raw data through Input, computes it during Processing, renders Information via Output, and persists it in Storage."
-      },
-      {
-        "question": "In computer terminology, what does the acronym 'GIGO' stand for?",
-        "options": [
-          {
-            "id": "A",
-            "text": "General Input General Output"
-          },
-          {
-            "id": "B",
-            "text": "Garbage In Garbage Out"
-          },
-          {
-            "id": "C",
-            "text": "Global Interface Global Operations"
-          },
-          {
-            "id": "D",
-            "text": "Gateway Input Gateway Output"
-          }
-        ],
-        "correctAnswer": "B",
-        "explanation": "GIGO (Garbage In, Garbage Out) means that the accuracy of computer output depends strictly on the correctness of the input supplied."
-      }
-    ]
+    quickRevision:
+      'Computer = input लेकर process करके output देने वाली electronic मशीन (IPO)। Data raw है, information processed। Characteristics: Speed, Accuracy (GIGO), Diligence, Versatility, Storage, zero IQ।',
+    practiceAssignment:
+      'अपने घर की तीन machines चुनें — जैसे phone, washing machine, TV remote — और हर एक के लिए लिखें: input क्या है, process क्या है, output क्या है। इनमें से कौन-सी असल में computer है?',
+    microQuiz: [
+      q(
+        'What is the correct order of computer operations?',
+        ['Process → Input → Output', 'Input → Process → Output', 'Output → Input → Process', 'Input → Output → Process'],
+        'B',
+        'Data goes in, is processed, and the result comes out — the IPO cycle.',
+      ),
+      q(
+        'A computer produced a wrong total because the clerk typed a wrong figure. Which principle does this show?',
+        ['Versatility', 'Diligence', 'GIGO', 'Storage'],
+        'C',
+        'Garbage In, Garbage Out: the computer was accurate, the input was not.',
+      ),
+    ],
   },
+
+  /* ============================================ 2. Evolution ============= */
   {
-    "chapterNumber": 1,
-    "topicNumber": 2,
-    "slug": "evolution-of-computers-and-applications",
-    "title": "Evolution of Computers & Applications",
-    "hindiTitle": "कंप्यूटर का विकास एवं अनुप्रयोग",
-    "definitionEnglish": "The evolution of computers traces the historical progression of computing technology from early mechanical counting tools (Abacus, Pascaline) through five distinct electronic generations characterized by fundamental technological breakthroughs.",
-    "definitionHindi": "कंप्यूटर का विकास प्रारंभिक मैकेनिकल गणना उपकरणों (अबेकस, पास्कलाइन) से लेकर पांच अलग-अलग इलेक्ट्रॉनिक पीढ़ियों (1st to 5th Generation) के तकनीकी विकास का ऐतिहासिक क्रम है।",
-    "simpleWords": "कंप्यूटर का इतिहास अबेकस से शुरू होकर वैक्यूम ट्यूब, ट्रांजिस्टर, आईसी और आज के आर्टिफिशियल इंटेलिजेंस (AI) तक विकसित हुआ है।",
-    "examImportance": "High (2-3 direct questions on computer generations, vacuum tubes, transistors, ICs, and inventors)",
-    "detailedExplanation": "### 1. Historical Pioneers of Computing\n- **Abacus (~3000 BC):** The world's earliest mechanical computing tool consisting of beads on rods used for basic addition and subtraction.\n- **Pascaline (1642):** Invented by **Blaise Pascal**; the first mechanical adding and subtracting machine using interlocking toothed gears.\n- **Analytical Engine (1837):** Designed by **Charles Babbage**; the first general-purpose mechanical computer featuring an arithmetic unit ('Mill') and memory ('Store'). Charles Babbage is revered as the **Father of Computer**.\n- **Ada Lovelace:** The world's **first computer programmer**, who wrote the first algorithm for Babbage's Analytical Engine.\n- **ENIAC (1946):** *Electronic Numerical Integrator and Computer*, built by J. Presper Eckert and John Mauchly at the University of Pennsylvania. The world's first general-purpose electronic digital computer.\n\n### 2. The Five Generations of Electronic Computers\n| Generation | Primary Switching Component | Main Memory & Storage | Programming Language | Notable Systems |\n| :--- | :--- | :--- | :--- | :--- |\n| **1st Gen (1940–1956)** | **Vacuum Tubes (Thermionic Valves)** | Magnetic Drums, Punched Cards | Machine Language (Binary 0s and 1s) | ENIAC, EDVAC, UNIVAC-1, IBM 701 |\n| **2nd Gen (1956–1963)** | **Transistors** (Invented at Bell Labs, 1947) | Magnetic Core Memory, Magnetic Tapes | Assembly Language, Early High-Level (FORTRAN, COBOL) | IBM 1401, IBM 1620, CDC 1604 |\n| **3rd Gen (1964–1971)** | **Integrated Circuits (ICs)** (Invented by Jack Kilby) | Magnetic Core, Early Semiconductor RAM | High-Level Languages (BASIC, Pascal, C) | IBM System/360, PDP-8, CDC 6600 |\n| **4th Gen (1971–Present)** | **Microprocessors (VLSI & LSI)** (Intel 4004 in 1971) | Semiconductor RAM, ROM, Hard Disk Drives | C++, Python, Java, SQL, Graphical OS | Apple Macintosh, IBM PC, Modern Laptops |\n| **5th Gen (Present & Beyond)** | **Ultra Large Scale Integration (ULSI) & AI** | High-speed SSDs, Cloud Storage, Optical | Natural Language Processing (NLP), Python, AI/ML | Supercomputers (PARAM, Fugaku, Frontier), Quantum PCs |\n\n### 3. Broad Applications of Computers Across Modern Society\n1. **Banking & Finance:** Core Banking Solutions (CBS), ATM withdrawals, Real-time Gross Settlement (RTGS/NEFT/UPI), fraud detection algorithms.\n2. **Education & E-Learning:** Virtual digital classrooms, Learning Management Systems (LMS), computer-based examinations (CBT).\n3. **Healthcare & Medicine:** CT Scanners, MRI Imaging, robotic laproscopic surgery, DNA sequencing, patient health record databases.\n4. **Governance & Public Administration (Digital India):** Aadhaar biometric authentication, passport issuance portals, income tax e-filing, land record digitization.\n5. **Weather Forecasting & Defense:** Supercomputing simulations analyzing satellite Doppler radar feeds to predict monsoons, cyclones, and aerospace trajectory mechanics.",
-    "realWorldAnalogy": "Comparing computer generations is like comparing transportation: 1st Gen is a massive steam locomotive, 2nd Gen is a diesel train, 3rd Gen is an electric express, 4th Gen is a sleek high-speed bullet train, and 5th Gen is a self-driving maglev.",
-    "importantPoints": [
-      "1st Generation: Vacuum Tubes | 2nd Gen: Transistors | 3rd Gen: Integrated Circuits (ICs) | 4th Gen: VLSI / Microprocessors | 5th Gen: ULSI & Artificial Intelligence.",
-      "ENIAC was the first general-purpose electronic digital computer (1946).",
-      "Jack Kilby invented the Integrated Circuit (IC) at Texas Instruments in 1958.",
-      "Intel 4004 was the world's first single-chip commercial microprocessor (released in 1971).",
-      "Ada Lovelace is universally recognized as the first computer programmer."
+    chapterNumber: 1,
+    topicNumber: 2,
+    slug: 'evolution-of-computers-and-applications',
+    title: 'Evolution of Computers & Applications',
+    hindiTitle: 'कंप्यूटर का विकास एवं अनुप्रयोग',
+    definitionEnglish:
+      'The evolution of computers is the story of how computing moved from mechanical counting devices to today\'s electronic machines, usually described as five generations, each defined by the technology inside it.',
+    definitionHindi:
+      'कंप्यूटर का विकास वह कहानी है जिसमें गिनती की mechanical मशीनों से आज के electronic कंप्यूटर तक का सफर पांच generations में बांटा जाता है — हर generation की पहचान उसके अंदर की technology से होती है।',
+    simpleWords:
+      'पहले कंप्यूटर एक पूरे कमरे जितने बड़े थे और सिर्फ जोड़-घटाव कर पाते थे। हर बार जब अंदर की technology बदली — vacuum tube से transistor, transistor से chip — कंप्यूटर छोटा, सस्ता और तेज़ हो गया। इन्हीं बदलावों को generations कहते हैं।',
+    examImportance: 'High (2–3 questions on generations and inventors)',
+    detailedExplanation: `### Before electronics
+
+- **Abacus** — the oldest counting device, beads on rods; still used to teach arithmetic.
+- **Pascaline (1642)** — Blaise Pascal's mechanical adding machine, worked with gears.
+- **Analytical Engine (1837)** — designed by **Charles Babbage**. It had a part for calculating and a part for storing numbers — the same idea as a modern CPU and memory. This is why Babbage is called the **father of the computer**.
+- **Ada Lovelace** wrote instructions for the Analytical Engine and is remembered as the **first programmer**.
+
+### The five generations
+
+The exam almost always asks "which technology belonged to which generation". This table is the whole topic:
+
+| Generation | Years | Main technology | What it meant |
+|---|---|---|---|
+| **First** | 1940–56 | **Vacuum tubes** | Room-sized, very hot, programmed in machine language (0s and 1s). Example: ENIAC, UNIVAC. |
+| **Second** | 1956–63 | **Transistors** | Much smaller and more reliable. Assembly language and early high-level languages (FORTRAN, COBOL). |
+| **Third** | 1964–71 | **Integrated circuits (ICs)** | Many transistors on one chip. Keyboards and monitors appear; operating systems appear. Example: IBM 360. |
+| **Fourth** | 1971–now | **Microprocessors** | The whole CPU on one chip (Intel 4004, 1971). Personal computers, laptops, GUI, the Internet. |
+| **Fifth** | now and ahead | **Artificial intelligence** | Machines that understand speech, recognise faces, learn from data. Also very fast parallel processing. |
+
+A few names go with the table: **ENIAC (1946)** was the first general-purpose electronic computer; the **IC** was invented by **Jack Kilby** (1958); the **Intel 4004 (1971)** was the first microprocessor.
+
+### What computers are used for
+
+The syllabus lists the main fields. One line each is enough:
+
+- **Banking** — ATMs, UPI, net banking, NEFT/RTGS transfers.
+- **Education** — online classes, digital notes, computer-based exams (like the CCC exam itself).
+- **Healthcare** — CT and MRI scans, patient records, telemedicine.
+- **Government** — Aadhaar, passport and PAN portals, income-tax e-filing, land records.
+- **Business and shopping** — billing, inventory, online stores.
+- **Science and weather** — supercomputers that forecast the monsoon or design aircraft.
+- **Entertainment and communication** — video calls, streaming, games, social media.`,
+    realWorldAnalogy:
+      'Generations को गाड़ियों की तरह सोचें: भाप का इंजन (1st), diesel (2nd), electric (3rd), bullet train (4th), और self-driving car (5th)। हर बार सवारी वही, तकनीक नई।',
+    importantPoints: [
+      '1st: vacuum tubes | 2nd: transistors | 3rd: ICs | 4th: microprocessors | 5th: AI।',
+      'Charles Babbage = father of the computer (Analytical Engine, 1837); Ada Lovelace = first programmer।',
+      'ENIAC (1946) = पहला general-purpose electronic computer।',
+      'IC का आविष्कार Jack Kilby ने किया (1958); Intel 4004 (1971) पहला microprocessor।',
     ],
-    "commonMistakes": [
-      "Believing Transistors were used in 1st Generation computers (Vacuum tubes were used in 1st Gen; Transistors in 2nd Gen).",
-      "Thinking the Intel 8086 was the first microprocessor (Intel 4004 was the first 4-bit microprocessor)."
+    commonMistakes: [
+      'Transistor को first generation में लिख देना — first generation में vacuum tubes थे, transistor second में आए।',
+      'Babbage को "first programmer" कहना — programmer Ada Lovelace थीं; Babbage ने मशीन design की।',
     ],
-    "examTips": [
-      "Direct CCC Question: 'Who invented the Integrated Circuit (IC)?' ➔ Jack Kilby & Robert Noyce.",
-      "Direct CCC Question: 'What was the core technology of 1st Generation computers?' ➔ Vacuum Tubes."
+    examTips: [
+      '"First generation computers में कौन-सी technology थी?" → Vacuum tubes।',
+      '"IC का आविष्कार किसने किया?" → Jack Kilby।',
+      '"Father of the computer" → Charles Babbage; "first computer programmer" → Ada Lovelace।',
     ],
-    "quickRevision": "Computers evolved across 5 generations: 1G=Vacuum Tubes, 2G=Transistors, 3G=ICs, 4G=VLSI Microprocessors, 5G=ULSI & AI. Charles Babbage is Father of Computer; Ada Lovelace is First Programmer.",
-    "practiceAssignment": "Create a summary chart mapping the 5 computer generations with their primary hardware components and prominent computer models.",
-    "microQuiz": [
-      {
-        "question": "Which electronic component was used as the primary switching device in First Generation computers?",
-        "options": [
-          {
-            "id": "A",
-            "text": "Transistors"
-          },
-          {
-            "id": "B",
-            "text": "Vacuum Tubes"
-          },
-          {
-            "id": "C",
-            "text": "Integrated Circuits (ICs)"
-          },
-          {
-            "id": "D",
-            "text": "Microprocessors"
-          }
-        ],
-        "correctAnswer": "B",
-        "explanation": "First Generation computers (1940-1956) relied on large, fragile, heat-generating Vacuum Tubes (Thermionic Valves)."
-      },
-      {
-        "question": "Who is acknowledged as the world's first computer programmer?",
-        "options": [
-          {
-            "id": "A",
-            "text": "Charles Babbage"
-          },
-          {
-            "id": "B",
-            "text": "Lady Ada Lovelace"
-          },
-          {
-            "id": "C",
-            "text": "Alan Turing"
-          },
-          {
-            "id": "D",
-            "text": "John von Neumann"
-          }
-        ],
-        "correctAnswer": "B",
-        "explanation": "Lady Ada Lovelace wrote the world's first algorithm intended to be executed by Charles Babbage's mechanical Analytical Engine."
-      }
-    ]
+    quickRevision:
+      'Abacus → Pascaline (1642) → Babbage का Analytical Engine (1837) → ENIAC (1946)। पांच generations: vacuum tubes, transistors, ICs, microprocessors, AI। Kilby = IC, Intel 4004 = पहला microprocessor।',
+    practiceAssignment:
+      'बिना देखे एक table बनाएं: पांच generations, हर एक की technology और एक example। फिर ऊपर की table से मिलाकर गलतियां ठीक करें — exam में यही table काम आएगी।',
+    microQuiz: [
+      q(
+        'Which technology was used in first-generation computers?',
+        ['Transistors', 'Vacuum tubes', 'Integrated circuits', 'Microprocessors'],
+        'B',
+        'Vacuum tubes came first (1940–56); transistors replaced them in the second generation.',
+      ),
+      q(
+        'Who is known as the first computer programmer?',
+        ['Charles Babbage', 'Ada Lovelace', 'Blaise Pascal', 'Jack Kilby'],
+        'B',
+        'Ada Lovelace wrote instructions for Babbage\'s Analytical Engine.',
+      ),
+    ],
   },
+
+  /* ============================================ 3. IT gadgets ============ */
   {
-    "chapterNumber": 1,
-    "topicNumber": 3,
-    "slug": "it-gadgets-and-their-applications",
-    "title": "IT Gadgets and Their Applications",
-    "hindiTitle": "आईटी गैजेट्स और उनके दैनिक उपयोग",
-    "definitionEnglish": "An IT (Information Technology) gadget is a compact, technologically advanced electronic device designed with embedded microprocessors and communication interfaces to perform specialized computing, communication, or monitoring tasks.",
-    "definitionHindi": "आईटी गैजेट एक ऐसा कॉम्पैक्ट और आधुनिक इलेक्ट्रॉनिक उपकरण है जिसमें विशेष कंप्यूटिंग, संचार या निगरानी कार्यों को निष्पादित करने के लिए माइक्रोप्रोसेसर और नेटवर्क सेंसर लगे होते हैं।",
-    "simpleWords": "आईटी गैजेट्स वे छोटे और स्मार्ट उपकरण हैं जैसे स्मार्टफोन, स्मार्टवॉच, टैबलेट, ड्रोन और वीआर हेडसेट जो हमारे दैनिक जीवन को आसान बनाते हैं।",
-    "examImportance": "Medium (1-2 questions on smart devices, sensors, and wearable computing)",
-    "detailedExplanation": "### 1. Categories of Modern IT Gadgets\nInformation Technology gadgets are classified into distinct functional domains:\n\n1. **Smart Wearable Devices:**\n   - **Smartwatches (Apple Watch, Galaxy Watch):** Feature optical PPG sensors, ECG monitors, accelerometers, and GPS chips to track fitness, sleep, step counts, and mirror smartphone phone calls and messages.\n   - **Smart Glasses & Augmented Reality (AR) Headsets:** Overlay digital data, turn-by-turn navigation graphics, and subtitles directly onto the user's real-world optical field of view.\n   - **Smart Fitness Bands:** Lightweight wristbands monitoring heart rate and activity metrics with battery life lasting multiple weeks.\n\n2. **Handheld & Portable Computing Devices:**\n   - **Smartphones:** Touchscreen microcomputers with multi-core ARM processors, 5G wireless modems, high-resolution cameras, and secure biometric enclaves.\n   - **Tablet PCs & E-Readers (Amazon Kindle):** E-readers utilize specialized **Electronic Ink (E-Ink)** reflection displays that mimic printed physical book paper with zero eye strain and weeks of battery endurance.\n\n3. **Smart Home & IoT (Internet of Things) Gadgets:**\n   - **Smart Speakers (Amazon Echo / Alexa, Google Nest):** Voice-activated artificial intelligence assistants that play music, answer questions, set alarms, and control smart light bulbs and thermostats.\n   - **Smart Security Cameras (CCTV with Wi-Fi):** Motion-detecting night-vision cameras streaming live encrypted video feeds to mobile apps.\n\n4. **Autonomous & Aerial Gadgets:**\n   - **Drones / UAVs:** Gyroscope-stabilized quadcopters used in cinematography, agricultural crop pesticide spraying, structural bridge inspections, and emergency medical cargo delivery.",
-    "realWorldAnalogy": "Just as a Swiss Army knife packs scissors, blades, and openers into a pocket tool, a Smartphone packs a camera, computer, GPS navigator, television, and payment wallet into a single pocket gadget.",
-    "importantPoints": [
-      "E-Book Readers (like Kindle) utilize E-Ink (Electronic Ink) technology to eliminate screen glare and reduce battery consumption.",
-      "Smartphones utilize capacitive multi-touch screens and ARM-based energy-efficient processors.",
-      "Drones are formally known as UAVs (Unmanned Aerial Vehicles).",
-      "Smart home devices communicate via Wi-Fi, Bluetooth, Zigbee, or Z-Wave protocols."
+    chapterNumber: 1,
+    topicNumber: 3,
+    slug: 'it-gadgets-and-their-applications',
+    title: 'IT Gadgets and Their Applications',
+    hindiTitle: 'आईटी गैजेट्स और उनके उपयोग',
+    definitionEnglish:
+      'An IT gadget is a small electronic device with a built-in processor that does a specific job — such as a smartphone, tablet, smartwatch, e-reader or drone.',
+    definitionHindi:
+      'IT gadget एक छोटा electronic device है जिसके अंदर processor होता है और जो कोई खास काम करता है — जैसे smartphone, tablet, smartwatch, e-reader या drone।',
+    simpleWords:
+      'आपके हाथ का phone एक camera, calculator, map, TV, bank और computer — सब एक साथ है। ऐसे छोटे, काम-के-हिसाब-से बने computer ही IT gadgets हैं।',
+    examImportance: 'Medium (1–2 questions, mostly full forms and "which device is used for what")',
+    detailedExplanation: `### The main gadgets and what each is for
+
+| Gadget | What it is | Everyday use |
+|---|---|---|
+| **Smartphone** | A pocket computer with a touch screen and mobile connection | Calls, WhatsApp, UPI payments, photos, maps, learning apps |
+| **Tablet** | A larger touch-screen device, between a phone and a laptop | Reading, online classes, drawing with a stylus |
+| **Laptop** | A portable computer with keyboard and battery | Office work, programming, exams like this one |
+| **Smartwatch / fitness band** | A small computer worn on the wrist | Shows notifications, counts steps, measures heart rate |
+| **E-reader** (e.g. Kindle) | A device only for reading books | Uses an **e-ink** screen that looks like paper — no glare, battery lasts weeks |
+| **Smart speaker** (Alexa, Google Nest) | A speaker that listens for voice commands | Plays music, sets alarms, answers questions, controls smart lights |
+| **Drone (UAV)** | A small flying machine controlled remotely | Photography, spraying crops, surveying land, delivering medicines |
+| **Smart TV / streaming stick** | A TV that connects to the Internet | YouTube, OTT apps, screen-mirroring from a phone |
+
+### Two ideas behind all of them
+
+**Sensors.** Gadgets collect data about the world through sensors: a camera, a microphone, GPS for location, an accelerometer that knows when you tilt or shake the phone, a fingerprint sensor. Sensors are the *input* side of the IPO cycle.
+
+**Connectivity.** Gadgets talk to each other and to the Internet through **Wi-Fi**, **Bluetooth** (short range, e.g. earphones) and **mobile data (4G/5G)**. When ordinary objects — a bulb, a fan, a fridge — get sensors and connectivity, we call them **IoT (Internet of Things)** devices.
+
+### Full forms the exam asks
+
+- **GPS** — Global Positioning System
+- **UAV** — Unmanned Aerial Vehicle (a drone)
+- **IoT** — Internet of Things
+- **VR / AR** — Virtual Reality (a fully computer-made world you see through a headset) / Augmented Reality (digital things added to the real world, like Snapchat filters)`,
+    realWorldAnalogy:
+      'Swiss army knife में चाकू, कैंची और opener एक साथ होते हैं; smartphone में camera, computer, map और wallet — एक जेब में पूरा IT department।',
+    importantPoints: [
+      'Smartphone, tablet, smartwatch, e-reader, smart speaker, drone — ये सब IT gadgets हैं।',
+      'E-reader में e-ink screen होती है — कागज़ जैसी, बिना चमक, हफ्तों की battery।',
+      'Drone का दूसरा नाम UAV = Unmanned Aerial Vehicle।',
+      'IoT = Internet of Things: रोज़मर्रा की चीज़ें जो sensor और इंटरनेट से जुड़ी हों।',
+      'Connectivity: Wi-Fi, Bluetooth (short range), 4G/5G।',
     ],
-    "commonMistakes": [
-      "Assuming E-Ink screens emit bright backlight like standard LCD/OLED phone screens (E-Ink reflects ambient light naturally like paper).",
-      "Believing smart speakers require physical button clicks for every task (They operate primarily on Voice Recognition NLP commands)."
+    commonMistakes: [
+      'E-ink screen को phone जैसी चमकदार screen समझना — e-ink कागज़ की तरह रोशनी reflect करती है, खुद चमकती नहीं।',
+      'VR और AR को एक ही समझना — VR पूरी दुनिया बनावटी दिखाता है; AR असली दुनिया पर digital चीज़ें जोड़ता है।',
     ],
-    "examTips": [
-      "Remember full form of UAV: Unmanned Aerial Vehicle.",
-      "Know that GPS stands for Global Positioning System."
+    examTips: [
+      '"UAV का full form" → Unmanned Aerial Vehicle।',
+      '"GPS का full form" → Global Positioning System।',
+      '"Kindle जैसे e-reader में कौन-सी screen होती है?" → E-ink।',
     ],
-    "quickRevision": "IT gadgets include Smartwatches (wearables), Smartphones (portable computing), E-Readers (E-Ink), Smart Speakers (voice AI), and Drones (UAVs for surveillance and delivery).",
-    "practiceAssignment": "Identify 3 sensors inside a modern smartphone (e.g., Accelerometer, Gyroscope, Proximity sensor) and write down their specific practical functions.",
-    "microQuiz": [
-      {
-        "question": "What specialized display technology is predominantly used in dedicated E-Book Readers like Amazon Kindle?",
-        "options": [
-          {
-            "id": "A",
-            "text": "Cathode Ray Tube (CRT)"
-          },
-          {
-            "id": "B",
-            "text": "Electronic Ink (E-Ink)"
-          },
-          {
-            "id": "C",
-            "text": "Plasma Display Panel"
-          },
-          {
-            "id": "D",
-            "text": "Liquid Crystal Display with CCFL"
-          }
-        ],
-        "correctAnswer": "B",
-        "explanation": "E-Ink (Electronic Ink) displays mimic physical paper by reflecting ambient light, offering zero eye strain and exceptionally low battery consumption."
-      }
-    ]
+    quickRevision:
+      'IT gadgets = processor वाले छोटे devices: smartphone, tablet, smartwatch, e-reader (e-ink), smart speaker, drone (UAV)। Sensors input देते हैं; Wi-Fi/Bluetooth/5G जोड़ते हैं। IoT = चीज़ें जो इंटरनेट से जुड़ी हों।',
+    practiceAssignment:
+      'अपने phone की Settings में जाकर पता करें कि उसमें कौन-कौन से sensors हैं (कई phones में "Sensors" या "About phone" में दिखता है)। कम से कम तीन के नाम और उनका काम लिखें।',
+    microQuiz: [
+      q(
+        'Which screen technology do e-readers such as Kindle use?',
+        ['LCD', 'E-ink', 'Plasma', 'CRT'],
+        'B',
+        'E-ink reflects light like paper, so there is no glare and very little battery use.',
+      ),
+      q(
+        'UAV stands for',
+        ['Universal Audio Video', 'Unmanned Aerial Vehicle', 'User Access Verification', 'Ultra Advanced Version'],
+        'B',
+        'A UAV is a drone — an aircraft with no pilot on board.',
+      ),
+    ],
   },
+
+  /* ============================================ 4. Hardware ============== */
   {
-    "chapterNumber": 1,
-    "topicNumber": 4,
-    "slug": "hardware-cpu-input-output-devices",
-    "title": "Hardware: CPU, Input & Output Devices",
-    "hindiTitle": "हार्डवेयर: सीपीयू, इनपुट एवं आउटपुट डिवाइसेज",
-    "definitionEnglish": "Computer hardware represents the physical, tangible machinery, electronic circuitry, and electromechanical components of a computer system, broadly categorized into the Central Processing Unit (CPU), Input Devices, and Output Devices.",
-    "definitionHindi": "कंप्यूटर हार्डवेयर वे सभी भौतिक और स्पर्श करने योग्य (Tangible) इलेक्ट्रॉनिक और मैकेनिकल भाग हैं जिन्हें हम देख और छू सकते हैं, जैसे सीपीयू, इनपुट डिवाइसेज और आउटपुट डिवाइसेज।",
-    "simpleWords": "हार्डवेयर कंप्यूटर के वे सभी भौतिक अंग हैं जिन्हें हम छू सकते हैं—जैसे कीबोर्ड, माउस, सीपीयू, मॉनिटर और प्रिंटर।",
-    "examImportance": "Very High (4-5 direct questions on CPU parts, printer types, DPI, and scanning devices in every CCC exam)",
-    "detailedExplanation": "### 1. Central Processing Unit (CPU) — The Brain of Computer\nThe CPU (microprocessor) interprets, manages, and executes all software instructions. It consists of three tightly coupled internal components:\n\n1. **ALU (Arithmetic Logic Unit):**\n   - **Arithmetic Section:** Performs fundamental mathematical operations (`+`, `-`, `*`, `/`).\n   - **Logic Section:** Performs decision-making comparisons (`=`, `<`, `>`, `<=`, `>=`, `!=`) and boolean logical operations (`AND`, `OR`, `NOT`).\n2. **CU (Control Unit):**\n   - Serves as the central nervous system or traffic supervisor of the computer.\n   - Fetches instructions from memory, decodes opcodes, generates micro-timing signals, and directs data flow between ALU, memory, and I/O devices.\n3. **Registers:**\n   - Ultra-fast, tiny internal memory storage cells inside the processor silicon (e.g., Accumulator `AC`, Program Counter `PC`, Instruction Register `IR`, Memory Address Register `MAR`).\n\n### 2. Primary Input Devices (Data Capture)\n- **Keyboard:** Standard layout is **QWERTY**, containing 104 to 108 keys (Alphanumeric, Modifier keys `Ctrl`, `Alt`, `Shift`, Navigation arrow keys, and Function keys `F1` to `F12`).\n- **Mouse:** Invented by **Douglas Engelbart in 1964**; a handheld pointing device controlling the onscreen graphical cursor pointer.\n- **Trackball & Touchpad:** Pointing device alternatives widely used on laptop decks and CAD workstations.\n- **Optical & Magnetic Readers:**\n  - **OMR (Optical Mark Recognition):** Reads pencil or pen darkened bubble marks on objective examination answer sheets.\n  - **OCR (Optical Character Recognition):** Scans printed or handwritten physical text and converts it into editable digital machine text.\n  - **MICR (Magnetic Ink Character Recognition):** Reads the 9-digit magnetic code printed with iron oxide ink at the bottom of bank cheques (First 3 digits = City Code, Middle 3 digits = Bank Code, Last 3 digits = Branch Code).\n  - **Barcode Reader:** Reads alternating 1D vertical black-and-white stripes encoding UPC inventory numbers.\n  - **QR Code Scanner:** Reads 2D matrix 2-dimensional Quick Response barcodes containing URLs, UPI payment strings, or text.\n- **Microphone & Web Camera:** Captures analog audio waves (converted via Sound Card ADC) and visual video frames.\n\n### 3. Primary Output Devices (Information Presentation)\n1. **Monitors (Visual Display Units - VDU):**\n   - **Technologies:** CRT (Cathode Ray Tube), LCD (Liquid Crystal Display), LED (Light Emitting Diode), OLED (Organic LED).\n   - **Resolution:** Total pixels displayed horizontally and vertically (e.g., Full HD: `1920 × 1080`, 4K UHD: `3840 × 2160`).\n   - **Aspect Ratio:** Proportional ratio of width to height (`16:9` widescreen, `4:3` standard).\n2. **Printers (Impact vs. Non-Impact):**\n| Category | Mechanism | Speed & Noise | Quality / Resolution | Examples |\n| :--- | :--- | :--- | :--- | :--- |\n| **Impact Printers** | Physical mechanical hammer strikes inked ribbon against paper | Slow (CPS: Characters Per Second), Loud clicking noise | Low resolution, can print multi-copy carbon copies | Dot Matrix Printer, Daisy Wheel, Line Printer |\n| **Non-Impact Printers** | Electrostatic toner powder or heated thermal micro-ink droplets without physical striking | Fast (PPM: Pages Per Minute), Silent operation | High resolution (measured in **DPI: Dots Per Inch**) | Laser Printer, Inkjet Printer, Thermal Printer |\n3. **Plotters:** Specialized vector graphic output devices that move colored mechanical pens across wide-format paper rolls to draw engineering blueprints, architectural schematics, and flex banners.\n4. **Speakers & Headphones:** Output audible acoustic sound converted from digital audio bits through DACs (Digital-to-Analog Converters).",
-    "realWorldAnalogy": "Human senses act as Input devices (Eyes, Ears), the Brain acts as the CPU (deciding and calculating), and Voice/Hands act as Output devices (speaking and writing).",
-    "importantPoints": [
-      "The CPU consists of three parts: ALU (Arithmetic Logic Unit), CU (Control Unit), and Registers.",
-      "Douglas Engelbart invented the computer mouse in 1964 using a wooden shell.",
-      "Printer resolution and print sharpness are measured in DPI (Dots Per Inch).",
-      "Printer printing speed is measured in PPM (Pages Per Minute) or CPS (Characters Per Second).",
-      "MICR codes on bank cheques contain 9 digits (City + Bank + Branch).",
-      "Dot Matrix is an Impact printer; Laser and Inkjet are Non-Impact printers."
+    chapterNumber: 1,
+    topicNumber: 4,
+    slug: 'hardware-cpu-input-output-devices',
+    title: 'Hardware: CPU, Input & Output Devices',
+    hindiTitle: 'हार्डवेयर: CPU, इनपुट और आउटपुट डिवाइस',
+    definitionEnglish:
+      'Hardware is every physical part of a computer that you can touch — the CPU that processes, the input devices that send data in, and the output devices that show results.',
+    definitionHindi:
+      'Hardware कंप्यूटर का हर वह भौतिक हिस्सा है जिसे छुआ जा सकता है — CPU जो process करता है, input devices जो data अंदर भेजते हैं, और output devices जो नतीजा दिखाते हैं।',
+    simpleWords:
+      'Keyboard, mouse, monitor, printer, और CPU वाला डिब्बा — जो कुछ भी आप हाथ में ले सकते हैं, वह hardware है। जो दिखता नहीं पर चलता है (Windows, WhatsApp), वह software है — अगले topic में।',
+    examImportance: 'Very high (4–5 questions in every paper on CPU parts, printers and input devices)',
+    detailedExplanation: `### The CPU — the brain
+
+The **CPU (Central Processing Unit)** does the *process* step of the IPO cycle. It has two working parts, and the exam asks for both by name:
+
+- **ALU (Arithmetic Logic Unit)** — does the maths (+ − × ÷) and the comparisons (is A bigger than B? are they equal?).
+- **CU (Control Unit)** — the manager. It fetches each instruction, decodes it, and tells the ALU, memory and devices what to do and when.
+
+A third part, **registers**, are tiny, very fast storage spaces inside the CPU where the ALU keeps the numbers it is working on right now.
+
+### Input devices — data goes in
+
+| Device | Notes |
+|---|---|
+| **Keyboard** | Standard layout is **QWERTY** (look at the first six letters on the top row). |
+| **Mouse** | Pointing device; invented by **Douglas Engelbart** (1964). Touchpad and trackball do the same job. |
+| **Scanner** | Converts a paper page or photo into a digital image. |
+| **Microphone, webcam** | Bring in sound and video. |
+| **Touch screen** | Both input and output — you touch what you see. |
+
+Four special readers turn up in the exam every year because they are used in exams and banks:
+
+- **OMR (Optical Mark Recognition)** — reads the dark circles on an answer sheet. This is how CCC and competitive exams are checked.
+- **OCR (Optical Character Recognition)** — reads printed text from a scanned page and turns it into editable text.
+- **MICR (Magnetic Ink Character Recognition)** — reads the **9-digit** code printed in magnetic ink at the bottom of a bank cheque (3 digits city, 3 bank, 3 branch).
+- **Barcode / QR code reader** — reads the stripes on a product or the square code you scan for UPI.
+
+### Output devices — results come out
+
+**Monitor** — the screen. Types by technology: CRT (the old, heavy box), LCD, LED, OLED. Size is measured **diagonally** in inches; sharpness is the **resolution** (e.g. 1920 × 1080 pixels).
+
+**Printer** — the exam's favourite output device. There are two families:
+
+| | Impact printer | Non-impact printer |
+|---|---|---|
+| How it prints | A head physically strikes an ink ribbon against the paper | No striking — ink is sprayed or toner is fused with heat |
+| Noise | Loud | Quiet |
+| Speed | Slow, measured in CPS (characters per second) | Fast, measured in PPM (pages per minute) |
+| Can print carbon copies | Yes | No |
+| Examples | **Dot-matrix**, daisy-wheel, line printer | **Inkjet**, **laser**, thermal |
+
+Print quality for any printer is measured in **DPI (dots per inch)** — more dots, sharper print.
+
+**Plotter** — draws large engineering drawings and banners with pens; used by architects and for flex printing. **Speakers / headphones** — sound output.`,
+    realWorldAnalogy:
+      'आपकी आंखें और कान input devices हैं, दिमाग CPU है, और मुंह-हाथ output devices — देखा, सोचा, बोला/लिखा।',
+    importantPoints: [
+      'CPU के दो मुख्य भाग: ALU (हिसाब और तुलना) और CU (control); registers CPU के अंदर की छोटी तेज़ memory।',
+      'Keyboard का layout QWERTY; mouse के आविष्कारक Douglas Engelbart (1964)।',
+      'OMR = answer sheet के गोले पढ़ता है; OCR = छपा text पढ़ता है; MICR = cheque का 9-digit code पढ़ता है।',
+      'Impact printer (dot-matrix) ribbon पर चोट करता है, शोर करता है; non-impact (inkjet, laser) चुप और तेज़।',
+      'Printer की quality DPI में, speed PPM में; monitor का size तिरछा (diagonal) नापते हैं।',
     ],
-    "commonMistakes": [
-      "Classifying Laser Printer as an Impact printer (Laser printer is strictly Non-Impact).",
-      "Assuming Monitor screen size is measured horizontally (Monitor screen size is always measured diagonally from corner to corner in inches)."
+    commonMistakes: [
+      'Laser printer को impact printer लिख देना — laser और inkjet दोनों non-impact हैं; impact सिर्फ dot-matrix जैसे printers हैं।',
+      'OMR और OCR में उलझना — OMR गोले (marks) पढ़ता है, OCR अक्षर (characters)।',
+      'Monitor का size चौड़ाई से नापना — size हमेशा एक कोने से विपरीत कोने तक (diagonal) inches में होता है।',
     ],
-    "examTips": [
-      "Direct CCC Question: 'Which printer uses a ribbon and makes noise while printing?' ➔ Dot Matrix Printer.",
-      "Direct CCC Question: 'How many digits are in an MICR code?' ➔ 9 digits.",
-      "Direct CCC Question: 'What does DPI stand for?' ➔ Dots Per Inch."
+    examTips: [
+      '"कौन-सा printer ribbon इस्तेमाल करता है और शोर करता है?" → Dot-matrix (impact)।',
+      '"MICR code में कितने अंक होते हैं?" → 9।',
+      '"DPI का full form" → Dots Per Inch; "PPM" → Pages Per Minute।',
+      '"CPU का कौन-सा भाग arithmetic करता है?" → ALU।',
     ],
-    "quickRevision": "Hardware includes CPU (ALU + CU + Registers), Input (Keyboard, Mouse, OMR, OCR, MICR, QR), and Output (Monitors, Laser/Inkjet Printers measured in DPI/PPM, Plotters for blueprints).",
-    "practiceAssignment": "Inspect the bottom of a bank cheque leaf or sample image to locate the 9-digit MICR code and identify which digits represent the city and bank.",
-    "microQuiz": [
-      {
-        "question": "Which of the following is an example of an IMPACT printer?",
-        "options": [
-          {
-            "id": "A",
-            "text": "Laser Printer"
-          },
-          {
-            "id": "B",
-            "text": "Inkjet Printer"
-          },
-          {
-            "id": "C",
-            "text": "Dot Matrix Printer"
-          },
-          {
-            "id": "D",
-            "text": "Thermal Printer"
-          }
-        ],
-        "correctAnswer": "C",
-        "explanation": "A Dot Matrix printer uses mechanical pins that physically strike an inked ribbon onto paper, making it an impact printer."
-      },
-      {
-        "question": "In banking systems, how many digits are present in an MICR (Magnetic Ink Character Recognition) code on a bank cheque?",
-        "options": [
-          {
-            "id": "A",
-            "text": "6 digits"
-          },
-          {
-            "id": "B",
-            "text": "9 digits"
-          },
-          {
-            "id": "C",
-            "text": "11 digits"
-          },
-          {
-            "id": "D",
-            "text": "16 digits"
-          }
-        ],
-        "correctAnswer": "B",
-        "explanation": "MICR code comprises 9 digits: first 3 for City code, middle 3 for Bank code, and last 3 for Branch code."
-      }
-    ]
+    quickRevision:
+      'CPU = ALU + CU (+ registers)। Input: keyboard (QWERTY), mouse (Engelbart), scanner, OMR (गोले), OCR (text), MICR (cheque, 9 digits)। Output: monitor (diagonal size), printer — impact (dot-matrix, noisy, CPS) vs non-impact (inkjet/laser, PPM, DPI), plotter।',
+    practiceAssignment:
+      'किसी cheque की photo (या bank की website का sample) देखकर नीचे छपे 9 अंक ढूंढें और उन्हें 3-3 के तीन हिस्सों में बांटकर लिखें: city, bank, branch।',
+    microQuiz: [
+      q(
+        'Which of these is an impact printer?',
+        ['Laser printer', 'Inkjet printer', 'Dot-matrix printer', 'Thermal printer'],
+        'C',
+        'A dot-matrix printer strikes an ink ribbon with pins; laser, inkjet and thermal printers do not strike the paper.',
+      ),
+      q(
+        'The part of the CPU that performs calculations and comparisons is the',
+        ['Control Unit', 'Arithmetic Logic Unit', 'Register', 'Hard disk'],
+        'B',
+        'The ALU does arithmetic and logic; the CU directs the work; the hard disk is not part of the CPU.',
+      ),
+    ],
   },
+
+  /* ============================================ 5. Memory ================ */
   {
-    "chapterNumber": 1,
-    "topicNumber": 5,
-    "slug": "computer-memory-and-storage",
-    "title": "Computer Memory and Storage Devices",
-    "hindiTitle": "कंप्यूटर मेमोरी एवं स्टोरेज डिवाइसेज",
-    "definitionEnglish": "Computer memory refers to the internal electronic components and external magnetic/optical/flash storage media that store binary data and program instructions temporarily or permanently for CPU execution.",
-    "definitionHindi": "कंप्यूटर मेमोरी से तात्पर्य उन आंतरिक इलेक्ट्रॉनिक घटकों और बाहरी स्टोरेज मीडिया से है जो सीपीयू के उपयोग के लिए बाइनरी डेटा (0 और 1) और निर्देशों को अस्थायी या स्थायी रूप से संचित करते हैं।",
-    "simpleWords": "मेमोरी कंप्यूटर की याददाश्त है। RAM अस्थायी (Volatile) होती है जबकि Hard Disk / SSD स्थायी (Non-Volatile) स्टोरेज होती है।",
-    "examImportance": "Very High (4-5 direct questions on RAM vs ROM, memory measurement units KB/MB/GB/TB, and cache memory)",
-    "detailedExplanation": "### 1. Memory Measurement Units Hierarchy (Crucial for CCC Exam)\nData inside digital computers is stored in binary digits (Bits):\n- **1 Bit:** Single binary digit (`0` or `1`).\n- **1 Nibble:** Group of **4 Bits** (e.g., `1010`).\n- **1 Byte:** Group of **8 Bits** (Represents 1 single text character, e.g., 'A').\n- **1 Kilobyte (KB):** `1024 Bytes` (`2^10 Bytes`).\n- **1 Megabyte (MB):** `1024 KB` (`2^20 Bytes`).\n- **1 Gigabyte (GB):** `1024 MB` (`2^30 Bytes`).\n- **1 Terabyte (TB):** `1024 GB` (`2^40 Bytes`).\n- **1 Petabyte (PB):** `1024 TB` (`2^50 Bytes`).\n- **1 Exabyte (EB):** `1024 PB` | **1 Zettabyte (ZB):** `1024 EB` | **1 Yottabyte (YB):** `1024 ZB`.\n\n### 2. Primary Memory vs. Secondary Memory\n| Attribute | Primary Memory (Main Memory: RAM / ROM) | Secondary Memory (Storage: HDD, SSD, USB) |\n| :--- | :--- | :--- |\n| **Direct CPU Access** | Directly accessed by CPU via memory bus | Not directly accessed; data must load into RAM first |\n| **Volatility** | RAM is **Volatile** (data lost on power off); ROM is Non-Volatile | **Non-Volatile** (data retained permanently without power) |\n| **Speed** | Extremely high access speed (nanoseconds) | Slower access speed (milliseconds/microseconds) |\n| **Cost & Capacity** | Expensive per gigabyte; limited capacity (8GB–64GB) | Low cost per gigabyte; massive capacity (512GB–10TB) |\n\n### 3. RAM (Random Access Memory) vs. ROM (Read Only Memory)\n- **RAM (Read/Write Memory):** Holds active operating system files and currently running user application programs.\n  - **SRAM (Static RAM):** Built from flip-flops; faster, does not require periodic electrical refreshing; used to manufacture ultra-fast **CPU Cache Memory (L1, L2, L3 Cache)**.\n  - **DRAM (Dynamic RAM):** Built from capacitors and transistors; requires thousands of refresh cycles per second; used for main system RAM (DDR4, DDR5).\n- **ROM (Non-Volatile Firmware Memory):** Retains permanent bootstrap instructions even when power is turned off.\n  - **BIOS / UEFI (Basic Input/Output System):** Stored inside ROM to perform the **POST (Power-On Self Test)** during system startup.\n  - **Types of ROM:** **PROM** (Programmable ROM), **EPROM** (Erasable PROM - erased with UV light), **EEPROM** (Electrically Erasable PROM - erased and rewritten electrically, basis of modern Flash storage).\n\n### 4. Secondary Storage Devices\n1. **HDD (Hard Disk Drive):** Magnetic rotating metal platters with read/write heads. Slower, mechanical moving parts.\n2. **SSD (Solid State Drive):** Uses NAND Flash semiconductor memory chips. Zero moving parts, silent, shock-resistant, with read speeds 5x to 20x faster than traditional HDDs.\n3. **Optical Discs:** Read and written using laser beams:\n   - **CD (Compact Disc):** Standard capacity ~**700 MB**.\n   - **DVD (Digital Versatile Disc):** Standard capacity ~**4.7 GB** (Single Layer) / **8.5 GB** (Dual Layer).\n   - **Blu-ray Disc (BD):** Uses blue-violet laser (`405 nm`), capacity ~**25 GB** (Single Layer) / **50 GB** (Dual Layer).\n4. **Flash Storage:** USB Pen Drives, SD Memory Cards using EEPROM NAND flash architecture.",
-    "realWorldAnalogy": "RAM is like your study desk where you open and read active books while working. Secondary Storage (Hard Disk) is like your bookshelf where you permanently store hundreds of books when not reading.",
-    "importantPoints": [
-      "1 Nibble = 4 Bits | 1 Byte = 8 Bits | 1 KB = 1024 Bytes | 1 MB = 1024 KB | 1 GB = 1024 MB | 1 TB = 1024 GB.",
-      "RAM is Volatile (loses data on power loss); ROM is Non-Volatile (retains data permanently).",
-      "Cache Memory is the fastest memory placed directly between the CPU and main RAM.",
-      "BIOS is stored in ROM and executes the POST (Power-On Self-Test) routine upon computer startup.",
-      "Standard CD capacity is 700 MB, standard DVD capacity is 4.7 GB, and Blu-ray is 25 GB."
+    chapterNumber: 1,
+    topicNumber: 5,
+    slug: 'computer-memory-and-storage',
+    title: 'Computer Memory and Storage Devices',
+    hindiTitle: 'कंप्यूटर मेमोरी और स्टोरेज डिवाइस',
+    definitionEnglish:
+      'Computer memory is where data and instructions are kept — temporarily in primary memory (RAM, ROM) while the CPU works, and permanently in secondary storage (hard disk, SSD, pen drive).',
+    definitionHindi:
+      'Computer memory वह जगह है जहां data और instructions रखे जाते हैं — primary memory (RAM, ROM) में अस्थायी रूप से जब CPU काम कर रहा हो, और secondary storage (hard disk, SSD, pen drive) में स्थायी रूप से।',
+    simpleWords:
+      'RAM आपकी study table है — जो किताबें अभी पढ़ रहे हैं वे यहां खुली हैं, पर table छोटी है और रात को (power off) सब समेट लिया जाता है। Hard disk आपकी अलमारी है — बड़ी, और चीज़ें सालों रखी रहती हैं।',
+    examImportance: 'Very high (4–5 questions on RAM vs ROM, units (KB/MB/GB) and storage devices)',
+    detailedExplanation: `### How data is measured
+
+Computers store everything as **bits** — a bit is a single 0 or 1. Eight bits make a **byte**, which holds one character such as the letter A. From there, each unit is **1024** times the previous one, not 1000, because computers count in powers of 2:
+
+| Unit | Equals |
+|---|---|
+| 1 nibble | 4 bits |
+| 1 byte (B) | 8 bits |
+| 1 kilobyte (KB) | 1024 bytes |
+| 1 megabyte (MB) | 1024 KB |
+| 1 gigabyte (GB) | 1024 MB |
+| 1 terabyte (TB) | 1024 GB |
+| 1 petabyte (PB) | 1024 TB |
+
+A rough feel: a text message is a few hundred bytes, a photo a few MB, a movie a few GB, a laptop hard disk 512 GB to 1 TB.
+
+### Primary memory — where the CPU works
+
+The CPU can only work on data that is in primary memory. There are two kinds:
+
+**RAM (Random Access Memory)** holds the programs and files you are using *right now*. It is fast, it can be read and written, and it is **volatile** — switch the power off and everything in it is gone. That is why you lose an unsaved document when the power fails. More RAM lets you keep more programs open without the computer slowing down.
+
+**ROM (Read Only Memory)** holds the small program the computer needs to start up — the **BIOS**, which checks the hardware (a step called **POST, Power-On Self-Test**) and then loads the operating system. ROM is **non-volatile**: its contents stay when the power is off, and normally they cannot be changed.
+
+| | RAM | ROM |
+|---|---|---|
+| Full form | Random Access Memory | Read Only Memory |
+| Volatile? | Yes — lost when power goes off | No — permanent |
+| Read / write | Both | Read only |
+| Holds | Running programs and open files | Start-up program (BIOS) |
+
+**Cache memory** is a very small, very fast memory placed between the CPU and RAM. It keeps the data the CPU used most recently so the CPU does not have to wait for RAM.
+
+### Secondary storage — where data lives permanently
+
+Secondary storage is slower than RAM but much larger, cheaper per GB, and non-volatile. The CPU does not use it directly — files are copied from it into RAM when you open them.
+
+- **Hard disk drive (HDD)** — spinning magnetic platters. Large and cheap; the usual 500 GB–2 TB drive.
+- **Solid-state drive (SSD)** — memory chips, no moving parts. Much faster and quieter than an HDD; most new laptops use one.
+- **Pen drive and memory card** — small flash memory you carry around.
+- **Optical discs** — read by laser. **CD ≈ 700 MB**, **DVD ≈ 4.7 GB**, **Blu-ray ≈ 25 GB**. Rarely used now, but the capacities are asked.
+- **Cloud storage** (Google Drive, DigiLocker) — your files kept on a company's servers and reached over the Internet.`,
+    realWorldAnalogy:
+      'Study table (RAM) पर सिर्फ वही किताबें जो अभी पढ़ रहे हैं; अलमारी (hard disk) में बाकी सब सालों तक। Table पर रखी किताब जल्दी मिलती है, पर table छोटी है और रोज़ खाली हो जाती है।',
+    importantPoints: [
+      '4 bits = 1 nibble; 8 bits = 1 byte; 1 KB = 1024 B; 1 MB = 1024 KB; 1 GB = 1024 MB; 1 TB = 1024 GB।',
+      'RAM volatile है (power जाते ही खाली), read-write; ROM non-volatile, read-only, इसमें BIOS रहता है।',
+      'BIOS शुरू होते ही POST (Power-On Self-Test) करता है।',
+      'Cache = CPU और RAM के बीच की सबसे तेज़ memory।',
+      'CD 700 MB, DVD 4.7 GB, Blu-ray 25 GB; SSD, HDD से तेज़ (moving parts नहीं)।',
     ],
-    "commonMistakes": [
-      "Believing 1 KB is equal to 1000 Bytes (In binary computing, 1 KB is strictly 1024 Bytes = 2^10).",
-      "Confusing 1 Nibble with 1 Byte (1 Nibble = 4 bits; 1 Byte = 8 bits)."
+    commonMistakes: [
+      '1 KB = 1000 bytes लिखना — computer में 1 KB = 1024 bytes (2 की घात)।',
+      'Nibble और byte में उलझना — nibble 4 bits, byte 8 bits।',
+      'Hard disk को primary memory कहना — hard disk secondary storage है; primary सिर्फ RAM और ROM।',
     ],
-    "examTips": [
-      "Frequently asked in CCC: 'How many bits are in a Nibble?' ➔ 4 Bits.",
-      "Frequently asked in CCC: 'What test is executed by BIOS when computer starts?' ➔ POST (Power-On Self-Test)."
+    examTips: [
+      '"1 nibble में कितने bits?" → 4।',
+      '"कौन-सी memory volatile है?" → RAM।',
+      '"BIOS कौन-सा test चलाता है?" → POST।',
+      '"1 GB में कितने MB?" → 1024।',
     ],
-    "quickRevision": "Memory hierarchy: Registers > Cache > RAM > SSD/HDD. Units: 4 bits=1 Nibble, 8 bits=1 Byte, 1024 B=1 KB, 1024 KB=1 MB, 1024 MB=1 GB, 1024 GB=1 TB. RAM is volatile, ROM holds BIOS firmware.",
-    "practiceAssignment": "Calculate how many Megabytes (MB) are contained in a 4 Gigabyte (GB) USB flash drive: (4 × 1024 MB = 4096 MB).",
-    "microQuiz": [
-      {
-        "question": "How many bits are grouped together to form exactly ONE Nibble?",
-        "options": [
-          {
-            "id": "A",
-            "text": "2 bits"
-          },
-          {
-            "id": "B",
-            "text": "4 bits"
-          },
-          {
-            "id": "C",
-            "text": "8 bits"
-          },
-          {
-            "id": "D",
-            "text": "16 bits"
-          }
-        ],
-        "correctAnswer": "B",
-        "explanation": "A Nibble is a 4-bit aggregation, equal to half of a standard 8-bit Byte."
-      },
-      {
-        "question": "Which type of computer memory is volatile and loses all stored data when electrical power is switched off?",
-        "options": [
-          {
-            "id": "A",
-            "text": "ROM (Read Only Memory)"
-          },
-          {
-            "id": "B",
-            "text": "RAM (Random Access Memory)"
-          },
-          {
-            "id": "C",
-            "text": "Hard Disk Drive"
-          },
-          {
-            "id": "D",
-            "text": "Solid State Drive"
-          }
-        ],
-        "correctAnswer": "B",
-        "explanation": "RAM is volatile memory; it requires continuous electrical power to maintain its stored binary states."
-      }
-    ]
+    quickRevision:
+      'Bit → nibble (4) → byte (8) → KB → MB → GB → TB, हर बार ×1024। Primary: RAM (volatile, काम की जगह), ROM (BIOS, permanent), cache (सबसे तेज़)। Secondary: HDD, SSD, pen drive, CD 700 MB / DVD 4.7 GB / Blu-ray 25 GB, cloud।',
+    practiceAssignment:
+      'Windows में This PC खोलें: C: drive का कुल size GB में देखें और उसे MB में बदलें (×1024)। फिर Task Manager (Ctrl+Shift+Esc) → Performance में देखें कि RAM कितनी है और अभी कितनी use हो रही है।',
+    microQuiz: [
+      q(
+        'How many bits make one byte?',
+        ['4', '8', '16', '1024'],
+        'B',
+        '8 bits = 1 byte; 4 bits = 1 nibble; 1024 bytes = 1 KB.',
+      ),
+      q(
+        'Which memory loses its contents when the power is switched off?',
+        ['ROM', 'Hard disk', 'RAM', 'Pen drive'],
+        'C',
+        'RAM is volatile. ROM, hard disks and pen drives keep their data without power.',
+      ),
+    ],
   },
+
+  /* ============================================ 6. Software ============== */
   {
-    "chapterNumber": 1,
-    "topicNumber": 6,
-    "slug": "software-system-application-utility",
-    "title": "Software: System, Application & Utility Software",
-    "hindiTitle": "सॉफ्टवेयर: सिस्टम, एप्लीकेशन एवं यूटिलिटी सॉफ्टवेयर",
-    "definitionEnglish": "Computer software is a comprehensive set of programs, procedures, algorithms, and documentation that instruct hardware on how to perform specific computational tasks, categorized into System Software, Application Software, and Utility Software.",
-    "definitionHindi": "सॉफ्टवेयर निर्देशों, प्रोग्रामों और डेटा का वह समूह है जो कंप्यूटर हार्डवेयर को यह बताता है कि क्या और कैसे करना है। इसे सिस्टम सॉफ्टवेयर, एप्लीकेशन सॉफ्टवेयर और यूटिलिटी सॉफ्टवेयर में वर्गीकृत किया जाता है।",
-    "simpleWords": "सॉफ्टवेयर कंप्यूटर की वह आत्मा या प्रोग्राम है जिसे हम छू नहीं सकते लेकिन जो हार्डवेयर को संचालित करता है।",
-    "examImportance": "High (3-4 questions on software types, translators, compilers vs interpreters)",
-    "detailedExplanation": "### 1. Classification of Computer Software\nSoftware is organized into three major functional categories:\n\n1. **System Software:**\n   - Software that directly manages, controls, and operates computer hardware resources while providing a foundational execution platform for application software.\n   - **Operating Systems (OS):** Windows 11, Ubuntu Linux, macOS, Android, iOS.\n   - **Device Drivers:** Specialized translation programs enabling the OS to communicate with hardware peripherals (e.g., Nvidia GPU driver, HP printer driver).\n   - **Language Translators (Translates human code into binary machine code):**\n     - **Compiler:** Translates the entire high-level source code program into machine language object code in a **single pass** before execution (e.g., C, C++). Generates a compiled `.exe` binary file.\n     - **Interpreter:** Translates and executes high-level source code **line-by-line** sequentially. Execution stops immediately when an error is encountered (e.g., Python, JavaScript).\n     - **Assembler:** Translates low-level Assembly Language mnemonic instructions (`MOV`, `ADD`, `JMP`) into raw machine language binary code.\n\n2. **Application Software:**\n   - Programs created to assist end-users in executing specific business, educational, or creative tasks.\n   - **General Purpose:** Word Processors (LibreOffice Writer, MS Word), Spreadsheets (LibreOffice Calc, MS Excel), Presentation Software (LibreOffice Impress), Web Browsers.\n   - **Specialized / Customized:** Banking Core Systems, Railway Reservation Systems, Hospital Management Software, Accounting tools (Tally Prime).\n\n3. **Utility Software (System Maintenance Tools):**\n   - Housekeeping programs designed to analyze, configure, optimize, protect, and maintain computer performance:\n   - **Disk Defragmenter:** Reorganizes fragmented scattered file clusters on HDDs into contiguous sectors to improve disk read speeds.\n   - **Antivirus & Anti-Malware:** Scans, quarantines, and cleans viral threats and trojans (e.g., Windows Defender, Quick Heal).\n   - **File Compression Tools:** Compresses large files into ZIP/RAR archives to save storage space (e.g., 7-Zip, WinRAR).\n   - **Disk Cleanup & Backup Utilities:** Removes temporary cache files and automates data replication.",
-    "realWorldAnalogy": "System Software is like the stage, lighting, and electricity in a theater (essential foundation), while Application Software is the actors performing the actual play for the audience.",
-    "importantPoints": [
-      "A Compiler translates entire source code into machine code in one single pass.",
-      "An Interpreter translates and executes code line-by-line sequentially.",
-      "An Assembler converts low-level Assembly code into binary machine language.",
-      "Disk Defragmenter, Antivirus, and 7-Zip are classic examples of Utility Software.",
-      "Operating System is the most fundamental System Software."
+    chapterNumber: 1,
+    topicNumber: 6,
+    slug: 'software-system-application-utility',
+    title: 'Software: System, Application & Utility Software',
+    hindiTitle: 'सॉफ्टवेयर: सिस्टम, एप्लीकेशन और यूटिलिटी',
+    definitionEnglish:
+      'Software is the set of programs and instructions that tell the hardware what to do. It is grouped into system software, application software and utility software.',
+    definitionHindi:
+      'Software programs और instructions का वह समूह है जो hardware को बताता है कि क्या करना है। इसे तीन भागों में बांटा जाता है: system software, application software और utility software।',
+    simpleWords:
+      'Hardware शरीर है, software उसकी जान। Windows phone को चलाता है (system), WhatsApp आपका काम करता है (application), और antivirus सफाई-सुरक्षा करता है (utility)। तीनों software हैं, काम अलग-अलग।',
+    examImportance: 'High (3–4 questions on software types and compiler vs interpreter)',
+    detailedExplanation: `### System software — runs the machine
+
+System software works between the hardware and everything else. Without it the computer cannot even start.
+
+- **Operating system (OS)** — the most important program on any computer. It starts the machine, runs other programs, manages memory and files, and gives you the screen you click on. Windows, Linux (Ubuntu), macOS, Android and iOS are all operating systems. Chapter 2 covers the OS in detail.
+- **Device drivers** — small programs that let the OS talk to a particular piece of hardware: the printer driver, the graphics driver.
+- **Language translators** — programs that turn the code a programmer writes into the 0s and 1s the CPU understands. There are three, and the exam asks the difference:
+
+| Translator | What it does |
+|---|---|
+| **Compiler** | Translates the *whole* program at once, then the translated program runs. Errors are reported together after translation. Used by C, C++, Java. |
+| **Interpreter** | Translates and runs the program *one line at a time*. Stops at the first error. Used by Python, JavaScript. |
+| **Assembler** | Translates assembly language (short codes like ADD, MOV) into machine code. |
+
+### Application software — does your work
+
+Application software is what you actually open to get something done. It runs on top of the OS.
+
+- **General purpose** — useful to everyone: word processor (LibreOffice Writer, MS Word), spreadsheet (LibreOffice Calc, Excel), presentation (LibreOffice Impress, PowerPoint), browser (Chrome), media player (VLC).
+- **Special purpose** — built for one job or one organisation: railway reservation system, hospital management software, Tally for accounts, a school's fee software.
+
+Chapters 3 to 5 of this course are entirely about the LibreOffice applications.
+
+### Utility software — keeps the computer healthy
+
+Utilities do maintenance. They are not the reason you bought the computer, but you would miss them:
+
+- **Antivirus** (Windows Defender, Quick Heal) — finds and removes viruses.
+- **Disk cleanup / disk defragmenter** — frees space and tidies the hard disk so it works faster.
+- **File compression** (WinRAR, 7-Zip) — squeezes files into a .zip to save space or send them.
+- **Backup tools** — copy your files somewhere safe.
+
+### Firmware
+
+One more word you will meet: **firmware** is software stored permanently in a chip inside a device — the BIOS on a motherboard, the program inside a washing machine or a TV remote. It sits between hardware and software.`,
+    realWorldAnalogy:
+      'Theatre में stage, lights और बिजली (system software) पहले चाहिए; उस पर होने वाला नाटक (application) असली मकसद है; और सफाई कर्मचारी (utility) सब कुछ चलता रखते हैं।',
+    importantPoints: [
+      'तीन प्रकार: system (OS, drivers, translators), application (Writer, Calc, browser), utility (antivirus, compression, disk cleanup)।',
+      'Operating system सबसे जरूरी system software है — इसके बिना कंप्यूटर शुरू नहीं होता।',
+      'Compiler पूरा program एक साथ translate करता है; interpreter एक-एक line; assembler assembly language को machine code में बदलता है।',
+      'Antivirus और WinRAR utility software हैं, application नहीं।',
+      'Firmware = chip में स्थायी रूप से रखा software (जैसे BIOS)।',
     ],
-    "commonMistakes": [
-      "Confusing Compilers with Interpreters (Compilers process the whole program at once; Interpreters process line-by-line).",
-      "Classifying Antivirus as Application software (Antivirus is a system maintenance Utility software)."
+    commonMistakes: [
+      'Compiler और interpreter उलट देना — याद रखें: compiler = complete (पूरा एक बार में), interpreter = line by line।',
+      'Antivirus को application software लिखना — यह maintenance का काम करता है, इसलिए utility है।',
+      'MS Word या LibreOffice को system software कहना — ये application हैं; system software OS है।',
     ],
-    "examTips": [
-      "Direct CCC Question: 'Which translator converts source program line-by-line?' ➔ Interpreter.",
-      "Direct CCC Question: 'Disk Defragmenter belongs to which software category?' ➔ Utility Software."
+    examTips: [
+      '"कौन-सा translator program को line-by-line चलाता है?" → Interpreter।',
+      '"Disk defragmenter किस प्रकार का software है?" → Utility।',
+      '"सबसे महत्वपूर्ण system software" → Operating system।',
     ],
-    "quickRevision": "Software: System Software (OS, Drivers, Translators: Compiler, Interpreter, Assembler), Application Software (LibreOffice Writer, Calc, Impress), and Utility Software (Antivirus, Disk Defragmenter, Compression).",
-    "practiceAssignment": "Open Task Manager in Windows (Ctrl + Shift + Esc) and identify which background services belong to System Software and which to Application Software.",
-    "microQuiz": [
-      {
-        "question": "Which language translator converts high-level source code into machine code line-by-line sequentially?",
-        "options": [
-          {
-            "id": "A",
-            "text": "Compiler"
-          },
-          {
-            "id": "B",
-            "text": "Interpreter"
-          },
-          {
-            "id": "C",
-            "text": "Assembler"
-          },
-          {
-            "id": "D",
-            "text": "Linker"
-          }
-        ],
-        "correctAnswer": "B",
-        "explanation": "An Interpreter translates and executes program code line-by-line, pausing immediately when a runtime syntax error is encountered."
-      }
-    ]
+    quickRevision:
+      'Software = system (OS, drivers, compiler/interpreter/assembler) + application (Writer, Calc, Impress, browser; general या special purpose) + utility (antivirus, 7-Zip, disk cleanup)। Firmware chip में रहता है।',
+    practiceAssignment:
+      'अपने computer या phone में installed 10 programs की list बनाएं और हर एक के आगे लिखें: system, application या utility। फिर application वालों को general-purpose और special-purpose में बांटें।',
+    microQuiz: [
+      q(
+        'Which translator converts and runs a program one line at a time?',
+        ['Compiler', 'Interpreter', 'Assembler', 'Linker'],
+        'B',
+        'An interpreter works line by line and stops at the first error; a compiler translates the whole program first.',
+      ),
+      q(
+        'Antivirus software is an example of',
+        ['System software', 'Application software', 'Utility software', 'Firmware'],
+        'C',
+        'Utilities maintain and protect the computer; antivirus, disk cleanup and compression tools are utilities.',
+      ),
+    ],
   },
+
+  /* ============================================ 7. Open source =========== */
   {
-    "chapterNumber": 1,
-    "topicNumber": 7,
-    "slug": "open-source-and-proprietary-software",
-    "title": "Open Source and Proprietary Software",
-    "hindiTitle": "ओपन सोर्स बनाम प्रोप्रायटरी सॉफ्टवेयर",
-    "definitionEnglish": "Open Source software provides public access to its underlying source code allowing users to inspect, modify, and redistribute it freely, whereas Proprietary software is commercial, closed-source software where the source code remains copyrighted and legally restricted by its owner.",
-    "definitionHindi": "ओपन सोर्स सॉफ्टवेयर वह है जिसका सोर्स कोड सार्वजनिक रूप से उपलब्ध होता है जिसे कोई भी देख, संशोधित और साझा कर सकता है, जबकि प्रोप्रायटरी (क्लोज्ड सोर्स) सॉफ्टवेयर का सोर्स कोड कंपनी द्वारा गोपनीय रखा जाता है।",
-    "simpleWords": "ओपन सोर्स सॉफ्टवेयर (जैसे Linux, LibreOffice) मुफ्त और खुला होता है, जबकि प्रोप्रायटरी सॉफ्टवेयर (जैसे Windows, MS Office) सशुल्क और बंद सोर्स कोड वाला होता है।",
-    "examImportance": "High (2-3 questions on open source definitions, Linux, LibreOffice, and licenses like GPL)",
-    "detailedExplanation": "### 1. Comparison: Open Source vs. Proprietary Software\n| Feature | Open Source Software (FOSS / OSS) | Proprietary Software (Closed Source) |\n| :--- | :--- | :--- |\n| **Source Code Availability** | Fully open, publicly accessible, and modifiable | Secret, compiled binary only; source code confidential |\n| **Licensing Cost** | Generally free of charge (Zero license fee) | Requires commercial purchase or recurring subscription |\n| **License Examples** | **GNU GPL (General Public License)**, MIT, Apache | End User License Agreement (**EULA**), Microsoft Commercial |\n| **Development Model** | Global community collaboration and peer review | In-house private corporate software engineering team |\n| **Prominent Examples** | **Linux Kernel, Ubuntu, LibreOffice, VLC Player, Python, Android (AOSP)** | **Microsoft Windows, macOS, MS Office 365, Adobe Photoshop, CorelDraw** |\n\n### 2. Software Licensing Categories\n1. **FOSS (Free and Open Source Software):** Software respecting user freedom to run, study, modify, and redistribute the program (promoted by the Free Software Foundation - FSF founded by **Richard Stallman** in 1985).\n2. **Freeware:** Software distributed without monetary cost, but whose source code remains closed and proprietary (e.g., Adobe Acrobat Reader, Google Chrome, WhatsApp).\n3. **Shareware (Trialware):** Proprietary software distributed free of charge on a temporary trial basis for evaluation (e.g., 30-day trial with limited features; e.g., WinRAR).\n4. **Firmware:** Permanent low-level software programmed into read-only ROM microchips (e.g., BIOS/UEFI on computer motherboards).",
-    "realWorldAnalogy": "Open Source is like a chef sharing their secret recipe publicly on the internet so anyone can cook, improve, and share it. Proprietary software is like Coca-Cola's secret formula locked inside a private vault.",
-    "importantPoints": [
-      "LibreOffice and Linux are prominent Free and Open Source Software (FOSS).",
-      "GNU GPL stands for General Public License.",
-      "Freeware is free to use, but its source code is closed (Not open source).",
-      "Richard Stallman founded the Free Software Foundation (FSF) in 1985.",
-      "Linus Torvalds created the Linux Operating System Kernel in 1991."
+    chapterNumber: 1,
+    topicNumber: 7,
+    slug: 'open-source-and-proprietary-software',
+    title: 'Open Source and Proprietary Software',
+    hindiTitle: 'ओपन सोर्स और प्रोप्राइटरी सॉफ्टवेयर',
+    definitionEnglish:
+      'Open-source software makes its source code public so anyone can study, change and share it, usually free of cost; proprietary software keeps its source code secret and is owned and sold by a company.',
+    definitionHindi:
+      'Open-source software अपना source code सबके लिए खुला रखता है ताकि कोई भी उसे पढ़, बदल और बांट सके, आमतौर पर मुफ्त; proprietary software का source code गुप्त रहता है और उसे एक company बेचती है।',
+    simpleWords:
+      'Linux और LibreOffice की recipe (code) सबके सामने रखी है — कोई भी देखे, सुधारे, बांटे: open source। Windows और MS Office की recipe Microsoft के पास बंद है और आप उसे खरीदकर इस्तेमाल करते हैं: proprietary।',
+    examImportance: 'High (2–3 questions; LibreOffice and Linux are the standard examples)',
+    detailedExplanation: `### Source code — the recipe
+
+Every program starts as text written by programmers, called **source code**. Whether that text is shared or hidden is the whole difference between the two kinds of software.
+
+### Open source vs proprietary
+
+| | Open-source software | Proprietary software |
+|---|---|---|
+| Source code | Public — anyone can read and modify it | Secret — only the owner can see it |
+| Cost | Usually free | Bought, or paid by subscription |
+| Who improves it | A worldwide community of volunteers and companies | The company that owns it |
+| Licence | Open licences such as **GNU GPL**, MIT, Apache | A **EULA** (End User Licence Agreement) that restricts copying |
+| Examples | **Linux, Ubuntu, LibreOffice, VLC, Firefox, Python, Android** | **Windows, MS Office, macOS, Adobe Photoshop** |
+
+Both kinds can be good software. Government of India actively promotes open source because it saves licence fees and keeps control of the code — which is why the CCC practical uses LibreOffice rather than MS Office.
+
+### People and dates the exam likes
+
+- **Richard Stallman** started the free-software movement and the **Free Software Foundation (FSF)** in 1985; the **GNU GPL** licence comes from there.
+- **Linus Torvalds** wrote the **Linux** kernel in **1991**.
+- **Android** is built on the Linux kernel and is open source, even though most phones add Google's proprietary apps on top.
+
+### Free of cost is not the same as open source
+
+Students mix these up, so keep them apart:
+
+- **Freeware** — free to use, but the code is closed. Google Chrome, Adobe Acrobat Reader, WhatsApp. Free, *not* open source.
+- **Shareware / trial** — free for a limited time or with limited features, then you pay. WinRAR's 40-day trial.
+- **Open source** — the code itself is free and open, whatever the price.`,
+    realWorldAnalogy:
+      'दादी की recipe जो पूरा मोहल्ला जानता है और हर घर अपने हिसाब से बनाता है — open source। Coca-Cola का formula जो तिजोरी में बंद है और सिर्फ bottle बिकती है — proprietary।',
+    importantPoints: [
+      'Open source = source code खुला, आमतौर पर मुफ्त: Linux, LibreOffice, VLC, Firefox, Android।',
+      'Proprietary = code गुप्त, company बेचती है: Windows, MS Office, Photoshop।',
+      'Open-source licence: GNU GPL; proprietary licence: EULA।',
+      'Richard Stallman = FSF (1985); Linus Torvalds = Linux (1991)।',
+      'Freeware (Chrome, Acrobat Reader) मुफ्त है पर open source नहीं।',
     ],
-    "commonMistakes": [
-      "Assuming 'Freeware' and 'Open Source' mean the same thing (Freeware is free in price, but its source code is locked and closed).",
-      "Believing Android is proprietary (Android OS is based on open-source Linux kernel)."
+    commonMistakes: [
+      'Freeware और open source को एक समझना — Chrome मुफ्त है पर उसका code बंद है, इसलिए open source नहीं।',
+      'Android को proprietary लिखना — Android Linux पर बना open-source OS है।',
+      'GPL का full form गलत लिखना — General Public License।',
     ],
-    "examTips": [
-      "Direct CCC Question: 'Is LibreOffice an open-source software?' ➔ True.",
-      "Direct CCC Question: 'Who developed the Linux Kernel?' ➔ Linus Torvalds (1991)."
+    examTips: [
+      '"LibreOffice open-source software है — सही या गलत?" → सही।',
+      '"Linux kernel किसने बनाया?" → Linus Torvalds (1991)।',
+      '"GPL का full form" → General Public License।',
     ],
-    "quickRevision": "Open Source (Linux, LibreOffice) offers free public source code under licenses like GNU GPL. Proprietary (Windows, MS Office) keeps source code closed under EULA. Freeware is free but closed-source.",
-    "practiceAssignment": "Download and install LibreOffice on your PC or view its official website (libreoffice.org) to verify its open-source license information.",
-    "microQuiz": [
-      {
-        "question": "Which of the following software packages is an example of Free and Open Source Software (FOSS)?",
-        "options": [
-          {
-            "id": "A",
-            "text": "Microsoft Windows 11"
-          },
-          {
-            "id": "B",
-            "text": "Adobe Photoshop"
-          },
-          {
-            "id": "C",
-            "text": "LibreOffice Writer"
-          },
-          {
-            "id": "D",
-            "text": "CorelDRAW"
-          }
-        ],
-        "correctAnswer": "C",
-        "explanation": "LibreOffice Writer is free, open-source office software developed by The Document Foundation under the GNU LGPL/MPL licenses."
-      }
-    ]
+    quickRevision:
+      'Open source: code खुला, मुफ्त, GNU GPL — Linux, LibreOffice, VLC, Android (Torvalds 1991, Stallman FSF 1985)। Proprietary: code बंद, EULA — Windows, MS Office। Freeware मुफ्त पर बंद code।',
+    practiceAssignment:
+      'libreoffice.org खोलें और Download page पर देखें कि कोई कीमत नहीं मांगी जाती। फिर अपने computer के 5 programs को open source / proprietary / freeware में बांटें।',
+    microQuiz: [
+      q(
+        'Which of these is open-source software?',
+        ['Microsoft Windows', 'Adobe Photoshop', 'LibreOffice Writer', 'MS Excel'],
+        'C',
+        'LibreOffice is free and its source code is public; the others are proprietary.',
+      ),
+      q(
+        'Google Chrome is free to download but its full source code is not public. It is best described as',
+        ['Open source', 'Freeware', 'Shareware', 'Firmware'],
+        'B',
+        'Free to use with closed code is freeware. Open source means the code itself is open.',
+      ),
+    ],
   },
+
+  /* ============================================ 8. Mobile apps =========== */
   {
-    "chapterNumber": 1,
-    "topicNumber": 8,
-    "slug": "mobile-apps-and-ecosystem",
-    "title": "Mobile Apps and Mobile Operating Systems",
-    "hindiTitle": "मोबाइल एप्स एवं उनका इकोसिस्टम",
-    "definitionEnglish": "A mobile application (mobile app) is software designed specifically to run on handheld wireless mobile devices like smartphones and tablets, powered by dedicated mobile operating systems such as Android and iOS.",
-    "definitionHindi": "मोबाइल एप्लीकेशन (मोबाइल ऐप) स्मार्टफोन और टैबलेट जैसे पोर्टेबल उपकरणों पर चलने के लिए डिज़ाइन किया गया सॉफ्टवेयर है, जो एंड्रॉइड (Android) और आईओएस (iOS) जैसे मोबाइल ऑपरेटिंग सिस्टम पर कार्य करता है।",
-    "simpleWords": "मोबाइल ऐप स्मार्टफोन पर चलने वाले छोटे प्रोग्राम होते हैं जिन्हें हम Google Play Store या Apple App Store से डाउनलोड करते हैं।",
-    "examImportance": "Medium (1-2 questions on mobile operating systems, Android, iOS, and app store ecosystems)",
-    "detailedExplanation": "### 1. Major Mobile Operating Systems\n1. **Android OS:**\n   - Developed by Google and the Open Handset Alliance; built upon an open-source **Linux Kernel**.\n   - World's most widely used mobile OS (~70%+ global market share).\n   - Official App Repository: **Google Play Store**.\n   - App File Package Format: **`.apk` (Android Package Kit)** and modern **`.aab` (Android App Bundle)**.\n2. **Apple iOS:**\n   - Proprietary closed-source mobile operating system developed exclusively by Apple Inc. for iPhones.\n   - Built on Darwin/Mach Unix-like architecture.\n   - Official App Repository: **Apple App Store**.\n   - App File Package Format: **`.ipa` (iOS App Store Package)**.\n\n### 2. Classification of Mobile Applications\n- **Native Apps:** Written specifically for a single operating system platform using platform languages (Java/Kotlin for Android, Swift for iOS). Offers fastest performance and complete access to hardware sensors (camera, GPS, accelerometer).\n- **Web Apps (Mobile Websites / PWAs):** Responsive web applications built with HTML5, CSS3, and JavaScript that run inside mobile web browsers without local app store installation.\n- **Hybrid Apps:** Cross-platform applications built with web technologies wrapped inside a native container shell (Flutter, React Native) that deploy to both Android and iOS from a single unified codebase.\n\n### 3. Mobile App Permissions & Security\n- Modern mobile OS enforce granular permission sandboxing: Apps must explicitly request user permission before accessing the Camera, Microphone, GPS Location, Contacts, or Storage.",
-    "realWorldAnalogy": "A native app is like an Italian chef cooking directly in Italy with local ingredients, while a web app is like ordering Italian food delivered from a website.",
-    "importantPoints": [
-      "Android is an open-source mobile OS developed by Google, based on the Linux kernel.",
-      "Android application installation files use the .apk (Android Package Kit) file extension.",
-      "iOS is a proprietary mobile OS developed exclusively by Apple Inc.",
-      "Google Play Store and Apple App Store are the official digital distribution platforms."
+    chapterNumber: 1,
+    topicNumber: 8,
+    slug: 'mobile-apps-and-ecosystem',
+    title: 'Mobile Apps and Mobile Operating Systems',
+    hindiTitle: 'मोबाइल ऐप्स और मोबाइल ऑपरेटिंग सिस्टम',
+    definitionEnglish:
+      'A mobile app is a program made to run on a smartphone or tablet. Apps run on a mobile operating system — mainly Android or iOS — and are installed from an app store.',
+    definitionHindi:
+      'Mobile app वह program है जो smartphone या tablet पर चलने के लिए बना है। Apps mobile operating system — मुख्यतः Android या iOS — पर चलते हैं और app store से install किए जाते हैं।',
+    simpleWords:
+      'WhatsApp, Paytm, YouTube — ये apps हैं। Phone में जो चीज़ इन सबको चलाती है वह mobile OS है: ज़्यादातर phones में Android, iPhone में iOS। Play Store वह दुकान है जहां से apps मिलते हैं।',
+    examImportance: 'Medium (1–2 questions on Android, iOS and app file types)',
+    detailedExplanation: `### Two operating systems run almost every phone
+
+| | Android | iOS |
+|---|---|---|
+| Made by | Google | Apple |
+| Runs on | Phones from many companies — Samsung, Xiaomi, Vivo, OnePlus and others | Only Apple's iPhone and iPad |
+| Open or closed | Open source, built on the Linux kernel | Proprietary |
+| App store | Google Play Store | Apple App Store |
+| App file type | **.apk** (Android Package) | **.ipa** |
+
+Because Android is open source and runs on cheap phones from many makers, it is by far the most common mobile OS in India.
+
+### Kinds of apps
+
+- **Native apps** are built for one OS and installed on the phone — WhatsApp, Google Pay. They are fast and can use everything the phone has: camera, GPS, contacts.
+- **Web apps** are websites designed to work like an app in the phone's browser — nothing to install. IRCTC's site on your phone, for example.
+- **Hybrid apps** are built once with web technology and packaged to run on both Android and iOS.
+
+### Permissions — what an app is allowed to touch
+
+An app cannot use your camera, microphone, location or contacts unless you allow it. The phone asks the first time, and you can change your answer later in Settings → Apps → Permissions. Check this occasionally: a torch app does not need your contacts.
+
+### Installing safely
+
+Install apps only from the official store. An **.apk** file downloaded from a random website can carry malware — this is the most common way phones get infected. Keep the OS and apps updated; updates fix security holes.`,
+    realWorldAnalogy:
+      'Mobile OS घर की नींव और बिजली-पानी है; apps उसमें रखे उपकरण — mixer, TV, fridge। App store वह भरोसेमंद दुकान है जहां से उपकरण खरीदते हैं; सड़क से उठाया उपकरण (unknown .apk) खतरनाक हो सकता है।',
+    importantPoints: [
+      'Android Google का है, open source, Linux kernel पर बना; iOS Apple का है, proprietary।',
+      'Android apps .apk file होते हैं और Google Play Store से मिलते हैं; iOS apps .ipa, App Store से।',
+      'App के प्रकार: native (install होता है), web app (browser में चलता है), hybrid (दोनों OS पर एक code)।',
+      'Camera, location, contacts जैसी चीज़ें app को permission देने पर ही मिलती हैं।',
+      'Official store के बाहर से .apk install करना virus का सबसे आम रास्ता है।',
     ],
-    "commonMistakes": [
-      "Thinking Android is developed by Apple and iOS by Google (Android is by Google; iOS is by Apple).",
-      "Believing .exe files can be installed directly on Android smartphones (.exe is for Windows; Android uses .apk)."
+    commonMistakes: [
+      'Android को Apple का और iOS को Google का बता देना — Android = Google, iOS = Apple।',
+      'यह सोचना कि .exe file phone पर install हो जाएगी — .exe Windows की है; Android .apk लेता है।',
     ],
-    "examTips": [
-      "Direct CCC Question: 'Android is based on which operating system kernel?' ➔ Linux Kernel.",
-      "Direct CCC Question: 'What is the file extension of an Android application package?' ➔ .apk."
+    examTips: [
+      '"Android किस kernel पर आधारित है?" → Linux।',
+      '"Android app की file extension" → .apk।',
+      '"iPhone का operating system" → iOS।',
     ],
-    "quickRevision": "Mobile OS include Android (Google, Linux-based, .apk format) and iOS (Apple, proprietary, .ipa format). App categories include Native, Web (PWA), and Hybrid.",
-    "practiceAssignment": "Open your smartphone settings, navigate to App Permissions, and check which apps have access to your Camera and Location.",
-    "microQuiz": [
-      {
-        "question": "What is the standard file extension used for installing applications on the Android operating system?",
-        "options": [
-          {
-            "id": "A",
-            "text": ".exe"
-          },
-          {
-            "id": "B",
-            "text": ".apk"
-          },
-          {
-            "id": "C",
-            "text": ".odt"
-          },
-          {
-            "id": "D",
-            "text": ".docx"
-          }
-        ],
-        "correctAnswer": "B",
-        "explanation": "Android applications are packaged and distributed in .apk (Android Package Kit) archive files."
-      }
-    ]
-  }
+    quickRevision:
+      'Mobile OS: Android (Google, open source, Linux, .apk, Play Store) और iOS (Apple, proprietary, .ipa, App Store)। Apps native / web / hybrid। Permissions से app की पहुंच तय होती है; apps सिर्फ official store से।',
+    practiceAssignment:
+      'Phone में Settings → Apps में जाकर कोई तीन apps खोलें और उनकी Permissions देखें। जिस app को उसके काम के लिए ज़रूरत न हो ऐसी कोई permission (जैसे torch को contacts) मिली हो तो बंद करें।',
+    microQuiz: [
+      q(
+        'The file extension of an Android app package is',
+        ['.exe', '.apk', '.ipa', '.docx'],
+        'B',
+        'Android uses .apk; iOS uses .ipa; .exe is a Windows program.',
+      ),
+      q(
+        'Which statement about Android is correct?',
+        ['It is made by Apple', 'It runs only on Samsung phones', 'It is open source and based on the Linux kernel', 'Its apps come from the Apple App Store'],
+        'C',
+        'Android is Google\'s open-source OS built on Linux; it runs on phones from many manufacturers.',
+      ),
+    ],
+  },
 ];

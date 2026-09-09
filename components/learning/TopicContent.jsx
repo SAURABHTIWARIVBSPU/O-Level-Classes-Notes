@@ -94,18 +94,18 @@ export default function TopicContent({ topic, prevTopic, nextTopic, related = []
     if (topic.whyImportant) add('why-it-matters', 'Why it matters');
 
     if (topic.detailedExplanation) {
-      add('explanation', 'Detailed explanation');
+      add('explanation', 'Understanding it properly');
       for (const h of extractHeadings(topic.detailedExplanation, 3)) {
         items.push({ ...h, depth: Math.max(3, h.depth) });
       }
     }
 
-    if (topic.syntax || topic.codeExample || topic.lineByLine?.length) add('code', 'Syntax & example');
-    if (topic.importantPoints?.length) add('key-points', 'Key points');
-    if (topic.commonMistakes?.length) add('mistakes', 'Common mistakes');
-    if (topic.examPerspective) add('exam', 'Exam perspective');
+    if (topic.syntax || topic.codeExample || topic.lineByLine?.length) add('code', 'See it in code');
+    if (topic.importantPoints?.length) add('key-points', 'Remember these');
+    if (topic.commonMistakes?.length) add('mistakes', 'Where students slip');
+    if (topic.examPerspective) add('exam', 'How the exam asks it');
     if (topic.quickRevision) add('revision', 'Quick revision');
-    if (topic.practiceTask) add('practice', 'Practice');
+    if (topic.practiceTask) add('practice', 'Try it yourself');
     if (topic.mcqs?.length) add('check', 'Check yourself');
     return items;
   }, [topic]);
@@ -243,14 +243,14 @@ export default function TopicContent({ topic, prevTopic, nextTopic, related = []
 
               {/* Detailed explanation */}
               {topic.detailedExplanation ? (
-                <Section id="explanation" title="Detailed explanation">
+                <Section id="explanation" title="Understanding it properly">
                   <MarkdownRenderer content={topic.detailedExplanation} className="prose-notes" />
                 </Section>
               ) : null}
 
               {/* Syntax → code → output → explanation */}
               {(topic.syntax || topic.codeExample || topic.lineByLine?.length) ? (
-                <Section id="code" title="Syntax & example">
+                <Section id="code" title="See it in code">
                   {topic.syntax ? (
                     <CodeBlock code={topic.syntax} language="text" title="Syntax" className="mb-4" />
                   ) : null}
@@ -274,7 +274,7 @@ export default function TopicContent({ topic, prevTopic, nextTopic, related = []
 
               {/* Key points */}
               {topic.importantPoints?.length ? (
-                <Section id="key-points" title="Key points" icon={ListChecks}>
+                <Section id="key-points" title="Remember these" icon={ListChecks}>
                   <ul className="space-y-2.5">
                     {topic.importantPoints.map((point, i) => (
                       <li key={i} className="flex gap-2.5">
@@ -288,7 +288,7 @@ export default function TopicContent({ topic, prevTopic, nextTopic, related = []
 
               {/* Common mistakes */}
               {topic.commonMistakes?.length ? (
-                <Section id="mistakes" title="Common mistakes">
+                <Section id="mistakes" title="Where students slip">
                   <Callout kind="danger" label="Students often get this wrong">
                     <ul className="space-y-2">
                       {topic.commonMistakes.map((m, i) => (
@@ -301,7 +301,7 @@ export default function TopicContent({ topic, prevTopic, nextTopic, related = []
 
               {/* Exam perspective */}
               {topic.examPerspective ? (
-                <Section id="exam" title="Exam perspective">
+                <Section id="exam" title="How the exam asks it">
                   <Callout kind="exam" label="How this is asked">
                     <p className="hindi-text">{topic.examPerspective}</p>
                   </Callout>
@@ -319,7 +319,7 @@ export default function TopicContent({ topic, prevTopic, nextTopic, related = []
 
               {/* Practice */}
               {topic.practiceTask ? (
-                <Section id="practice" title="Practice">
+                <Section id="practice" title="Try it yourself">
                   <TryItYourself
                     task={topic.practiceTask}
                     hints={topic.hints || []}
