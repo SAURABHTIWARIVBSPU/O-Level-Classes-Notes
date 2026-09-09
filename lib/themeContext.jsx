@@ -1,41 +1,48 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
-const ThemeContext = createContext();
+const ThemeContext = createContext(null);
+const STORAGE_KEY = 'olevel_theme_pref';
 
 export function ThemeProvider({ children }) {
+  // Start from whatever the pre-paint bootstrap script already decided, so the
+  // first client render matches the DOM and nothing flashes.
   const [theme, setTheme] = useState('light');
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    try {
-      const savedTheme = localStorage.getItem('olevel_theme_pref');
-      if (savedTheme === 'dark') {
-        setTheme('dark');
-        document.documentElement.classList.add('dark');
-      } else {
-        // default clean white light theme
-        setTheme('light');
-        document.documentElement.classList.remove('dark');
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    const isDark = document.documentElement.classList.contains('dark');
+    setTheme(isDark ? 'dark' : 'light');
+    setMounted(true);
+
+    // Follow the OS only while the user has expressed no preference of their own.
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const onChange = (e) => {
+      try {
+        if (localStorage.getItem(STORAGE_KEY)) return;
+      } catch { /* storage blocked — fall through and follow the OS */ }
+      document.documentElement.classList.toggle('dark', e.matches);
+      setTheme(e.matches ? 'dark' : 'light');
+    };
+    mq.addEventListener?.('change', onChange);
+    return () => mq.removeEventListener?.('change', onChange);
   }, []);
 
-  const toggleTheme = () => {
-    const nextTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(nextTheme);
-    document.documentElement.classList.toggle('dark', nextTheme === 'dark');
+  const applyTheme = useCallback((next) => {
+    setTheme(next);
+    document.documentElement.classList.toggle('dark', next === 'dark');
     try {
-      localStorage.setItem('olevel_theme_pref', nextTheme);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+      localStorage.setItem(STORAGE_KEY, next);
+    } catch { /* private mode — the choice just won't persist */ }
+  }, []);
+
+  const toggleTheme = useCallback(() => {
+    applyTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark');
+  }, [applyTheme]);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme: applyTheme, toggleTheme, mounted }}>
       {children}
     </ThemeContext.Provider>
   );

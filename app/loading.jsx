@@ -1,26 +1,39 @@
 import React from 'react';
 
-export default function GlobalLoading() {
+/**
+ * A skeleton in the shape of a real page — header, then a text column —
+ * rather than a spinner in an empty viewport. It keeps the layout stable so
+ * nothing jumps when the content arrives.
+ */
+export default function Loading() {
   return (
-    <div className="max-w-5xl mx-auto py-12 px-4 space-y-6 animate-pulse">
-      {/* Header skeleton */}
-      <div className="space-y-3 pb-6 border-b border-appborder">
-        <div className="h-4 w-32 bg-slate-200 dark:bg-slate-800 rounded-lg" />
-        <div className="h-9 w-3/4 max-w-lg bg-slate-200 dark:bg-slate-800 rounded-xl" />
-        <div className="h-4 w-full max-w-xl bg-slate-200 dark:bg-slate-800 rounded-lg" />
+    <div className="shell py-8 sm:py-10" role="status" aria-label="Loading">
+      <span className="sr-only">Loading…</span>
+
+      <div className="pb-6 mb-8 border-b border-line">
+        <div className="skeleton h-3 w-24 mb-4" />
+        <div className="skeleton h-8 w-3/4 max-w-lg mb-3" />
+        <div className="skeleton h-4 w-1/2 max-w-sm" />
       </div>
 
-      {/* Content cards skeleton */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-4">
-        <div className="h-40 rounded-2xl bg-white dark:bg-slate-900 border border-appborder p-6 space-y-3">
-          <div className="h-4 w-24 bg-slate-200 dark:bg-slate-800 rounded" />
-          <div className="h-6 w-48 bg-slate-200 dark:bg-slate-800 rounded" />
-          <div className="h-12 w-full bg-slate-100 dark:bg-slate-800/60 rounded-xl" />
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_13rem]">
+        <div className="max-w-measure space-y-8">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="space-y-2.5">
+              <div className="skeleton h-5 w-40" />
+              <div className="skeleton h-3.5 w-full" />
+              <div className="skeleton h-3.5 w-full" />
+              <div className="skeleton h-3.5 w-11/12" />
+              <div className="skeleton h-3.5 w-3/5" />
+            </div>
+          ))}
         </div>
-        <div className="h-40 rounded-2xl bg-white dark:bg-slate-900 border border-appborder p-6 space-y-3">
-          <div className="h-4 w-24 bg-slate-200 dark:bg-slate-800 rounded" />
-          <div className="h-6 w-48 bg-slate-200 dark:bg-slate-800 rounded" />
-          <div className="h-12 w-full bg-slate-100 dark:bg-slate-800/60 rounded-xl" />
+
+        <div className="hidden lg:block space-y-2">
+          <div className="skeleton h-3 w-20 mb-3" />
+          {[0, 1, 2, 3, 4].map((i) => (
+            <div key={i} className="skeleton h-3 w-full" style={{ opacity: 1 - i * 0.12 }} />
+          ))}
         </div>
       </div>
     </div>

@@ -2,259 +2,125 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { 
-  BookOpen, 
-  GraduationCap, 
-  ShieldCheck, 
-  Heart, 
-  Presentation, 
-  Terminal, 
-  BookMarked,
-  HelpCircle,
-  Award,
-  FileText,
-  Columns,
-  Code2,
-  FolderGit2,
-  Flame,
-  Search,
-  ArrowUp,
-  Sparkles,
-  ExternalLink,
-  Laptop
-} from 'lucide-react';
-import { unitsData } from '@/data/syllabusData';
-import { cccChaptersData } from '@/data/cccSyllabusData';
-import { useFullscreen } from '@/lib/fullscreenContext';
+import { GraduationCap, ArrowUpRight } from 'lucide-react';
+import { COURSES, OLEVEL_NAV, CCC_NAV, getModules } from '@/lib/navigation';
 
+/**
+ * A product footer: a genuine second navigation surface for students who
+ * reached the bottom of a page, not a decorative strip.
+ */
 export default function Footer() {
-  const { isFullscreen } = useFullscreen();
+  const year = new Date().getFullYear();
+  const olevelUnits = getModules('olevel');
+  const cccChapters = getModules('ccc');
 
-  const scrollToTop = () => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
+  const Column = ({ title, children }) => (
+    <div>
+      <h2 className="eyebrow mb-3">{title}</h2>
+      {children}
+    </div>
+  );
 
-  if (isFullscreen) {
-    return null;
-  }
-
-  const highYieldTopics = [
-    { title: 'CCC Ch 1: Computer & Hardware', href: '/ccc/chapters/chapter-1' },
-    { title: 'CCC Ch 3: LibreOffice Writer', href: '/ccc/chapters/chapter-3' },
-    { title: 'CCC Ch 4: LibreOffice Calc', href: '/ccc/chapters/chapter-4' },
-    { title: 'CCC Ch 5: LibreOffice Impress', href: '/ccc/chapters/chapter-5' },
-    { title: 'CCC Ch 8: UPI & Digital Banking', href: '/ccc/chapters/chapter-8' },
-    { title: 'CCC 100-Mark Mock Test', href: '/ccc/mock-test' },
-    { title: 'O-Level HTML DOM Tree', href: '/units/unit-3/topics/head-section-and-elements' },
-    { title: 'O-Level CSS Box Model', href: '/units/unit-4/topics/introduction-to-css' },
-    { title: 'O-Level JavaScript Events', href: '/units/unit-6/topics/client-side-scripting-intro' }
-  ];
+  const linkClass = 'block py-1 text-base text-ink-2 hover:text-ink transition-colors';
 
   return (
-    <footer className="border-t border-appborder bg-white dark:bg-darkbg text-slate-700 dark:text-slate-300 transition-colors duration-200 mt-20">
-      
-      {/* ================= 1. PRIMARY MULTI-COLUMN NAVIGATION ================= */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-8">
-          
-          {/* Brand & Accreditation Column (Span 4) */}
-          <div className="lg:col-span-4 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="h-10 bg-white p-1 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs flex items-center">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img 
-                  src="/logo.png" 
-                  alt="MSITM Logo" 
-                  className="h-8 w-auto object-contain"
-                />
-              </div>
-              <div>
-                <span className="font-black text-base tracking-tight text-slate-900 dark:text-white block">
-                  NIELIT Learning Studio
-                </span>
-                <span className="text-[11px] font-mono text-brand-600 dark:text-brand-400 font-bold block">
-                  O-LEVEL (M2-R5.1) &amp; CCC (REVISION 3)
-                </span>
-              </div>
-            </div>
+    <footer className="mt-20 border-t border-line bg-surface no-print">
+      <div className="shell shell-wide py-12">
+        <div className="grid gap-10 lg:grid-cols-12">
 
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-sm">
-              The premier bilingual interactive learning platform for 
-              <strong> NIELIT O-Level (Web Designing)</strong> &amp; 
-              <strong> CCC (Course on Computer Concepts)</strong>. Complete 18-part notes, digital whiteboard, live sandbox, and exam simulators.
+          {/* Identity */}
+          <div className="lg:col-span-4">
+            <Link href="/" className="inline-flex items-center gap-2 mb-3">
+              <span className="w-7 h-7 rounded-lg bg-ink grid place-items-center">
+                <GraduationCap className="w-4 h-4 text-ink-inv" aria-hidden="true" />
+              </span>
+              <span className="text-base font-semibold text-ink">NIELIT Learning Platform</span>
+            </Link>
+            <p className="text-base text-ink-3 leading-relaxed max-w-sm">
+              Bilingual notes, comparisons, one-liners and exam practice for the NIELIT
+              O&nbsp;Level M2-R5.1 and CCC syllabi — written for students who revise on a phone.
             </p>
-
-            {/* Dual Course Badges */}
-            <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400">
-              <Link href="/" className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-appborder px-2.5 py-1 rounded-lg shadow-2xs font-mono text-[11px] hover:text-brand-600">
-                <GraduationCap className="w-3.5 h-3.5 text-brand-600" />
-                O-Level M2-R5.1 (120h)
-              </Link>
-              <Link href="/ccc" className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-appborder px-2.5 py-1 rounded-lg shadow-2xs font-mono text-[11px] hover:text-brand-600">
-                <Laptop className="w-3.5 h-3.5 text-accent-blue" />
-                CCC Course (80h)
-              </Link>
-            </div>
+            <p className="mt-4 text-xs text-ink-4 leading-relaxed max-w-sm">
+              An independent study resource. Not affiliated with or endorsed by NIELIT.
+              Always confirm the current syllabus and exam pattern on the official NIELIT website.
+            </p>
           </div>
 
-          {/* CCC Modules 01 - 09 (Span 3) */}
-          <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono flex items-center gap-1.5">
-              <Laptop className="w-3.5 h-3.5 text-accent-blue" />
-              <span>CCC Modules (80H)</span>
-            </h4>
-            <ul className="space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
-              <li>
-                <Link href="/ccc/chapters/chapter-1" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors block">
-                  Ch 1: Intro to Computer &amp; Hardware
-                </Link>
-              </li>
-              <li>
-                <Link href="/ccc/chapters/chapter-2" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors block">
-                  Ch 2: Operating System (Linux/Windows)
-                </Link>
-              </li>
-              <li>
-                <Link href="/ccc/chapters/chapter-3" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors block">
-                  Ch 3: LibreOffice Writer (.odt)
-                </Link>
-              </li>
-              <li>
-                <Link href="/ccc/chapters/chapter-4" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors block">
-                  Ch 4: LibreOffice Calc (.ods)
-                </Link>
-              </li>
-              <li>
-                <Link href="/ccc/chapters/chapter-5" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors block">
-                  Ch 5: LibreOffice Impress (.odp)
-                </Link>
-              </li>
-              <li>
-                <Link href="/ccc/chapters/chapter-8" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors block">
-                  Ch 8: UPI, AEPS &amp; Net Banking
-                </Link>
-              </li>
-              <li className="pt-1">
-                <Link href="/ccc/syllabus" className="font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1">
-                  <span>80H CCC Blueprint</span>
-                  <ExternalLink className="w-3 h-3" />
-                </Link>
-              </li>
-            </ul>
+          {/* O Level */}
+          <div className="lg:col-span-2">
+            <Column title="O Level">
+              <nav aria-label="O Level">
+                {OLEVEL_NAV.flatMap((g) => g.items).slice(0, 7).map((item) => (
+                  <Link key={item.href} href={item.href} className={linkClass}>{item.label}</Link>
+                ))}
+              </nav>
+            </Column>
           </div>
 
-          {/* O-Level M2-R5.1 Units (Span 2) */}
-          <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5 text-brand-600" />
-              <span>O-Level Units</span>
-            </h4>
-            <ul className="space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
-              {unitsData.slice(0, 5).map((unit) => (
-                <li key={unit.slug}>
-                  <Link 
-                    href={`/units/${unit.slug}`} 
-                    className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors block"
-                  >
-                    U0{unit.unitNumber}: {unit.title}
+          {/* CCC */}
+          <div className="lg:col-span-2">
+            <Column title="CCC">
+              <nav aria-label="CCC">
+                <Link href="/ccc" className={linkClass}>CCC home</Link>
+                {CCC_NAV.flatMap((g) => g.items).map((item) => (
+                  <Link key={item.href} href={item.href} className={linkClass}>{item.label}</Link>
+                ))}
+              </nav>
+            </Column>
+          </div>
+
+          {/* Units */}
+          <div className="lg:col-span-2">
+            <Column title="O Level units">
+              <nav aria-label="O Level units">
+                {olevelUnits.map((u) => (
+                  <Link key={u.key} href={u.href} className={`${linkClass} truncate`}>
+                    <span className="font-mono text-xs text-ink-4 mr-1.5">{u.number}</span>
+                    {u.title}
                   </Link>
-                </li>
-              ))}
-              <li className="pt-1">
-                <Link href="/syllabus" className="font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1">
-                  <span>100M O-Level Blueprint</span>
-                  <ExternalLink className="w-3 h-3" />
-                </Link>
-              </li>
-            </ul>
+                ))}
+              </nav>
+            </Column>
           </div>
 
-          {/* Practice, MCQs & Mock Simulators (Span 3) */}
-          <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono flex items-center gap-1.5">
-              <Award className="w-3.5 h-3.5 text-amber-500" />
-              <span>Exams &amp; Simulators</span>
-            </h4>
-            <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-400">
-              <li>
-                <Link href="/ccc/mock-test" className="hover:text-amber-600 dark:hover:text-amber-400 transition-colors flex items-center gap-1.5">
-                  <Award className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                  <span>CCC 100-Mark Mock Exam</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/ccc/mcqs" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1.5">
-                  <HelpCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                  <span>CCC 200+ Chapter MCQs</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/ccc/cheat-sheets" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-1.5">
-                  <Code2 className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
-                  <span>LibreOffice Shortcuts</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/classroom" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors flex items-center gap-1.5">
-                  <Presentation className="w-3.5 h-3.5 text-brand-500 shrink-0" />
-                  <span>Digital Board Classroom</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/playground" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors flex items-center gap-1.5">
-                  <Terminal className="w-3.5 h-3.5 text-sky-500 shrink-0" />
-                  <span>Live Code Sandbox</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-        </div>
-
-        {/* ================= 2. HIGH-YIELD TOPICS REDIRECT STRIP ================= */}
-        <div className="mt-10 pt-6 border-t border-slate-200 dark:border-slate-800 space-y-2.5">
-          <div className="flex items-center gap-2 text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span>POPULAR EXAM TOPIC REDIRECTS:</span>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {highYieldTopics.map((topic) => (
-              <Link
-                key={topic.title}
-                href={topic.href}
-                className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 border border-appborder text-[11px] font-medium text-slate-600 dark:text-slate-400 hover:text-brand-600 hover:border-brand-500 transition-colors shadow-2xs"
-              >
-                {topic.title} →
-              </Link>
-            ))}
+          {/* Chapters */}
+          <div className="lg:col-span-2">
+            <Column title="CCC chapters">
+              <nav aria-label="CCC chapters">
+                {cccChapters.map((c) => (
+                  <Link key={c.key} href={c.href} className={`${linkClass} truncate`}>
+                    <span className="font-mono text-xs text-ink-4 mr-1.5">{c.number}</span>
+                    {c.title}
+                  </Link>
+                ))}
+              </nav>
+            </Column>
           </div>
         </div>
+      </div>
 
-        {/* ================= 3. BOTTOM COPYRIGHT & ACCREDITATION STRIP ================= */}
-        <div className="border-t border-slate-200 dark:border-slate-800 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 dark:text-slate-400 gap-4">
-          <div className="space-y-1 text-center sm:text-left">
-            <p className="font-semibold text-slate-700 dark:text-slate-300">
-              © 2026 NIELIT Standard Learning Portal • O-Level (M2-R5.1) &amp; CCC (Course on Computer Concepts)
-            </p>
-            <p className="text-[11px] text-slate-400 dark:text-slate-500">
-              National Institute of Electronics &amp; Information Technology (NIELIT) Open Educational Platform.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <button
-              onClick={scrollToTop}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all shadow-2xs"
+      <div className="border-t border-line">
+        <div className="shell shell-wide py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <p className="text-xs text-ink-4">
+            © {year} NIELIT Learning Platform. Study material for educational use.
+          </p>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <Link href="/syllabus" className="text-xs text-ink-3 hover:text-ink transition-colors">O Level syllabus</Link>
+            <Link href="/ccc/syllabus" className="text-xs text-ink-3 hover:text-ink transition-colors">CCC syllabus</Link>
+            <a
+              href="https://www.nielit.gov.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-ink-3 hover:text-ink transition-colors"
             >
-              <span>Back to top</span>
-              <ArrowUp className="w-3.5 h-3.5" />
-            </button>
+              Official NIELIT site
+              <ArrowUpRight className="w-3 h-3" aria-hidden="true" />
+            </a>
           </div>
         </div>
-
       </div>
     </footer>
   );
 }
+
+export { COURSES };

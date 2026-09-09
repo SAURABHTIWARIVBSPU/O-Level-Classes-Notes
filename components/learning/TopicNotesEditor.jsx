@@ -1,102 +1,116 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { NotebookPen, Check, Trash2, ChevronDown } from 'lucide-react';
 import { useProgress } from '@/lib/progressContext';
-import { Edit3, Check, Trash2, BookMarked } from 'lucide-react';
+import { Button } from '@/components/ui';
 
+/**
+ * A place for the student's own words — mnemonics, doubts, what the teacher
+ * said. Stored per topic in this browser only.
+ *
+ * Deleting asks for confirmation inline rather than through window.confirm(),
+ * which cannot be styled, translated, or dismissed with the keyboard reliably.
+ */
 export default function TopicNotesEditor({ topicSlug, topicTitle }) {
   const { saveNote, getNote, deleteNote } = useProgress();
-  const [noteText, setNoteText] = useState('');
-  const [savedStatus, setSavedStatus] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [text, setText] = useState('');
+  const [open, setOpen] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const keepRef = useRef(null);
 
   useEffect(() => {
-    if (topicSlug) {
-      setNoteText(getNote(topicSlug));
-    }
+    if (topicSlug) setText(getNote(topicSlug));
   }, [topicSlug, getNote]);
 
-  const handleSave = () => {
-    if (!topicSlug) return;
-    saveNote(topicSlug, noteText);
-    setSavedStatus(true);
-    setTimeout(() => setSavedStatus(false), 2000);
+  useEffect(() => {
+    if (confirming) keepRef.current?.focus();
+  }, [confirming]);
+
+  const hasNote = Boolean(text.trim());
+
+  const save = () => {
+    saveNote(topicSlug, text);
+    setJustSaved(true);
+    setTimeout(() => setJustSaved(false), 2000);
   };
 
-  const handleDelete = () => {
-    if (!topicSlug) return;
-    if (confirm('Clear your personal study notes for this topic?')) {
-      deleteNote(topicSlug);
-      setNoteText('');
-    }
+  const remove = () => {
+    deleteNote(topicSlug);
+    setText('');
+    setConfirming(false);
   };
 
   return (
-    <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-sm my-6 text-xs">
-      
-      {/* Header Bar */}
+    <section className="panel overflow-hidden">
       <button
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/60 flex items-center justify-between transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-controls="topic-notes-body"
+        className="w-full px-4 py-3 flex items-center justify-between gap-3 text-left hover:bg-sunken transition-colors"
       >
-        <div className="flex items-center gap-2 font-bold text-slate-800 dark:text-slate-200">
-          <BookMarked className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-          <span>My Personal Study Notes (व्यक्तिगत नोट्स)</span>
-          {noteText && (
-            <span className="w-2 h-2 rounded-full bg-purple-500 inline-block" />
-          )}
-        </div>
-        <span className="text-[11px] text-slate-400 font-medium">
-          {isExpanded ? 'Collapse' : noteText ? 'View saved notes' : 'Click to write personal notes'}
+        <span className="flex items-center gap-2 min-w-0">
+          <NotebookPen className="w-4 h-4 text-ink-3 shrink-0" aria-hidden="true" />
+          <span className="text-base font-medium text-ink">My notes</span>
+          {hasNote ? <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" aria-label="You have notes on this topic" /> : null}
+        </span>
+        <span className="flex items-center gap-2 shrink-0">
+          <span className="hidden sm:inline text-sm text-ink-4">
+            {hasNote ? 'View or edit' : 'Add your own notes'}
+          </span>
+          <ChevronDown className={`w-4 h-4 text-ink-3 transition-transform duration-fast ${open ? 'rotate-180' : ''}`} aria-hidden="true" />
         </span>
       </button>
 
-      {/* Editor Body */}
-      {isExpanded && (
-        <div className="p-4 space-y-3 border-t border-slate-200 dark:border-slate-800">
-          <p className="text-slate-500 dark:text-slate-400 text-[11px]">
-            Write your own mnemonics, doubts, or teacher tips for <strong className="text-slate-700 dark:text-slate-300">{topicTitle}</strong>. Saved automatically on this device.
-          </p>
+      {open ? (
+        <div id="topic-notes-body" className="p-4 border-t border-line space-y-3">
+          <label htmlFor="topic-note" className="block text-sm text-ink-3">
+            Mnemonics, doubts or teacher tips for <span className="text-ink-2 font-medium">{topicTitle}</span>.
+            Saved on this device only.
+          </label>
 
           <textarea
-            value={noteText}
-            onChange={(e) => setNoteText(e.target.value)}
-            rows={4}
-            placeholder="Type your personal exam notes here..."
-            className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs focus:outline-none focus:ring-2 focus:ring-purple-500 font-sans leading-relaxed resize-y"
+            id="topic-note"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            rows={5}
+            placeholder="Type your notes…"
+            className="input h-auto py-2.5 resize-y leading-relaxed"
           />
 
-          <div className="flex items-center justify-between gap-2 pt-1">
-            <span className="text-[11px] text-slate-400">
-              {savedStatus && (
-                <span className="text-emerald-600 font-bold flex items-center gap-1">
-                  <Check className="w-3.5 h-3.5" /> Note saved successfully!
-                </span>
-              )}
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="text-sm text-ok inline-flex items-center gap-1.5" aria-live="polite">
+              {justSaved ? (<><Check className="w-3.5 h-3.5" aria-hidden="true" /> Saved</>) : null}
             </span>
 
             <div className="flex items-center gap-2">
-              {noteText && (
-                <button
-                  onClick={handleDelete}
-                  className="px-3 py-1.5 rounded-lg text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 font-bold transition-colors"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
+              {confirming ? (
+                <>
+                  <span className="text-sm text-ink-2">Delete these notes?</span>
+                  <button ref={keepRef} type="button" className="btn btn-secondary btn-sm" onClick={() => setConfirming(false)}>Keep</button>
+                  <Button size="sm" variant="ghost" className="text-danger" onClick={remove}>Delete</Button>
+                </>
+              ) : (
+                <>
+                  {hasNote ? (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      icon={Trash2}
+                      iconOnly
+                      onClick={() => setConfirming(true)}
+                      aria-label="Delete these notes"
+                    />
+                  ) : null}
+                  <Button size="sm" variant="primary" onClick={save}>Save notes</Button>
+                </>
               )}
-
-              <button
-                onClick={handleSave}
-                className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold transition-all shadow-sm"
-              >
-                <Edit3 className="w-3.5 h-3.5" />
-                <span>Save Note</span>
-              </button>
             </div>
           </div>
         </div>
-      )}
-
-    </div>
+      ) : null}
+    </section>
   );
 }

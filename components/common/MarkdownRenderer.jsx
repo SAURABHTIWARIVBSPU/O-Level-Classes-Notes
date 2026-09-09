@@ -1,267 +1,227 @@
 'use client';
 
-import React, { useMemo, useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { marked } from 'marked';
-
-// Helper to generate URL-safe slugs for headings
-function slugify(text) {
-  return String(text || '')
-    .toLowerCase()
-    .replace(/<[^>]*>/g, '')
-    .replace(/[^\w\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-');
-}
+import { highlight, escapeHtml, languageLabel } from '@/lib/highlight';
 
 /**
- * Creates custom marked renderer configured with instructional design standards.
- * Supports both Marked v18 token object parameters and legacy signatures.
+ * Renders note bodies — markdown strings, and the structured objects some data
+ * files use — into semantic HTML.
+ *
+ * The important change from the previous version: this emits **plain semantic
+ * elements**. All typography, spacing, colour and rhythm come from the
+ * `.prose-notes` rules in globals.css. Previously every element carried its own
+ * hard-coded `slate-*` / `dark:*` utility soup, which meant the reading
+ * experience could never be tuned in one place and always fought the design
+ * system. Only structures with no HTML equivalent (callouts, the code block
+ * chrome, the table scroller) get class names, and those class names are
+ * design-system classes, not ad-hoc utilities.
  */
-function createCustomRenderer() {
+
+/* ----------------------------------------------------------------- slugify */
+
+export function slugify(text = '') {
+  return String(text)
+    .toLowerCase()
+    .replace(/<[^>]*>/g, '')
+    .replace(/[^\wऀ-ॿ\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .slice(0, 80);
+}
+
+/* ------------------------------------------------------------ callout rules
+   Authors write callouts as blockquotes with a leading marker. Keeping the
+   detection in one table makes the vocabulary visible and easy to extend. */
+
+const CALLOUT_RULES = [
+  { kind: 'exam',      label: 'Exam point',     re: /^(\[!EXAM\]|\*\*Exam[^:*]*:?\*\*|Exam Point:|Exam Tip:)/i },
+  { kind: 'tip',       label: 'Tip',            re: /^(\[!TIP\]|\*\*Tip:?\*\*|Tip:)/i },
+  { kind: 'warning',   label: 'Watch out',      re: /^(\[!WARNING\]|\[!CAUTION\]|\*\*Warning:?\*\*|Warning:|\*\*Caution:?\*\*|Caution:)/i },
+  { kind: 'danger',    label: 'Common mistake', re: /^(\[!DANGER\]|\*\*Common Mistake:?\*\*|Common Mistake:|\*\*Pitfall:?\*\*|Pitfall:)/i },
+  { kind: 'important', label: 'Important',      re: /^(\[!IMPORTANT\]|\*\*Important:?\*\*|Important:|\*\*Golden Point:?\*\*|Golden Point:)/i },
+  { kind: 'analogy',   label: 'In plain terms', re: /^(\[!ANALOGY\]|\*\*Analogy:?\*\*|Analogy:|\*\*Think of it:?\*\*)/i },
+  { kind: 'note',      label: 'Note',           re: /^(\[!NOTE\]|\*\*Note:?\*\*|Note:)/i },
+];
+
+/* Inline SVGs — the renderer produces an HTML string, so it cannot use the
+   React icon components the rest of the app uses. Paths match lucide. */
+const CALLOUT_ICONS = {
+  note: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+  tip: '<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+  important: '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+  warning: '<path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+  danger: '<path d="M20 13c0 5-3.5 7.5-7.7 8.9a1 1 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1 1 0 0 1 1.5 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M12 8v4"/><path d="M12 16h.01"/>',
+  exam: '<path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
+  analogy: '<path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',
+};
+
+function calloutHtml(kind, label, bodyHtml) {
+  const icon = CALLOUT_ICONS[kind] || CALLOUT_ICONS.note;
+  return (
+    `<aside class="callout callout-${kind}">` +
+    `<svg class="callout__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icon}</svg>` +
+    `<div class="callout__body"><span class="callout__label">${label}</span>${bodyHtml}</div>` +
+    `</aside>`
+  );
+}
+
+/* --------------------------------------------------------- heading offset
+   Authors write `###` as their top level in some files and `##` in others.
+   Emitting those depths literally produces h2 → h4 jumps under the page's own
+   heading. Normalising the shallowest heading in a document to <h3> keeps the
+   outline valid wherever the content came from. Set synchronously immediately
+   before marked.parse, which is synchronous too. */
+
+let headingOffset = 0;
+
+function computeHeadingOffset(markdown) {
+  const depths = [];
+  const re = /^(#{1,6})\s+\S/gm;
+  let m;
+  while ((m = re.exec(markdown)) !== null) depths.push(m[1].length);
+  if (!depths.length) return 0;
+  return 3 - Math.min(...depths); // shallowest heading becomes h3
+}
+
+/* ---------------------------------------------------------------- renderer */
+
+function createRenderer() {
   const renderer = new marked.Renderer();
 
-  // 1. Heading Rendering with ID anchors
+  // marked v18 passes token objects; older signatures pass primitives. Both
+  // shapes appear across this project's data, so normalise once.
+  const inline = function (token, fallback) {
+    if (typeof token === 'object' && token !== null) {
+      return this.parser ? this.parser.parseInline(token.tokens || []) : (token.text || '');
+    }
+    return token ?? fallback ?? '';
+  };
+
   renderer.heading = function (token, level) {
     const depth = typeof token === 'object' && token !== null ? (token.depth || 1) : (level || 1);
-    const text = typeof token === 'object' && token !== null
-      ? (this.parser ? this.parser.parseInline(token.tokens || []) : (token.text || ''))
-      : (token || '');
-
-    const id = slugify(text);
-
-    const headingStyles = {
-      1: 'text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-8 mb-4 pb-2.5 border-b border-slate-200 dark:border-slate-800 tracking-tight',
-      2: 'text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mt-7 mb-3 tracking-tight',
-      3: 'text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-6 mb-2.5 flex items-center gap-2',
-      4: 'text-sm sm:text-base font-bold text-slate-800 dark:text-slate-200 mt-4 mb-2',
-      5: 'text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mt-3 mb-1.5',
-      6: 'text-xs font-semibold text-slate-500 dark:text-slate-400 mt-2.5 mb-1 uppercase tracking-wider',
-    };
-
-    const cls = headingStyles[depth] || headingStyles[3];
-    return `<h${depth} id="${id}" class="${cls} scroll-mt-24 group">${text}</h${depth}>`;
+    const text = inline.call(this, token);
+    // Never emit an h1 inside a note body — the page owns the h1.
+    const tag = `h${Math.min(Math.max(depth + headingOffset, 2), 5)}`;
+    const id = slugify(typeof token === 'object' ? token.text : text);
+    return `<${tag} id="${id}">${text}</${tag}>`;
   };
 
-  // 2. Paragraph Rendering
   renderer.paragraph = function (token) {
-    const text = typeof token === 'object' && token !== null
-      ? (this.parser ? this.parser.parseInline(token.tokens || []) : (token.text || ''))
-      : (token || '');
-    return `<p class="text-sm sm:text-[15px] leading-relaxed text-slate-700 dark:text-slate-300 my-3 font-normal">${text}</p>`;
+    return `<p>${inline.call(this, token)}</p>`;
   };
 
-  // 3. Strong/Bold Text
   renderer.strong = function (token) {
-    const text = typeof token === 'object' && token !== null
-      ? (this.parser ? this.parser.parseInline(token.tokens || []) : (token.text || ''))
-      : (token || '');
-    return `<strong class="font-bold text-slate-900 dark:text-white">${text}</strong>`;
+    return `<strong>${inline.call(this, token)}</strong>`;
   };
 
-  // 4. Italic/Em Text
   renderer.em = function (token) {
-    const text = typeof token === 'object' && token !== null
-      ? (this.parser ? this.parser.parseInline(token.tokens || []) : (token.text || ''))
-      : (token || '');
-    return `<em class="italic text-slate-800 dark:text-slate-200">${text}</em>`;
+    return `<em>${inline.call(this, token)}</em>`;
   };
 
-  // 5. Inline Code
   renderer.codespan = function (token) {
     const text = typeof token === 'object' && token !== null ? (token.text || '') : (token || '');
-    return `<code class="font-mono text-[12px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-brand-600 dark:text-brand-400 font-semibold border border-slate-200 dark:border-slate-700/70">${text}</code>`;
+    return `<code>${escapeHtml(text)}</code>`;
   };
 
-  // 6. Fenced Code Blocks with Language Header and Copy Button
   renderer.code = function (token, lang) {
-    const rawCode = typeof token === 'object' && token !== null ? (token.text || '') : (token || '');
+    const raw = typeof token === 'object' && token !== null ? (token.text || '') : (token || '');
     const language = typeof token === 'object' && token !== null ? (token.lang || '') : (lang || '');
-    const displayLang = language ? language.toUpperCase() : 'CODE';
-
-    // Escape HTML in code
-    const escapedCode = rawCode
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
-
-    return `<div class="my-5 rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 shadow-md">
-      <div class="flex items-center justify-between px-4 py-2 bg-slate-900 border-b border-slate-800 text-xs">
-        <span class="font-mono font-bold text-brand-400 flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-          </svg>
-          <span>${displayLang}</span>
-        </span>
-        <button
-          type="button"
-          class="copy-code-button inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-semibold transition-colors focus:outline-none"
-          title="Copy code"
-        >
-          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="btn-text">Copy</span>
-        </button>
-      </div>
-      <pre class="p-4 text-xs font-mono text-emerald-400 overflow-x-auto m-0 leading-relaxed max-h-[420px]"><code>${escapedCode}</code></pre>
-    </div>`;
+    return (
+      `<figure class="code-block">` +
+      `<figcaption class="code-block__bar">` +
+      `<span class="code-block__lang">${escapeHtml(languageLabel(language))}</span>` +
+      `<button type="button" class="code-block__copy" data-copy aria-label="Copy code to clipboard">` +
+      `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">` +
+      `<rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>` +
+      `<span data-copy-label>Copy</span></button>` +
+      `</figcaption>` +
+      `<pre tabindex="0"><code>${highlight(raw, language)}</code></pre>` +
+      `</figure>`
+    );
   };
 
-  // 7. Unordered and Ordered Lists
   renderer.list = function (token, ordered, start) {
     const isOrdered = typeof token === 'object' && token !== null ? token.ordered : ordered;
     const startNum = typeof token === 'object' && token !== null ? token.start : start;
-    const type = isOrdered ? 'ol' : 'ul';
-    const listCls = isOrdered
-      ? 'list-decimal list-outside space-y-2.5 my-3 text-sm sm:text-[15px] text-slate-700 dark:text-slate-300 pl-5 leading-relaxed'
-      : 'list-disc list-outside space-y-2 my-3 text-sm sm:text-[15px] text-slate-700 dark:text-slate-300 pl-5 leading-relaxed';
+    const tag = isOrdered ? 'ol' : 'ul';
 
     let body = '';
     if (typeof token === 'object' && token !== null && Array.isArray(token.items)) {
-      for (const item of token.items) {
-        body += this.listitem(item);
-      }
+      for (const item of token.items) body += this.listitem(item);
     } else if (typeof token === 'string') {
       body = token;
     }
-    const startAttr = isOrdered && startNum !== 1 && startNum ? ` start="${startNum}"` : '';
-    return `<${type}${startAttr} class="${listCls}">${body}</${type}>`;
+
+    const startAttr = isOrdered && startNum && startNum !== 1 ? ` start="${startNum}"` : '';
+    return `<${tag}${startAttr}>${body}</${tag}>`;
   };
 
   renderer.listitem = function (token) {
     let text = '';
     if (typeof token === 'object' && token !== null) {
-      if (token.tokens && this.parser) {
-        text = this.parser.parse(token.tokens);
-      } else {
-        text = token.text || '';
+      text = this.parser ? this.parser.parse(token.tokens || [], !!token.loose) : (token.text || '');
+      // A single paragraph inside a tight list item adds a wrapper for nothing
+      if (!token.loose) text = text.replace(/^<p>/, '').replace(/<\/p>\s*$/, '');
+      if (token.task) {
+        const checked = token.checked ? ' checked' : '';
+        return `<li class="task"><input type="checkbox" disabled${checked} /> ${text}</li>`;
       }
     } else {
       text = token || '';
     }
-    return `<li class="leading-relaxed"><span class="align-baseline">${text}</span></li>`;
+    return `<li>${text}</li>`;
   };
 
-  // 8. Content-Aware Blockquote & Semantic Callout Engine
   renderer.blockquote = function (token) {
-    let quote = '';
+    let html = '';
+    let raw = '';
     if (typeof token === 'object' && token !== null) {
-      if (token.tokens && this.parser) {
-        quote = this.parser.parse(token.tokens);
-      } else {
-        quote = token.text || '';
-      }
+      html = this.parser ? this.parser.parse(token.tokens || []) : (token.text || '');
+      raw = token.text || '';
     } else {
-      quote = token || '';
+      html = token || '';
+      raw = String(token || '').replace(/<[^>]*>/g, '');
     }
 
-    const cleanTrimmed = quote.trim();
-
-    // Check for Semantic Callout Markers
-    // 1. Tip Callout
-    if (/^(\[!TIP\]|\*\*Tip:?\*\*|Tip:)/i.test(cleanTrimmed)) {
-      const content = cleanTrimmed.replace(/^(\[!TIP\]|\*\*Tip:?\*\*|Tip:)/i, '').trim();
-      return `<div class="callout-box callout-tip">
-        <div class="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-amber-800 dark:text-amber-300 mb-1">
-          <svg class="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
-          <span>EXAM TIP &amp; SHORTCUT</span>
-        </div>
-        <div class="text-xs sm:text-sm text-amber-950 dark:text-amber-200 leading-relaxed">${content}</div>
-      </div>`;
+    const trimmed = raw.trim();
+    for (const rule of CALLOUT_RULES) {
+      if (rule.re.test(trimmed)) {
+        // Strip the marker from the rendered HTML, not the raw text, so inline
+        // formatting inside the body survives.
+        const cleaned = html.replace(
+          new RegExp(`(<p>\\s*)(<strong>)?\\s*${rule.re.source.replace(/^\^\(|\)$/g, '')}\\s*(</strong>)?\\s*`, 'i'),
+          '$1',
+        );
+        return calloutHtml(rule.kind, rule.label, cleaned);
+      }
     }
 
-    // 2. Warning / Pitfall Callout
-    if (/^(\[!WARNING\]|\[!CAUTION\]|\*\*Warning:?\*\*|Warning:|\*\*Caution:?\*\*|Caution:)/i.test(cleanTrimmed)) {
-      const content = cleanTrimmed.replace(/^(\[!WARNING\]|\[!CAUTION\]|\*\*Warning:?\*\*|Warning:|\*\*Caution:?\*\*|Caution:)/i, '').trim();
-      return `<div class="callout-box callout-warning">
-        <div class="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-rose-800 dark:text-rose-300 mb-1">
-          <svg class="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-          <span>CRITICAL PITFALL &amp; WARNING</span>
-        </div>
-        <div class="text-xs sm:text-sm text-rose-950 dark:text-rose-200 leading-relaxed">${content}</div>
-      </div>`;
-    }
-
-    // 3. Important / Key Takeaway Callout
-    if (/^(\[!IMPORTANT\]|\*\*Important:?\*\*|Important:|\*\*Golden Point:?\*\*)/i.test(cleanTrimmed)) {
-      const content = cleanTrimmed.replace(/^(\[!IMPORTANT\]|\*\*Important:?\*\*|Important:|\*\*Golden Point:?\*\*)/i, '').trim();
-      return `<div class="callout-box callout-important">
-        <div class="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-emerald-800 dark:text-emerald-300 mb-1">
-          <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span>KEY EXAM TAKEAWAY</span>
-        </div>
-        <div class="text-xs sm:text-sm text-emerald-950 dark:text-emerald-200 leading-relaxed">${content}</div>
-      </div>`;
-    }
-
-    // 4. Analogy / Intuition Callout
-    if (/^(\*\*Analogy:?\*\*|Analogy:|\*\*Real-World Analogy:?\*\*)/i.test(cleanTrimmed)) {
-      const content = cleanTrimmed.replace(/^(\*\*Analogy:?\*\*|Analogy:|\*\*Real-World Analogy:?\*\*)/i, '').trim();
-      return `<div class="callout-box callout-analogy">
-        <div class="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-indigo-800 dark:text-indigo-300 mb-1">
-          <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-          </svg>
-          <span>REAL-WORLD ANALOGY (वास्तविक जीवन का उदाहरण)</span>
-        </div>
-        <div class="text-xs sm:text-sm text-indigo-950 dark:text-indigo-200 leading-relaxed">${content}</div>
-      </div>`;
-    }
-
-    // 5. Note Callout (or [!NOTE])
-    if (/^(\[!NOTE\]|\*\*Note:?\*\*|Note:)/i.test(cleanTrimmed)) {
-      const content = cleanTrimmed.replace(/^(\[!NOTE\]|\*\*Note:?\*\*|Note:)/i, '').trim();
-      return `<div class="callout-box callout-note">
-        <div class="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-accent-blue dark:text-sky-300 mb-1">
-          <svg class="w-4 h-4 text-accent-blue dark:text-sky-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span>TECHNICAL NOTE</span>
-        </div>
-        <div class="text-xs sm:text-sm text-slate-800 dark:text-slate-200 leading-relaxed">${content}</div>
-      </div>`;
-    }
-
-    // Standard Blockquote Fallback
-    return `<blockquote class="my-4 border-l-4 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 px-4 py-3 rounded-r-xl text-sm italic text-slate-700 dark:text-slate-300 leading-relaxed">${quote}</blockquote>`;
+    return calloutHtml('note', 'Note', html);
   };
 
-  // 9. Responsive Comparison & Specification Tables
+  /* Tables: wrapped so they scroll inside their own box instead of pushing the
+     page sideways. Styling comes from `.table-wrap` in globals.css. */
   renderer.table = function (token) {
-    let headerHtml = '';
-    let rowsHtml = '';
+    let head = '';
+    let body = '';
     if (typeof token === 'object' && token !== null && Array.isArray(token.header)) {
-      let headerCells = '';
-      for (const cell of token.header) {
-        headerCells += this.tablecell(cell);
-      }
-      headerHtml = this.tablerow({ text: headerCells });
-      for (const row of (token.rows || [])) {
+      let cells = '';
+      for (const cell of token.header) cells += this.tablecell(cell);
+      head = `<tr>${cells}</tr>`;
+      for (const row of token.rows || []) {
         let rowCells = '';
-        for (const cell of row) {
-          rowCells += this.tablecell(cell);
-        }
-        rowsHtml += this.tablerow({ text: rowCells });
+        for (const cell of row) rowCells += this.tablecell(cell);
+        body += `<tr>${rowCells}</tr>`;
       }
     }
-    return `<div class="table-responsive my-6 border border-slate-200 dark:border-slate-800 shadow-xs">
-      <table class="w-full text-left text-xs sm:text-sm">
-        <thead class="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-bold border-b border-slate-200 dark:border-slate-700 uppercase tracking-wider text-[11px]">${headerHtml}</thead>
-        <tbody class="divide-y divide-slate-100 dark:divide-slate-800 bg-white dark:bg-slate-900">${rowsHtml}</tbody>
-      </table>
-    </div>`;
+    return `<div class="table-wrap"><div class="table-scroll" tabindex="0"><table><thead>${head}</thead><tbody>${body}</tbody></table></div></div>`;
   };
 
   renderer.tablerow = function (token) {
     const content = typeof token === 'object' && token !== null ? (token.text || '') : (token || '');
-    return `<tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors even:bg-slate-50/30 dark:even:bg-slate-800/20">${content}</tr>`;
+    return `<tr>${content}</tr>`;
   };
 
   renderer.tablecell = function (token, flags) {
@@ -277,14 +237,11 @@ function createCustomRenderer() {
       isHeader = flags && flags.header;
     }
     const tag = isHeader ? 'th' : 'td';
-    const cls = isHeader
-      ? 'px-4 py-3 font-extrabold text-slate-900 dark:text-slate-100'
-      : 'px-4 py-3 text-slate-700 dark:text-slate-300 leading-relaxed';
-    const alignAttr = align ? ` align="${align}"` : '';
-    return `<${tag}${alignAttr} class="${cls}">${content}</${tag}>`;
+    const scope = isHeader ? ' scope="col"' : '';
+    const alignAttr = align ? ` style="text-align:${align}"` : '';
+    return `<${tag}${scope}${alignAttr}>${content}</${tag}>`;
   };
 
-  // 10. Links with external accessibility
   renderer.link = function (token, title, text) {
     let href = '';
     let linkTitle = '';
@@ -298,99 +255,75 @@ function createCustomRenderer() {
       linkTitle = title || '';
       linkText = text || '';
     }
-    const titleAttr = linkTitle ? ` title="${linkTitle}"` : '';
-    const isExternal = /^https?:\/\//i.test(href);
-    const targetAttr = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
-    return `<a href="${href}"${titleAttr}${targetAttr} class="text-brand-600 dark:text-brand-400 font-semibold underline underline-offset-2 hover:text-brand-700 transition-colors">${linkText}</a>`;
+    const external = /^https?:\/\//i.test(href);
+    return (
+      `<a href="${escapeHtml(href)}"` +
+      (linkTitle ? ` title="${escapeHtml(linkTitle)}"` : '') +
+      (external ? ' target="_blank" rel="noopener noreferrer"' : '') +
+      `>${linkText}</a>`
+    );
   };
 
-  // 11. Horizontal Rules
-  renderer.hr = function () {
-    return '<hr class="my-8 border-slate-200 dark:border-slate-800" />';
-  };
+  renderer.hr = () => '<hr />';
 
   return renderer;
 }
 
-const sharedRenderer = createCustomRenderer();
+const sharedRenderer = createRenderer();
 
-/**
- * Universal content parser that recursively transforms strings, structured objects,
- * and arrays into clean semantic HTML without producing [object Object].
- */
+/* ------------------------------------------------- structured-object bridge
+   Some datasets store a note as an object rather than a markdown string. This
+   maps those shapes onto the same semantic HTML so both render identically. */
+
 export function renderUniversalContent(content) {
   if (content === null || content === undefined) return '';
 
-  // 1. Markdown String (Standard)
   if (typeof content === 'string') {
-    return marked.parse(content, {
-      renderer: sharedRenderer,
-      gfm: true,
-      breaks: true,
-    });
+    headingOffset = computeHeadingOffset(content);
+    return marked.parse(content, { renderer: sharedRenderer, gfm: true, breaks: true });
   }
 
-  // 2. Arrays: map and recursively concatenate
   if (Array.isArray(content)) {
-    return content.map((item) => renderUniversalContent(item)).join('');
+    return content.map(renderUniversalContent).join('');
   }
 
-  // 3. Structured Objects: Polymorphically render according to fields
-  if (typeof content === 'object' && content !== null) {
+  if (typeof content === 'object') {
     let html = '';
 
-    // Title / Heading
     const title = content.title || content.heading || content.name;
     if (title && typeof title === 'string') {
-      html += `<h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-5 mb-2 flex items-center gap-2">${title}</h3>`;
+      html += `<h3 id="${slugify(title)}">${escapeHtml(title)}</h3>`;
     }
 
-    // Description / Body text
     const desc = content.description || content.text || content.content || content.explanation || content.summary;
-    if (desc) {
-      html += renderUniversalContent(desc);
-    }
+    if (desc) html += renderUniversalContent(desc);
 
-    // Code / Syntax Snippet
     const code = content.code || content.syntax || content.example;
     if (code && typeof code === 'string') {
-      html += `<div class="my-4 rounded-xl overflow-hidden bg-slate-950 border border-slate-800 shadow-sm"><pre class="p-3.5 text-xs font-mono text-emerald-400 overflow-x-auto m-0 leading-relaxed"><code>${code}</code></pre></div>`;
+      html += sharedRenderer.code({ text: code, lang: content.language || '' });
     }
 
-    // Points / Items / List
     const points = content.points || content.items || content.list || content.subpoints;
-    if (Array.isArray(points) && points.length > 0) {
-      html += `<ul class="list-disc list-outside space-y-2 my-3 text-sm text-slate-700 dark:text-slate-300 pl-5">`;
+    if (Array.isArray(points) && points.length) {
+      html += '<ul>';
       for (const pt of points) {
-        if (typeof pt === 'string') {
-          html += `<li class="leading-relaxed"><span class="align-baseline">${pt}</span></li>`;
-        } else if (typeof pt === 'object' && pt !== null) {
-          const ptText = pt.text || pt.title || pt.content || pt.desc || pt.point || '';
-          if (ptText) {
-            html += `<li class="leading-relaxed"><span class="align-baseline">${ptText}</span></li>`;
-          }
+        if (typeof pt === 'string') html += `<li>${pt}</li>`;
+        else if (pt && typeof pt === 'object') {
+          const t = pt.text || pt.title || pt.content || pt.desc || pt.point || '';
+          if (t) html += `<li>${t}</li>`;
         }
       }
-      html += `</ul>`;
+      html += '</ul>';
     }
 
-    // Sub-sections
-    const subSections = content.subSections || content.sections || content.children;
-    if (Array.isArray(subSections)) {
-      html += renderUniversalContent(subSections);
-    }
+    const sub = content.subSections || content.sections || content.children;
+    if (Array.isArray(sub)) html += renderUniversalContent(sub);
 
-    // Fallback if no known keys were found
     if (!html) {
-      const parts = [];
       for (const [k, v] of Object.entries(content)) {
-        if (typeof v === 'string') {
-          parts.push(`<p class="text-sm leading-relaxed text-slate-700 dark:text-slate-300 my-2.5"><strong class="font-bold text-slate-900 dark:text-white">${k}:</strong> ${v}</p>`);
-        } else if (typeof v === 'object' && v !== null) {
-          parts.push(renderUniversalContent(v));
-        }
+        if (typeof v === 'string') html += `<p><strong>${escapeHtml(k)}:</strong> ${v}</p>`;
+        else if (v && typeof v === 'object') html += renderUniversalContent(v);
       }
-      html = parts.join('');
     }
 
     return html;
@@ -399,56 +332,56 @@ export function renderUniversalContent(content) {
   return '';
 }
 
-/**
- * Universal Markdown & Content Renderer component.
- * Serves all Units, Chapters, Topics, and Sub-topics globally.
- */
+/** Heading list for a table of contents, without rendering the content twice. */
+export function extractHeadings(content, maxDepth = 4) {
+  if (typeof content !== 'string') return [];
+  const offset = computeHeadingOffset(content);
+  const out = [];
+  const re = /^(#{1,6})\s+(.+)$/gm;
+  let m;
+  while ((m = re.exec(content)) !== null) {
+    const depth = Math.min(Math.max(m[1].length + offset, 2), 5);
+    if (depth > maxDepth) continue;
+    const text = m[2].replace(/[*_`]/g, '').trim();
+    out.push({ id: slugify(text), text, depth });
+  }
+  return out;
+}
+
+/* -------------------------------------------------------------- component */
+
 export default function MarkdownRenderer({ content, className = '' }) {
-  const containerRef = useRef(null);
+  const ref = useRef(null);
+  const html = useMemo(() => renderUniversalContent(content), [content]);
 
-  const html = useMemo(() => {
-    return renderUniversalContent(content);
-  }, [content]);
-
-  // Client-side event delegation for markdown code block Copy buttons
+  // One delegated listener for every copy button in the rendered tree.
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
+    const el = ref.current;
+    if (!el) return undefined;
 
-    const handleCopyClick = (e) => {
-      const btn = e.target.closest('.copy-code-button');
+    const onClick = async (e) => {
+      const btn = e.target.closest('[data-copy]');
       if (!btn) return;
+      const code = btn.closest('.code-block')?.querySelector('pre code');
+      if (!code) return;
 
-      const codeContainer = btn.closest('.rounded-2xl, .rounded-xl');
-      if (!codeContainer) return;
-
-      const codeEl = codeContainer.querySelector('pre code');
-      if (!codeEl) return;
-
-      const textToCopy = codeEl.innerText || codeEl.textContent || '';
-      navigator.clipboard.writeText(textToCopy).then(() => {
-        const textSpan = btn.querySelector('.btn-text');
-        if (textSpan) {
-          const original = textSpan.innerText;
-          textSpan.innerText = 'Copied!';
-          btn.classList.add('text-emerald-400');
-          setTimeout(() => {
-            textSpan.innerText = original;
-            btn.classList.remove('text-emerald-400');
-          }, 2000);
-        }
-      });
+      try {
+        await navigator.clipboard.writeText(code.innerText || code.textContent || '');
+        const label = btn.querySelector('[data-copy-label]');
+        if (!label) return;
+        const original = label.textContent;
+        label.textContent = 'Copied';
+        setTimeout(() => { label.textContent = original; }, 1800);
+      } catch {
+        /* clipboard unavailable (insecure origin / denied) — no-op */
+      }
     };
 
-    el.addEventListener('click', handleCopyClick);
-    return () => el.removeEventListener('click', handleCopyClick);
+    el.addEventListener('click', onClick);
+    return () => el.removeEventListener('click', onClick);
   }, [html]);
 
-  return (
-    <div
-      ref={containerRef}
-      className={`markdown-content leading-relaxed ${className}`}
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
-  );
+  if (!html) return null;
+
+  return <div ref={ref} className={className} dangerouslySetInnerHTML={{ __html: html }} />;
 }

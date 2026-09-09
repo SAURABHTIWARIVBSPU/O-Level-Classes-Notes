@@ -1,98 +1,184 @@
-'use client';
-
 import React from 'react';
-import Link from 'next/link';
-import { 
-  HelpCircle, 
-  BookOpen, 
-  Award, 
-  ArrowRight, 
-  CheckCircle2, 
-  Sparkles,
-  Layers,
-  ChevronLeft
-} from 'lucide-react';
+import { ArrowRight, GraduationCap, Layers, ListChecks, Timer } from 'lucide-react';
+
+import {
+  Badge,
+  Breadcrumbs,
+  Button,
+  CardLink,
+  EmptyState,
+  MetaItem,
+  PageHeader,
+  Panel,
+  SectionHeading,
+} from '@/components/ui';
+import { LastScore } from '@/components/mcq/QuizCard';
 import { cccChaptersData } from '@/data/cccSyllabusData';
 import { cccMcqsData } from '@/data/cccMcqsData';
 
-export default function CCCMCQsPortalPage() {
+export const metadata = {
+  title: 'MCQ practice — CCC',
+  description:
+    'Chapter-wise NIELIT CCC practice questions in Hindi and English, from computer basics and Ubuntu to LibreOffice, digital payments and cyber safety — each with the answer and the reason behind it.',
+};
+
+export default function CccMcqsHubPage() {
+  const counts = new Map();
+  cccMcqsData.forEach((q) => {
+    counts.set(q.chapterSlug, (counts.get(q.chapterSlug) || 0) + 1);
+  });
+
+  const chapters = cccChaptersData.map((c) => ({
+    slug: c.slug,
+    label: c.chapterNumber,
+    title: c.title,
+    hindiTitle: c.hindiTitle,
+    count: counts.get(c.slug) || 0,
+  }));
+
+  const total = cccMcqsData.length;
+  const covered = chapters.filter((c) => c.count > 0).length;
+
   return (
-    <div className="space-y-10 py-4 max-w-7xl mx-auto">
-      
-      {/* Header Banner */}
-      <div className="space-y-4 border-b border-appborder pb-8">
-        <Link
-          href="/ccc"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-brand-600 transition-colors"
-        >
-          <ChevronLeft className="w-4 h-4" />
-          <span>Back to CCC Hub</span>
-        </Link>
+    <div className="shell py-8 sm:py-10">
+      <Breadcrumbs
+        items={[{ label: 'CCC', href: '/ccc' }, { label: 'MCQ practice' }]}
+        className="mb-5"
+      />
 
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 font-mono text-xs font-bold">
-            200+ OFFICIAL EXAM QUESTIONS
-          </span>
-          <span className="px-3 py-1 rounded-full bg-accent-blue/10 text-accent-blue border border-accent-blue/30 font-mono text-xs font-bold">
-            Chapter-Wise MCQs &amp; True/False
-          </span>
-        </div>
+      <PageHeader
+        eyebrow="CCC · Course on Computer Concepts"
+        title="MCQ practice"
+        hindiTitle="बहुविकल्पीय प्रश्न अभ्यास"
+        description="Chapter by chapter, in Hindi with the English question alongside. Choose an option and the answer appears straight away, with a short explanation of why it is the answer."
+        actions={
+          <>
+            <Button href="/ccc/mock-test" variant="primary">
+              <Timer className="w-4 h-4" aria-hidden="true" />
+              Take the mock test
+            </Button>
+            <Button href="/ccc/mcqs/all" variant="secondary">
+              <ListChecks className="w-4 h-4" aria-hidden="true" />
+              All questions
+            </Button>
+          </>
+        }
+        meta={
+          <>
+            <MetaItem>
+              <ListChecks className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+              {total} questions
+            </MetaItem>
+            <MetaItem>
+              <Layers className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+              {covered} of {chapters.length} chapters covered
+            </MetaItem>
+            <MetaItem>
+              <GraduationCap className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+              <span lang="hi" className="hindi-text">हिन्दी</span>
+              <span>+ English on every question</span>
+            </MetaItem>
+          </>
+        }
+      />
 
-        <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-          CCC Chapter-Wise MCQ Question Bank
-        </h1>
+      <div className="space-y-12">
+        <section aria-labelledby="by-chapter">
+          <SectionHeading
+            id="by-chapter"
+            eyebrow="Question bank"
+            title="Practise by chapter"
+            description="Your most recent result for each chapter is shown on its card."
+          />
 
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed">
-          Practice official NIELIT CCC exam questions chapter by chapter with bilingual English and Hindi explanations, instant score checking, and answer review.
-        </p>
-      </div>
+          {total === 0 ? (
+            <EmptyState
+              title="The question bank is empty"
+              description="No CCC practice questions have been added yet. The chapter notes are still the fastest way to revise."
+              action={<Button href="/ccc/chapters/chapter-1" variant="secondary">Open the chapter notes</Button>}
+            />
+          ) : (
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {chapters.map((chapter) => {
+                const body = (
+                  <>
+                    <div className="flex items-start justify-between gap-3">
+                      <p className="eyebrow">Chapter {chapter.label}</p>
+                      {chapter.count > 0 ? (
+                        <Badge tone="neutral" className="tabular-nums">{chapter.count} questions</Badge>
+                      ) : (
+                        <Badge tone="neutral">Coming soon</Badge>
+                      )}
+                    </div>
+                    <h3 className="mt-2 text-h4 font-semibold text-ink">{chapter.title}</h3>
+                    {chapter.hindiTitle ? (
+                      <p className="mt-0.5 text-sm text-hindi hindi-text" lang="hi">{chapter.hindiTitle}</p>
+                    ) : null}
+                    <div className="mt-4 flex items-center justify-between gap-2 min-h-[1.5rem]">
+                      <LastScore quizId={`ccc-mcq-${chapter.slug}`} />
+                      {chapter.count > 0 ? (
+                        <span className="ml-auto inline-flex items-center gap-1 text-sm font-medium text-accent">
+                          Practise
+                          <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                        </span>
+                      ) : (
+                        <span className="ml-auto text-sm text-ink-3">No questions yet</span>
+                      )}
+                    </div>
+                  </>
+                );
 
-      {/* Chapter Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {cccChaptersData.map((ch) => {
-          const chapterMcqs = cccMcqsData.filter((m) => m.chapterSlug === ch.slug);
-          return (
-            <div
-              key={ch.slug}
-              className="p-5 sm:p-6 rounded-xl border border-appborder bg-white dark:bg-slate-900 hover:border-brand-500/80 transition-all flex flex-col justify-between space-y-4 shadow-xs group"
-            >
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-md font-mono text-[10px] font-bold uppercase tracking-wider border bg-accent-blue/10 text-accent-blue border-accent-blue/20">
-                    CHAPTER {ch.chapterNumber}
-                  </span>
-                  <span className="text-xs font-semibold text-amber-600 dark:text-amber-400 font-mono">
-                    {chapterMcqs.length || 15}+ Questions
-                  </span>
-                </div>
+                return (
+                  <li key={chapter.slug}>
+                    {chapter.count > 0 ? (
+                      <CardLink href={`/ccc/mcqs/${chapter.slug}`} className="h-full p-5">{body}</CardLink>
+                    ) : (
+                      <Panel className="h-full p-5">{body}</Panel>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
 
-                <h3 className="font-bold text-base text-slate-900 dark:text-white group-hover:text-brand-600 transition-colors">
-                  {ch.title}
-                </h3>
-                
-                <p className="text-xs font-semibold text-brand-600 dark:text-brand-400 hindi-text">
-                  {ch.hindiTitle}
+        <section aria-labelledby="whole-course">
+          <SectionHeading
+            id="whole-course"
+            eyebrow="Across all chapters"
+            title="When you are ready for the whole course"
+          />
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <li>
+              <CardLink href="/ccc/mcqs/all" className="h-full p-5">
+                <ListChecks className="w-5 h-5 text-ink-3" aria-hidden="true" />
+                <h3 className="mt-3 text-h4 font-semibold text-ink">All {total} questions</h3>
+                <p className="mt-1.5 text-base text-ink-2 leading-relaxed">
+                  Every chapter in one set, with a search box and a chapter filter. Untimed.
                 </p>
-
-                <p className="text-xs text-slate-500 line-clamp-2">
-                  {ch.description}
+                <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-accent">
+                  Open the full bank
+                  <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                </span>
+              </CardLink>
+            </li>
+            <li>
+              <CardLink href="/ccc/mock-test" className="h-full p-5">
+                <Timer className="w-5 h-5 text-ink-3" aria-hidden="true" />
+                <h3 className="mt-3 text-h4 font-semibold text-ink">Mock test</h3>
+                <p className="mt-1.5 text-base text-ink-2 leading-relaxed">
+                  A timed paper across all nine chapters — one mark per question, no negative marking, qualify at
+                  50%.
                 </p>
-              </div>
-
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
-                <Link
-                  href={`/ccc/mcqs/${ch.slug}`}
-                  className="w-full py-2 rounded-lg bg-slate-100 dark:bg-slate-800 group-hover:bg-brand-500 group-hover:text-white text-slate-700 dark:text-slate-200 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <span>Practice Chapter {ch.chapterNumber} MCQs</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-          );
-        })}
+                <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-accent">
+                  Read the brief and start
+                  <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                </span>
+              </CardLink>
+            </li>
+          </ul>
+        </section>
       </div>
-
     </div>
   );
 }

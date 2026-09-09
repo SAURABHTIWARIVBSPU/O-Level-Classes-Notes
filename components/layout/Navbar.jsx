@@ -1,442 +1,327 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  Search, 
-  Sun, 
-  Moon, 
-  Menu, 
-  X, 
-  ChevronDown,
-  BookOpen,
-  HelpCircle,
-  Award,
-  FileText,
-  Columns,
-  Code2,
-  Terminal,
-  Presentation,
-  CheckCircle2,
-  Sparkles,
-  GraduationCap
+import {
+  Search, Menu, X, Sun, Moon, ChevronDown, Check, Languages, GraduationCap,
 } from 'lucide-react';
+
 import { useTheme } from '@/lib/themeContext';
 import { useLanguage } from '@/lib/languageContext';
-import { useProgress } from '@/lib/progressContext';
-import { useFullscreen } from '@/lib/fullscreenContext';
-import { unitsData } from '@/data/syllabusData';
-import { cccChaptersData } from '@/data/cccSyllabusData';
+import { COURSES, courseFromPath, navForCourse, isActivePath, getModules } from '@/lib/navigation';
+import CommandPalette from './CommandPalette';
+import MobileNav from './MobileNav';
 
-export default function Navbar() {
-  const pathname = usePathname();
-  const isCccCourse = pathname.startsWith('/ccc');
+/* ------------------------------------------------------------- dropdown */
 
-  const { theme, toggleTheme } = useTheme();
-  const { language, changeLanguage } = useLanguage();
-  const { streak } = useProgress();
-  const { isFullscreen } = useFullscreen();
+function NavMenu({ group, pathname }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const timer = useRef(null);
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(null);
-  const navRef = useRef(null);
+  const anyActive = group.items.some((i) => isActivePath(pathname, i.href, i.match));
 
-  // Close dropdown on route change
   useEffect(() => {
-    setActiveDropdown(null);
-    setMobileMenuOpen(false);
-  }, [pathname]);
-
-  // Click outside to close dropdowns
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (navRef.current && !navRef.current.contains(event.target)) {
-        setActiveDropdown(null);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    const onDocClick = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    const onEsc = (e) => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('mousedown', onDocClick);
+    document.addEventListener('keydown', onEsc);
+    return () => {
+      document.removeEventListener('mousedown', onDocClick);
+      document.removeEventListener('keydown', onEsc);
+      clearTimeout(timer.current);
+    };
   }, []);
 
-  // Fullscreen hides navbar
-  if (isFullscreen) {
-    return null;
-  }
-
-  const toggleDropdown = (name) => {
-    setActiveDropdown((prev) => (prev === name ? null : name));
-  };
+  useEffect(() => { setOpen(false); }, [pathname]);
 
   return (
-    <header 
-      ref={navRef} 
-      className="sticky top-0 z-40 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors select-none"
+    <div
+      ref={ref}
+      className="relative"
+      onMouseEnter={() => { clearTimeout(timer.current); setOpen(true); }}
+      onMouseLeave={() => { timer.current = setTimeout(() => setOpen(false), 120); }}
     >
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-[54px] gap-2">
-          
-          {/* ================= 1. Brand Logo & Course Indicator ================= */}
-          <div className="flex items-center gap-2.5 shrink-0">
-            <Link 
-              href={isCccCourse ? "/ccc" : "/"} 
-              className="flex items-center gap-2.5 group focus:outline-none py-1"
-            >
-              <div className="h-7 sm:h-8 flex items-center bg-white rounded-md p-0.5 border border-slate-200/80 dark:border-slate-700">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img 
-                  src="/logo.png" 
-                  alt="MSITM" 
-                  className="h-6 sm:h-7 w-auto object-contain"
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-haspopup="true"
+        className={`inline-flex items-center gap-1 h-8 px-2.5 rounded-lg text-sm font-medium transition-colors ${
+          anyActive ? 'text-ink bg-sunken' : 'text-ink-2 hover:text-ink hover:bg-sunken'
+        }`}
+      >
+        {group.label}
+        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-fast ${open ? 'rotate-180' : ''}`} aria-hidden="true" />
+      </button>
+
+      {open ? (
+        <div className="absolute left-0 top-full pt-1.5 z-header">
+          <div className="w-72 rounded-xl border border-line bg-overlay shadow-e3 p-1.5 animate-fade-in">
+            {group.items.map((item) => {
+              const active = isActivePath(pathname, item.href, item.match);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`block px-2.5 py-2 rounded-lg transition-colors ${
+                    active ? 'bg-accent-soft' : 'hover:bg-sunken'
+                  }`}
+                >
+                  <span className={`block text-base font-medium ${active ? 'text-accent' : 'text-ink'}`}>
+                    {item.label}
+                  </span>
+                  {item.desc ? <span className="block text-xs text-ink-3 mt-0.5">{item.desc}</span> : null}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------- course switcher */
+
+function CourseSwitcher({ course, pathname }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const onDocClick = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener('mousedown', onDocClick);
+    return () => document.removeEventListener('mousedown', onDocClick);
+  }, []);
+
+  useEffect(() => { setOpen(false); }, [pathname]);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-haspopup="listbox"
+        aria-label={`Current course: ${course.name}. Change course`}
+        className="inline-flex items-center gap-1.5 h-8 pl-2 pr-1.5 rounded-lg border border-line bg-surface hover:border-line-strong transition-colors"
+      >
+        <span
+          className="w-1.5 h-1.5 rounded-full shrink-0"
+          style={{ background: `rgb(var(${course.accentVar}))` }}
+          aria-hidden="true"
+        />
+        <span className="text-sm font-semibold text-ink">{course.name}</span>
+        <ChevronDown className={`w-3.5 h-3.5 text-ink-3 transition-transform duration-fast ${open ? 'rotate-180' : ''}`} aria-hidden="true" />
+      </button>
+
+      {open ? (
+        <div className="absolute left-0 top-full mt-1.5 w-[19rem] rounded-xl border border-line bg-overlay shadow-e3 p-1.5 z-header animate-fade-in" role="listbox">
+          {Object.values(COURSES).map((c) => {
+            const active = c.key === course.key;
+            return (
+              <Link
+                key={c.key}
+                href={c.home}
+                role="option"
+                aria-selected={active}
+                className={`flex items-start gap-2.5 px-2.5 py-2.5 rounded-lg transition-colors ${active ? 'bg-accent-soft' : 'hover:bg-sunken'}`}
+              >
+                <span
+                  className="mt-1 w-1.5 h-1.5 rounded-full shrink-0"
+                  style={{ background: `rgb(var(${c.accentVar}))` }}
+                  aria-hidden="true"
                 />
-              </div>
-
-              <div className="flex items-center gap-1.5">
-                <span className="font-bold text-sm tracking-tight text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
-                  {isCccCourse ? "CCC Studio" : "O-Level Studio"}
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-center gap-1.5">
+                    <span className={`text-base font-semibold ${active ? 'text-accent' : 'text-ink'}`}>{c.fullName}</span>
+                    {active ? <Check className="w-3.5 h-3.5 text-accent" aria-hidden="true" /> : null}
+                  </span>
+                  <span className="block text-xs text-ink-3 mt-0.5">{c.subject} · {c.level}</span>
                 </span>
-                <span className={`text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded text-white tracking-wider ${
-                  isCccCourse ? "bg-accent-blue" : "bg-brand-600"
-                }`}>
-                  {isCccCourse ? "CCC (80H)" : "M2-R5.1"}
-                </span>
-              </div>
-            </Link>
-          </div>
+              </Link>
+            );
+          })}
+        </div>
+      ) : null}
+    </div>
+  );
+}
 
-          {/* ================= 2. Course Switcher Pill (O-Level vs CCC) ================= */}
-          <div className="hidden md:flex items-center bg-slate-100 dark:bg-slate-800/80 p-0.5 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px] font-bold">
-            <Link
-              href="/"
-              className={`px-3 py-1 rounded-lg transition-all flex items-center gap-1 ${
-                !isCccCourse 
-                  ? "bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-2xs font-extrabold" 
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+/* -------------------------------------------------------- language toggle */
+
+const LANGUAGES = [
+  { value: 'both', short: 'EN+हि', label: 'English and Hindi' },
+  { value: 'en', short: 'EN', label: 'English only' },
+  { value: 'hi', short: 'हिन्दी', label: 'Hindi only' },
+];
+
+function LanguageToggle() {
+  const { language, changeLanguage } = useLanguage();
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const onDocClick = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener('mousedown', onDocClick);
+    return () => document.removeEventListener('mousedown', onDocClick);
+  }, []);
+
+  const current = LANGUAGES.find((l) => l.value === language) || LANGUAGES[0];
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-label={`Reading language: ${current.label}. Change`}
+        className="btn btn-ghost btn-sm gap-1.5"
+      >
+        <Languages className="w-4 h-4" aria-hidden="true" />
+        <span className="hidden md:inline">{current.short}</span>
+      </button>
+      {open ? (
+        <div className="absolute right-0 top-full mt-1.5 w-48 rounded-xl border border-line bg-overlay shadow-e3 p-1.5 z-header animate-fade-in">
+          {LANGUAGES.map((l) => (
+            <button
+              key={l.value}
+              type="button"
+              onClick={() => { changeLanguage(l.value); setOpen(false); }}
+              className={`w-full flex items-center justify-between gap-2 px-2.5 py-2 rounded-lg text-left text-base transition-colors ${
+                language === l.value ? 'bg-accent-soft text-accent font-medium' : 'text-ink hover:bg-sunken'
               }`}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-500" />
-              <span>O-Level (M2-R5.1)</span>
-            </Link>
+              {l.label}
+              {language === l.value ? <Check className="w-3.5 h-3.5" aria-hidden="true" /> : null}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
 
-            <Link
-              href="/ccc"
-              className={`px-3 py-1 rounded-lg transition-all flex items-center gap-1 ${
-                isCccCourse 
-                  ? "bg-white dark:bg-slate-900 text-accent-blue dark:text-blue-400 shadow-2xs font-extrabold" 
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-              }`}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-accent-blue" />
-              <span>CCC Computer Concepts</span>
+/* ------------------------------------------------------------ theme toggle */
+
+function ThemeToggle() {
+  const { theme, toggleTheme, mounted } = useTheme();
+  return (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      className="btn btn-ghost btn-sm btn-icon"
+      aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+    >
+      {mounted && theme === 'dark'
+        ? <Sun className="w-4 h-4" aria-hidden="true" />
+        : <Moon className="w-4 h-4" aria-hidden="true" />}
+    </button>
+  );
+}
+
+/* ------------------------------------------------------------------ navbar */
+
+export default function Navbar() {
+  const pathname = usePathname() || '/';
+  const course = courseFromPath(pathname);
+  const nav = navForCourse(course.key);
+
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+      // "/" opens search, but not while the user is typing in a field
+      if (e.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) && !e.target.isContentEditable) {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  useEffect(() => { setDrawerOpen(false); }, [pathname]);
+
+  const closeSearch = useCallback(() => setSearchOpen(false), []);
+
+  return (
+    <>
+      <header className="sticky top-0 z-header bg-surface/95 supports-[backdrop-filter]:bg-surface/85 backdrop-blur-sm border-b border-line no-print">
+        <div className="shell shell-wide flex items-center gap-3 h-[var(--header-h)]">
+
+          {/* Brand + course */}
+          <div className="flex items-center gap-2.5 min-w-0">
+            <Link href={course.home} className="flex items-center gap-2 shrink-0 group" aria-label={`${course.fullName} home`}>
+              <span className="w-7 h-7 rounded-lg bg-ink grid place-items-center shrink-0">
+                <GraduationCap className="w-4 h-4 text-ink-inv" aria-hidden="true" />
+              </span>
+              <span className="hidden sm:block text-base font-semibold text-ink tracking-tight">NIELIT</span>
             </Link>
+            <span className="hidden sm:block w-px h-5 bg-line" aria-hidden="true" />
+            <CourseSwitcher course={course} pathname={pathname} />
           </div>
 
-          {/* ================= 3. Contextual Navigation Links ================= */}
-          <nav className="hidden lg:flex items-center gap-1 h-full text-xs font-semibold">
-            
-            {/* If on CCC Course */}
-            {isCccCourse ? (
-              <>
-                {/* CCC Chapters Dropdown */}
-                <div className="relative h-full flex items-center">
-                  <button
-                    onClick={() => toggleDropdown('cccChapters')}
-                    onMouseEnter={() => setActiveDropdown('cccChapters')}
-                    className={`flex items-center gap-1 px-3 py-1.5 rounded-md transition-all cursor-pointer ${
-                      activeDropdown === 'cccChapters' || pathname.startsWith('/ccc/chapters')
-                        ? 'bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 font-bold'
-                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                    }`}
-                  >
-                    <span>9 Chapters</span>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-150 ${activeDropdown === 'cccChapters' ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  {activeDropdown === 'cccChapters' && (
-                    <div 
-                      onMouseLeave={() => setActiveDropdown(null)}
-                      className="absolute left-0 top-[48px] w-[360px] rounded-xl bg-white dark:bg-slate-900 border border-appborder shadow-xl p-3 z-50 animate-in fade-in slide-in-from-top-1 duration-150 space-y-1"
-                    >
-                      <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 pb-1 mb-1 border-b border-appborder">
-                        Official CCC Modules (80 Hours)
-                      </div>
-                      {cccChaptersData.map((ch) => (
-                        <Link
-                          key={ch.slug}
-                          href={`/ccc/chapters/${ch.slug}`}
-                          className="block px-2.5 py-1.5 rounded-lg text-xs text-slate-700 dark:text-slate-300 hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-slate-800 dark:hover:text-brand-300 transition-colors"
-                        >
-                          <span className="font-mono text-[10px] text-slate-400 mr-1.5">Ch {ch.chapterNumber}</span>
-                          <span>{ch.title}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <Link
-                  href="/ccc/syllabus"
-                  className={`px-3 py-1.5 rounded-md transition-all ${
-                    pathname === '/ccc/syllabus' ? 'bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                  }`}
-                >
-                  80H Syllabus
-                </Link>
-
-                <Link
-                  href="/ccc/notes"
-                  className={`px-3 py-1.5 rounded-md transition-all ${
-                    pathname.startsWith('/ccc/notes') ? 'bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                  }`}
-                >
-                  Notes &amp; PDF
-                </Link>
-
-                <Link
-                  href="/ccc/mcqs"
-                  className={`px-3 py-1.5 rounded-md transition-all ${
-                    pathname.startsWith('/ccc/mcqs') ? 'bg-slate-100 dark:bg-slate-800 text-emerald-600 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                  }`}
-                >
-                  200 MCQs
-                </Link>
-
-                <Link
-                  href="/ccc/mock-test"
-                  className={`px-3 py-1.5 rounded-md transition-all ${
-                    pathname === '/ccc/mock-test' ? 'bg-slate-100 dark:bg-slate-800 text-amber-600 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                  }`}
-                >
-                  100M Mock Test
-                </Link>
-
-                <Link
-                  href="/ccc/cheat-sheets"
-                  className={`px-3 py-1.5 rounded-md transition-all ${
-                    pathname === '/ccc/cheat-sheets' ? 'bg-slate-100 dark:bg-slate-800 text-indigo-600 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                  }`}
-                >
-                  Shortcuts
-                </Link>
-
-                <Link
-                  href="/ccc/one-liners"
-                  className={`px-3 py-1.5 rounded-md transition-all ${
-                    pathname === '/ccc/one-liners' ? 'bg-slate-100 dark:bg-slate-800 text-purple-600 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                  }`}
-                >
-                  100 Points
-                </Link>
-              </>
-            ) : (
-              /* If on O-Level Course */
-              <>
-                {/* Tutorials & Syllabus Dropdown */}
-                <div className="relative h-full flex items-center">
-                  <button
-                    onClick={() => toggleDropdown('tutorials')}
-                    onMouseEnter={() => setActiveDropdown('tutorials')}
-                    className={`flex items-center gap-1 px-3 py-1.5 rounded-md transition-all ${
-                      pathname.startsWith('/units') || activeDropdown === 'tutorials'
-                        ? 'bg-slate-100 dark:bg-slate-800 text-brand-600 dark:text-brand-400 font-bold'
-                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                    }`}
-                  >
-                    <span>Tutorials</span>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-150 ${activeDropdown === 'tutorials' ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  {activeDropdown === 'tutorials' && (
-                    <div 
-                      onMouseLeave={() => setActiveDropdown(null)}
-                      className="absolute left-0 top-[48px] w-[460px] rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl p-4 z-50 animate-in fade-in slide-in-from-top-1 duration-150 grid grid-cols-2 gap-4"
-                    >
-                      <div>
-                        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 pb-1 mb-1 border-b border-slate-100 dark:border-slate-800">
-                          Syllabus Units (01-08)
-                        </div>
-                        {unitsData.map((u) => (
-                          <Link
-                            key={u.slug}
-                            href={`/units/${u.slug}`}
-                            className="block px-2 py-1 rounded text-xs text-slate-700 dark:text-slate-300 hover:bg-brand-50 hover:text-brand-700 dark:hover:bg-slate-800 transition-colors"
-                          >
-                            <span className="font-mono text-[10px] text-slate-400 mr-1">U{u.unitNumber}</span>
-                            <span>{u.title}</span>
-                          </Link>
-                        ))}
-                      </div>
-
-                      <div>
-                        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 pb-1 mb-1 border-b border-slate-100 dark:border-slate-800">
-                          Revision Vault
-                        </div>
-                        <Link href="/syllabus" className="block px-2 py-1 rounded text-xs text-slate-700 dark:text-slate-300 hover:bg-brand-50">
-                          100M Syllabus Blueprint
-                        </Link>
-                        <Link href="/one-liners" className="block px-2 py-1 rounded text-xs text-slate-700 dark:text-slate-300 hover:bg-brand-50">
-                          100 Golden Points
-                        </Link>
-                        <Link href="/differences" className="block px-2 py-1 rounded text-xs text-slate-700 dark:text-slate-300 hover:bg-brand-50">
-                          17 Concept Differences
-                        </Link>
-                        <Link href="/cheat-sheets" className="block px-2 py-1 rounded text-xs text-slate-700 dark:text-slate-300 hover:bg-brand-50">
-                          Syntax Cheat Sheets
-                        </Link>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <Link
-                  href="/notes"
-                  className={`px-3 py-1.5 rounded-md transition-all ${
-                    pathname.startsWith('/notes') ? 'bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                  }`}
-                >
-                  Notes &amp; PDF
-                </Link>
-
-                <Link
-                  href="/classroom"
-                  className={`px-3 py-1.5 rounded-md transition-all ${
-                    pathname === '/classroom' ? 'bg-amber-50 dark:bg-amber-950 text-amber-600 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                  }`}
-                >
-                  Digital Board
-                </Link>
-
-                <Link
-                  href="/playground"
-                  className={`px-3 py-1.5 rounded-md transition-all ${
-                    pathname === '/playground' ? 'bg-sky-50 dark:bg-sky-950 text-sky-600 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                  }`}
-                >
-                  Playground
-                </Link>
-
-                <Link
-                  href="/mcqs"
-                  className={`px-3 py-1.5 rounded-md transition-all ${
-                    pathname.startsWith('/mcqs') ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-600 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                  }`}
-                >
-                  200 MCQs
-                </Link>
-
-                <Link
-                  href="/mock-test"
-                  className={`px-3 py-1.5 rounded-md transition-all ${
-                    pathname === '/mock-test' ? 'bg-rose-50 dark:bg-rose-950 text-rose-600 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                  }`}
-                >
-                  Mock Test
-                </Link>
-              </>
-            )}
+          {/* Primary nav */}
+          <nav className="hidden lg:flex items-center gap-0.5 ml-2" aria-label="Main">
+            {nav.map((group) => (
+              <NavMenu key={group.label} group={group} pathname={pathname} />
+            ))}
           </nav>
 
-          {/* ================= 4. Global Action Icons ================= */}
-          <div className="flex items-center gap-1.5 shrink-0">
-            <Link
-              href="/search"
+          {/* Utilities */}
+          <div className="ml-auto flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              className="hidden sm:flex items-center gap-2 h-8 pl-2.5 pr-1.5 rounded-lg border border-line bg-sunken text-ink-3 hover:border-line-strong hover:text-ink-2 transition-colors"
+              aria-label="Search (press Control K)"
+            >
+              <Search className="w-3.5 h-3.5" aria-hidden="true" />
+              <span className="text-sm hidden md:inline">Search</span>
+              <kbd className="hidden md:inline-flex items-center h-5 px-1.5 rounded border border-line bg-surface font-mono text-2xs text-ink-4">⌘K</kbd>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              className="sm:hidden btn btn-ghost btn-sm btn-icon"
               aria-label="Search"
-              className="p-1.5 rounded-md text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             >
-              <Search className="w-4 h-4" />
-            </Link>
-
-            <button
-              onClick={toggleTheme}
-              aria-label="Toggle Theme"
-              className="p-1.5 rounded-md text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-            >
-              {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
+              <Search className="w-4 h-4" aria-hidden="true" />
             </button>
 
-            {/* Mobile Menu Trigger */}
+            <LanguageToggle />
+            <ThemeToggle />
+
             <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-1.5 rounded-md text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+              type="button"
+              onClick={() => setDrawerOpen(true)}
+              className="lg:hidden btn btn-ghost btn-sm btn-icon"
+              aria-label="Open menu"
+              aria-expanded={drawerOpen}
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              <Menu className="w-4.5 h-4.5" aria-hidden="true" />
             </button>
           </div>
-
         </div>
+      </header>
 
-        {/* Mobile Menu Dropdown */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 py-3 space-y-3 animate-in fade-in">
-            {/* Course Switcher */}
-            <div className="flex items-center gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-bold">
-              <Link
-                href="/"
-                className={`flex-1 py-1.5 text-center rounded-lg ${!isCccCourse ? 'bg-white dark:bg-slate-900 text-brand-600 font-bold shadow-2xs' : 'text-slate-600'}`}
-              >
-                O-Level M2-R5.1
-              </Link>
-              <Link
-                href="/ccc"
-                className={`flex-1 py-1.5 text-center rounded-lg ${isCccCourse ? 'bg-white dark:bg-slate-900 text-brand-600 font-bold shadow-2xs' : 'text-slate-600'}`}
-              >
-                CCC Course
-              </Link>
-            </div>
-
-            {isCccCourse ? (
-              <div className="space-y-1 text-sm font-medium">
-                <Link href="/ccc" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-                  CCC Home Studio
-                </Link>
-                <Link href="/ccc/syllabus" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-                  80-Hour Syllabus Blueprint
-                </Link>
-                <Link href="/ccc/notes" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-brand-600 font-bold">
-                  Unit-Wise Notes &amp; PDF Library
-                </Link>
-                <Link href="/ccc/mcqs" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-                  200+ Chapter MCQs
-                </Link>
-                <Link href="/ccc/mock-test" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-                  100-Mark Mock Simulator
-                </Link>
-                <Link href="/ccc/cheat-sheets" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-                  LibreOffice Cheat Sheets
-                </Link>
-                <Link href="/ccc/one-liners" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-                  100 Golden Points
-                </Link>
-              </div>
-            ) : (
-              <div className="space-y-1 text-sm font-medium">
-                <Link href="/" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-                  O-Level Home
-                </Link>
-                <Link href="/syllabus" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-                  100M Syllabus Blueprint
-                </Link>
-                <Link href="/notes" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-brand-600 font-bold">
-                  Unit-Wise Notes &amp; PDF Library
-                </Link>
-                <Link href="/classroom" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-                  Digital Board Classroom
-                </Link>
-                <Link href="/playground" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-                  Code Playground
-                </Link>
-                <Link href="/mcqs" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-                  200 MCQs
-                </Link>
-                <Link href="/mock-test" className="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-                  100-Mark Mock Exam
-                </Link>
-              </div>
-            )}
-          </div>
-        )}
-
-      </div>
-    </header>
+      <CommandPalette open={searchOpen} onClose={closeSearch} />
+      <MobileNav
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        course={course}
+        nav={nav}
+        modules={getModules(course.key)}
+        pathname={pathname}
+      />
+    </>
   );
 }

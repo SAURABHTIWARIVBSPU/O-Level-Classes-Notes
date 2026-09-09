@@ -1,221 +1,231 @@
-'use client';
-
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { 
-  BookOpen, 
-  Download, 
-  Search, 
-  FileText, 
-  Clock, 
-  Layers, 
-  Award, 
-  ExternalLink,
-  ChevronRight,
-  Sparkles,
-  CheckCircle2,
-  GraduationCap
-} from 'lucide-react';
+import fs from 'fs';
+import path from 'path';
+import { Award, BookOpen, Clock, Download, FileText, Layers } from 'lucide-react';
+import {
+  Badge,
+  Breadcrumbs,
+  Button,
+  EmptyState,
+  MetaItem,
+  PageHeader,
+  StatTile,
+} from '@/components/ui';
 import { oLevelNotesMeta, oLevelUnitNotesList } from '@/data/oLevelNotesData';
 
-export default function OLevelNotesHubPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedGroup, setSelectedGroup] = useState('ALL');
+export const metadata = {
+  title: 'Full unit notes — O Level M2-R5.1',
+  description:
+    'Long-form study notes for all 8 units of NIELIT O Level M2-R5.1 Web Designing & Publishing. Read each unit in the bilingual web reader, or download the English and हिन्दी PDF textbooks.',
+};
 
-  const filteredUnits = useMemo(() => {
-    return oLevelUnitNotesList.filter((unit) => {
-      const matchesSearch = 
-        unit.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        unit.hindiTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        unit.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        unit.highlights.some(h => h.toLowerCase().includes(searchQuery.toLowerCase()));
+/* 44px targets on touch, the standard control height from `sm` up. */
+const TOUCH = 'min-h-11 sm:min-h-0';
 
-      const matchesGroup = selectedGroup === 'ALL' || unit.marksGroup === selectedGroup;
+function checkPdfExists(relUrl) {
+  if (!relUrl) return false;
+  try {
+    const p = path.join(process.cwd(), 'public', relUrl.replace(/^\//, ''));
+    return fs.existsSync(p);
+  } catch {
+    return false;
+  }
+}
 
-      return matchesSearch && matchesGroup;
-    });
-  }, [searchQuery, selectedGroup]);
+/**
+ * The Hindi editions follow the same file convention as
+ * data/canonicalNotes/localizationHelper.js, which is the only place that
+ * name is defined. oLevelNotesData carries the English file only.
+ */
+function hindiPdf(unit) {
+  const fileName = `O_Level_Unit_${unit.unitNumberPadded}_Detailed_Notes_Hindi.pdf`;
+  return { fileName, url: `${oLevelNotesMeta.pdfBaseUrl}/${fileName}` };
+}
+
+export default function OLevelNotesLibraryPage() {
+  const units = oLevelUnitNotesList || [];
 
   return (
-    <div className="space-y-8 py-4 max-w-6xl mx-auto">
-      
-      {/* 1. Header Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-navy text-white p-6 sm:p-8 shadow-xl border border-navy-800">
-        <div className="relative z-10 space-y-4 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/20 border border-brand-400/30 text-brand-300 text-xs font-semibold uppercase tracking-wider backdrop-blur-sm">
-            <GraduationCap className="w-4 h-4 text-brand-400" />
-            <span>NIELIT O-Level {oLevelNotesMeta.courseCode} Official Curriculum</span>
-          </div>
+    <div className="shell py-8 sm:py-10">
+      <Breadcrumbs items={[{ label: 'Full unit notes' }]} className="mb-5" />
 
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
-            Unit-Wise Detailed Notes &amp; Digital PDF Library
-          </h1>
+      <PageHeader
+        eyebrow={`NIELIT O Level · ${oLevelNotesMeta.courseCode}`}
+        title="Full unit notes"
+        hindiTitle="संपूर्ण इकाई नोट्स"
+        description={`Every unit of ${oLevelNotesMeta.courseName} written out in full — the same syllabus you sit the exam on, in one continuous read. Each unit opens in the bilingual web reader and is also published as a printable PDF in English and हिन्दी.`}
+        actions={
+          <Button variant="secondary" href="/syllabus" className={TOUCH}>
+            <Layers className="w-4 h-4" aria-hidden="true" />
+            Syllabus &amp; blueprint
+          </Button>
+        }
+      />
 
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            Textbook-quality study material for <strong className="text-white">M2-R5.1: Web Designing and Publishing</strong>.
-            Authored strictly according to the official NIELIT syllabus across all 8 Units (87 topics).
-            Read online interactively or download high-resolution study books.
-          </p>
-
-          {/* Quick Metrics Strip */}
-          <div className="flex flex-wrap gap-4 pt-2 text-xs text-slate-300">
-            <div className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">
-              <Layers className="w-4 h-4 text-brand-400" />
-              <span><strong>8</strong> Curriculum Units</span>
-            </div>
-            <div className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">
-              <FileText className="w-4 h-4 text-accent-blue" />
-              <span><strong>87</strong> Topics (100% Covered)</span>
-            </div>
-            <div className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">
-              <Clock className="w-4 h-4 text-emerald-400" />
-              <span><strong>120</strong> Hours (48T + 72P)</span>
-            </div>
-            <div className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">
-              <BookOpen className="w-4 h-4 text-amber-400" />
-              <span><strong>95</strong> Pages of Detailed Notes</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Controls & Search Toolbar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-xl border border-appborder shadow-xs">
-        {/* Search Field */}
-        <div className="relative w-full sm:w-80">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search units, topics, HTML, CSS..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-appborder bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-colors"
+      <section aria-labelledby="library-scale" className="mb-12">
+        <h2 id="library-scale" className="sr-only">
+          What the library covers
+        </h2>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <StatTile label="Units" value={oLevelNotesMeta.totalUnits} hint="Full syllabus coverage" />
+          <StatTile label="Topics" value={oLevelNotesMeta.totalTopics} hint="Every syllabus point" />
+          <StatTile
+            label="Course hours"
+            value={oLevelNotesMeta.totalHours}
+            hint={`${oLevelNotesMeta.totalTheoryHours}h theory + ${oLevelNotesMeta.totalPracticalHours}h practical`}
+          />
+          <StatTile
+            label="PDF pages"
+            value={oLevelNotesMeta.totalPages}
+            hint="English and हिन्दी editions"
           />
         </div>
+      </section>
 
-        {/* Group Filter */}
-        <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
-          {['ALL', 'Group 1', 'Group 2', 'Group 3', 'Group 4', 'Group 5'].map((grp) => (
-            <button
-              key={grp}
-              onClick={() => setSelectedGroup(grp)}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
-                selectedGroup === grp
-                  ? 'bg-brand-500 text-white shadow-2xs'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
-              }`}
-            >
-              {grp}
-            </button>
-          ))}
-        </div>
-      </div>
+      <section aria-labelledby="unit-library">
+        <h2 id="unit-library" className="text-h2 font-semibold text-ink">
+          All {units.length} units
+        </h2>
+        <p className="mt-1.5 mb-6 text-base text-ink-2 max-w-measure leading-relaxed">
+          Units run in syllabus order. Marks are awarded per group of units, so the weightage shown
+          on a card is the weightage of the group it belongs to.
+        </p>
 
-      {/* 3. Units Notes Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
-        {filteredUnits.map((unit) => (
-          <div
-            key={unit.slug}
-            className="group flex flex-col justify-between bg-white dark:bg-slate-900 rounded-xl border border-appborder p-5 sm:p-6 shadow-xs hover:border-brand-500/80 transition-all duration-150"
-          >
-            <div className="space-y-4">
-              {/* Unit Header Bar */}
-              <div className="flex items-start justify-between gap-3">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="px-2 py-0.5 text-[10px] font-black rounded uppercase tracking-wider bg-brand-50 text-brand-700 dark:bg-brand-950/60 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
+        {units.length === 0 ? (
+          <EmptyState
+            title="No unit notes published yet"
+            description="The long-form notes for this module are not available. The syllabus blueprint lists every topic in the meantime."
+            action={
+              <Button variant="primary" href="/syllabus">
+                Open the syllabus
+              </Button>
+            }
+          />
+        ) : (
+          <ul className="grid gap-4 sm:gap-5 md:grid-cols-2">
+            {units.map((unit) => {
+              const hindi = hindiPdf(unit);
+              const hasEnPdf = checkPdfExists(unit.pdfUrl);
+              const hasHiPdf = checkPdfExists(hindi.url);
+              const readHref = `/notes/${unit.slug}`;
+
+              return (
+                <li key={unit.slug} className="panel p-5 flex flex-col">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge tone="accent" mono>
                       Unit {unit.unitNumberPadded}
-                    </span>
-                    <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
-                      Sec {unit.officialSection}
-                    </span>
-                    <span className="px-2 py-0.5 text-[10px] font-bold rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                      {unit.marksWeight}
-                    </span>
+                    </Badge>
+                    {unit.officialSection ? (
+                      <span className="eyebrow">Section {unit.officialSection}</span>
+                    ) : null}
+                    <Badge tone="neutral" className="ml-auto">
+                      {unit.marksGroup} · {unit.marksWeight.split(' ')[0]} marks
+                    </Badge>
                   </div>
-                  <h2 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-brand-600 transition-colors">
-                    {unit.title}
-                  </h2>
-                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+
+                  <h3 className="mt-3 text-h3 font-semibold text-ink">{unit.title}</h3>
+                  <p className="text-sm font-medium text-ink-3 hindi-text" lang="hi">
                     {unit.hindiTitle}
                   </p>
-                </div>
+                  <p className="mt-2 text-base text-ink-2 leading-relaxed line-clamp-3">
+                    {unit.description}
+                  </p>
 
-                {/* PDF Badge */}
-                <div className="text-right shrink-0">
-                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">
-                    <FileText className="w-3.5 h-3.5 text-navy dark:text-brand-400" />
-                    <span>{unit.pageCount} Pages</span>
-                  </span>
-                  <p className="text-[10px] text-slate-400 mt-0.5">{unit.fileSizeKb}</p>
-                </div>
-              </div>
+                  <div className="mt-4 pt-3 border-t border-line grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-ink-3">
+                    <MetaItem icon={BookOpen}>
+                      <span className="tabular-nums">{unit.topicCount}</span> topics
+                    </MetaItem>
+                    <MetaItem icon={Clock}>
+                      <span className="tabular-nums">{unit.totalHours}</span>h total
+                    </MetaItem>
+                    <MetaItem icon={FileText}>
+                      <span className="tabular-nums">{unit.pageCount}</span> pages
+                    </MetaItem>
+                    <MetaItem icon={Award}>{unit.fileSizeKb}</MetaItem>
+                  </div>
 
-              {/* Description */}
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
-                {unit.description}
-              </p>
+                  {unit.highlights?.length ? (
+                    <details className="group mt-4 pt-3 border-t border-line text-xs">
+                      <summary className="cursor-pointer select-none text-ink-3 hover:text-ink font-medium">
+                        What this unit covers ({unit.highlights.length} core areas)
+                      </summary>
+                      <ul className="mt-2.5 space-y-1.5 pl-3 border-l-2 border-line text-ink-2">
+                        {unit.highlights.map((item, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <span
+                              className="mt-1.5 w-1 h-1 rounded-full bg-accent shrink-0"
+                              aria-hidden="true"
+                            />
+                            <span className="leading-relaxed">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  ) : null}
 
-              {/* Highlights Checklist */}
-              <div className="space-y-1.5 pt-2 border-t border-slate-100 dark:border-slate-800/80">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                  Core Syllabus Competencies:
-                </p>
-                <div className="grid grid-cols-1 gap-1">
-                  {unit.highlights.slice(0, 3).map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-1.5 text-xs text-slate-700 dark:text-slate-300">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                      <span className="line-clamp-1">{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+                  <div className="mt-auto pt-5 flex flex-wrap items-center gap-2">
+                    <Button variant="primary" href={readHref} className={TOUCH}>
+                      <BookOpen className="w-4 h-4" aria-hidden="true" />
+                      Read notes
+                    </Button>
 
-            {/* Bottom Actions */}
-            <div className="flex items-center gap-2 pt-5 mt-4 border-t border-slate-100 dark:border-slate-800">
-              <Link
-                href={`/notes/${unit.slug}`}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white font-semibold text-xs transition-colors shadow-sm"
-              >
-                <BookOpen className="w-4 h-4" />
-                <span>Read Notes</span>
-              </Link>
+                    {hasEnPdf ? (
+                      <a
+                        href={unit.pdfUrl}
+                        download={unit.pdfFileName}
+                        className={`btn btn-secondary ${TOUCH}`}
+                        aria-label={`Download the English PDF for Unit ${unit.unitNumberPadded} (${unit.pdfFileName})`}
+                      >
+                        <Download className="w-4 h-4" aria-hidden="true" />
+                        English PDF
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled
+                        className={`btn btn-secondary ${TOUCH} opacity-60 cursor-not-allowed`}
+                        title="PDF textbook coming soon"
+                        aria-label={`English PDF for Unit ${unit.unitNumberPadded} is not yet available`}
+                      >
+                        <Download className="w-4 h-4" aria-hidden="true" />
+                        English PDF (soon)
+                      </button>
+                    )}
 
-              <a
-                href={unit.pdfUrl}
-                download={unit.pdfFileName}
-                className="inline-flex items-center justify-center gap-1 px-2.5 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-colors"
-                title={`Download English PDF (${unit.pdfFileName})`}
-              >
-                <Download className="w-3.5 h-3.5 text-blue-500" />
-                <span>EN</span>
-              </a>
-
-              {unit.hiPdfUrl && (
-                <a
-                  href={unit.hiPdfUrl}
-                  download={unit.hiPdfFileName}
-                  className="inline-flex items-center justify-center gap-1 px-2.5 py-2.5 rounded-lg border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-50 dark:hover:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-semibold text-xs transition-colors"
-                  title={`Download Hindi PDF (${unit.hiPdfFileName})`}
-                >
-                  <Download className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>हिन्दी</span>
-                </a>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {filteredUnits.length === 0 && (
-        <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
-          <Search className="w-10 h-10 text-slate-400 mx-auto mb-3" />
-          <h3 className="text-base font-bold text-slate-800 dark:text-white">No Notes Found</h3>
-          <p className="text-xs text-slate-500 mt-1">Try adjusting your search terms or filter.</p>
-        </div>
-      )}
-
+                    {hasHiPdf ? (
+                      <a
+                        href={hindi.url}
+                        download={hindi.fileName}
+                        className={`btn btn-secondary ${TOUCH}`}
+                        aria-label={`Download the Hindi PDF for Unit ${unit.unitNumberPadded} (${hindi.fileName})`}
+                      >
+                        <Download className="w-4 h-4" aria-hidden="true" />
+                        <span className="hindi-text" lang="hi">
+                          हिन्दी PDF
+                        </span>
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled
+                        className={`btn btn-secondary ${TOUCH} opacity-60 cursor-not-allowed`}
+                        title="Hindi PDF textbook coming soon"
+                        aria-label={`Hindi PDF for Unit ${unit.unitNumberPadded} is not yet available`}
+                      >
+                        <Download className="w-4 h-4" aria-hidden="true" />
+                        <span className="hindi-text" lang="hi">
+                          हिन्दी PDF (soon)
+                        </span>
+                      </button>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </section>
     </div>
   );
 }

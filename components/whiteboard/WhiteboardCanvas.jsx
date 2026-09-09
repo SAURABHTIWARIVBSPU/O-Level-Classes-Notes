@@ -3,6 +3,18 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { boardTemplates } from './BoardTemplates';
 
+/**
+ * The drawing surface itself.
+ *
+ * Two colour systems meet here and they are not the same thing:
+ *
+ *  - The frame around the board is UI chrome and uses design tokens.
+ *  - Everything painted *into* the canvas — the paper, the grid, the ink, the
+ *    sticky note — is content. Those stay literal colour values, because the
+ *    board is exported as a PNG and has to look identical wherever it lands,
+ *    independent of the reader's theme.
+ */
+
 export default function WhiteboardCanvas({
   activeTool = 'pen',
   strokeColor = '#F19A27',
@@ -184,7 +196,7 @@ export default function WhiteboardCanvas({
       const ctx = canvas.getContext('2d');
       const { width, height, dpr } = dimensionsRef.current;
 
-      const tmpl = boardTemplates.find((t) => t.id === templateTrigger);
+      const tmpl = boardTemplates.find((t) => t.id === (templateTrigger?.id ?? templateTrigger));
       if (tmpl && tmpl.draw) {
         // Reset scale and clear canvas background cleanly
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -449,7 +461,7 @@ export default function WhiteboardCanvas({
   };
 
   return (
-    <div ref={containerRef} className="relative w-full h-full select-none touch-none overflow-hidden rounded-xl bg-slate-950">
+    <div ref={containerRef} className="relative h-full w-full select-none touch-none overflow-hidden rounded-xl bg-sunken">
       <canvas
         ref={canvasRef}
         onPointerDown={handlePointerDown}
@@ -458,9 +470,12 @@ export default function WhiteboardCanvas({
         onPointerLeave={handlePointerUp}
         className="block cursor-crosshair touch-none"
         style={{ touchAction: 'none' }}
+        aria-label={`Whiteboard drawing surface. Current tool: ${activeTool}.`}
+        role="img"
       />
 
-      {/* Floating text input box when Text Tool is active */}
+      {/* Floating text input box when Text Tool is active. Its text colour is
+          the ink it will be written in, so that stays a literal value. */}
       {textInput.visible && (
         <div
           className="absolute z-20"
@@ -476,8 +491,9 @@ export default function WhiteboardCanvas({
               if (e.key === 'Enter') handleTextSubmit();
               if (e.key === 'Escape') setTextInput({ visible: false, x: 0, y: 0, value: '' });
             }}
-            placeholder="Type text & press Enter..."
-            className="px-2.5 py-1 text-sm font-bold bg-white dark:bg-slate-900 border-2 border-brand-500 rounded-lg shadow-xl outline-none text-slate-900 dark:text-white"
+            placeholder="Type text, then press Enter…"
+            aria-label="Text to write on the board"
+            className="input w-56 max-w-[70vw] border-accent font-medium shadow-e3"
             style={{ color: strokeColor }}
           />
         </div>

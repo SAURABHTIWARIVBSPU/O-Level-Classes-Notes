@@ -1,236 +1,340 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
-import { 
-  BookOpen, 
-  GraduationCap, 
-  ShieldCheck, 
-  Clock, 
-  CheckCircle2, 
-  ArrowRight,
-  ExternalLink,
-  Award,
-  Sparkles,
-  Layers,
-  FileText
-} from 'lucide-react';
-import { cccChaptersData, cccSyllabusMeta } from '@/data/cccSyllabusData';
-import { useProgress } from '@/lib/progressContext';
+import { ArrowRight, CheckCircle2, Clock, GraduationCap, ListChecks, Timer } from 'lucide-react';
+
+import {
+  Badge,
+  Breadcrumbs,
+  Button,
+  MetaItem,
+  PageHeader,
+  ProgressBar,
+  ScrollTable,
+  SectionHeading,
+  StatTile,
+} from '@/components/ui';
+import { getCourseMeta, getModules } from '@/lib/navigation';
+
+export const metadata = {
+  title: 'CCC syllabus and exam blueprint',
+  description:
+    'The official NIELIT CCC blueprint: all nine chapters with theory hours, practical hours and exam weightage, plus the learning outcomes and topic list for each chapter.',
+};
+
+/** "10-12 Marks" → 12. The upper bound is what a chapter can actually cost you. */
+function marksCeiling(marks) {
+  const numbers = String(marks || '').match(/\d+/g);
+  if (!numbers) return 0;
+  return Math.max(...numbers.map(Number));
+}
+
+const stripLeadingZero = (n) => String(n || '').replace(/^0+/, '') || String(n);
 
 export default function CCCSyllabusPage() {
-  const { completedTopics, toggleTopicCompleted } = useProgress();
+  const meta = getCourseMeta('ccc');
+  const chapters = getModules('ccc');
+
+  const peak = Math.max(1, ...chapters.map((c) => marksCeiling(c.marks)));
+  const totals = chapters.reduce(
+    (acc, c) => ({
+      theory: acc.theory + (c.theoryHours || 0),
+      practical: acc.practical + (c.practicalHours || 0),
+      hours: acc.hours + (c.hours || 0),
+      topics: acc.topics + (c.topics ? c.topics.length : 0),
+    }),
+    { theory: 0, practical: 0, hours: 0, topics: 0 },
+  );
 
   return (
-    <div className="space-y-12 py-4 max-w-7xl mx-auto">
-      
-      {/* Header Banner */}
-      <div className="space-y-4 border-b border-appborder pb-8">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="px-3 py-1 rounded-full bg-accent-blue/10 border border-accent-blue/30 text-accent-blue font-mono text-xs font-bold">
-            {cccSyllabusMeta.organization}
-          </span>
-          <span className="px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-600 dark:text-brand-400 font-mono text-xs font-bold">
-            {cccSyllabusMeta.courseCode} • {cccSyllabusMeta.revision} (w.e.f. {cccSyllabusMeta.implementationDate})
-          </span>
-          <span className="px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-mono text-xs font-bold">
-            {cccSyllabusMeta.durationTotalHours} Hours (32 Theory + 48 Practical)
-          </span>
-        </div>
+    <div className="shell py-8 sm:py-10">
+      <Breadcrumbs className="mb-5" items={[{ label: 'CCC', href: '/ccc' }, { label: 'Syllabus' }]} />
 
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
-          {cccSyllabusMeta.courseName}
-        </h1>
-        
-        <p className="text-lg sm:text-xl font-extrabold text-navy dark:text-brand-400 hindi-text">
-          {cccSyllabusMeta.hindiCourseName}
-        </p>
+      <PageHeader
+        eyebrow={`${meta.revision} · in force from ${meta.implementationDate}`}
+        title="CCC syllabus and exam blueprint"
+        hindiTitle={meta.hindiCourseName}
+        description={meta.purpose}
+        actions={
+          <>
+            <Button variant="primary" href="/ccc/chapters/chapter-1" iconRight={ArrowRight}>
+              Start Chapter 1
+            </Button>
+            <Button variant="secondary" href="/ccc/notes">
+              Full notes
+            </Button>
+          </>
+        }
+        meta={
+          <>
+            <MetaItem icon={ListChecks}>
+              {chapters.length} chapters · {totals.topics} topics
+            </MetaItem>
+            <MetaItem icon={Clock}>{meta.durationTotalHours} hours</MetaItem>
+            <MetaItem icon={Timer}>90-minute paper</MetaItem>
+            <MetaItem icon={GraduationCap}>{meta.organization}</MetaItem>
+          </>
+        }
+      />
 
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
-          {cccSyllabusMeta.purpose}
-        </p>
+      <div className="space-y-12">
+        {/* ---------------------------------------------------- the exam itself */}
+        <section aria-labelledby="exam-shape">
+          <SectionHeading
+            id="exam-shape"
+            eyebrow="The paper"
+            title="What the exam asks for"
+            description={meta.examPattern}
+          />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <StatTile
+              label="Course length"
+              value={`${meta.durationTotalHours}h`}
+              hint={`${meta.theoryHours}h theory + ${meta.practicalHours}h practical`}
+              icon={Clock}
+            />
+            <StatTile label="Questions" value="100" hint="MCQ and true/false" icon={ListChecks} />
+            <StatTile label="Time" value="90 min" hint="No negative marking" icon={Timer} />
+            <StatTile label="Pass mark" value="50%" hint="Grade D or higher" icon={GraduationCap} />
+          </div>
+          <p className="mt-4 text-sm text-ink-3 max-w-measure">
+            Practical work is done in {meta.practicalEnvironment}
+          </p>
+        </section>
 
-        {/* Target Job Roles & Practical Platform Strip */}
-        <div className="flex flex-wrap items-center gap-3 pt-1 text-xs">
-          <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
-            <span className="font-bold text-slate-700 dark:text-slate-300">Target Job Roles:</span>
-            {cccSyllabusMeta.jobRoles.map((role) => (
-              <span key={role} className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 font-medium text-slate-700 dark:text-slate-300 border border-appborder">
-                {role}
+        {/* -------------------------------------------------- chapter blueprint */}
+        <section aria-labelledby="blueprint">
+          <SectionHeading
+            id="blueprint"
+            eyebrow="Official blueprint"
+            title="Hours and weightage, chapter by chapter"
+            description="Bar length compares each chapter against the heaviest one, so you can see where the marks actually sit."
+          />
+
+          {/* Tablet and up: the real table */}
+          <div className="hidden sm:block">
+            <ScrollTable>
+              <table>
+                <caption className="sr-only">
+                  NIELIT CCC chapters with theory hours, practical hours, total hours and exam
+                  weightage
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col" className="w-12">
+                      No.
+                    </th>
+                    <th scope="col">Chapter</th>
+                    <th scope="col" className="w-16">
+                      Theory
+                    </th>
+                    <th scope="col" className="w-20">
+                      Practical
+                    </th>
+                    <th scope="col" className="w-16">
+                      Total
+                    </th>
+                    <th scope="col" className="w-1/4">
+                      Weightage
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {chapters.map((chapter) => (
+                    <tr key={chapter.key}>
+                      <td className="tabular-nums">{stripLeadingZero(chapter.number)}</td>
+                      <td>
+                        <Link
+                          href={chapter.href}
+                          className="font-medium text-ink hover:text-accent transition-colors duration-fast"
+                        >
+                          {chapter.title}
+                        </Link>
+                        {chapter.hindiTitle ? (
+                          <span className="block mt-0.5 text-xs text-hindi hindi-text" lang="hi">
+                            {chapter.hindiTitle}
+                          </span>
+                        ) : null}
+                      </td>
+                      <td className="tabular-nums">{chapter.theoryHours ?? '—'}h</td>
+                      <td className="tabular-nums">{chapter.practicalHours ?? '—'}h</td>
+                      <td className="tabular-nums font-medium text-ink">{chapter.hours ?? '—'}h</td>
+                      <td>
+                        <ProgressBar
+                          value={(marksCeiling(chapter.marks) / peak) * 100}
+                          label={chapter.marks}
+                          showValue={false}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className="bg-sunken">
+                    <th
+                      scope="row"
+                      colSpan={2}
+                      className="px-3.5 py-2.5 border-t border-line text-left text-sm font-semibold text-ink"
+                    >
+                      Whole course · {chapters.length} chapters
+                    </th>
+                    <td className="px-3.5 py-2.5 border-t border-line text-sm font-medium text-ink tabular-nums">
+                      {totals.theory}h
+                    </td>
+                    <td className="px-3.5 py-2.5 border-t border-line text-sm font-medium text-ink tabular-nums">
+                      {totals.practical}h
+                    </td>
+                    <td className="px-3.5 py-2.5 border-t border-line text-sm font-medium text-ink tabular-nums">
+                      {totals.hours}h
+                    </td>
+                    <td className="px-3.5 py-2.5 border-t border-line text-sm font-medium text-ink">
+                      100 marks
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </ScrollTable>
+          </div>
+
+          {/* 320px: the same rows, stacked — a six-column table is not readable here */}
+          <ul className="sm:hidden space-y-2.5">
+            {chapters.map((chapter) => (
+              <li key={chapter.key} className="panel overflow-hidden">
+                <Link href={chapter.href} className="block px-4 py-3 border-b border-line">
+                  <span className="eyebrow block mb-1">Chapter {stripLeadingZero(chapter.number)}</span>
+                  <span className="block text-h4 font-medium text-ink leading-snug">
+                    {chapter.title}
+                  </span>
+                  {chapter.hindiTitle ? (
+                    <span className="block mt-0.5 text-sm text-hindi hindi-text" lang="hi">
+                      {chapter.hindiTitle}
+                    </span>
+                  ) : null}
+                </Link>
+                <dl className="px-4 py-3 grid grid-cols-3 gap-3">
+                  <div>
+                    <dt className="eyebrow">Theory</dt>
+                    <dd className="text-base text-ink tabular-nums">{chapter.theoryHours ?? '—'}h</dd>
+                  </div>
+                  <div>
+                    <dt className="eyebrow">Practical</dt>
+                    <dd className="text-base text-ink tabular-nums">
+                      {chapter.practicalHours ?? '—'}h
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="eyebrow">Total</dt>
+                    <dd className="text-base text-ink tabular-nums">{chapter.hours ?? '—'}h</dd>
+                  </div>
+                </dl>
+                <div className="px-4 pb-3">
+                  <ProgressBar
+                    value={(marksCeiling(chapter.marks) / peak) * 100}
+                    label={chapter.marks}
+                    showValue={false}
+                  />
+                </div>
+              </li>
+            ))}
+            <li className="well px-4 py-3 flex items-center justify-between gap-3">
+              <span className="text-sm font-medium text-ink">Whole course</span>
+              <span className="text-sm text-ink-2 tabular-nums">
+                {totals.hours}h · 100 marks
               </span>
+            </li>
+          </ul>
+        </section>
+
+        {/* --------------------------------------------------- learning outcomes */}
+        <section aria-labelledby="outcomes">
+          <SectionHeading
+            id="outcomes"
+            eyebrow="Learning outcomes"
+            title="What each chapter should leave you able to do"
+            description="The outcomes below are the official NIELIT wording. The topic links go straight to the reading pages."
+          />
+
+          <div className="divide-y divide-line border-t border-line">
+            {chapters.map((chapter) => (
+              <article key={chapter.key} className="py-8 first:pt-6">
+                <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
+                  <div className="min-w-0">
+                    <p className="eyebrow mb-1.5">Chapter {stripLeadingZero(chapter.number)}</p>
+                    <h3 className="text-h3 font-semibold text-ink">{chapter.title}</h3>
+                    {chapter.hindiTitle ? (
+                      <p className="mt-0.5 text-base text-hindi hindi-text" lang="hi">
+                        {chapter.hindiTitle}
+                      </p>
+                    ) : null}
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2 shrink-0">
+                    {chapter.hours ? <Badge tone="neutral">{chapter.hours} hours</Badge> : null}
+                    {chapter.marks ? <Badge tone="exam">{chapter.marks}</Badge> : null}
+                  </div>
+                </div>
+
+                {chapter.objectives && chapter.objectives.length ? (
+                  <ul className="space-y-2.5 max-w-measure">
+                    {chapter.objectives.map((objective, i) => (
+                      <li key={i} className="flex items-start gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 mt-1 shrink-0 text-ok" aria-hidden="true" />
+                        <span className="text-base text-ink-2 leading-relaxed">{objective}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+
+                {chapter.topics && chapter.topics.length ? (
+                  <div className="mt-5">
+                    <p className="eyebrow mb-2">
+                      {chapter.topics.length} {chapter.topics.length === 1 ? 'topic' : 'topics'}
+                    </p>
+                    <ul className="grid gap-2 sm:grid-cols-2">
+                      {chapter.topics.map((topic) => (
+                        <li key={topic.slug} className="min-w-0">
+                          <Link
+                            href={topic.href}
+                            className="flex items-center min-h-11 px-3 py-2 rounded-md border border-line bg-surface text-sm text-ink-2 hover:text-ink hover:border-line-strong transition-colors duration-fast"
+                          >
+                            {topic.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+
+                <div className="mt-5">
+                  <Button variant="secondary" size="sm" href={chapter.href} iconRight={ArrowRight}>
+                    Open Chapter {stripLeadingZero(chapter.number)}
+                  </Button>
+                </div>
+              </article>
             ))}
           </div>
-          <span className="text-slate-300 dark:text-slate-600 hidden sm:inline">•</span>
-          <div className="flex items-center gap-1 text-emerald-700 dark:text-emerald-400 font-medium">
-            <span>Practical Lab: <strong>Ubuntu Linux &amp; LibreOffice</strong></span>
-          </div>
-        </div>
+        </section>
 
-        {/* 4 Key Badges */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-          <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-appborder shadow-2xs">
-            <span className="text-[11px] font-bold text-slate-400 uppercase block">Total Duration</span>
-            <strong className="text-base font-black text-slate-900 dark:text-white">80 Hours</strong>
-            <span className="text-[10px] text-slate-500 block">32h Theory + 48h Lab</span>
-          </div>
-
-          <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-appborder shadow-2xs">
-            <span className="text-[11px] font-bold text-slate-400 uppercase block">Exam Pattern</span>
-            <strong className="text-base font-black text-slate-900 dark:text-white">100 Questions</strong>
-            <span className="text-[10px] text-slate-500 block">Online MCQs &amp; True/False</span>
-          </div>
-
-          <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-appborder shadow-2xs">
-            <span className="text-[11px] font-bold text-slate-400 uppercase block">Exam Duration</span>
-            <strong className="text-base font-black text-slate-900 dark:text-white">90 Minutes</strong>
-            <span className="text-[10px] text-slate-500 block">No Negative Marking</span>
-          </div>
-
-          <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-appborder shadow-2xs">
-            <span className="text-[11px] font-bold text-slate-400 uppercase block">Passing Grade</span>
-            <strong className="text-base font-black text-slate-900 dark:text-white">50% Marks</strong>
-            <span className="text-[10px] text-slate-500 block">Grade S (85%+) to D</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Official 9 Chapters Table */}
-      <section className="space-y-6">
-        <div className="space-y-1">
-          <span className="text-xs font-mono font-bold uppercase tracking-widest text-brand-600 dark:text-brand-400">
-            OFFICIAL NIELIT BLUEPRINT
-          </span>
-          <h2 className="text-2xl font-black text-slate-900 dark:text-white">
-            Chapter-Wise Duration &amp; Syllabus Outline
+        {/* ------------------------------------------------------------ closing */}
+        <section aria-labelledby="syllabus-next">
+          <h2 id="syllabus-next" className="text-h2 font-semibold text-ink">
+            Where to go from here
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-            Official breakdown of 9 modules from Revision 3 curriculum implemented w.e.f. 01st June, 2019
+          <p className="mt-2 text-base text-ink-2 leading-relaxed max-w-measure">
+            {meta.eligibility} Everything above is covered by the reading pages, the chapter
+            questions and the mock test.
           </p>
-        </div>
-
-        <div className="table-responsive rounded-xl border border-appborder shadow-xs bg-white dark:bg-slate-900">
-          <table className="w-full text-left text-xs sm:text-sm">
-            <thead className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold border-b border-appborder">
-              <tr>
-                <th className="p-4 w-16 text-center">Ch. No.</th>
-                <th className="p-4">Chapter Title &amp; Hindi Name</th>
-                <th className="p-4 text-center">Theory</th>
-                <th className="p-4 text-center">Lab</th>
-                <th className="p-4 text-center">Total</th>
-                <th className="p-4 text-center">Weightage</th>
-                <th className="p-4 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-600 dark:text-slate-300">
-              {cccChaptersData.map((ch) => (
-                <tr key={ch.slug} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="p-4 text-center font-mono font-bold text-accent-blue">
-                    {ch.chapterNumber}
-                  </td>
-                  <td className="p-4 space-y-0.5">
-                    <strong className="text-slate-900 dark:text-white block font-bold">
-                      {ch.title}
-                    </strong>
-                    <span className="text-xs text-brand-600 dark:text-brand-400 hindi-text font-medium block">
-                      {ch.hindiTitle}
-                    </span>
-                  </td>
-                  <td className="p-4 text-center font-mono">{ch.theoryHours}h</td>
-                  <td className="p-4 text-center font-mono">{ch.practicalHours}h</td>
-                  <td className="p-4 text-center font-mono font-bold text-slate-900 dark:text-white">
-                    {ch.totalHours}h
-                  </td>
-                  <td className="p-4 text-center font-mono text-amber-600 dark:text-amber-400 font-bold">
-                    {ch.marksWeight}
-                  </td>
-                  <td className="p-4 text-right">
-                    <Link
-                      href={`/ccc/chapters/${ch.slug}`}
-                      className="px-3 py-1.5 rounded-lg bg-brand-50 hover:bg-brand-500 hover:text-white text-brand-700 dark:bg-brand-950/60 dark:text-brand-300 font-bold text-xs transition-all inline-flex items-center gap-1 shadow-2xs"
-                    >
-                      <span>Study</span>
-                      <ArrowRight className="w-3 h-3" />
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-              <tr className="bg-slate-100 dark:bg-slate-800/80 font-black text-slate-900 dark:text-white">
-                <td className="p-4 text-center" colSpan={2}>
-                  TOTAL DURATION &amp; MARKS
-                </td>
-                <td className="p-4 text-center font-mono">32h</td>
-                <td className="p-4 text-center font-mono">48h</td>
-                <td className="p-4 text-center font-mono text-accent-blue font-black">
-                  80h
-                </td>
-                <td className="p-4 text-center font-mono text-amber-500 font-black">
-                  100 Marks
-                </td>
-                <td className="p-4 text-right font-mono text-xs text-emerald-500">
-                  Pass: 50%
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* Chapter Checklists */}
-      <section className="space-y-6">
-        <div className="space-y-1">
-          <span className="text-xs font-mono font-bold uppercase tracking-widest text-brand-600 dark:text-brand-400">
-            INTERACTIVE TOPIC DIRECTORY
-          </span>
-          <h2 className="text-2xl font-black text-slate-900 dark:text-white">
-            Topic Checklists for All 9 Modules
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          {cccChaptersData.map((ch) => (
-            <div
-              key={ch.slug}
-              className="p-5 sm:p-6 rounded-xl border border-appborder bg-white dark:bg-slate-900 space-y-4 shadow-xs"
-            >
-              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                <div>
-                  <span className="text-[10px] font-mono font-bold text-accent-blue block">
-                    CHAPTER {ch.chapterNumber}
-                  </span>
-                  <h3 className="font-bold text-base text-slate-900 dark:text-white">
-                    {ch.title}
-                  </h3>
-                </div>
-                <Link
-                  href={`/ccc/chapters/${ch.slug}`}
-                  className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1"
-                >
-                  <span>View All</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-
-              <div className="space-y-2">
-                {ch.topics.map((t, idx) => (
-                  <div
-                    key={t.slug}
-                    className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-appborder flex items-center justify-between text-xs"
-                  >
-                    <Link
-                      href={`/ccc/chapters/${ch.slug}/topics/${t.slug}`}
-                      className="font-medium text-slate-700 dark:text-slate-300 hover:text-brand-600 transition-colors flex items-center gap-2"
-                    >
-                      <span className="font-mono text-[10px] text-slate-400">{idx + 1}.</span>
-                      <span>{t.title}</span>
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
+          <div className="mt-5 flex flex-wrap gap-2">
+            <Button variant="primary" href="/ccc/chapters/chapter-1" iconRight={ArrowRight}>
+              Start Chapter 1
+            </Button>
+            <Button variant="secondary" href="/ccc/mcqs">
+              Chapter questions
+            </Button>
+            <Button variant="ghost" href="/ccc/mock-test">
+              Mock test
+            </Button>
+          </div>
+        </section>
+      </div>
     </div>
   );
 }

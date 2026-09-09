@@ -1,350 +1,427 @@
-'use client';
-
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { 
-  BookOpen, 
-  CheckCircle2, 
-  Circle, 
-  Clock, 
-  Award, 
-  ShieldCheck, 
-  FileText,
-  ExternalLink,
-  ChevronRight,
-  Sparkles,
-  BarChart3,
-  Check,
-  Layers,
-  Flame,
-  ArrowRight
-} from 'lucide-react';
-import { unitsData, syllabusMeta } from '@/data/syllabusData';
-import { useProgress } from '@/lib/progressContext';
+import { Award, BookOpen, FileText, GraduationCap, Layers, ListChecks, Target } from 'lucide-react';
+import {
+  Badge,
+  Breadcrumbs,
+  Button,
+  MetaItem,
+  PageHeader,
+  Panel,
+  ScrollTable,
+  StatTile,
+} from '@/components/ui';
+import { getCourseMeta, getModules } from '@/lib/navigation';
 
-export default function SyllabusPage() {
-  const { completedTopics, toggleTopicCompleted, overallPercentage } = useProgress();
-  const [selectedGroupFilter, setSelectedGroupFilter] = useState('all');
+export const metadata = {
+  title: 'Syllabus and exam blueprint — O Level M2-R5.1',
+  description:
+    'The official NIELIT O Level M2-R5.1 Web Designing & Publishing syllabus: how the 100 written marks are split across five unit groups, theory and practical hours for all 8 units, and the learning objective behind each one.',
+};
+
+/* 44px targets on touch, the standard control height from `sm` up. */
+const TOUCH = 'min-h-11 sm:min-h-0';
+
+function unitSlugFromLabel(label = '') {
+  const number = String(label).replace(/[^0-9]/g, '');
+  return number ? `/units/unit-${number}` : '/syllabus';
+}
+
+export default function OLevelSyllabusPage() {
+  const meta = getCourseMeta('olevel');
+  const modules = getModules('olevel');
+
+  const totalMarks = meta.writtenMarksMax || 100;
+  const groups = meta.marksDistribution || [];
+  const totalTopics = modules.reduce((count, module) => count + (module.topics?.length || 0), 0);
 
   return (
-    <div className="space-y-12 max-w-6xl mx-auto py-4">
-      
-      {/* ================= HEADER SECTION ================= */}
-      <div className="border-b border-slate-200 dark:border-slate-800 pb-6 space-y-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 text-xs font-mono font-bold">
-            <Sparkles className="w-3.5 h-3.5 text-brand-500" />
-            NIELIT O-LEVEL (IT) • MODULE M2-R5.1
-          </div>
-          <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold">
-            Official Curriculum &amp; Examination Blueprint
-          </div>
-        </div>
+    <div className="shell py-8 sm:py-10">
+      <Breadcrumbs items={[{ label: 'Syllabus & blueprint' }]} className="mb-5" />
 
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
-          Web Designing &amp; Publishing Syllabus
-        </h1>
-        <p className="text-sm sm:text-base font-bold text-brand-600 dark:text-brand-400 hindi-text">
-          वेब डिजाइनिंग एवं पब्लिशिंग — आधिकारिक पाठ्यक्रम एवं अंक विभाजन (Marks Distribution)
+      <PageHeader
+        eyebrow={`NIELIT O Level · ${meta.moduleCode}`}
+        title="Syllabus and exam blueprint"
+        hindiTitle={`${meta.hindiModuleName} — पाठ्यक्रम एवं अंक विभाजन`}
+        description={meta.purpose}
+        actions={
+          <>
+            <Button variant="primary" href="/notes" className={TOUCH}>
+              <BookOpen className="w-4 h-4" aria-hidden="true" />
+              Read the notes
+            </Button>
+            <Button variant="secondary" href="/mock-test" className={TOUCH}>
+              <Target className="w-4 h-4" aria-hidden="true" />
+              Mock test
+            </Button>
+          </>
+        }
+        meta={
+          <>
+            <MetaItem>
+              <GraduationCap className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+              {meta.moduleName}
+            </MetaItem>
+            <MetaItem>
+              <Layers className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+              {modules.length} units · {totalTopics} topics
+            </MetaItem>
+          </>
+        }
+      />
+
+      {/* ------------------------------------------------------ at a glance */}
+      <section aria-labelledby="course-shape" className="mb-12">
+        <h2 id="course-shape" className="sr-only">
+          Course at a glance
+        </h2>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <StatTile
+            label="Total duration"
+            value={`${meta.durationTotalHours} h`}
+            hint={`${meta.theoryHours}h theory + ${meta.practicalHours}h practical`}
+          />
+          <StatTile
+            label="Written paper"
+            value={`${totalMarks} marks`}
+            hint="Written theory exam (pass: 50%)"
+          />
+          <StatTile label="Units" value={modules.length} hint="In syllabus order" />
+          <StatTile label="Topics" value={totalTopics} hint="Examinable syllabus points" />
+        </div>
+      </section>
+
+      {/* --------------------------------------------- marks distribution */}
+      <section aria-labelledby="marks-distribution" className="mb-12">
+        <h2 id="marks-distribution" className="text-h2 font-semibold text-ink">
+          Marks distribution
+        </h2>
+        <p className="mt-1.5 mb-6 text-base text-ink-2 max-w-measure leading-relaxed">
+          Marks are awarded per group of units, not per unit. Each bar below is measured against the
+          whole {totalMarks}-mark paper, so the length of a bar is the share of the paper that group
+          is worth.
         </p>
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
-          National Institute of Electronics &amp; Information Technology (NIELIT) standard 120-hour curriculum breakdown with official unit-wise marks allocation and interactive topic mastery tracker.
-        </p>
-      </div>
 
-      {/* ================= TOP METRICS TILES ================= */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs">
-          <div className="flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">
-            <Clock className="w-4 h-4 text-sky-500" /> Total Duration
-          </div>
-          <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
-            120 Hours
-          </div>
-          <span className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 block">
-            48h Theory + 72h Practical Labs
-          </span>
-        </div>
+        <ol className="space-y-6">
+          {groups.map((group, index) => {
+            const share = Math.max(0, Math.min(100, (group.marks / totalMarks) * 100));
+            return (
+              <li key={group.id || index}>
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <h3 className="text-h4 font-medium text-ink">
+                    <span className="font-mono text-sm text-ink-4 mr-2">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    {group.groupName}
+                  </h3>
+                  <p className="text-sm text-ink-2 tabular-nums shrink-0">
+                    <span className="font-semibold text-ink">{group.marks}</span> of {totalMarks}{' '}
+                    marks · {group.percentage}
+                  </p>
+                </div>
 
-        <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs">
-          <div className="flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">
-            <Award className="w-4 h-4 text-emerald-500" /> Total Marks
-          </div>
-          <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
-            100 Marks
-          </div>
-          <span className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 block">
-            Written Theory Exam (Pass: 50%)
-          </span>
-        </div>
+                <div
+                  className="mt-2.5 h-2 w-full rounded-full bg-sunken border border-line overflow-hidden"
+                  aria-hidden="true"
+                >
+                  <div className="h-full rounded-full bg-accent" style={{ width: `${share}%` }} />
+                </div>
 
-        <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs">
-          <div className="flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">
-            <Layers className="w-4 h-4 text-indigo-500" /> Syllabus Modules
-          </div>
-          <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
-            8 Units
-          </div>
-          <span className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 block">
-            87 Detailed Lesson Topics
-          </span>
-        </div>
+                <div className="mt-2.5 flex flex-wrap gap-2">
+                  {(group.unitsCovered || []).map((label) => (
+                    <Link
+                      key={label}
+                      href={unitSlugFromLabel(label)}
+                      className={`btn btn-secondary btn-sm ${TOUCH}`}
+                    >
+                      {label}
+                    </Link>
+                  ))}
+                </div>
+              </li>
+            );
+          })}
 
-        <div className="p-5 rounded-2xl border border-brand-200 dark:border-brand-900/60 bg-brand-50/50 dark:bg-brand-950/20 shadow-xs">
-          <div className="flex items-center gap-2 text-xs font-bold text-brand-600 dark:text-brand-400 mb-1.5">
-            <ShieldCheck className="w-4 h-4 text-brand-600" /> Your Syllabus Progress
-          </div>
-          <div className="text-2xl sm:text-3xl font-black text-brand-600 dark:text-brand-400">
-            {overallPercentage}%
-          </div>
-          <span className="text-[11px] text-slate-600 dark:text-slate-300 mt-1 block font-medium">
-            {completedTopics.length} of 87 Topics Mastered
-          </span>
-        </div>
-      </div>
-
-      {/* ================= 3. OFFICIAL MARKS DISTRIBUTION (SECTION 3) ================= */}
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-brand-600" />
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                3. Marks Distribution (अंक विभाजन)
-              </h2>
+          <li className="pt-5 border-t border-line">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h3 className="text-h4 font-semibold text-ink">Total written marks</h3>
+              <p className="text-sm text-ink tabular-nums font-semibold shrink-0">
+                {totalMarks} of {totalMarks} marks · 100%
+              </p>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Official NIELIT O-Level M2-R5.1 Module Unit Wise Marks Weightage
+            <div
+              className="mt-2.5 h-2 w-full rounded-full bg-sunken border border-line overflow-hidden"
+              aria-hidden="true"
+            >
+              <div className="h-full w-full rounded-full bg-accent" />
+            </div>
+            <p className="mt-2.5 text-sm text-ink-3">
+              All {modules.length} units combined, across {groups.length} mark groups.
             </p>
-          </div>
-        </div>
+          </li>
+        </ol>
+      </section>
 
-        {/* Primary Official Table */}
-        <div className="border border-appborder rounded-xl overflow-hidden shadow-xs bg-white dark:bg-slate-900">
-          <div className="table-responsive">
-            <table className="w-full text-left text-xs sm:text-sm">
-              <thead className="bg-[#1e293b] text-white font-bold">
+      {/* ---------------------------------------------------- exam pattern */}
+      <section aria-labelledby="exam-pattern" className="mb-12">
+        <h2 id="exam-pattern" className="text-h2 font-semibold text-ink">
+          Exam pattern
+        </h2>
+        <p className="mt-1.5 mb-6 text-base text-ink-2 max-w-measure leading-relaxed">
+          What the module is assessed on, and what it is meant to leave you able to do.
+        </p>
+
+        <div className="grid gap-4 sm:gap-5 lg:grid-cols-2">
+          <Panel className="p-5">
+            <h3 className="text-h4 font-semibold text-ink">The paper</h3>
+            <dl className="mt-4 divide-y divide-line">
+              {[
+                { term: 'Module', detail: `${meta.moduleName} (${meta.moduleCode})` },
+                { term: 'Written paper', detail: `${totalMarks} marks, all 8 units` },
+                { term: 'Mark groups', detail: `${groups.length} groups of units` },
+                {
+                  term: 'Course hours',
+                  detail: `${meta.durationTotalHours} hours — ${meta.theoryHours} theory, ${meta.practicalHours} practical`,
+                },
+              ].map((row) => (
+                <div key={row.term} className="flex flex-wrap gap-x-4 gap-y-0.5 py-2.5 first:pt-0">
+                  <dt className="text-sm text-ink-3 w-32 shrink-0">{row.term}</dt>
+                  <dd className="text-base text-ink flex-1 min-w-0">{row.detail}</dd>
+                </div>
+              ))}
+            </dl>
+          </Panel>
+
+          <Panel className="p-5">
+            <h3 className="text-h4 font-semibold text-ink">Module objectives</h3>
+            <p className="mt-1 text-sm text-ink-3">
+              On completing this module a learner should be able to:
+            </p>
+            <ul className="mt-3 space-y-2">
+              {(meta.objectives || []).map((objective, i) => (
+                <li key={i} className="flex items-start gap-2.5 text-base text-ink-2">
+                  <span
+                    className="mt-2 w-1.5 h-1.5 rounded-full bg-accent shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span className="leading-relaxed">{objective}</span>
+                </li>
+              ))}
+            </ul>
+          </Panel>
+        </div>
+      </section>
+
+      {/* -------------------------------------------------- units and hours */}
+      <section aria-labelledby="units-and-hours" className="mb-12">
+        <h2 id="units-and-hours" className="text-h2 font-semibold text-ink">
+          Units and hours
+        </h2>
+        <p className="mt-1.5 mb-6 text-base text-ink-2 max-w-measure leading-relaxed">
+          The official teaching split for each unit. Practical hours outnumber theory hours across
+          the module, which is what the practical exam is built on.
+        </p>
+
+        {/* Tablet and up: one table, scrolling inside its own container */}
+        <div className="hidden sm:block">
+          <ScrollTable>
+            <table>
+              <caption className="sr-only">
+                Theory, practical and total hours for each unit, with its mark group
+              </caption>
+              <thead>
                 <tr>
-                  <th className="p-4 w-16 text-center">No.</th>
-                  <th className="p-4">Module Unit</th>
-                  <th className="p-4">Units Covered</th>
-                  <th className="p-4 text-right w-48">Written Marks (Max.)</th>
+                  <th scope="col" className="w-14">
+                    Unit
+                  </th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Theory</th>
+                  <th scope="col">Practical</th>
+                  <th scope="col">Total</th>
+                  <th scope="col">Mark group</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {syllabusMeta.marksDistribution.map((row, idx) => (
-                  <tr 
-                    key={row.id || idx} 
-                    className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors"
-                  >
-                    <td className="p-4 font-mono font-bold text-center text-slate-500 dark:text-slate-400">
-                      {idx + 1}
+              <tbody>
+                {modules.map((module) => (
+                  <tr key={module.key}>
+                    <td className="font-mono tabular-nums">{module.number}</td>
+                    <td>
+                      <Link href={module.href} className="text-ink hover:text-accent font-medium">
+                        {module.title}
+                      </Link>
+                      {module.hindiTitle ? (
+                        <span className="block text-xs text-hindi hindi-text" lang="hi">
+                          {module.hindiTitle}
+                        </span>
+                      ) : null}
                     </td>
-                    <td className="p-4 font-bold text-slate-900 dark:text-white">
-                      {row.groupName}
-                    </td>
-                    <td className="p-4">
-                      <div className="flex flex-wrap gap-1.5">
-                        {row.unitsCovered.map((u) => {
-                          const unitNum = u.replace('Unit ', '');
-                          return (
-                            <Link
-                              key={u}
-                              href={`/units/unit-${unitNum}`}
-                              className="px-2 py-0.5 rounded-lg bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 font-mono text-[11px] font-bold hover:bg-brand-100 transition-colors"
-                            >
-                              {u} →
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    </td>
-                    <td className="p-4 text-right">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 font-black text-sm text-slate-900 dark:text-white">
-                        {row.marks} Marks
-                      </span>
-                    </td>
+                    <td className="tabular-nums">{module.theoryHours} h</td>
+                    <td className="tabular-nums">{module.practicalHours} h</td>
+                    <td className="tabular-nums font-medium">{module.hours} h</td>
+                    <td>{module.marksGroup}</td>
                   </tr>
                 ))}
-                
-                {/* Total Row */}
-                <tr className="bg-brand-50/60 dark:bg-brand-950/40 border-t-2 border-slate-200 dark:border-slate-700 font-black">
-                  <td className="p-4 text-center text-slate-700 dark:text-slate-300">6</td>
-                  <td className="p-4 text-slate-900 dark:text-white text-base">Total Examination Marks</td>
-                  <td className="p-4 text-xs font-mono text-slate-500">All 8 Units Combined</td>
-                  <td className="p-4 text-right text-brand-600 dark:text-brand-400 text-base font-black">
-                    100 Marks
-                  </td>
+                <tr>
+                  <td />
+                  <td className="font-semibold">All units</td>
+                  <td className="tabular-nums font-semibold">{meta.theoryHours} h</td>
+                  <td className="tabular-nums font-semibold">{meta.practicalHours} h</td>
+                  <td className="tabular-nums font-semibold">{meta.durationTotalHours} h</td>
+                  <td className="tabular-nums font-semibold">{totalMarks} marks</td>
                 </tr>
               </tbody>
             </table>
-          </div>
+          </ScrollTable>
         </div>
-      </section>
 
-      {/* ================= 5 VISUAL MARKS WEIGHTAGE CARDS ================= */}
-      <section className="space-y-4">
-        <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
-          Module-Wise Weightage Breakdown &amp; Objectives
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {syllabusMeta.marksDistribution.map((group, idx) => (
-            <div
-              key={group.id || idx}
-              className="p-5 rounded-xl border border-appborder bg-white dark:bg-slate-900 shadow-xs flex flex-col justify-between space-y-4 hover:border-brand-500/80 transition-all"
-            >
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                    GROUP {idx + 1}
-                  </span>
-                  <span className="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-xs font-black">
-                    {group.marks} MARKS ({group.percentage})
-                  </span>
-                </div>
-
-                <h4 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white leading-snug">
-                  {group.groupName}
-                </h4>
-
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {group.unitsCovered.map((u) => {
-                    const unitNum = u.replace('Unit ', '');
-                    return (
-                      <Link
-                        key={u}
-                        href={`/units/unit-${unitNum}`}
-                        className="text-xs font-bold text-brand-600 hover:underline"
-                      >
-                        {u} Notes →
-                      </Link>
-                    );
-                  })}
-                </div>
+        {/* 320px: the same numbers, stacked — never a shrunken six-column table */}
+        <ul className="sm:hidden space-y-2.5">
+          {modules.map((module) => (
+            <li key={module.key} className="panel overflow-hidden">
+              <div className="px-3.5 py-2.5 bg-sunken border-b border-line">
+                <p className="text-sm font-semibold text-ink">
+                  <span className="font-mono text-ink-3 mr-2 tabular-nums">{module.number}</span>
+                  <Link href={module.href} className="hover:text-accent">
+                    {module.title}
+                  </Link>
+                </p>
+                {module.marksGroup ? (
+                  <p className="mt-0.5 text-xs text-ink-3">{module.marksGroup}</p>
+                ) : null}
               </div>
-
-              {/* Progress Bar for Group */}
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
-                <span>Weightage in Exam</span>
-                <span className="font-black text-slate-900 dark:text-white">{group.percentage}</span>
-              </div>
-            </div>
+              <dl className="grid grid-cols-3 divide-x divide-line">
+                {[
+                  { term: 'Theory', value: module.theoryHours },
+                  { term: 'Practical', value: module.practicalHours },
+                  { term: 'Total', value: module.hours },
+                ].map((cell) => (
+                  <div key={cell.term} className="px-3 py-2.5">
+                    <dt className="eyebrow">{cell.term}</dt>
+                    <dd className="mt-0.5 text-base font-medium text-ink tabular-nums">
+                      {cell.value} h
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </li>
           ))}
-        </div>
+          <li className="panel px-3.5 py-3 flex items-center justify-between gap-3">
+            <span className="text-sm font-semibold text-ink">All units</span>
+            <span className="text-sm text-ink-2 tabular-nums">
+              {meta.theoryHours}h + {meta.practicalHours}h = {meta.durationTotalHours}h
+            </span>
+          </li>
+        </ul>
       </section>
 
-      {/* ================= 8-UNIT COMPLETE TOPIC CHECKLIST ================= */}
-      <section className="space-y-6">
-        <div>
-          <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-            Complete Interactive Topic Checklist (All 8 Units)
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-            Click any checkbox to track your completion, or click the topic title to jump directly to the full 18-part lesson notes.
-          </p>
-        </div>
+      {/* ---------------------------------------------------- unit by unit */}
+      <section aria-labelledby="unit-detail">
+        <h2 id="unit-detail" className="text-h2 font-semibold text-ink">
+          Unit by unit
+        </h2>
+        <p className="mt-1.5 mb-6 text-base text-ink-2 max-w-measure leading-relaxed">
+          What each unit expects you to be able to do, and every syllabus topic inside it.
+        </p>
 
-        <div className="space-y-6">
-          {unitsData.map((unit) => {
-            const totalInUnit = unit.topics?.length || 0;
-            const completedInUnit = unit.topics?.filter((t) => completedTopics.includes(t.slug)).length || 0;
-            const unitPercent = totalInUnit > 0 ? Math.round((completedInUnit / totalInUnit) * 100) : 0;
-
+        <ol className="space-y-4 sm:space-y-5">
+          {modules.map((module) => {
+            const topics = module.topics || [];
             return (
-              <div
-                key={unit.slug}
-                className="border border-appborder rounded-xl p-5 sm:p-6 bg-white dark:bg-slate-900 shadow-xs space-y-4"
-              >
-                {/* Unit Header */}
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
-                        UNIT {unit.unitNumber}
-                      </span>
-                      <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-                        {unit.marksWeight}
-                      </span>
-                    </div>
-
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                      {unit.title}
-                    </h3>
-                    <p className="text-xs font-semibold text-brand-600 dark:text-brand-400 hindi-text">
-                      {unit.hindiTitle}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <div className="text-right">
-                      <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
-                        {completedInUnit} / {totalInUnit} Done ({unitPercent}%)
-                      </span>
-                      <span className="text-[10px] text-slate-400">
-                        {unit.totalHours}h ({unit.theoryHours}h Th + {unit.practicalHours}h Lab)
-                      </span>
-                    </div>
-
-                    <Link
-                      href={`/units/${unit.slug}`}
-                      className="px-3.5 py-1.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold transition-all shadow-2xs flex items-center gap-1"
-                    >
-                      <span>Study Unit</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
+              <li key={module.key} className="panel p-5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge tone="accent" mono>
+                    Unit {module.number}
+                  </Badge>
+                  {module.marksGroup ? <Badge tone="exam">{module.marksGroup}</Badge> : null}
+                  <span className="text-xs text-ink-3 tabular-nums ml-auto">
+                    {module.hours} h · {topics.length} topics
+                  </span>
                 </div>
 
-                {/* Topics Checklist Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 pt-1">
-                  {(unit.topics || []).map((topic, tIdx) => {
-                    const isDone = completedTopics.includes(topic.slug);
-                    return (
-                      <div
-                        key={topic.slug}
-                        className={`p-2.5 rounded-lg border flex items-start gap-2.5 transition-all ${
-                          isDone
-                            ? 'border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/40 dark:bg-emerald-950/20'
-                            : 'border-appborder bg-slate-50/50 dark:bg-slate-800/40 hover:border-brand-400'
-                        }`}
-                      >
-                        <button
-                          onClick={() => toggleTopicCompleted(topic.slug)}
-                          className="mt-0.5 shrink-0 transition-transform active:scale-90"
-                          title={isDone ? 'Mark as Incomplete' : 'Mark as Complete'}
-                        >
-                          {isDone ? (
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600 fill-emerald-100 dark:fill-emerald-950" />
-                          ) : (
-                            <Circle className="w-4 h-4 text-slate-400 hover:text-brand-500" />
-                          )}
-                        </button>
+                <h3 className="mt-3 text-h3 font-semibold text-ink leading-snug">
+                  <Link
+                    href={module.href}
+                    className="hover:text-accent transition-colors duration-fast"
+                  >
+                    {module.title}
+                  </Link>
+                </h3>
+                {module.hindiTitle ? (
+                  <p className="mt-1 text-base text-hindi hindi-text" lang="hi">
+                    {module.hindiTitle}
+                  </p>
+                ) : null}
+                {module.description ? (
+                  <p className="mt-2.5 text-base text-ink-2 leading-relaxed max-w-measure">
+                    {module.description}
+                  </p>
+                ) : null}
 
-                        <div className="min-w-0 flex-1">
+                {module.objectives?.length ? (
+                  <div className="mt-4">
+                    <p className="eyebrow mb-2">Learning objectives</p>
+                    <ul className="space-y-1.5">
+                      {module.objectives.map((objective, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-base text-ink-2">
+                          <span
+                            className="mt-2 w-1.5 h-1.5 rounded-full bg-ok shrink-0"
+                            aria-hidden="true"
+                          />
+                          <span className="leading-relaxed">{objective}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+
+                {topics.length ? (
+                  <details className="mt-4">
+                    <summary className="flex items-center text-sm font-medium text-ink-2 hover:text-ink cursor-pointer min-h-11 sm:min-h-0">
+                      All {topics.length} topics in this unit
+                    </summary>
+                    <ol className="mt-3 grid gap-x-6 gap-y-1.5 sm:grid-cols-2">
+                      {topics.map((topic, i) => (
+                        <li key={topic.slug} className="flex items-start gap-2">
+                          <span className="text-xs font-mono text-ink-4 tabular-nums mt-1 shrink-0">
+                            {String(i + 1).padStart(2, '0')}
+                          </span>
                           <Link
-                            href={`/units/${unit.slug}/topics/${topic.slug}`}
-                            className={`text-xs font-medium block leading-snug hover:text-brand-600 dark:hover:text-brand-400 transition-colors ${
-                              isDone ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-800 dark:text-slate-200'
-                            }`}
+                            href={topic.href}
+                            className="text-base text-ink-2 hover:text-accent leading-snug"
                           >
-                            <span className="font-mono text-[10px] text-slate-400 mr-1">
-                              {tIdx + 1}.
-                            </span>
                             {topic.title}
                           </Link>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                        </li>
+                      ))}
+                    </ol>
+                  </details>
+                ) : null}
 
-              </div>
+                <div className="mt-5 pt-4 border-t border-line flex flex-wrap items-center gap-2">
+                  <Button variant="secondary" href={module.href} className={TOUCH}>
+                    <Layers className="w-4 h-4" aria-hidden="true" />
+                    Topic notes
+                  </Button>
+                  <Button variant="ghost" href={module.notesHref} className={TOUCH}>
+                    <FileText className="w-4 h-4" aria-hidden="true" />
+                    Full unit notes
+                  </Button>
+                  <Button variant="ghost" href={module.mcqHref} className={TOUCH}>
+                    <ListChecks className="w-4 h-4" aria-hidden="true" />
+                    MCQ practice
+                  </Button>
+                  {module.oneShotHref ? (
+                    <Button variant="ghost" href={module.oneShotHref} className={TOUCH}>
+                      <Award className="w-4 h-4" aria-hidden="true" />
+                      One-shot revision
+                    </Button>
+                  ) : null}
+                </div>
+              </li>
             );
           })}
-        </div>
+        </ol>
       </section>
-
     </div>
   );
 }

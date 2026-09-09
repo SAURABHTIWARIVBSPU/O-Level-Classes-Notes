@@ -1,161 +1,282 @@
 'use client';
 
-import React, { useState } from 'react';
-import { 
-  Download, 
-  Maximize2, 
-  Minimize2, 
-  ExternalLink, 
-  FileText, 
-  BookOpen, 
-  ZoomIn, 
-  ZoomOut, 
-  RotateCw,
-  Sparkles,
-  Layers,
-  ArrowRight
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  Download,
+  ExternalLink,
+  FileText,
+  Maximize2,
+  Minimize2,
+  ZoomIn,
+  ZoomOut,
 } from 'lucide-react';
+import { Badge, EmptyState } from '@/components/ui';
 
-export default function UnitPdfReader({ unitNotes }) {
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [zoomLevel, setZoomLevel] = useState(100);
+/**
+ * The PDF panel: a restrained frame around the official unit textbook.
+ *
+ * It is a *viewer*, not a feature — one quiet toolbar, the page itself gets the
+ * room, every control says what it does. Inline PDF rendering is unreliable on
+ * mobile browsers, so "open" and "download" are always visible rather than
+ * hidden behind an embed that may never paint.
+ *
+ * Accepts either the flat props used by CanonicalWebReader or the legacy
+ * `unitNotes` object, so both call shapes keep working.
+ *
+ * PDFs are static files, not app routes, so the links here are plain anchors
+ * carrying the `.btn` classes rather than <Button href>, which would route
+ * them through next/link.
+ */
 
-  if (!unitNotes) return null;
+const ZOOM_MIN = 75;
+const ZOOM_MAX = 175;
+const ZOOM_STEP = 25;
 
-  const toggleFullscreen = () => {
-    setIsFullscreen(!isFullscreen);
-  };
+/* 44px targets on touch, the standard control height from `sm` up. */
+const TOUCH = 'min-h-11 sm:min-h-0';
 
-  const handleZoomIn = () => {
-    setZoomLevel((prev) => Math.min(prev + 15, 150));
-  };
+export default function UnitPdfReader({
+  unitNotes = null,
+  pdfUrl,
+  fileName,
+  unitTitle,
+  unitNumber,
+  pageCount,
+  fileSizeKb,
+  topicCount,
+  languageLabel,
+  className = '',
+  pdfAvailable = true,
+}) {
+  const url = pdfUrl || unitNotes?.pdfUrl || '';
+  const name = fileName || unitNotes?.pdfFileName || '';
+  const title = unitTitle || unitNotes?.title || '';
+  const number = unitNumber ?? unitNotes?.unitNumberPadded ?? unitNotes?.unitNumber ?? null;
+  const pages = pageCount ?? unitNotes?.pageCount ?? null;
+  const size = fileSizeKb ?? unitNotes?.fileSizeKb ?? null;
+  const topics = topicCount ?? unitNotes?.topicCount ?? null;
+  const isAvailable = pdfAvailable && (unitNotes?.pdfAvailable !== false);
 
-  const handleZoomOut = () => {
-    setZoomLevel((prev) => Math.max(prev - 15, 75));
-  };
+  const [zoom, setZoom] = useState(100);
+  const [expanded, setExpanded] = useState(false);
+
+  const panelRef = useRef(null);
+  const expandRef = useRef(null);
+  const returnFocusRef = useRef(null);
+
+  const zoomOut = useCallback(() => setZoom((z) => Math.max(ZOOM_MIN, z - ZOOM_STEP)), []);
+  const zoomIn = useCallback(() => setZoom((z) => Math.min(ZOOM_MAX, z + ZOOM_STEP)), []);
+
+  /* The expanded view is a dialog: Escape closes it, Tab stays inside it, and
+     focus goes back to the control that opened it. */
+  useEffect(() => {
+    if (!expanded) return undefined;
+
+    returnFocusRef.current = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    expandRef.current?.focus();
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        event.stopPropagation();
+        setExpanded(false);
+        return;
+      }
+      if (event.key !== 'Tab' || !panelRef.current) return;
+
+      const focusable = Array.from(
+        panelRef.current.querySelectorAll(
+          'a[href], button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      if (!focusable.length) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', onKeyDown);
+      const target = returnFocusRef.current;
+      if (target && typeof target.focus === 'function') target.focus();
+    };
+  }, [expanded]);
+
+  if (!url || !isAvailable) {
+    return (
+      <EmptyState
+        icon={FileText}
+        title="This PDF is not published yet"
+        description="The printable textbook for this unit is not available. The web notes cover the same syllabus, topic for topic."
+        className={className}
+      />
+    );
+  }
+
+  const frameTitle = title ? `${title} — PDF notes` : `PDF notes${name ? ` (${name})` : ''}`;
+  const downloadName = name || undefined;
+
+  const meta = [
+    number != null ? `Unit ${number}` : null,
+    pages != null ? `${pages} pages` : null,
+    size || null,
+    topics != null ? `${topics} topics` : null,
+  ].filter(Boolean);
+
+  const toolbar = (
+    <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 px-3 sm:px-4 py-2.5 border-b border-line bg-surface">
+      <div className="flex items-center gap-2.5 min-w-0">
+        <FileText className="w-4 h-4 text-ink-3 shrink-0" aria-hidden="true" />
+        <div className="min-w-0">
+          <p className="text-sm font-medium text-ink truncate">{name || frameTitle}</p>
+          {meta.length ? (
+            <p className="text-xs text-ink-3 tabular-nums truncate">{meta.join(' · ')}</p>
+          ) : null}
+        </div>
+        {languageLabel ? (
+          <Badge tone="neutral" className="shrink-0 hidden sm:inline-flex">
+            {languageLabel}
+          </Badge>
+        ) : null}
+      </div>
+
+      <div className="flex items-center gap-1.5 sm:gap-2">
+        {/* Zoom — pointer devices only; touch users pinch inside the embed. */}
+        <div className="hidden md:flex items-center gap-0.5 rounded-md border border-line bg-sunken p-0.5">
+          <button
+            type="button"
+            onClick={zoomOut}
+            disabled={zoom <= ZOOM_MIN}
+            className="btn btn-ghost btn-sm btn-icon"
+            aria-label="Zoom out"
+          >
+            <ZoomOut className="w-3.5 h-3.5" aria-hidden="true" />
+          </button>
+          <span className="w-12 text-center text-2xs font-semibold text-ink-2 tabular-nums" aria-live="polite">
+            {zoom}%
+          </span>
+          <button
+            type="button"
+            onClick={zoomIn}
+            disabled={zoom >= ZOOM_MAX}
+            className="btn btn-ghost btn-sm btn-icon"
+            aria-label="Zoom in"
+          >
+            <ZoomIn className="w-3.5 h-3.5" aria-hidden="true" />
+          </button>
+        </div>
+
+        <button
+          ref={expandRef}
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          aria-expanded={expanded}
+          aria-label={expanded ? 'Exit full screen PDF view' : 'Open the PDF full screen'}
+          className={`btn btn-ghost btn-sm ${TOUCH}`}
+        >
+          {expanded ? (
+            <Minimize2 className="w-3.5 h-3.5" aria-hidden="true" />
+          ) : (
+            <Maximize2 className="w-3.5 h-3.5" aria-hidden="true" />
+          )}
+          <span className="hidden sm:inline">{expanded ? 'Exit full screen' : 'Full screen'}</span>
+        </button>
+
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`btn btn-secondary btn-sm ${TOUCH}`}
+          aria-label={`Open ${name || 'the PDF'} in a new tab`}
+        >
+          <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+          <span className="hidden sm:inline">Open</span>
+        </a>
+
+        <a
+          href={url}
+          download={downloadName}
+          className={`btn btn-primary btn-sm ${TOUCH}`}
+          aria-label={`Download ${name || 'the PDF'}`}
+        >
+          <Download className="w-3.5 h-3.5" aria-hidden="true" />
+          <span className="hidden sm:inline">Download</span>
+        </a>
+      </div>
+    </div>
+  );
+
+  const frame = (
+    <div className={expanded ? 'flex-1 min-h-0 bg-sunken' : 'bg-sunken'}>
+      <iframe
+        src={`${url}#toolbar=1&navpanes=0&scrollbar=1&view=FitH&zoom=${zoom}`}
+        title={frameTitle}
+        className={
+          expanded
+            ? 'w-full h-full border-0 block'
+            : 'w-full h-[62vh] min-h-[22rem] sm:h-[70vh] xl:h-[46rem] border-0 block'
+        }
+      />
+    </div>
+  );
+
+  if (expanded) {
+    return (
+      <div
+        className="fixed inset-0 z-dialog bg-ground no-print"
+        role="dialog"
+        aria-modal="true"
+        aria-label={frameTitle}
+      >
+        <div ref={panelRef} className="flex flex-col h-full">
+          {toolbar}
+          {frame}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className={`space-y-4 transition-all ${isFullscreen ? 'fixed inset-0 z-50 bg-slate-950 p-4 overflow-hidden flex flex-col' : ''}`}>
-      
-      {/* Top Controls Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 sm:p-4 rounded-2xl bg-white dark:bg-slate-900 border border-appborder shadow-xs">
-        
-        {/* Unit Info */}
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-accent-blue/10 text-accent-blue border border-accent-blue/20 flex items-center justify-center font-mono font-bold text-xs shadow-2xs">
-            U{unitNotes.unitNumberPadded}
-          </div>
-          <div>
-            <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white line-clamp-1">
-              {unitNotes.pdfFileName}
-            </h3>
-            <span className="text-[11px] font-mono text-slate-500">
-              {unitNotes.pageCount} Pages • {unitNotes.fileSizeKb} • {unitNotes.topicCount} Topics
-            </span>
-          </div>
-        </div>
+    <div ref={panelRef} className={`panel overflow-hidden ${className}`}>
+      {toolbar}
+      {frame}
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-2">
-          
-          {/* Zoom Controls */}
-          <div className="hidden sm:flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-appborder text-xs font-mono">
-            <button
-              onClick={handleZoomOut}
-              title="Zoom Out"
-              className="p-1 rounded-lg hover:bg-white dark:hover:bg-slate-900 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
-            >
-              <ZoomOut className="w-3.5 h-3.5" />
-            </button>
-            <span className="px-1.5 text-[10px] font-bold text-slate-700 dark:text-slate-300 min-w-[36px] text-center">
-              {zoomLevel}%
-            </span>
-            <button
-              onClick={handleZoomIn}
-              title="Zoom In"
-              className="p-1 rounded-lg hover:bg-white dark:hover:bg-slate-900 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
-            >
-              <ZoomIn className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          {/* Fullscreen Button */}
-          <button
-            onClick={toggleFullscreen}
-            title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Viewer"}
-            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-brand-950 text-slate-700 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 border border-appborder transition-all text-xs font-bold flex items-center gap-1.5 cursor-pointer"
-          >
-            {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-            <span className="hidden md:inline">{isFullscreen ? "Exit Fullscreen" : "Fullscreen"}</span>
-          </button>
-
-          {/* Direct Download Button */}
+      {/* Always visible, because an embed that fails to paint is silent. */}
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2.5 px-3 sm:px-4 py-3 border-t border-line">
+        <p className="text-xs text-ink-3 max-w-measure">
+          Some mobile browsers cannot display a PDF inside a page. If the frame above stays blank,
+          open the file in a new tab or save it to your device.
+        </p>
+        <div className="flex flex-wrap items-center gap-2">
           <a
-            href={unitNotes.pdfUrl}
-            download={unitNotes.pdfFileName}
-            className="px-3.5 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold text-xs transition-all flex items-center gap-1.5 shadow-xs"
-          >
-            <Download className="w-3.5 h-3.5" />
-            <span>Download PDF</span>
-          </a>
-        </div>
-      </div>
-
-      {/* Embedded PDF Canvas Frame */}
-      <div 
-        className={`relative rounded-xl border border-appborder bg-slate-100 dark:bg-slate-950 overflow-hidden shadow-inner ${
-          isFullscreen ? 'flex-1 h-full' : 'h-[650px] sm:h-[750px] lg:h-[850px]'
-        }`}
-      >
-        <iframe
-          src={`${unitNotes.pdfUrl}#toolbar=1&navpanes=1&scrollbar=1&zoom=${zoomLevel}`}
-          title={`${unitNotes.title} PDF Notes`}
-          className="w-full h-full border-none rounded-xl"
-        />
-
-        {/* Fallback overlay if browser blocks inline iframe rendering */}
-        <noscript>
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-white dark:bg-slate-900">
-            <FileText className="w-12 h-12 text-brand-600 mb-3" />
-            <h4 className="text-base font-bold text-slate-900 dark:text-white mb-1">
-              Download {unitNotes.pdfFileName}
-            </h4>
-            <p className="text-xs text-slate-500 mb-4 max-w-sm">
-              Your browser does not support inline PDF previews. You can download the complete textbook notes directly.
-            </p>
-            <a
-              href={unitNotes.pdfUrl}
-              download={unitNotes.pdfFileName}
-              className="px-4 py-2 rounded-xl bg-brand-500 text-white text-xs font-bold shadow-sm"
-            >
-              Download PDF Document
-            </a>
-          </div>
-        </noscript>
-      </div>
-
-      {/* Quick Study Advice Strip */}
-      {!isFullscreen && (
-        <div className="p-4 rounded-2xl bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/60 flex flex-wrap items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300 font-medium">
-            <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
-            <span>
-              Tip: You can read this PDF directly on your smartphone, or print all {unitNotes.pageCount} pages for revision before your CCC exam!
-            </span>
-          </div>
-
-          <a
-            href={unitNotes.pdfUrl}
+            href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-bold text-brand-600 dark:text-brand-400 hover:underline inline-flex items-center gap-1 shrink-0"
+            className={`btn btn-ghost btn-sm ${TOUCH}`}
           >
-            <span>Open in New Browser Tab</span>
-            <ExternalLink className="w-3.5 h-3.5" />
+            <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+            Open in a new tab
+          </a>
+          <a
+            href={url}
+            download={downloadName}
+            className={`btn btn-secondary btn-sm ${TOUCH}`}
+          >
+            <Download className="w-3.5 h-3.5" aria-hidden="true" />
+            Save the PDF
           </a>
         </div>
-      )}
-
+      </div>
     </div>
   );
 }

@@ -1,78 +1,72 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Code } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { useLanguage } from '@/lib/languageContext';
+import { highlight } from '@/lib/highlight';
 
-export default function LineByLineCode({ lines = [] }) {
-  const [activeLine, setActiveLine] = useState(null);
+/**
+ * Code explained one line at a time. Each line is a disclosure: tap it and the
+ * explanation appears underneath, so a long example doesn't become a wall of
+ * commentary.
+ */
+export default function LineByLineCode({ lines = [], language: lang = 'html' }) {
+  const [openIndex, setOpenIndex] = useState(null);
   const { language } = useLanguage();
 
-  if (!lines || lines.length === 0) return null;
+  if (!lines.length) return null;
+
+  const showEnglish = language === 'both' || language === 'en';
+  const showHindi = language === 'both' || language === 'hi';
 
   return (
-    <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-slate-50 dark:bg-slate-900/60 my-4 text-xs shadow-2xs">
-      <div className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-        <span className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
-          <Code className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" />
-          <span>
-            {language === 'en' 
-              ? 'Line-by-Line Code Breakdown' 
-              : language === 'hi' 
-              ? 'कोड की प्रत्येक पंक्ति का विश्लेषण' 
-              : 'Line-by-Line Code Breakdown (कोड की हर पंक्ति का अर्थ)'}
-          </span>
-        </span>
-        <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-          Click line to inspect logic
-        </span>
+    <div className="panel overflow-hidden">
+      <div className="px-3.5 py-2 bg-sunken border-b border-line flex items-center justify-between gap-3">
+        <span className="code-block__lang">Line by line</span>
+        <span className="text-xs text-ink-4">Tap a line for the explanation</span>
       </div>
 
-      <div className="divide-y divide-slate-200 dark:divide-slate-800/60 font-mono">
-        {lines.map((item, idx) => {
-          const isOpen = activeLine === idx;
+      <ol className="divide-y divide-line">
+        {lines.map((item, i) => {
+          const isOpen = openIndex === i;
           return (
-            <div key={idx} className="transition-colors">
+            <li key={i}>
               <button
                 type="button"
-                onClick={() => setActiveLine(isOpen ? null : idx)}
-                className={`w-full text-left p-3 min-h-[44px] flex items-center justify-between gap-3 transition-colors ${
-                  isOpen
-                    ? 'bg-brand-50/80 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300'
-                    : 'hover:bg-slate-100/70 dark:hover:bg-slate-800/40 text-slate-800 dark:text-slate-200'
+                onClick={() => setOpenIndex(isOpen ? null : i)}
+                aria-expanded={isOpen}
+                aria-controls={`lbl-${i}`}
+                className={`w-full text-left px-3 py-2.5 flex items-center gap-3 transition-colors ${
+                  isOpen ? 'bg-accent-soft' : 'hover:bg-sunken'
                 }`}
               >
-                <div className="flex items-center gap-3 overflow-x-auto">
-                  <span className="text-slate-400 dark:text-slate-600 font-bold select-none text-[11px] w-6 text-right shrink-0 font-mono">
-                    {idx + 1}
-                  </span>
-                  <span className="font-bold whitespace-nowrap">{item.code}</span>
-                </div>
-                <div className="shrink-0 text-slate-400">
-                  {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                </div>
+                <span className="font-mono text-2xs text-ink-4 tabular-nums w-5 text-right shrink-0 select-none">
+                  {i + 1}
+                </span>
+                <code
+                  className="flex-1 min-w-0 font-mono text-sm text-ink whitespace-pre overflow-x-auto no-scrollbar"
+                  dangerouslySetInnerHTML={{ __html: highlight(item.code || '', lang) }}
+                />
+                <ChevronDown
+                  className={`w-4 h-4 text-ink-4 shrink-0 transition-transform duration-fast ${isOpen ? 'rotate-180' : ''}`}
+                  aria-hidden="true"
+                />
               </button>
 
-              {isOpen && (
-                <div className="px-11 py-3 bg-brand-50/40 dark:bg-brand-950/20 text-slate-700 dark:text-slate-300 space-y-1.5 font-sans border-t border-brand-100 dark:border-brand-900/40">
-                  {(language === 'both' || language === 'en') && item.en && (
-                    <p className="font-medium text-xs sm:text-sm leading-relaxed">
-                      {language === 'both' && <strong className="text-brand-700 dark:text-brand-400 mr-1.5">English:</strong>}
-                      {item.en}
-                    </p>
-                  )}
-                  {(language === 'both' || language === 'hi') && item.hi && (
-                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 hindi-text leading-relaxed">
-                      {language === 'both' && <strong className="text-brand-700 dark:text-brand-400 mr-1.5">हिन्दी:</strong>}
-                      {item.hi}
-                    </p>
-                  )}
+              {isOpen ? (
+                <div id={`lbl-${i}`} className="px-3 pb-3 pl-11 space-y-1.5 border-t border-line pt-2.5">
+                  {showEnglish && item.en ? (
+                    <p className="text-base text-ink-2 leading-relaxed">{item.en}</p>
+                  ) : null}
+                  {showHindi && item.hi ? (
+                    <p className="text-base text-ink-3 leading-relaxed hindi-text" lang="hi">{item.hi}</p>
+                  ) : null}
                 </div>
-              )}
-            </div>
+              ) : null}
+            </li>
           );
         })}
-      </div>
+      </ol>
     </div>
   );
 }

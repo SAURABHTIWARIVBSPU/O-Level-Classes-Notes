@@ -1,76 +1,154 @@
-'use client';
-
 import React from 'react';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { BookOpen, Layers, ListChecks, Timer } from 'lucide-react';
+
+import { Breadcrumbs, Button, MetaItem, PageHeader } from '@/components/ui';
+import { PracticeDeck } from '@/components/mcq/QuizCard';
 import { masterMcqs } from '@/data/mcqsData';
 import { unitsData } from '@/data/syllabusData';
-import QuizCard from '@/components/mcq/QuizCard';
-import { ArrowLeft, HelpCircle, Award } from 'lucide-react';
 
-export default function UnitMcqsPage({ params }) {
-  const { unitSlug } = params;
+const ALL = 'all';
+
+export function generateStaticParams() {
+  return [{ unitSlug: ALL }, ...unitsData.map((u) => ({ unitSlug: u.slug }))];
+}
+
+function resolveUnit(unitSlug) {
+  if (unitSlug === ALL) return { slug: ALL, isAll: true };
   const unit = unitsData.find((u) => u.slug === unitSlug);
+  if (!unit) return null;
+  return {
+    slug: unit.slug,
+    isAll: false,
+    number: Number(unit.unitNumber),
+    label: unit.unitNumber,
+    title: unit.title,
+    hindiTitle: unit.hindiTitle,
+  };
+}
 
-  if (!unit) {
-    notFound();
+/* The unit number in syllabusData is a string ("01") and on a question it is a
+   number (1) — comparing them without Number() is why this page used to show
+   nothing at all. */
+function questionsFor(unit) {
+  if (!unit) return [];
+  if (unit.isAll) return masterMcqs;
+  return masterMcqs.filter((q) => Number(q.unit) === unit.number);
+}
+
+export async function generateMetadata({ params }) {
+  const { unitSlug } = await Promise.resolve(params);
+  const unit = resolveUnit(decodeURIComponent(unitSlug || ''));
+
+  if (!unit) return { title: 'Unit not found' };
+
+  if (unit.isAll) {
+    return {
+      title: `All ${masterMcqs.length} MCQs — O Level M2-R5.1`,
+      description: `Search and practise the complete bank of ${masterMcqs.length} NIELIT O Level M2-R5.1 multiple-choice questions, filtered by unit and difficulty, with an explanation after every answer.`,
+    };
   }
 
-  const unitMcqs = masterMcqs.filter((m) => m.unit === unit.unitNumber);
+  const count = questionsFor(unit).length;
+  return {
+    title: `Unit ${unit.label} MCQs — ${unit.title}`,
+    description: `${count} practice questions on ${unit.title} for NIELIT O Level M2-R5.1, each with the correct answer and the reasoning behind it.`,
+  };
+}
+
+export default async function UnitMcqsPage({ params }) {
+  const { unitSlug } = await Promise.resolve(params);
+  const unit = resolveUnit(decodeURIComponent(unitSlug || ''));
+
+  if (!unit) notFound();
+
+  const questions = questionsFor(unit);
+  const timedMinutes = Math.max(5, Math.round(questions.length * 0.9));
+
+  const groups = unitsData.map((u) => ({
+    value: String(Number(u.unitNumber)),
+    label: `Unit ${u.unitNumber} — ${u.title}`,
+  }));
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto py-4">
-      
-      {/* Header */}
-      <div>
-        <Link
-          href={`/units/${unit.slug}`}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-brand-600 transition-colors mb-3"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" /> Back to Unit {unit.unitNumber} Overview
-        </Link>
+    <div className="shell py-8 sm:py-10">
+      <Breadcrumbs
+        items={[
+          { label: 'MCQ practice', href: '/mcqs' },
+          { label: unit.isAll ? 'All questions' : `Unit ${unit.label}` },
+        ]}
+        className="mb-5"
+      />
 
-        <div className="border-b border-slate-200 dark:border-slate-800 pb-6 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 block mb-1">
-              Unit {unit.unitNumber} Practice Question Bank
-            </span>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-              {unit.title} — MCQs ({unitMcqs.length})
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-              Master every concept of this unit through targeted multiple-choice practice.
-            </p>
-          </div>
+      <PageHeader
+        eyebrow={unit.isAll ? 'O Level · Whole syllabus' : `O Level · Unit ${unit.label}`}
+        title={unit.isAll ? `All ${questions.length} questions` : `${unit.title} — MCQs`}
+        hindiTitle={unit.isAll ? undefined : unit.hindiTitle}
+        description={
+          unit.isAll
+            ? 'The complete question bank. Narrow it down by unit, by difficulty, or by a word in the question, then work through what is left one question at a time.'
+            : 'Answer, read why the answer is right, move on. Nothing here is timed — the timed version of this unit is one tap away.'
+        }
+        actions={
+          <>
+            <Button href="/mcqs" variant="secondary">
+              <Layers className="w-4 h-4" aria-hidden="true" />
+              All units
+            </Button>
+            <Button href="/mock-test" variant="ghost">
+              <Timer className="w-4 h-4" aria-hidden="true" />
+              Mock test
+            </Button>
+          </>
+        }
+        meta={
+          <>
+            <MetaItem>
+              <ListChecks className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+              {questions.length} questions
+            </MetaItem>
+            {questions.length > 0 && !unit.isAll ? (
+              <MetaItem>
+                <Timer className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                Timed version: {timedMinutes} minutes
+              </MetaItem>
+            ) : null}
+            <MetaItem>
+              <BookOpen className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+              Explanation after every answer
+            </MetaItem>
+          </>
+        }
+      />
 
-          <Link
-            href="/mock-test"
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold shadow-sm transition-all"
-          >
-            <Award className="w-4 h-4" />
-            Full 100-Mark Mock Test
-          </Link>
-        </div>
-      </div>
-
-      {/* MCQs */}
-      <div className="space-y-6">
-        {unitMcqs.map((mcq, idx) => (
-          <QuizCard
-            key={mcq.id}
-            mcq={mcq}
-            questionIndex={idx}
-            totalQuestions={unitMcqs.length}
-          />
-        ))}
-
-        {unitMcqs.length === 0 && (
-          <p className="text-xs text-slate-500 text-center py-12">
-            No MCQs available specifically for this unit.
-          </p>
-        )}
-      </div>
-
+      <PracticeDeck
+        questions={questions}
+        quizId={unit.isAll ? 'mcq-all' : `mcq-unit-${unit.number}`}
+        groupLabel="Unit"
+        groups={unit.isAll ? groups : []}
+        showFilters={unit.isAll}
+        emptyTitle={unit.isAll ? 'The question bank is empty' : `No questions for Unit ${unit.label} yet`}
+        emptyDescription="There are no practice questions here yet. The notes for this unit are the next best thing."
+        emptyAction={
+          <>
+            <Button href={`/units/${unit.isAll ? 'unit-1' : unit.slug}`} variant="primary">
+              Read the notes
+            </Button>
+            <Button href="/mcqs" variant="secondary">Pick another unit</Button>
+          </>
+        }
+        timed={
+          unit.isAll || !questions.length
+            ? null
+            : {
+                label: 'Timed test',
+                examTitle: `Unit ${unit.label} timed test — ${unit.title}`,
+                durationMinutes: timedMinutes,
+                quizId: `mcq-unit-${unit.number}`,
+                intro: `All ${questions.length} questions from Unit ${unit.label}, under the same rules as the real paper.`,
+              }
+        }
+      />
     </div>
   );
 }

@@ -1,9 +1,48 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { allTopics } from '@/data/topicsData';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import { getCourseTopics } from '@/lib/navigation';
 
-const ProgressContext = createContext();
+/**
+ * Local learning progress. Everything lives in localStorage — there is no
+ * account — so every read and write is guarded: private-mode browsers throw on
+ * access and the app must keep working without it.
+ *
+ * Perf note: this provider is mounted in the root layout, so it must NOT pull
+ * in the full topic bodies (`data/topicsData` is ~700KB). The lightweight
+ * syllabus index from `lib/navigation` carries the slugs and titles it needs.
+ */
+
+const ProgressContext = createContext(null);
+
+const KEYS = {
+  completed: 'olevel_completed_topics',
+  quiz: 'olevel_quiz_scores',
+  topic: 'olevel_topic_scores',
+  bookmarks: 'olevel_bookmarks',
+  savedMcqs: 'olevel_saved_mcqs',
+  notes: 'olevel_personal_notes',
+  lastVisited: 'olevel_last_visited',
+  lastActive: 'olevel_last_active_date',
+  streak: 'olevel_streak',
+};
+
+function read(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function write(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    /* storage unavailable — progress simply won't survive a reload */
+  }
+}
 
 export function ProgressProvider({ children }) {
   const [completedTopics, setCompletedTopics] = useState([]);
@@ -16,244 +55,207 @@ export function ProgressProvider({ children }) {
   const [streak, setStreak] = useState(1);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load progress from localStorage on mount
   useEffect(() => {
+    setCompletedTopics(read(KEYS.completed, []));
+    setQuizScores(read(KEYS.quiz, {}));
+    setTopicScores(read(KEYS.topic, {}));
+    setBookmarks(read(KEYS.bookmarks, []));
+    setSavedMcqs(read(KEYS.savedMcqs, []));
+    setPersonalNotes(read(KEYS.notes, {}));
+    setLastVisited(read(KEYS.lastVisited, null));
+
     try {
-      const savedTopics = localStorage.getItem('olevel_completed_topics');
-      if (savedTopics) setCompletedTopics(JSON.parse(savedTopics));
-
-      const savedScores = localStorage.getItem('olevel_quiz_scores');
-      if (savedScores) setQuizScores(JSON.parse(savedScores));
-
-      const savedTopicScores = localStorage.getItem('olevel_topic_scores');
-      if (savedTopicScores) setTopicScores(JSON.parse(savedTopicScores));
-
-      const savedBmarks = localStorage.getItem('olevel_bookmarks');
-      if (savedBmarks) setBookmarks(JSON.parse(savedBmarks));
-
-      const savedQ = localStorage.getItem('olevel_saved_mcqs');
-      if (savedQ) setSavedMcqs(JSON.parse(savedQ));
-
-      const savedNotes = localStorage.getItem('olevel_personal_notes');
-      if (savedNotes) setPersonalNotes(JSON.parse(savedNotes));
-
-      const savedLast = localStorage.getItem('olevel_last_visited');
-      if (savedLast) setLastVisited(JSON.parse(savedLast));
-
-      // Calculate streak based on last active date
-      const lastDate = localStorage.getItem('olevel_last_active_date');
       const today = new Date().toISOString().split('T')[0];
+      const lastDate = localStorage.getItem(KEYS.lastActive);
+      const saved = parseInt(localStorage.getItem(KEYS.streak) || '1', 10);
+
       if (lastDate) {
-        const diff = Math.floor((new Date(today) - new Date(lastDate)) / (1000 * 60 * 60 * 24));
-        const savedStreak = parseInt(localStorage.getItem('olevel_streak') || '1', 10);
-        if (diff === 1) {
-          const newStreak = savedStreak + 1;
-          setStreak(newStreak);
-          localStorage.setItem('olevel_streak', newStreak.toString());
-        } else if (diff > 1) {
+        const days = Math.floor((new Date(today) - new Date(lastDate)) / 86400000);
+        if (days === 1) {
+          const next = saved + 1;
+          setStreak(next);
+          localStorage.setItem(KEYS.streak, String(next));
+        } else if (days > 1) {
           setStreak(1);
-          localStorage.setItem('olevel_streak', '1');
+          localStorage.setItem(KEYS.streak, '1');
         } else {
-          setStreak(savedStreak);
+          setStreak(saved);
         }
       }
-      localStorage.setItem('olevel_last_active_date', today);
-    } catch (e) {
-      console.error('Error reading localStorage:', e);
+      localStorage.setItem(KEYS.lastActive, today);
+    } catch {
+      /* no storage — streak stays at 1 for this session */
     }
+
     setIsLoaded(true);
   }, []);
 
-  const toggleTopicCompleted = (slug) => {
-    setCompletedTopics((prev) => {
-      const updated = prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug];
-      try {
-        localStorage.setItem('olevel_completed_topics', JSON.stringify(updated));
-      } catch (e) {
-        console.error(e);
-      }
-      return updated;
-    });
-  };
+  /* --- mutations. Stable identities so callers can put them in deps. ------ */
 
-  const markTopicCompleted = (slug) => {
+  const toggleTopicCompleted = useCallback((slug) => {
+    setCompletedTopics((prev) => {
+      const next = prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug];
+      write(KEYS.completed, next);
+      return next;
+    });
+  }, []);
+
+  const markTopicCompleted = useCallback((slug) => {
     setCompletedTopics((prev) => {
       if (prev.includes(slug)) return prev;
-      const updated = [...prev, slug];
-      try {
-        localStorage.setItem('olevel_completed_topics', JSON.stringify(updated));
-      } catch (e) {
-        console.error(e);
-      }
-      return updated;
+      const next = [...prev, slug];
+      write(KEYS.completed, next);
+      return next;
     });
-  };
+  }, []);
 
-  const toggleBookmark = (slug) => {
+  const toggleBookmark = useCallback((slug) => {
     setBookmarks((prev) => {
-      const updated = prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug];
-      try {
-        localStorage.setItem('olevel_bookmarks', JSON.stringify(updated));
-      } catch (e) {
-        console.error(e);
-      }
-      return updated;
+      const next = prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug];
+      write(KEYS.bookmarks, next);
+      return next;
     });
-  };
+  }, []);
 
-  const isBookmarked = (slug) => bookmarks.includes(slug);
-
-  const toggleSavedMcq = (id) => {
+  const toggleSavedMcq = useCallback((id) => {
     setSavedMcqs((prev) => {
-      const updated = prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id];
-      try {
-        localStorage.setItem('olevel_saved_mcqs', JSON.stringify(updated));
-      } catch (e) {
-        console.error(e);
-      }
-      return updated;
+      const next = prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id];
+      write(KEYS.savedMcqs, next);
+      return next;
     });
-  };
+  }, []);
 
-  const isMcqSaved = (id) => savedMcqs.includes(id);
-
-  const saveNote = (slug, text) => {
+  const saveNote = useCallback((slug, text) => {
     setPersonalNotes((prev) => {
-      const updated = { ...prev, [slug]: text };
-      try {
-        localStorage.setItem('olevel_personal_notes', JSON.stringify(updated));
-      } catch (e) {
-        console.error(e);
-      }
-      return updated;
+      const next = { ...prev, [slug]: text };
+      write(KEYS.notes, next);
+      return next;
     });
-  };
+  }, []);
 
-  const getNote = (slug) => personalNotes[slug] || '';
-
-  const deleteNote = (slug) => {
+  const deleteNote = useCallback((slug) => {
     setPersonalNotes((prev) => {
-      const updated = { ...prev };
-      delete updated[slug];
-      try {
-        localStorage.setItem('olevel_personal_notes', JSON.stringify(updated));
-      } catch (e) {
-        console.error(e);
-      }
-      return updated;
+      const next = { ...prev };
+      delete next[slug];
+      write(KEYS.notes, next);
+      return next;
     });
-  };
+  }, []);
 
-  const recordTopicScore = (slug, correct, total) => {
+  const recordTopicScore = useCallback((slug, correct, total) => {
     setTopicScores((prev) => {
-      const updated = {
-        ...prev,
-        [slug]: { correct, total, date: new Date().toISOString() },
-      };
-      try {
-        localStorage.setItem('olevel_topic_scores', JSON.stringify(updated));
-      } catch (e) {
-        console.error(e);
-      }
-      return updated;
+      const next = { ...prev, [slug]: { correct, total, date: new Date().toISOString() } };
+      write(KEYS.topic, next);
+      return next;
     });
-  };
+  }, []);
 
-  const recordQuizScore = (quizId, score, total) => {
+  const recordQuizScore = useCallback((quizId, score, total) => {
     setQuizScores((prev) => {
-      const updated = {
-        ...prev,
-        [quizId]: { score, total, date: new Date().toISOString() },
-      };
-      try {
-        localStorage.setItem('olevel_quiz_scores', JSON.stringify(updated));
-      } catch (e) {
-        console.error(e);
-      }
-      return updated;
+      const next = { ...prev, [quizId]: { score, total, date: new Date().toISOString() } };
+      write(KEYS.quiz, next);
+      return next;
     });
-  };
+  }, []);
 
-  const updateLastVisited = (topic) => {
+  const updateLastVisited = useCallback((topic) => {
     setLastVisited(topic);
+    write(KEYS.lastVisited, topic);
+  }, []);
+
+  /**
+   * Destructive and irreversible — the caller owns the confirmation UI. This
+   * used to call window.confirm(), which meant no page could style, translate
+   * or cancel it properly.
+   */
+  const resetProgress = useCallback(() => {
+    setCompletedTopics([]);
+    setQuizScores({});
+    setTopicScores({});
+    setBookmarks([]);
+    setSavedMcqs([]);
+    setPersonalNotes({});
+    setLastVisited(null);
     try {
-      localStorage.setItem('olevel_last_visited', JSON.stringify(topic));
-    } catch (e) {
-      console.error(e);
-    }
-  };
+      [KEYS.completed, KEYS.quiz, KEYS.topic, KEYS.bookmarks, KEYS.savedMcqs, KEYS.notes, KEYS.lastVisited]
+        .forEach((k) => localStorage.removeItem(k));
+    } catch { /* nothing to clear */ }
+  }, []);
 
-  const resetProgress = () => {
-    if (confirm('Are you sure you want to reset your learning progress?')) {
-      setCompletedTopics([]);
-      setQuizScores({});
-      setTopicScores({});
-      setBookmarks([]);
-      setSavedMcqs([]);
-      setPersonalNotes({});
-      setLastVisited(null);
-      localStorage.removeItem('olevel_completed_topics');
-      localStorage.removeItem('olevel_quiz_scores');
-      localStorage.removeItem('olevel_topic_scores');
-      localStorage.removeItem('olevel_bookmarks');
-      localStorage.removeItem('olevel_saved_mcqs');
-      localStorage.removeItem('olevel_personal_notes');
-      localStorage.removeItem('olevel_last_visited');
-    }
-  };
+  /* --- derived ------------------------------------------------------------ */
 
-  // Metrics
-  const totalTopics = allTopics.length;
+  const isBookmarked = useCallback((slug) => bookmarks.includes(slug), [bookmarks]);
+  const isMcqSaved = useCallback((id) => savedMcqs.includes(id), [savedMcqs]);
+  const getNote = useCallback((slug) => personalNotes[slug] || '', [personalNotes]);
+  const isTopicCompleted = useCallback((slug) => completedTopics.includes(slug), [completedTopics]);
+
+  const olevelTopics = useMemo(() => getCourseTopics('olevel'), []);
+  const totalTopics = olevelTopics.length;
   const completedCount = completedTopics.length;
   const overallPercentage = totalTopics > 0 ? Math.round((completedCount / totalTopics) * 100) : 0;
 
-  // Weak Topics calculation (topics with quiz score < 70%)
-  const weakTopics = Object.entries(topicScores)
-    .filter(([_, data]) => data.total > 0 && (data.correct / data.total) < 0.7)
-    .map(([slug, data]) => {
-      const found = allTopics.find((t) => t.slug === slug);
-      return {
-        slug,
-        title: found ? found.title : slug,
-        unit: found ? found.unit : 1,
-        accuracy: Math.round((data.correct / data.total) * 100),
-      };
-    });
+  /** Per-course completion, so CCC pages stop reporting O Level numbers. */
+  const percentageFor = useCallback((courseKey) => {
+    const topics = getCourseTopics(courseKey);
+    if (!topics.length) return 0;
+    const done = topics.filter((t) => completedTopics.includes(t.slug)).length;
+    return Math.round((done / topics.length) * 100);
+  }, [completedTopics]);
 
-  return (
-    <ProgressContext.Provider
-      value={{
-        completedTopics,
-        quizScores,
-        topicScores,
-        bookmarks,
-        savedMcqs,
-        personalNotes,
-        lastVisited,
-        streak,
-        isLoaded,
-        toggleTopicCompleted,
-        markTopicCompleted,
-        toggleBookmark,
-        isBookmarked,
-        toggleSavedMcq,
-        isMcqSaved,
-        saveNote,
-        getNote,
-        deleteNote,
-        recordTopicScore,
-        recordQuizScore,
-        updateLastVisited,
-        resetProgress,
-        totalTopics,
-        completedCount,
-        overallPercentage,
-        weakTopics,
-      }}
-    >
-      {children}
-    </ProgressContext.Provider>
-  );
+  const weakTopics = useMemo(() => (
+    Object.entries(topicScores)
+      .filter(([, d]) => d.total > 0 && d.correct / d.total < 0.7)
+      .map(([slug, d]) => {
+        const found = olevelTopics.find((t) => t.slug === slug);
+        return {
+          slug,
+          title: found ? found.title : slug,
+          unit: found ? found.moduleNumber : 1,
+          href: found ? found.href : `/units/unit-1`,
+          accuracy: Math.round((d.correct / d.total) * 100),
+        };
+      })
+  ), [topicScores, olevelTopics]);
+
+  const value = useMemo(() => ({
+    completedTopics,
+    quizScores,
+    topicScores,
+    bookmarks,
+    savedMcqs,
+    personalNotes,
+    lastVisited,
+    streak,
+    isLoaded,
+    toggleTopicCompleted,
+    markTopicCompleted,
+    isTopicCompleted,
+    toggleBookmark,
+    isBookmarked,
+    toggleSavedMcq,
+    isMcqSaved,
+    saveNote,
+    getNote,
+    deleteNote,
+    recordTopicScore,
+    recordQuizScore,
+    updateLastVisited,
+    resetProgress,
+    totalTopics,
+    completedCount,
+    overallPercentage,
+    percentageFor,
+    weakTopics,
+  }), [
+    completedTopics, quizScores, topicScores, bookmarks, savedMcqs, personalNotes,
+    lastVisited, streak, isLoaded, toggleTopicCompleted, markTopicCompleted,
+    isTopicCompleted, toggleBookmark, isBookmarked, toggleSavedMcq, isMcqSaved,
+    saveNote, getNote, deleteNote, recordTopicScore, recordQuizScore,
+    updateLastVisited, resetProgress, totalTopics, completedCount,
+    overallPercentage, percentageFor, weakTopics,
+  ]);
+
+  return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>;
 }
 
 export function useProgress() {

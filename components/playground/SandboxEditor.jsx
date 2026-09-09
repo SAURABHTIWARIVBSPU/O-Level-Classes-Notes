@@ -1,9 +1,23 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Play, RotateCcw, Copy, Check, ExternalLink, Code2, Eye, Maximize2, Minimize2, Smartphone, Monitor } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback, useId } from 'react';
+import { Play, RotateCcw, Copy, Check, Eye, Maximize2, Minimize2 } from 'lucide-react';
+import { Button, Segmented } from '@/components/ui';
 import FullscreenPortal from '@/components/common/FullscreenPortal';
 
+/**
+ * The code playground: a plain textarea beside a sandboxed preview frame.
+ *
+ * Deliberately not an IDE. Students are marked on writing HTML by hand in the
+ * practical exam, so the editor stays a text field with a monospace face and a
+ * Run button — no autocomplete, no traffic lights, no chrome competing with the
+ * code.
+ *
+ * Layout: below `sm` the split is useless (two 300px panes on a 320px screen),
+ * so the panes become tabs — Code / Result — and only one is shown. Both panes
+ * stay mounted either way: unmounting the iframe would throw away `srcdoc` and
+ * blank the preview every time the tab changed.
+ */
 const PRESET_TEMPLATES = {
   html5: {
     name: 'HTML5 Starter Skeleton',
@@ -210,168 +224,235 @@ const PRESET_TEMPLATES = {
   }
 };
 
+const VIEW_OPTIONS_WIDE = [
+  { value: 'code', label: 'Code' },
+  { value: 'preview', label: 'Result' },
+  { value: 'split', label: 'Split' },
+];
+const VIEW_OPTIONS_NARROW = VIEW_OPTIONS_WIDE.slice(0, 2);
+
 export default function SandboxEditor({ initialCode, initialTemplate = 'html5' }) {
-  const [code, setCode] = useState(initialCode || PRESET_TEMPLATES[initialTemplate].code);
+  // An unknown key would crash the editor; the host page already guards, this
+  // is the belt to that pair of braces.
+  const startKey = PRESET_TEMPLATES[initialTemplate] ? initialTemplate : 'html5';
+
+  const [templateKey, setTemplateKey] = useState(startKey);
+  const [code, setCode] = useState(initialCode || PRESET_TEMPLATES[startKey].code);
   const [copied, setCopied] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [view, setView] = useState('split'); // 'split' | 'code' | 'preview'
+  const [narrow, setNarrow] = useState(false);
+
   const iframeRef = useRef(null);
+  const shellRef = useRef(null);
+  const fullscreenButtonRef = useRef(null);
+  const copyTimer = useRef(null);
+  const wasFullscreen = useRef(false);
 
-  const runCode = () => {
+  // Latest code without making `runCode` a new function on every keystroke.
+  const codeRef = useRef(code);
+  codeRef.current = code;
+
+  const codeLabelId = useId();
+
+  const runCode = useCallback(() => {
     if (iframeRef.current) {
-      iframeRef.current.srcdoc = code;
+      iframeRef.current.srcdoc = codeRef.current;
     }
-  };
-
-  // Run on mount and code changes
-  useEffect(() => {
-    runCode();
   }, []);
 
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [activeTab, setActiveTab] = useState('split'); // 'split' | 'code' | 'preview'
+  /* --------------------------------------------------------------- effects */
 
-  // Ensure iframe renders code when entering or exiting fullscreen
+  // Render once on mount.
   useEffect(() => {
-    const timer = setTimeout(() => {
-      runCode();
-    }, 50);
+    runCode();
+  }, [runCode]);
+
+  // Re-render after a fullscreen transition: the portal moves the frame in the
+  // DOM, which drops whatever it was showing.
+  useEffect(() => {
+    const timer = setTimeout(runCode, 50);
     return () => clearTimeout(timer);
+  }, [isFullscreen, runCode]);
+
+  // Below `sm` the split view has nowhere to go, so the control offers two
+  // options instead of three and 'split' resolves to the code pane.
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639.98px)');
+    const apply = () => setNarrow(mq.matches);
+    apply();
+    mq.addEventListener('change', apply);
+    return () => mq.removeEventListener('change', apply);
+  }, []);
+
+  useEffect(() => () => clearTimeout(copyTimer.current), []);
+
+  // Fullscreen is a modal layer: Escape closes it, focus moves into it on open
+  // and returns to the button that opened it on close.
+  useEffect(() => {
+    if (!isFullscreen) return undefined;
+    wasFullscreen.current = true;
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setIsFullscreen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+
+    const focusTimer = setTimeout(() => shellRef.current?.focus(), 0);
+
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      clearTimeout(focusTimer);
+    };
   }, [isFullscreen]);
 
+  useEffect(() => {
+    if (isFullscreen || !wasFullscreen.current) return;
+    wasFullscreen.current = false;
+    fullscreenButtonRef.current?.focus();
+  }, [isFullscreen]);
+
+  /* --------------------------------------------------------------- actions */
+
   const handleTemplateChange = (key) => {
-    setCode(PRESET_TEMPLATES[key].code);
+    const preset = PRESET_TEMPLATES[key];
+    if (!preset) return;
+    setTemplateKey(key);
+    setCode(preset.code);
     if (iframeRef.current) {
-      iframeRef.current.srcdoc = PRESET_TEMPLATES[key].code;
+      iframeRef.current.srcdoc = preset.code;
     }
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      clearTimeout(copyTimer.current);
+      copyTimer.current = setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard blocked (http, permissions) — the button simply does nothing */
+    }
   };
 
   const handleReset = () => {
-    setCode(PRESET_TEMPLATES[initialTemplate].code);
+    setTemplateKey(startKey);
+    setCode(PRESET_TEMPLATES[startKey].code);
     if (iframeRef.current) {
-      iframeRef.current.srcdoc = PRESET_TEMPLATES[initialTemplate].code;
+      iframeRef.current.srcdoc = PRESET_TEMPLATES[startKey].code;
     }
   };
 
+  /* ---------------------------------------------------------------- layout */
+
+  const effectiveView = narrow && view === 'split' ? 'code' : view;
+  const isSplit = view === 'split';
+
+  const codePane = view === 'preview' ? 'hidden' : 'flex';
+  const previewPane = view === 'preview' ? 'flex' : isSplit ? 'hidden sm:flex' : 'hidden';
+
   return (
-    <FullscreenPortal 
-      isOpen={isFullscreen} 
-      onClose={() => setIsFullscreen(false)} 
+    <FullscreenPortal
+      isOpen={isFullscreen}
+      onClose={() => setIsFullscreen(false)}
       toolName="code-playground"
     >
-      <div className={`transition-all ${
-        isFullscreen 
-          ? 'w-full h-full flex flex-col bg-white dark:bg-slate-900 rounded-none border-none p-0 overflow-hidden' 
-          : 'border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-lg bg-white dark:bg-slate-900'
-      }`}>
-      
-      {/* Top Action Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 bg-slate-100 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
-        
-        {/* Preset Selector */}
-        <div className="flex items-center gap-2">
-          <Code2 className="w-4 h-4 text-brand-600" />
-          <span className="text-xs font-bold text-slate-700 dark:text-slate-300 hidden sm:inline">Preset:</span>
-          <select
-            onChange={(e) => handleTemplateChange(e.target.value)}
-            className="text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-brand-500"
-          >
-            {Object.entries(PRESET_TEMPLATES).map(([key, t]) => (
-              <option key={key} value={key}>
-                {t.name}
-              </option>
-            ))}
-          </select>
+      <div
+        ref={shellRef}
+        tabIndex={isFullscreen ? -1 : undefined}
+        className={
+          isFullscreen
+            ? 'flex h-full w-full flex-col overflow-hidden bg-surface'
+            : 'panel overflow-hidden'
+        }
+      >
+        {/* ---------------------------------------------------- action bar */}
+        <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-line bg-surface px-3 py-2 sm:px-4">
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="eyebrow hidden sm:inline" aria-hidden="true">
+              Preset
+            </span>
+            <select
+              aria-label="Starting template"
+              value={templateKey}
+              onChange={(e) => handleTemplateChange(e.target.value)}
+              className="input w-auto max-w-[13rem] text-sm sm:max-w-none"
+            >
+              {Object.entries(PRESET_TEMPLATES).map(([key, t]) => (
+                <option key={key} value={key}>
+                  {t.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <Segmented
+            ariaLabel="Editor view"
+            options={narrow ? VIEW_OPTIONS_NARROW : VIEW_OPTIONS_WIDE}
+            value={effectiveView}
+            onChange={setView}
+          />
+
+          <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
+            <Button
+              variant="primary"
+              icon={Play}
+              onClick={runCode}
+              aria-label="Run the code"
+              title="Run the code (Ctrl + Enter)"
+            >
+              Run
+            </Button>
+
+            <Button
+              variant="secondary"
+              icon={copied ? Check : Copy}
+              onClick={handleCopy}
+              aria-label={copied ? 'Code copied to clipboard' : 'Copy code to clipboard'}
+              title="Copy code"
+            >
+              <span className="hidden sm:inline">{copied ? 'Copied' : 'Copy'}</span>
+            </Button>
+
+            <Button
+              variant="secondary"
+              iconOnly
+              icon={RotateCcw}
+              onClick={handleReset}
+              aria-label="Reset the editor to the starting template"
+              title="Reset to the starting template"
+            />
+
+            <button
+              type="button"
+              ref={fullscreenButtonRef}
+              onClick={() => setIsFullscreen((v) => !v)}
+              className="btn btn-secondary btn-icon"
+              aria-label={isFullscreen ? 'Exit fullscreen editor' : 'Open the editor fullscreen'}
+              title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen editor'}
+            >
+              {isFullscreen ? (
+                <Minimize2 className="h-4 w-4" aria-hidden="true" />
+              ) : (
+                <Maximize2 className="h-4 w-4" aria-hidden="true" />
+              )}
+            </button>
+          </div>
         </div>
 
-        {/* View Mode Toggle for Small Screens */}
-        <div className="flex lg:hidden items-center bg-slate-200 dark:bg-slate-800 p-0.5 rounded-lg text-xs font-bold">
-          <button
-            onClick={() => setActiveTab('code')}
-            className={`px-2.5 py-1 rounded-md transition-all ${
-              activeTab === 'code' ? 'bg-white dark:bg-slate-900 text-brand-600 shadow-xs' : 'text-slate-500'
-            }`}
-          >
-            Editor
-          </button>
-          <button
-            onClick={() => setActiveTab('preview')}
-            className={`px-2.5 py-1 rounded-md transition-all ${
-              activeTab === 'preview' ? 'bg-white dark:bg-slate-900 text-emerald-600 shadow-xs' : 'text-slate-500'
-            }`}
-          >
-            Preview
-          </button>
-          <button
-            onClick={() => setActiveTab('split')}
-            className={`px-2.5 py-1 rounded-md transition-all ${
-              activeTab === 'split' ? 'bg-white dark:bg-slate-900 text-indigo-600 shadow-xs' : 'text-slate-500'
-            }`}
-          >
-            Split
-          </button>
-        </div>
-
-        {/* Action Controls */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <button
-            onClick={runCode}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold shadow-sm transition-colors"
-            title="Execute code in preview (Ctrl+Enter)"
-          >
-            <Play className="w-3.5 h-3.5 fill-current" />
-            <span>Run</span>
-          </button>
-          
-          <button
-            onClick={handleCopy}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors"
-            title="Copy code"
-          >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-            <span className="hidden sm:inline">{copied ? 'Copied' : 'Copy'}</span>
-          </button>
-
-          <button
-            onClick={handleReset}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors"
-            title="Reset to default template"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-          </button>
-
-          <button
-            onClick={() => setIsFullscreen(!isFullscreen)}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors"
-            title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen Editor'}
-          >
-            {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
-          </button>
-        </div>
-
-      </div>
-
-      {/* Editor & Preview Split View */}
-      <div className={`grid ${
-        activeTab === 'code'
-          ? 'grid-cols-1'
-          : activeTab === 'preview'
-          ? 'grid-cols-1'
-          : 'grid-cols-1 lg:grid-cols-2'
-      } divide-y lg:divide-y-0 lg:divide-x divide-slate-200 dark:divide-slate-800 ${
-        isFullscreen ? 'flex-1 min-h-0' : 'min-h-[460px]'
-      }`}>
-        
-        {/* Code Input Area */}
-        {(activeTab === 'split' || activeTab === 'code') && (
-          <div className="flex flex-col bg-slate-950 flex-1">
-            <div className="flex items-center justify-between px-4 py-1.5 bg-slate-900 border-b border-slate-800 text-[11px] font-mono text-slate-400">
-              <span>HTML / CSS / JS Editor</span>
-              <span className="text-emerald-400">● Ready</span>
+        {/* ------------------------------------------------ editor + result */}
+        <div
+          className={`grid ${isSplit ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'} ${
+            isFullscreen ? 'min-h-0 flex-1' : 'min-h-[460px]'
+          }`}
+        >
+          {/* Code */}
+          <section aria-label="Code editor" className={`${codePane} min-h-0 min-w-0 flex-col bg-sunken`}>
+            <div className="flex shrink-0 items-center justify-between gap-2 border-b border-line bg-surface px-3.5 py-2">
+              <span id={codeLabelId} className="code-block__lang">
+                HTML / CSS / JS
+              </span>
+              <span className="text-2xs text-ink-3">Ctrl + Enter runs</span>
             </div>
             <textarea
               value={code}
@@ -382,35 +463,41 @@ export default function SandboxEditor({ initialCode, initialTemplate = 'html5' }
                   runCode();
                 }
               }}
-              placeholder="Type your HTML/CSS/JavaScript code here..."
-              className="flex-1 w-full p-4 bg-transparent text-slate-100 font-mono text-xs leading-relaxed resize-none focus:outline-none focus:ring-0 min-h-[300px]"
+              aria-labelledby={codeLabelId}
+              placeholder="Type your HTML, CSS and JavaScript here…"
+              className="min-h-[300px] w-full flex-1 resize-none bg-transparent p-4 font-mono text-sm leading-relaxed text-ink placeholder:text-ink-4"
               spellCheck="false"
             />
-          </div>
-        )}
+          </section>
 
-        {/* Live Preview Iframe Area */}
-        {(activeTab === 'split' || activeTab === 'preview') && (
-          <div className="flex flex-col bg-white flex-1">
-            <div className="flex items-center justify-between px-4 py-1.5 bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 text-[11px] font-semibold text-slate-600 dark:text-slate-400">
-              <span className="flex items-center gap-1.5">
-                <Eye className="w-3.5 h-3.5 text-emerald-500" />
-                Live Sandboxed Output
+          {/* Result */}
+          <section
+            aria-label="Live preview"
+            className={`${previewPane} min-h-0 min-w-0 flex-col ${
+              isSplit ? 'border-t border-line sm:border-l sm:border-t-0' : ''
+            }`}
+          >
+            <div className="flex shrink-0 items-center justify-between gap-2 border-b border-line bg-surface px-3.5 py-2">
+              <span className="code-block__lang inline-flex items-center gap-1.5">
+                <Eye className="h-3.5 w-3.5" aria-hidden="true" />
+                Live result
               </span>
-              <span className="text-[10px] text-slate-400">Press Ctrl + Enter to Run</span>
+              <span className="text-2xs text-ink-3">Sandboxed frame</span>
             </div>
+            {/* `allow-scripts` without `allow-same-origin`: student code runs,
+                but it cannot reach this page's DOM, storage or cookies.
+                `allow-modals` is what keeps alert() and confirm() working, which
+                the exam questions rely on. The frame stays white because the
+                page inside it is the student's document, not our chrome. */}
             <iframe
               ref={iframeRef}
-              title="Sandbox Live Preview"
+              title="Live preview of your code"
               sandbox="allow-scripts allow-modals"
-              className="flex-1 w-full h-full min-h-[300px] border-0 bg-white"
+              className="h-full min-h-[300px] w-full flex-1 border-0 bg-white"
             />
-          </div>
-        )}
-
+          </section>
+        </div>
       </div>
-
-    </div>
     </FullscreenPortal>
   );
 }

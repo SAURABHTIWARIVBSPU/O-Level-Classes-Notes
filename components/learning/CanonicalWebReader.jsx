@@ -1,61 +1,260 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { 
-  BookOpen, 
-  Download, 
-  ChevronLeft, 
-  ArrowLeft, 
-  ArrowRight, 
-  CheckCircle2, 
-  Sparkles, 
-  Award, 
-  Lightbulb, 
-  FileText, 
-  Code, 
-  Copy, 
-  Check, 
-  Layers, 
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  ArrowLeft,
+  ChevronRight,
+  Clock,
+  Download,
+  ExternalLink,
+  FileText,
   GraduationCap,
-  Languages,
-  FileDown,
-  Compass
+  Layers,
 } from 'lucide-react';
+import {
+  Badge,
+  Breadcrumbs,
+  Button,
+  Callout,
+  CodeBlock,
+  EmptyState,
+  MetaItem,
+  PageHeader,
+  PrevNext,
+  ReadingProgress,
+  ScrollTable,
+  Segmented,
+  TableOfContents,
+} from '@/components/ui';
+import CourseSidebar from '@/components/layout/CourseSidebar';
+import { useLanguage } from '@/lib/languageContext';
 import UnitPdfReader from './UnitPdfReader';
 import { getLocalizedUnit, UI_LABELS } from '@/data/canonicalNotes/localizationHelper';
 
-function CodeBlockRenderer({ code, language }) {
-  const [copied, setCopied] = useState(false);
+/* ==========================================================================
+   The long-form unit reader.
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+   Three columns at xl — course tree · reading column · table of contents —
+   collapsing to a single column with a one-line TOC below that. The reading
+   column never exceeds the 68ch measure, because this is where a student sits
+   for half an hour.
+
+   Chrome strings live here (presentation). Everything a student reads comes
+   from data/canonicalNotes and is never rewritten.
+   ========================================================================== */
+
+const CHROME = {
+  en: {
+    read: 'Read',
+    pdf: 'PDF',
+    onThisPage: 'On this page',
+    contents: 'Course contents',
+    outcomes: 'What you will learn',
+    revision: 'Revision checklist',
+    keyTerms: 'Key terms and full forms',
+    downloads: 'Download this unit',
+    downloadsHelp: 'The same syllabus as a printable textbook, in English and हिन्दी.',
+    definition: 'Definition',
+    why: 'Why it matters',
+    how: 'How it works',
+    components: 'Key components',
+    example: 'In practice',
+    points: 'Exam points',
+    recap: 'Quick recap',
+    hindiGroup: 'हिन्दी में',
+    langLabel: 'Reading language',
+    viewLabel: 'Notes or PDF',
+    topicWord: 'topics',
+    hoursWord: 'hours',
+  },
+  hi: {
+    read: 'पढ़ें',
+    pdf: 'पीडीएफ',
+    onThisPage: 'इस पृष्ठ पर',
+    contents: 'पाठ्यक्रम सूची',
+    outcomes: 'आप क्या सीखेंगे',
+    revision: 'पुनरीक्षण चेकलिस्ट',
+    keyTerms: 'मुख्य शब्दावली एवं पूर्ण रूप',
+    downloads: 'यह इकाई डाउनलोड करें',
+    downloadsHelp: 'यही पाठ्यक्रम मुद्रण योग्य पुस्तक के रूप में, अंग्रेज़ी और हिन्दी में।',
+    definition: 'परिभाषा',
+    why: 'महत्व',
+    how: 'कार्यप्रणाली',
+    components: 'मुख्य घटक',
+    example: 'व्यवहार में',
+    points: 'परीक्षा बिंदु',
+    recap: 'त्वरित सारांश',
+    hindiGroup: 'हिन्दी में',
+    langLabel: 'पठन भाषा',
+    viewLabel: 'नोट्स या पीडीएफ',
+    topicWord: 'विषय',
+    hoursWord: 'घंटे',
+  },
+};
+
+const LANGUAGE_OPTIONS = [
+  { value: 'both', label: 'EN + हि' },
+  { value: 'en', label: 'EN' },
+  { value: 'hi', label: 'हिन्दी' },
+];
+
+/* 44px targets on touch, the standard control height from `sm` up. */
+const TOUCH = 'min-h-11 sm:min-h-0';
+const TOUCH_SEGMENT = '[&_.segment-item]:min-h-11 sm:[&_.segment-item]:min-h-0';
+
+/* Prose rhythm for content nested one level below the article root, where
+   `.prose-notes > * + *` no longer reaches. Headings keep their own margins. */
+const FLOW = '[&>*+*]:mt-[1.1em]';
+
+function slugify(value = '') {
+  return String(value)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+/**
+ * Pairs each topic's English and Hindi variants.
+ *
+ * The unit arrives already flattened to one language by `getCanonicalOLevelUnit`,
+ * which drops the per-topic `en` / `hi` objects — so the Hindi bodies are
+ * recovered from `unitData.hi.topics`, matched by position exactly as the
+ * canonical index merges them. Raw (unflattened) units still work too.
+ */
+function pairTopics(unitData) {
+  const primary = unitData?.topics || [];
+  const hindiTopics = unitData?.hi?.topics || [];
+
+  return primary.map((topic, index) => {
+    const en = topic.en || topic;
+    const hi = topic.hi || hindiTopics[index] || null;
+    const code = topic.code || en.code || String(index + 1);
+
+    return {
+      code,
+      id: `topic-${slugify(`${code}-${en.title || ''}`) || index + 1}`,
+      codeSnippet: topic.codeSnippet || en.codeSnippet || null,
+      codeLanguage: topic.codeLanguage || en.codeLanguage || '',
+      en,
+      hi,
+    };
+  });
+}
+
+/* ------------------------------------------------------------ topic body */
+
+function TopicBody({ topic, chrome, withCode }) {
+  if (!topic) return null;
+
+  const table = topic.table && topic.table.headers && topic.table.rows ? topic.table : null;
+  const components = Array.isArray(topic.componentsOrTypes) ? topic.componentsOrTypes : [];
+  const points = Array.isArray(topic.importantPoints) ? topic.importantPoints : [];
 
   return (
-    <div className="rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 text-slate-100 shadow-md my-4">
-      <div className="flex items-center justify-between px-4 py-2 bg-slate-900 border-b border-slate-800 text-xs">
-        <span className="font-mono font-bold text-brand-400 uppercase tracking-wider flex items-center gap-1.5">
-          <Code className="w-3.5 h-3.5" />
-          <span>{language || 'CODE SNIPPET'}</span>
-        </span>
-        <button
-          type="button"
-          onClick={handleCopy}
-          className="flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-semibold text-slate-300 transition-colors"
-        >
-          {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-          <span>{copied ? 'Copied!' : 'Copy'}</span>
-        </button>
-      </div>
-      <pre className="p-4 text-xs font-mono overflow-x-auto leading-relaxed text-emerald-400">
-        <code>{code}</code>
-      </pre>
+    <>
+      {topic.whatIsIt ? (
+        <div className="border-l-2 border-accent-line pl-4">
+          <p className="eyebrow mb-1">{chrome.definition}</p>
+          <p className="text-ink">{topic.whatIsIt}</p>
+        </div>
+      ) : null}
+
+      {topic.whyImportant ? (
+        <p>
+          <strong>{chrome.why}. </strong>
+          {topic.whyImportant}
+        </p>
+      ) : null}
+
+      {topic.howItWorks ? (
+        <div>
+          <p className="eyebrow mb-1.5">{chrome.how}</p>
+          <p>{topic.howItWorks}</p>
+        </div>
+      ) : null}
+
+      {withCode && topic.codeSnippet ? (
+        <CodeBlock code={topic.codeSnippet} language={topic.codeLanguage} runnable />
+      ) : null}
+
+      {components.length ? (
+        <div>
+          <p className="eyebrow mb-1.5">{topic.componentsTitle || chrome.components}</p>
+          <ul>
+            {components.map((item, i) => (
+              <li key={i}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      {table ? (
+        <ScrollTable>
+          <table>
+            <caption className={topic.tableTitle ? 'eyebrow text-left px-3.5 pt-3 pb-1' : 'sr-only'}>
+              {topic.tableTitle || `${topic.title} — comparison table`}
+            </caption>
+            <thead>
+              <tr>
+                {table.headers.map((header, i) => (
+                  <th key={i} scope="col">
+                    {header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {table.rows.map((row, r) => (
+                <tr key={r}>
+                  {row.map((cell, c) => (
+                    <td key={c}>{cell}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ScrollTable>
+      ) : null}
+
+      {topic.practicalExample ? (
+        <Callout kind="analogy" label={chrome.example}>
+          <p>{topic.practicalExample}</p>
+        </Callout>
+      ) : null}
+
+      {points.length ? (
+        <Callout kind="exam" label={chrome.points}>
+          <ul>
+            {points.map((point, i) => (
+              <li key={i}>{point}</li>
+            ))}
+          </ul>
+        </Callout>
+      ) : null}
+
+      {topic.quickRevision ? (
+        <div className="border-t border-line pt-3">
+          <p className="eyebrow mb-1">{chrome.recap}</p>
+          <p className="text-base text-ink-3">{topic.quickRevision}</p>
+        </div>
+      ) : null}
+    </>
+  );
+}
+
+/* Hindi half of a bilingual section — grouped, never interleaved sentence by
+   sentence, so each language reads as continuous prose. */
+function HindiGroup({ label, children }) {
+  return (
+    <div lang="hi" className="hindi-text border-l-2 border-line pl-4 sm:pl-5">
+      <p className="eyebrow mb-2">{label}</p>
+      <div className={FLOW}>{children}</div>
     </div>
   );
 }
+
+/* --------------------------------------------------------------- reader */
 
 export default function CanonicalWebReader({
   unitData,
@@ -63,526 +262,583 @@ export default function CanonicalWebReader({
   prevUnit,
   nextUnit,
   backHref,
-  backLabel
+  backLabel,
 }) {
-  const [activeTab, setActiveTab] = useState('notes'); // 'notes' | 'pdf'
-  const [currentLang, setCurrentLang] = useState('en'); // 'en' | 'hi'
+  const { language, changeLanguage } = useLanguage();
+  const [view, setView] = useState('notes');
+  const [pdfLang, setPdfLang] = useState('en');
+  const [activeSection, setActiveSection] = useState(null);
 
-  // Hydrate user's saved language preference on client mount
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('olevel_lang_pref');
-      if (saved === 'hi' || saved === 'en') {
-        setCurrentLang(saved);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
+  const en = useMemo(() => (unitData ? getLocalizedUnit(unitData, 'en') : null), [unitData]);
+  const hi = useMemo(() => (unitData ? getLocalizedUnit(unitData, 'hi') : null), [unitData]);
+  const topics = useMemo(() => pairTopics(unitData), [unitData]);
 
-  const handleLangChange = (lang) => {
-    setCurrentLang(lang);
-    try {
-      localStorage.setItem('olevel_lang_pref', lang);
-    } catch (e) {
-      console.error(e);
-    }
+  const isCcc = (unitData?.courseId || courseMeta?.courseId) === 'CCC';
+  const hindiAvailable = Boolean(unitData?.hi);
+  /* Hindi-only never leaves a blank page: English stands in wherever the
+     Hindi edition has no counterpart. */
+  const showEnglish = language !== 'hi' || !hindiAvailable;
+  const showHindi = hindiAvailable && (language === 'both' || language === 'hi');
+  const chrome = language === 'hi' && hindiAvailable ? CHROME.hi : CHROME.en;
+
+  const pickPair = (englishList, hindiList) => {
+    const enList = Array.isArray(englishList) ? englishList : [];
+    const hiList = Array.isArray(hindiList) ? hindiList : [];
+    const useHindi = showHindi && hiList.length > 0;
+    return {
+      en: showEnglish || !useHindi ? enList : [],
+      hi: useHindi ? hiList : [],
+    };
   };
 
-  if (!unitData) {
+  const outcomes = pickPair(en?.whatYouWillLearn, hi?.whatYouWillLearn);
+  const revision = pickPair(en?.unitRevision, hi?.unitRevision);
+  const terms = pickPair(en?.keyTerms, hi?.keyTerms);
+
+  const hasOutcomes = outcomes.en.length > 0 || outcomes.hi.length > 0;
+  const hasRevision = revision.en.length > 0 || revision.hi.length > 0;
+  const hasTerms = terms.en.length > 0 || terms.hi.length > 0;
+
+  /* The sticky context bar tracks the same sections the TOC lists. */
+  const sections = useMemo(() => {
+    const list = [];
+    if (hasOutcomes) list.push({ id: 'learning-outcomes', label: chrome.outcomes });
+    topics.forEach((topic) => {
+      const heading = language === 'hi' && topic.hi ? topic.hi.title : topic.en.title;
+      list.push({ id: topic.id, label: `${topic.code} ${heading}` });
+    });
+    if (hasRevision) list.push({ id: 'revision-checklist', label: chrome.revision });
+    if (hasTerms) list.push({ id: 'key-terms', label: chrome.keyTerms });
+    return list;
+  }, [topics, language, chrome, hasOutcomes, hasRevision, hasTerms]);
+
+  useEffect(() => {
+    if (view !== 'notes' || !sections.length) {
+      setActiveSection(null);
+      return undefined;
+    }
+
+    let ticking = false;
+    const compute = () => {
+      ticking = false;
+      let current = sections[0];
+      for (const section of sections) {
+        const el = document.getElementById(section.id);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top <= 140) current = section;
+        else break;
+      }
+      setActiveSection(current);
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(compute);
+    };
+
+    compute();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [view, sections]);
+
+  /* Follow the reading language into the PDF panel, but keep them independent
+     once the reader has chosen a PDF explicitly. */
+  useEffect(() => {
+    setPdfLang(language === 'hi' ? 'hi' : 'en');
+  }, [language]);
+
+  if (!unitData || !en) {
     return (
-      <div className="p-8 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
-        <p className="text-slate-500">Unit notes content not found.</p>
-        <Link href={backHref || '/'} className="mt-4 inline-block text-brand-600 font-bold text-sm">
-          Return to Hub
-        </Link>
+      <div className="shell py-8 sm:py-10">
+        <EmptyState
+          icon={FileText}
+          title="These unit notes are not available"
+          description="The notes for this unit could not be loaded. Pick another unit from the library."
+          action={
+            <Button variant="primary" href={backHref || '/notes'} icon={ArrowLeft}>
+              {backLabel || 'Back to the notes library'}
+            </Button>
+          }
+        />
       </div>
     );
   }
 
-  // Get canonical localized data with guaranteed 100% field parity
-  const localized = getLocalizedUnit(unitData, currentLang);
-  const labels = UI_LABELS[currentLang] || UI_LABELS.en;
-  const isOLevel = unitData.courseId === 'O_LEVEL' || courseMeta?.courseId === 'O_LEVEL';
+  const notesBase = isCcc ? '/ccc/notes' : '/notes';
+  const unitWord = isCcc ? 'Chapter' : 'Unit';
+  const padded = unitData.unitNumberPadded || String(unitData.unitNumber);
+  const courseShortName = unitData.courseShortName || courseMeta?.courseShortName || 'NIELIT';
+  const courseCode = unitData.courseCode || courseMeta?.courseCode || '';
 
-  // Active PDF for viewer based on current language
-  const activePdfUrl = currentLang === 'hi' ? (unitData.hiPdfUrl || unitData.pdfUrl) : unitData.pdfUrl;
-  const activePdfName = currentLang === 'hi' ? (unitData.hiPdfFileName || unitData.pdfFileName) : unitData.pdfFileName;
+  const enPdfUrl = en.enPdfUrl || unitData.pdfUrl;
+  const enPdfName = en.enPdfFileName || unitData.pdfFileName;
+  const hiPdfUrl = unitData.hiPdfUrl || en.hiPdfUrl;
+  const hiPdfName = unitData.hiPdfFileName || en.hiPdfFileName;
+  const enPdfAvailable = unitData.pdfAvailable ?? true;
+  const hiPdfAvailable = unitData.hiPdfAvailable ?? Boolean(hiPdfUrl);
+  const usingHindiPdf = pdfLang === 'hi' && Boolean(hiPdfUrl);
+  const activePdfUrl = usingHindiPdf ? hiPdfUrl : enPdfUrl;
+  const activePdfName = usingHindiPdf ? hiPdfName : enPdfName;
+  const activePdfAvailable = usingHindiPdf ? hiPdfAvailable : enPdfAvailable;
+
+  const introEn = showEnglish || !(showHindi && hi?.introduction) ? en.introduction : null;
+  const introHi = showHindi ? hi?.introduction : null;
+
+  const title = language === 'hi' && hi?.title ? hi.title : en.title;
+  const hindiTitle = language !== 'hi' && hindiAvailable ? hi?.title : null;
+  const activeModule = isCcc ? `chapter-${unitData.unitNumber}` : `unit-${unitData.unitNumber}`;
+
+  const crumbs = isCcc
+    ? [
+        { label: 'CCC', href: '/ccc' },
+        { label: 'Chapter notes', href: backHref || '/ccc/notes' },
+        { label: `${unitWord} ${padded}: ${en.title}` },
+      ]
+    : [
+        { label: 'Unit notes', href: backHref || '/notes' },
+        { label: `${unitWord} ${padded}: ${en.title}` },
+      ];
+
+  const readingColumnClass =
+    view === 'pdf'
+      ? 'min-w-0 xl:col-start-2 xl:col-end-4 xl:row-start-1'
+      : 'min-w-0 xl:col-start-2 xl:row-start-1';
 
   return (
-    <div className="space-y-8 py-4 max-w-4xl mx-auto text-slate-800 dark:text-slate-200">
-      
-      {/* 1. Top Navigation & Action Strip */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
-        <Link
-          href={backHref || '/notes'}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
-        >
-          <ChevronLeft className="w-4 h-4" />
-          <span>{backLabel || 'Back to Notes Library'}</span>
-        </Link>
+    <div className="shell shell-wide py-6 sm:py-8">
+      <ReadingProgress />
 
-        {/* View Mode Tab Switcher + Bilingual Switcher + Download PDF Buttons */}
-        <div className="flex items-center gap-2.5 flex-wrap">
-          
-          {/* Language Toggle: English | हिन्दी */}
-          <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold shadow-2xs">
-            <span className="px-2 text-slate-400 dark:text-slate-500 flex items-center gap-1">
-              <Languages className="w-3.5 h-3.5" />
-            </span>
-            <button
-              onClick={() => handleLangChange('en')}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
-                currentLang === 'en'
-                  ? 'bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-2xs font-extrabold'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              English
-            </button>
-            <button
-              onClick={() => handleLangChange('hi')}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
-                currentLang === 'hi'
-                  ? 'bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-2xs font-extrabold'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              हिन्दी
-            </button>
-          </div>
+      <Breadcrumbs items={crumbs} className="mb-5" />
 
-          {/* View Mode Tabs: Notes vs PDF */}
-          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold">
-            <button
-              onClick={() => setActiveTab('notes')}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-                activeTab === 'notes'
-                  ? 'bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-2xs font-extrabold'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>{currentLang === 'hi' ? 'वेब रीडर' : 'Interactive Web Reader'}</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('pdf')}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-                activeTab === 'pdf'
-                  ? 'bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-2xs font-extrabold'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              <FileText className="w-3.5 h-3.5" />
-              <span>{currentLang === 'hi' ? 'पीडीएफ व्यूअर' : 'Textbook PDF Viewer'}</span>
-            </button>
-          </div>
-
-          {/* Download PDF Actions */}
-          <div className="flex items-center gap-1.5">
-            <a
-              href={unitData.pdfUrl}
-              download={unitData.pdfFileName}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition-colors shadow-sm"
-              title={`Download English PDF (${unitData.pdfFileName})`}
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>{currentLang === 'hi' ? 'अंग्रेजी PDF' : 'English PDF'}</span>
-            </a>
-
-            {unitData.hiPdfUrl && (
-              <a
-                href={unitData.hiPdfUrl}
-                download={unitData.hiPdfFileName}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors shadow-sm"
-                title={`Download Hindi PDF (${unitData.hiPdfFileName})`}
-              >
-                <FileDown className="w-3.5 h-3.5" />
-                <span>{currentLang === 'hi' ? 'हिन्दी PDF' : 'Hindi PDF'}</span>
-              </a>
-            )}
-          </div>
-
-        </div>
-      </div>
-
-      {/* 2. Unit Title & Course Identity Banner */}
-      <header className="space-y-4 p-6 sm:p-8 rounded-xl bg-navy text-white border border-navy-800 shadow-sm">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="px-2.5 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 font-mono text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5">
-            <GraduationCap className="w-3.5 h-3.5 text-blue-300" />
-            <span>{unitData.courseShortName || 'NIELIT'}</span>
-          </span>
-          <span className="px-2.5 py-1 rounded-full bg-white/10 text-white font-mono text-[11px] font-bold">
-            {currentLang === 'hi' ? `इकाई ${unitData.unitNumberPadded}` : `UNIT ${unitData.unitNumberPadded}`} • SECTION {unitData.officialSection}
-          </span>
-          <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 font-mono text-[11px] font-bold">
-            {localized.topics.length} {currentLang === 'hi' ? 'पाठ्यक्रम विषय' : 'SYLLABUS TOPICS'}
-          </span>
-          <span className="px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 font-mono text-[11px] font-bold">
-            {unitData.totalHours} {currentLang === 'hi' ? 'घंटे' : 'HOURS'} ({unitData.theoryHours}T + {unitData.practicalHours}P)
-          </span>
-        </div>
-
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
-          {localized.title}
-        </h1>
-
-        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl">
-          {localized.introduction}
-        </p>
-
-        {/* What You Will Master In This Unit */}
-        {localized.whatYouWillLearn && localized.whatYouWillLearn.length > 0 && (
-          <div className="pt-4 border-t border-white/10 space-y-2">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-blue-300 block">
-              {labels.whatYouWillLearn}:
-            </span>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {localized.whatYouWillLearn.map((item, idx) => (
-                <div key={idx} className="flex items-start gap-2 text-xs text-slate-200">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
-                  <span className="leading-relaxed">{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </header>
-
-      {/* =========================================================================
-          TAB 1: INTERACTIVE WEB READER (Textbook Chapter Flow)
-      ========================================================================= */}
-      {activeTab === 'notes' && (
-        <div className="space-y-8">
-          
-          {/* Streamlined, Compact Sticky Topic Navigation Pill Bar */}
-          <div className="sticky top-16 z-20 py-2.5 px-3 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-2 overflow-x-auto">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 shrink-0 flex items-center gap-1 pl-1">
-              <Compass className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" />
-              <span>Jump:</span>
-            </span>
-            <div className="flex items-center gap-1.5">
-              {localized.topics.map((t) => (
-                <a
-                  key={t.code}
-                  href={`#topic-${t.code}`}
-                  className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-brand-950 hover:text-brand-600 dark:hover:text-brand-400 text-slate-700 dark:text-slate-300 text-xs font-semibold transition-colors whitespace-nowrap"
-                >
-                  <span className="font-mono text-brand-600 dark:text-brand-400 mr-1">{t.code}</span>
-                  <span className="truncate max-w-[140px] inline-block align-bottom">{t.title}</span>
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* Sequential Textbook Sections (De-Cardified) */}
-          <div className="space-y-16 divide-y divide-slate-200 dark:divide-slate-800">
-            {localized.topics.map((topic, index) => (
-              <section
-                key={topic.code}
-                id={`topic-${topic.code}`}
-                className={`scroll-mt-28 space-y-6 ${index > 0 ? 'pt-12' : 'pt-2'}`}
-              >
-                {/* Topic Header */}
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 text-xs font-mono font-extrabold rounded bg-brand-100 text-brand-800 dark:bg-brand-900/40 dark:text-brand-300 uppercase tracking-wider">
-                      {currentLang === 'hi' ? `विषय ${topic.code}` : `Topic ${topic.code}`}
-                    </span>
-                    <span className="text-xs text-slate-400 font-mono">
-                      {unitData.courseShortName} Curriculum
-                    </span>
-                  </div>
-                  <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight pt-1">
-                    {topic.title}
-                  </h2>
-                </div>
-
-                {/* 1. What is this? & 2. Why is it important? (Fluent Editorial Prose) */}
-                <div className="space-y-4">
-                  {topic.whatIsIt && (
-                    <div className="border-l-4 border-brand-600 pl-4 py-1">
-                      <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-brand-700 dark:text-brand-400 block mb-1">
-                        {labels.whatIsIt}:
-                      </span>
-                      <p className="text-sm sm:text-[15px] text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
-                        {topic.whatIsIt}
-                      </p>
-                    </div>
-                  )}
-
-                  {topic.whyImportant && (
-                    <div className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-                      <Award className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
-                      <p className="leading-relaxed">
-                        <strong className="text-slate-900 dark:text-white font-bold mr-1">{labels.whyImportant}:</strong>
-                        {topic.whyImportant}
-                      </p>
-                    </div>
-                  )}
-
-                  {topic.howItWorks && (
-                    <div className="space-y-1.5 pt-1">
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                        <Layers className="w-3.5 h-3.5 text-cyan-500" />
-                        <span>{labels.howItWorks}</span>
-                      </h3>
-                      <p className="text-sm sm:text-[15px] text-slate-700 dark:text-slate-300 leading-relaxed">
-                        {topic.howItWorks}
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Code Block */}
-                {topic.codeSnippet && (
-                  <CodeBlockRenderer
-                    code={topic.codeSnippet}
-                    language={topic.codeLanguage || 'SOURCE CODE'}
-                  />
-                )}
-
-                {/* Key Components / Characteristics */}
-                {topic.componentsOrTypes && topic.componentsOrTypes.length > 0 && (
-                  <div className="space-y-2.5 pt-1">
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                      <CheckCircle2 className="w-4 h-4 text-brand-600 dark:text-brand-400" />
-                      <span>{topic.componentsTitle || labels.keyComponents}</span>
-                    </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                      {topic.componentsOrTypes.map((comp, cIdx) => (
-                        <div key={cIdx} className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-xs sm:text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-brand-500 mt-2 shrink-0" />
-                          <span className="leading-relaxed">{comp}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Comparison / Specification Table */}
-                {topic.table && (
-                  <div className="space-y-2 pt-2">
-                    {topic.tableTitle && (
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
-                        {topic.tableTitle}
-                      </h3>
-                    )}
-                    <div className="table-responsive border border-slate-200 dark:border-slate-800 shadow-xs">
-                      <table className="w-full text-xs sm:text-sm text-left">
-                        <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-bold border-b border-slate-200 dark:border-slate-700">
-                          <tr>
-                            {topic.table.headers.map((h, hIdx) => (
-                              <th key={hIdx} className="px-4 py-3">{h}</th>
-                            ))}
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800 bg-white dark:bg-slate-900">
-                          {topic.table.rows.map((row, rIdx) => (
-                            <tr key={rIdx} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors even:bg-slate-50/30 dark:even:bg-slate-800/20">
-                              {row.map((cell, cIdx) => (
-                                <td key={cIdx} className="px-4 py-3 text-slate-700 dark:text-slate-300 leading-relaxed">
-                                  {cell}
-                                </td>
-                              ))}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                )}
-
-                {/* Practical Real-World Example */}
-                {topic.practicalExample && (
-                  <div className="callout-box callout-analogy">
-                    <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-indigo-900 dark:text-indigo-300 mb-1">
-                      <Lightbulb className="w-4 h-4 text-indigo-600 shrink-0" />
-                      <span>{labels.practicalExample}</span>
-                    </div>
-                    <p className="text-xs sm:text-sm text-indigo-950 dark:text-indigo-200 leading-relaxed">
-                      {topic.practicalExample}
-                    </p>
-                  </div>
-                )}
-
-                {/* Key Technical Facts & Syllabus Highlights */}
-                {topic.importantPoints && topic.importantPoints.length > 0 && (
-                  <div className="callout-box callout-important">
-                    <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-emerald-900 dark:text-emerald-300 mb-2">
-                      <Award className="w-4 h-4 text-emerald-600 shrink-0" />
-                      <span>{labels.examPoints}</span>
-                    </div>
-                    <ul className="space-y-1.5 pl-4">
-                      {topic.importantPoints.map((pt, pIdx) => (
-                        <li key={pIdx} className="text-xs sm:text-sm text-emerald-950 dark:text-emerald-200 list-disc leading-relaxed">
-                          {pt}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {/* Quick Topic Recap */}
-                {topic.quickRevision && (
-                  <div className="p-3.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 flex items-start gap-2">
-                    <span className="font-bold text-brand-600 dark:text-brand-400 uppercase tracking-wider shrink-0 mt-0.5">
-                      {labels.quickRecap}:
-                    </span>
-                    <span className="leading-relaxed">{topic.quickRevision}</span>
-                  </div>
-                )}
-              </section>
-            ))}
-          </div>
-
-          {/* Unit Revision Checklist */}
-          {localized.unitRevision && localized.unitRevision.length > 0 && (
-            <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 mt-12">
-              <div className="border-b border-slate-100 dark:border-slate-800 pb-3">
-                <span className="text-xs font-mono font-bold text-brand-600 dark:text-brand-400 uppercase tracking-wider">
-                  {labels.revisionTitle}
+      <PageHeader
+        eyebrow={[courseShortName, courseCode].filter(Boolean).join(' · ')}
+        title={title}
+        hindiTitle={hindiTitle}
+        actions={
+          <>
+            <Segmented
+              className={TOUCH_SEGMENT}
+              options={LANGUAGE_OPTIONS}
+              value={language}
+              onChange={changeLanguage}
+              ariaLabel={chrome.langLabel}
+            />
+            <Segmented
+              className={TOUCH_SEGMENT}
+              options={[
+                { value: 'notes', label: chrome.read },
+                { value: 'pdf', label: chrome.pdf },
+              ]}
+              value={view}
+              onChange={setView}
+              ariaLabel={chrome.viewLabel}
+            />
+          </>
+        }
+        meta={
+          <>
+            <MetaItem icon={GraduationCap}>
+              {unitWord} {padded}
+              {unitData.officialSection ? ` · Section ${unitData.officialSection}` : ''}
+            </MetaItem>
+            <MetaItem icon={Layers}>
+              {topics.length} {chrome.topicWord}
+            </MetaItem>
+            {unitData.totalHours ? (
+              <MetaItem icon={Clock}>
+                <span className="tabular-nums">
+                  {unitData.totalHours} {chrome.hoursWord}
                 </span>
-                <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
-                  {labels.revisionHeading}
-                </h3>
-              </div>
-              <ul className="space-y-2">
-                {localized.unitRevision.map((rev, rIdx) => (
-                  <li key={rIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
-                    <span className="leading-relaxed">{rev}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+                {unitData.theoryHours != null && unitData.practicalHours != null ? (
+                  <span className="tabular-nums">
+                    {' '}
+                    ({unitData.theoryHours}T + {unitData.practicalHours}P)
+                  </span>
+                ) : null}
+              </MetaItem>
+            ) : null}
+            <Button
+              variant="ghost"
+              size="sm"
+              icon={ArrowLeft}
+              href={backHref || notesBase}
+              className="-ml-2"
+            >
+              {backLabel || 'Back to the notes library'}
+            </Button>
+          </>
+        }
+      />
 
-          {/* Key Terms, Acronyms & Full Forms Table */}
-          {localized.keyTerms && localized.keyTerms.length > 0 && (
-            <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-              <div className="border-b border-slate-100 dark:border-slate-800 pb-3">
-                <span className="text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                  Glossary &amp; Official Standards
-                </span>
-                <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
-                  {labels.keyTermsTitle}
-                </h3>
-              </div>
-              <div className="table-responsive border border-slate-200 dark:border-slate-800">
-                <table className="w-full text-xs sm:text-sm text-left">
-                  <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-bold border-b border-slate-200 dark:border-slate-700">
-                    <tr>
-                      {labels.termHeaders.map((h, hIdx) => (
-                        <th key={hIdx} className="px-4 py-3">{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800 bg-white dark:bg-slate-900">
-                    {localized.keyTerms.map((t, tIdx) => (
-                      <tr key={tIdx} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors even:bg-slate-50/30 dark:even:bg-slate-800/20">
-                        <td className="px-4 py-3 font-bold font-mono text-brand-600 dark:text-brand-400">
-                          {t.term}
-                        </td>
-                        <td className="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">
-                          {t.fullForm}
-                        </td>
-                        <td className="px-4 py-3 text-slate-600 dark:text-slate-300 leading-relaxed">
-                          {t.desc}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-        </div>
-      )}
-
-      {/* =========================================================================
-          TAB 2: TEXTBOOK PDF VIEWER
-      ========================================================================= */}
-      {activeTab === 'pdf' && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs">
-            <span className="font-bold text-slate-700 dark:text-slate-300 flex items-center gap-2">
-              <FileText className="w-4 h-4 text-brand-600" />
-              <span>Viewing PDF: <strong className="text-brand-600 dark:text-brand-400">{activePdfName}</strong></span>
-            </span>
-            <div className="flex items-center gap-2">
-              <span className="text-slate-400 text-[11px]">PDF Language:</span>
-              <button
-                onClick={() => handleLangChange('en')}
-                className={`px-2.5 py-1 rounded text-[11px] font-bold transition-colors ${
-                  currentLang === 'en'
-                    ? 'bg-brand-600 text-white'
-                    : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
-                }`}
-              >
-                English PDF
-              </button>
-              {unitData.hiPdfUrl && (
-                <button
-                  onClick={() => handleLangChange('hi')}
-                  className={`px-2.5 py-1 rounded text-[11px] font-bold transition-colors ${
-                    currentLang === 'hi'
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
-                  }`}
-                >
-                  हिन्दी PDF
-                </button>
-              )}
-            </div>
-          </div>
-
-          <UnitPdfReader
-            pdfUrl={activePdfUrl}
-            fileName={activePdfName}
-            unitTitle={localized.title}
-            unitNumber={unitData.unitNumber}
-            pageCount={unitData.pageCount || 10}
+      <div className="xl:grid xl:grid-cols-[15rem_minmax(0,1fr)_13rem] xl:gap-x-10">
+        {/* Course tree — a rail at xl, a sheet below it */}
+        <div className="xl:col-start-1 xl:row-start-1">
+          <CourseSidebar
+            courseKey={isCcc ? 'ccc' : 'olevel'}
+            activeModule={activeModule}
+            title={chrome.contents}
           />
         </div>
-      )}
 
-      {/* 3. Bottom Unit Navigation Strip */}
-      <nav className="flex flex-wrap items-center justify-between gap-4 pt-8 border-t border-slate-200 dark:border-slate-800">
-        {prevUnit ? (
-          <Link
-            href={isOLevel ? `/notes/${prevUnit.slug}` : `/ccc/notes/${prevUnit.slug}`}
-            className="inline-flex items-center gap-2.5 px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-brand-500 text-slate-700 dark:text-slate-300 text-xs font-bold transition-all shadow-2xs group"
-          >
-            <ArrowLeft className="w-4 h-4 text-slate-400 group-hover:text-brand-600 transition-colors" />
-            <div className="text-left">
-              <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
-                {currentLang === 'hi' ? 'पिछली इकाई' : 'Previous Unit'}
-              </span>
-              <span className="group-hover:text-brand-600 transition-colors">Unit {prevUnit.unitNumberPadded || prevUnit.unitNumber}: {prevUnit.title}</span>
+        {/* Table of contents — one collapsed row below xl, a rail at xl */}
+        {view === 'notes' ? (
+          <div className="mb-6 xl:mb-0 xl:col-start-3 xl:row-start-1 [&>div]:lg:block [&>div]:xl:hidden [&>nav]:lg:hidden [&>nav]:xl:block">
+            {/* keyed on language so headings are re-read after a switch */}
+            <TableOfContents key={language} title={chrome.onThisPage} />
+          </div>
+        ) : null}
+
+        {/* Reading column */}
+        <div className={readingColumnClass}>
+          {view === 'notes' ? (
+            <>
+              {/* Quiet "where am I" bar */}
+              <div className="sticky top-header z-30 bg-ground border-b border-line py-2 mb-6 no-print">
+                <p className="flex items-center gap-1.5 text-xs min-w-0">
+                  <span className="font-mono text-ink-3 shrink-0">
+                    {unitWord} {padded}
+                  </span>
+                  {activeSection ? (
+                    <>
+                      <ChevronRight className="w-3 h-3 text-ink-4 shrink-0" aria-hidden="true" />
+                      <span className="truncate font-medium text-ink-2">{activeSection.label}</span>
+                    </>
+                  ) : null}
+                </p>
+              </div>
+
+              <article data-toc-root className="prose-notes max-w-measure">
+                {introEn ? <p className="text-lead text-ink-2">{introEn}</p> : null}
+                {introHi ? (
+                  introEn ? (
+                    <HindiGroup label={chrome.hindiGroup}>
+                      <p className="text-lead">{introHi}</p>
+                    </HindiGroup>
+                  ) : (
+                    <p className="text-lead text-ink-2 hindi-text" lang="hi">
+                      {introHi}
+                    </p>
+                  )
+                ) : null}
+
+                {hasOutcomes ? (
+                  <section aria-labelledby="learning-outcomes" className={FLOW}>
+                    <h2 id="learning-outcomes">{chrome.outcomes}</h2>
+                    {outcomes.en.length ? (
+                      <ul>
+                        {outcomes.en.map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                    {outcomes.hi.length ? (
+                      outcomes.en.length ? (
+                        <HindiGroup label={chrome.hindiGroup}>
+                          <ul>
+                            {outcomes.hi.map((item, i) => (
+                              <li key={i}>{item}</li>
+                            ))}
+                          </ul>
+                        </HindiGroup>
+                      ) : (
+                        <ul lang="hi" className="hindi-text">
+                          {outcomes.hi.map((item, i) => (
+                            <li key={i}>{item}</li>
+                          ))}
+                        </ul>
+                      )
+                    ) : null}
+                  </section>
+                ) : null}
+
+                {topics.map((topic) => {
+                  const englishTopic = topic.en;
+                  const hindiTopic = topic.hi;
+                  const showTopicHindi = showHindi && Boolean(hindiTopic);
+                  const showTopicEnglish = showEnglish || !showTopicHindi;
+                  const headingIsHindi = showTopicHindi && !showTopicEnglish;
+                  const headingText = headingIsHindi ? hindiTopic.title : englishTopic.title;
+
+                  return (
+                    <section key={topic.id} aria-labelledby={topic.id} className={FLOW}>
+                      <h2
+                        id={topic.id}
+                        className={headingIsHindi ? 'hindi-text' : undefined}
+                        lang={headingIsHindi ? 'hi' : undefined}
+                      >
+                        <span className="font-mono text-ink-4 mr-2">{topic.code}</span>
+                        {headingText}
+                      </h2>
+
+                      {showTopicEnglish && showTopicHindi && hindiTopic.title ? (
+                        <p className="text-base text-hindi hindi-text !mt-1" lang="hi">
+                          {hindiTopic.title}
+                        </p>
+                      ) : null}
+
+                      {showTopicEnglish ? (
+                        <TopicBody
+                          topic={{ ...englishTopic, codeSnippet: topic.codeSnippet, codeLanguage: topic.codeLanguage }}
+                          chrome={CHROME.en}
+                          withCode
+                        />
+                      ) : null}
+
+                      {showTopicHindi ? (
+                        showTopicEnglish ? (
+                          <HindiGroup label={chrome.hindiGroup}>
+                            <TopicBody topic={hindiTopic} chrome={CHROME.hi} withCode={false} />
+                          </HindiGroup>
+                        ) : (
+                          <div lang="hi" className={`hindi-text ${FLOW}`}>
+                            <TopicBody
+                              topic={{
+                                ...hindiTopic,
+                                codeSnippet: topic.codeSnippet,
+                                codeLanguage: topic.codeLanguage,
+                              }}
+                              chrome={CHROME.hi}
+                              withCode
+                            />
+                          </div>
+                        )
+                      ) : null}
+                    </section>
+                  );
+                })}
+
+                {hasRevision ? (
+                  <section aria-labelledby="revision-checklist" className={FLOW}>
+                    <h2 id="revision-checklist">{chrome.revision}</h2>
+                    {revision.en.length ? (
+                      <ul>
+                        {revision.en.map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                    {revision.hi.length ? (
+                      revision.en.length ? (
+                        <HindiGroup label={chrome.hindiGroup}>
+                          <ul>
+                            {revision.hi.map((item, i) => (
+                              <li key={i}>{item}</li>
+                            ))}
+                          </ul>
+                        </HindiGroup>
+                      ) : (
+                        <ul lang="hi" className="hindi-text">
+                          {revision.hi.map((item, i) => (
+                            <li key={i}>{item}</li>
+                          ))}
+                        </ul>
+                      )
+                    ) : null}
+                  </section>
+                ) : null}
+
+                {hasTerms ? (
+                  <section aria-labelledby="key-terms" className={FLOW}>
+                    <h2 id="key-terms">{chrome.keyTerms}</h2>
+                    {terms.en.length ? (
+                      <ScrollTable>
+                        <table>
+                          <caption className="sr-only">{UI_LABELS.en.keyTermsTitle}</caption>
+                          <thead>
+                            <tr>
+                              {UI_LABELS.en.termHeaders.map((header, i) => (
+                                <th key={i} scope="col">
+                                  {header}
+                                </th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {terms.en.map((term, i) => (
+                              <tr key={i}>
+                                <td>{term.term}</td>
+                                <td>{term.fullForm}</td>
+                                <td>{term.desc}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </ScrollTable>
+                    ) : null}
+                    {terms.hi.length ? (
+                      <div lang="hi" className="hindi-text">
+                        {terms.en.length ? (
+                          <p className="eyebrow mb-2">{chrome.hindiGroup}</p>
+                        ) : null}
+                        <ScrollTable>
+                          <table>
+                            <caption className="sr-only">{UI_LABELS.hi.keyTermsTitle}</caption>
+                            <thead>
+                              <tr>
+                                {UI_LABELS.hi.termHeaders.map((header, i) => (
+                                  <th key={i} scope="col">
+                                    {header}
+                                  </th>
+                                ))}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {terms.hi.map((term, i) => (
+                                <tr key={i}>
+                                  <td>{term.term}</td>
+                                  <td>{term.fullForm}</td>
+                                  <td>{term.desc}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </ScrollTable>
+                      </div>
+                    ) : null}
+                  </section>
+                ) : null}
+              </article>
+
+              {/* Downloads — outside the article so reading progress ends with
+                  the last line of the notes */}
+              <section
+                aria-labelledby="unit-downloads"
+                className="mt-12 panel p-5 max-w-measure no-print"
+              >
+                <h2 id="unit-downloads" className="text-h4 font-semibold text-ink">
+                  {chrome.downloads}
+                </h2>
+                <p className="mt-1 text-base text-ink-3">{chrome.downloadsHelp}</p>
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                  {enPdfAvailable ? (
+                    <a
+                      href={enPdfUrl}
+                      download={enPdfName}
+                      className={`btn btn-secondary ${TOUCH}`}
+                      aria-label={`Download the English PDF (${enPdfName})`}
+                    >
+                      <Download className="w-4 h-4" aria-hidden="true" />
+                      English PDF
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled
+                      className={`btn btn-secondary ${TOUCH} opacity-60 cursor-not-allowed`}
+                      title="English PDF not available yet"
+                      aria-label={`English PDF (${enPdfName}) is not yet available`}
+                    >
+                      <Download className="w-4 h-4" aria-hidden="true" />
+                      English PDF (soon)
+                    </button>
+                  )}
+                  {hiPdfUrl ? (
+                    hiPdfAvailable ? (
+                      <a
+                        href={hiPdfUrl}
+                        download={hiPdfName}
+                        className={`btn btn-secondary ${TOUCH}`}
+                        aria-label={`Download the Hindi PDF (${hiPdfName})`}
+                      >
+                        <Download className="w-4 h-4" aria-hidden="true" />
+                        <span className="hindi-text" lang="hi">
+                          हिन्दी PDF
+                        </span>
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled
+                        className={`btn btn-secondary ${TOUCH} opacity-60 cursor-not-allowed`}
+                        title="Hindi PDF not available yet"
+                        aria-label={`Hindi PDF (${hiPdfName}) is not yet available`}
+                      >
+                        <Download className="w-4 h-4" aria-hidden="true" />
+                        <span className="hindi-text" lang="hi">
+                          हिन्दी PDF (soon)
+                        </span>
+                      </button>
+                    )
+                  ) : null}
+                  {activePdfAvailable ? (
+                    <a
+                      href={activePdfUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`btn btn-ghost ${TOUCH}`}
+                    >
+                      <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                      Open in a new tab
+                    </a>
+                  ) : null}
+                </div>
+              </section>
+            </>
+          ) : (
+            <div className="space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="flex items-center gap-2 text-sm text-ink-2 min-w-0">
+                  <FileText className="w-4 h-4 text-ink-3 shrink-0" aria-hidden="true" />
+                  <span className="truncate">{activePdfName}</span>
+                  <Badge tone="neutral" mono>
+                    {unitWord} {padded}
+                  </Badge>
+                </p>
+                {hiPdfUrl ? (
+                  <Segmented
+                    className={TOUCH_SEGMENT}
+                    options={[
+                      { value: 'en', label: 'English' },
+                      { value: 'hi', label: 'हिन्दी' },
+                    ]}
+                    value={usingHindiPdf ? 'hi' : 'en'}
+                    onChange={setPdfLang}
+                    ariaLabel="PDF language"
+                  />
+                ) : null}
+              </div>
+
+              <UnitPdfReader
+                pdfUrl={activePdfUrl}
+                fileName={activePdfName}
+                unitTitle={title}
+                unitNumber={padded}
+                pageCount={unitData.pageCount}
+                topicCount={topics.length}
+                languageLabel={usingHindiPdf ? 'हिन्दी' : 'English'}
+                pdfAvailable={activePdfAvailable}
+              />
             </div>
-          </Link>
-        ) : <div />}
+          )}
 
-        {nextUnit ? (
-          <Link
-            href={isOLevel ? `/notes/${nextUnit.slug}` : `/ccc/notes/${nextUnit.slug}`}
-            className="inline-flex items-center gap-2.5 px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-brand-500 text-slate-700 dark:text-slate-300 text-xs font-bold transition-all shadow-2xs group"
-          >
-            <div className="text-right">
-              <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
-                {currentLang === 'hi' ? 'अगली इकाई' : 'Next Unit'}
-              </span>
-              <span className="group-hover:text-brand-600 transition-colors">Unit {nextUnit.unitNumberPadded || nextUnit.unitNumber}: {nextUnit.title}</span>
-            </div>
-            <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-brand-600 transition-colors" />
-          </Link>
-        ) : <div />}
-      </nav>
-
+          <PrevNext
+            className="mt-12"
+            prev={
+              prevUnit
+                ? {
+                    href: `${notesBase}/${prevUnit.slug}`,
+                    title: `${unitWord} ${prevUnit.unitNumberPadded || prevUnit.unitNumber}: ${prevUnit.title}`,
+                    hindiTitle: prevUnit.hi?.title,
+                  }
+                : null
+            }
+            next={
+              nextUnit
+                ? {
+                    href: `${notesBase}/${nextUnit.slug}`,
+                    title: `${unitWord} ${nextUnit.unitNumberPadded || nextUnit.unitNumber}: ${nextUnit.title}`,
+                    hindiTitle: nextUnit.hi?.title,
+                  }
+                : null
+            }
+          />
+        </div>
+      </div>
     </div>
   );
 }

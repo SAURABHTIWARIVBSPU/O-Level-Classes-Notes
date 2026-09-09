@@ -1,169 +1,143 @@
 'use client';
 
-import React, { useState } from 'react';
-import { HelpCircle, CheckCircle2, XCircle, Award, RotateCcw } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { CheckCircle2, XCircle, RotateCcw } from 'lucide-react';
 import { useProgress } from '@/lib/progressContext';
-import { useLanguage } from '@/lib/languageContext';
+import { Button, Panel, ProgressBar } from '@/components/ui';
 
+/**
+ * A short self-check at the end of a topic.
+ *
+ * Correct/incorrect is signalled with an icon *and* a colour, never colour
+ * alone, and options are real radio inputs so keyboard and screen-reader users
+ * get the same behaviour as everyone else.
+ */
 export default function MicroQuiz({ topicSlug, questions = [] }) {
   const { recordTopicScore } = useProgress();
-  const { language } = useLanguage();
-  const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
-  if (!questions || questions.length === 0) return null;
+  const answeredCount = Object.keys(answers).length;
+  const allAnswered = questions.length > 0 && answeredCount === questions.length;
 
-  const handleSelect = (qIdx, optId) => {
-    if (submitted) return;
-    setSelectedAnswers((prev) => ({ ...prev, [qIdx]: optId }));
-  };
+  const correctCount = useMemo(
+    () => questions.reduce((n, q, i) => (answers[i] === q.correctAnswer ? n + 1 : n), 0),
+    [answers, questions],
+  );
 
-  const handleSubmit = () => {
+  if (!questions.length) return null;
+
+  const submit = () => {
     setSubmitted(true);
-    let correctCount = 0;
-    questions.forEach((q, idx) => {
-      if (selectedAnswers[idx] === q.correctAnswer) {
-        correctCount++;
-      }
-    });
-    if (recordTopicScore && topicSlug) {
-      recordTopicScore(topicSlug, correctCount, questions.length);
-    }
+    const score = questions.reduce((n, q, i) => (answers[i] === q.correctAnswer ? n + 1 : n), 0);
+    if (topicSlug) recordTopicScore(topicSlug, score, questions.length);
   };
 
-  const handleReset = () => {
-    setSelectedAnswers({});
+  const reset = () => {
+    setAnswers({});
     setSubmitted(false);
   };
 
-  const totalAnswered = Object.keys(selectedAnswers).length;
-  const isComplete = totalAnswered === questions.length;
-
-  let correctCount = 0;
-  if (submitted) {
-    questions.forEach((q, idx) => {
-      if (selectedAnswers[idx] === q.correctAnswer) correctCount++;
-    });
-  }
+  const pct = Math.round((correctCount / questions.length) * 100);
 
   return (
-    <div className="border border-brand-200 dark:border-brand-900/60 rounded-2xl p-5 bg-brand-50/30 dark:bg-brand-950/20 shadow-xs space-y-5 my-6">
-      
-      {/* Header */}
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-xs">
-            <HelpCircle className="w-4 h-4" />
-          </div>
-          <div>
-            <span className="text-[10px] uppercase font-bold tracking-wider text-brand-700 dark:text-brand-400 block font-mono">
-              CONCEPT RETENTION TEST
-            </span>
-            <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
-              {language === 'en' 
-                ? 'Topic Micro-Quiz' 
-                : language === 'hi' 
-                ? 'माइक्रो क्विज़ (Micro Quiz)' 
-                : 'Topic Micro-Quiz (त्वरित ज्ञान जांच)'}
-            </h3>
-          </div>
+    <Panel className="p-4 sm:p-5">
+      <div className="flex items-center justify-between gap-3 mb-4">
+        <div>
+          <p className="eyebrow">Quick check</p>
+          <p className="text-base text-ink-3 mt-0.5">
+            {questions.length} question{questions.length === 1 ? '' : 's'} on what you just read
+          </p>
         </div>
-
-        {submitted && (
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-800 dark:text-brand-200 text-xs font-bold shadow-xs">
-            <Award className="w-3.5 h-3.5" />
-            <span>Score: {correctCount} / {questions.length}</span>
-          </div>
-        )}
+        {submitted ? (
+          <span className="text-h3 font-semibold text-ink tabular-nums shrink-0">
+            {correctCount}<span className="text-ink-4">/{questions.length}</span>
+          </span>
+        ) : null}
       </div>
 
-      {/* Questions List */}
-      <div className="space-y-4 text-xs sm:text-sm">
-        {questions.map((q, qIdx) => {
-          const selected = selectedAnswers[qIdx];
-          const isCorrect = selected === q.correctAnswer;
+      <ol className="space-y-6">
+        {questions.map((q, qi) => {
+          const chosen = answers[qi];
+          const options = q.options || [];
 
           return (
-            <div
-              key={qIdx}
-              className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3 shadow-xs"
-            >
-              <p className="font-bold text-slate-900 dark:text-white leading-snug">
-                Q{qIdx + 1}. {q.question}
-              </p>
+            <li key={qi}>
+              <fieldset>
+                <legend className="text-prose text-ink font-medium leading-relaxed mb-3">
+                  <span className="font-mono text-xs text-ink-4 mr-2">{qi + 1}.</span>
+                  {q.question}
+                </legend>
 
-              {/* Options */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {q.options.map((opt) => {
-                  let optStyle = 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:border-brand-400';
+                <div className="space-y-1.5">
+                  {options.map((opt, oi) => {
+                    const value = opt.id ?? oi;
+                    const text = typeof opt === 'string' ? opt : opt.text;
+                    const isChosen = chosen === value;
+                    const isRight = submitted && value === q.correctAnswer;
+                    const isWrong = submitted && isChosen && value !== q.correctAnswer;
 
-                  if (selected === opt.id) {
-                    optStyle = 'border-brand-500 bg-brand-50 dark:bg-brand-950 text-brand-800 dark:text-brand-200 font-bold';
-                  }
+                    const tone = isRight
+                      ? 'border-ok-line bg-ok-soft'
+                      : isWrong
+                        ? 'border-danger-line bg-danger-soft'
+                        : isChosen
+                          ? 'border-accent-line bg-accent-soft'
+                          : 'border-line hover:border-line-strong';
 
-                  if (submitted) {
-                    if (opt.id === q.correctAnswer) {
-                      optStyle = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-200 font-bold';
-                    } else if (selected === opt.id && !isCorrect) {
-                      optStyle = 'border-rose-500 bg-rose-50 dark:bg-rose-950 text-rose-800 dark:text-rose-200 font-bold';
-                    }
-                  }
-
-                  return (
-                    <button
-                      key={opt.id}
-                      onClick={() => handleSelect(qIdx, opt.id)}
-                      disabled={submitted}
-                      className={`p-3 min-h-[44px] rounded-xl border text-left flex items-start gap-2.5 text-xs transition-all cursor-pointer ${optStyle}`}
-                    >
-                      <span className="w-5 h-5 rounded-full border flex items-center justify-center text-[11px] font-bold shrink-0 mt-0.5">
-                        {opt.id}
-                      </span>
-                      <span className="flex-1 leading-snug">{opt.text}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Explanation upon submit */}
-              {submitted && q.explanation && (
-                <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  <strong className="text-brand-600 dark:text-brand-400 mr-1 font-bold">
-                    {language === 'en' ? 'Explanation:' : 'व्याख्या (Explanation):'}
-                  </strong>
-                  {q.explanation}
+                    return (
+                      <label
+                        key={value}
+                        className={`flex items-start gap-2.5 px-3 py-2.5 rounded-lg border cursor-pointer transition-colors ${tone} ${submitted ? 'cursor-default' : ''}`}
+                      >
+                        <input
+                          type="radio"
+                          name={`mq-${topicSlug}-${qi}`}
+                          value={String(value)}
+                          checked={isChosen}
+                          disabled={submitted}
+                          onChange={() => setAnswers((a) => ({ ...a, [qi]: value }))}
+                          className="mt-1 accent-[rgb(var(--c-accent))] shrink-0"
+                        />
+                        <span className="text-base text-ink-2 leading-relaxed flex-1">{text}</span>
+                        {isRight ? <CheckCircle2 className="w-4 h-4 mt-0.5 text-ok shrink-0" aria-label="Correct answer" /> : null}
+                        {isWrong ? <XCircle className="w-4 h-4 mt-0.5 text-danger shrink-0" aria-label="Your answer, incorrect" /> : null}
+                      </label>
+                    );
+                  })}
                 </div>
-              )}
-            </div>
+
+                {submitted && q.explanation ? (
+                  <p className="mt-2.5 text-base text-ink-2 leading-relaxed border-l-2 border-line pl-3">
+                    {q.explanation}
+                  </p>
+                ) : null}
+              </fieldset>
+            </li>
           );
         })}
-      </div>
+      </ol>
 
-      {/* Action Buttons */}
-      <div className="flex items-center gap-3 pt-2">
-        {!submitted ? (
-          <button
-            onClick={handleSubmit}
-            disabled={!isComplete}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-xs ${
-              isComplete
-                ? 'bg-brand-600 hover:bg-brand-500 text-white cursor-pointer'
-                : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
-            }`}
-          >
-            {language === 'en' ? 'Submit Quiz Answers' : 'उत्तर सबमिट करें (Submit)'}
-          </button>
+      <div className="mt-5 pt-4 border-t border-line flex flex-wrap items-center justify-between gap-3">
+        {submitted ? (
+          <>
+            <ProgressBar
+              className="flex-1 min-w-[12rem]"
+              value={pct}
+              tone={pct >= 70 ? 'ok' : pct >= 40 ? 'warn' : 'danger'}
+              label={pct >= 70 ? 'Solid — move on' : 'Worth re-reading this topic'}
+            />
+            <Button size="sm" icon={RotateCcw} onClick={reset}>Try again</Button>
+          </>
         ) : (
-          <button
-            onClick={handleReset}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold transition-all shadow-xs"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>{language === 'en' ? 'Retake Quiz' : 'पुनः प्रयास करें (Retake)'}</span>
-          </button>
+          <>
+            <p className="text-sm text-ink-3">{answeredCount} of {questions.length} answered</p>
+            <Button variant="primary" size="sm" onClick={submit} disabled={!allAnswered}>
+              Check answers
+            </Button>
+          </>
         )}
       </div>
-
-    </div>
+    </Panel>
   );
 }

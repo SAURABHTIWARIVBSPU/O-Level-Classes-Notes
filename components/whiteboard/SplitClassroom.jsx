@@ -1,15 +1,54 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Presentation, Columns2, School } from 'lucide-react';
+
+import { Badge, Segmented } from '@/components/ui';
 import WhiteboardToolbar from './WhiteboardToolbar';
 import WhiteboardCanvas from './WhiteboardCanvas';
 import SandboxEditor from '@/components/playground/SandboxEditor';
 import FullscreenPortal from '@/components/common/FullscreenPortal';
-import { Presentation, Columns2, Terminal, School } from 'lucide-react';
+
+/**
+ * Board on one side, live editor on the other.
+ *
+ * All whiteboard state lives here rather than in the canvas: the toolbar and
+ * the canvas are siblings, and the canvas is driven by counter "triggers"
+ * (`undoTrigger`, `clearTrigger`, …) so a repeated action still fires. The
+ * template trigger carries a timestamp for the same reason — loading the same
+ * diagram twice has to be two events.
+ *
+ * Presentation mode is a modal layer, so it closes on Escape and hands focus
+ * back to the button that opened it.
+ */
+
+const LAYOUT_OPTIONS = [
+  {
+    value: 'split',
+    label: (
+      <span className="inline-flex items-center gap-1.5">
+        <Columns2 className="h-3.5 w-3.5" aria-hidden="true" />
+        <span className="hidden sm:inline">Board and code</span>
+        <span className="sm:hidden">Split</span>
+      </span>
+    ),
+  },
+  {
+    value: 'board-only',
+    label: (
+      <span className="inline-flex items-center gap-1.5">
+        <Presentation className="h-3.5 w-3.5" aria-hidden="true" />
+        <span className="hidden sm:inline">Board only</span>
+        <span className="sm:hidden">Board</span>
+      </span>
+    ),
+  },
+];
 
 export default function SplitClassroom({ initialTemplate = null }) {
   // Whiteboard controls
   const [activeTool, setActiveTool] = useState('pen');
+  // Default ink — a canvas colour, not UI chrome.
   const [strokeColor, setStrokeColor] = useState('#F19A27');
   const [strokeWidth, setStrokeWidth] = useState(4);
   const [bgType, setBgType] = useState('grid');
@@ -31,10 +70,40 @@ export default function SplitClassroom({ initialTemplate = null }) {
   // View Layout Mode: 'split' (Whiteboard + Editor side-by-side) | 'board-only'
   const [layoutMode, setLayoutMode] = useState('split');
 
+  const shellRef = useRef(null);
+  const boardRef = useRef(null);
+  const wasPresenting = useRef(false);
+
   const handleHistoryChange = (undoable, redoable) => {
     setCanUndo(undoable);
     setCanRedo(redoable);
   };
+
+  // Presentation mode is a dialog: Escape closes it and focus moves into it.
+  useEffect(() => {
+    if (!isPresentationMode) return undefined;
+    wasPresenting.current = true;
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setIsPresentationMode(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+
+    const focusTimer = setTimeout(() => shellRef.current?.focus(), 0);
+
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      clearTimeout(focusTimer);
+    };
+  }, [isPresentationMode]);
+
+  // …and focus goes back to the toolbar button that opened it. The portal
+  // re-parents the DOM, so the node has to be looked up again after the exit.
+  useEffect(() => {
+    if (isPresentationMode || !wasPresenting.current) return;
+    wasPresenting.current = false;
+    boardRef.current?.querySelector('[data-presentation-toggle]')?.focus();
+  }, [isPresentationMode]);
 
   return (
     <FullscreenPortal
@@ -42,142 +111,114 @@ export default function SplitClassroom({ initialTemplate = null }) {
       onClose={() => setIsPresentationMode(false)}
       toolName="digital-classroom"
     >
-      <div 
-        className={`transition-all ${
-          isPresentationMode 
-            ? 'w-full h-full flex flex-col justify-between p-3 bg-white dark:bg-slate-950 overflow-hidden space-y-3' 
+      <div
+        ref={shellRef}
+        tabIndex={isPresentationMode ? -1 : undefined}
+        className={
+          isPresentationMode
+            ? 'flex h-full w-full flex-col gap-3 overflow-hidden bg-ground p-3'
             : 'space-y-4'
-        }`}
+        }
       >
-        
-        {/* Header Banner & Mode Switches */}
-        <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-100 dark:bg-slate-900 p-2.5 sm:p-3 rounded-2xl border border-slate-200 dark:border-slate-800 shrink-0">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-md shrink-0">
-              <School className="w-4 h-4" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-sm font-black text-slate-900 dark:text-white">
-                  MSITM Digital Board &amp; Coding Studio
-                </h2>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">
-                  LIVE CLASSROOM
-                </span>
+        {/* ------------------------------------------------ header + layout */}
+        <div className="panel flex shrink-0 flex-wrap items-center justify-between gap-3 p-3">
+          <div className="flex min-w-0 items-center gap-3">
+            <span
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-line bg-sunken"
+              aria-hidden="true"
+            >
+              <School className="h-4 w-4 text-ink-3" />
+            </span>
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-h4 font-semibold text-ink">Digital board and code studio</h2>
+                <Badge tone="neutral">Live classroom</Badge>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">
-                Explain visually on Whiteboard → Code alongside → Run instant live preview.
+              <p className="mt-0.5 hidden text-xs text-ink-3 sm:block">
+                Explain it on the board, write the code beside it, run it in front of the class.
               </p>
             </div>
           </div>
 
-          {/* Layout Switcher */}
-          <div className="flex items-center gap-1 bg-white dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
-            <button
-              onClick={() => setLayoutMode('split')}
-              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg font-bold transition-all ${
-                layoutMode === 'split'
-                  ? 'bg-brand-600 text-white shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              <Columns2 className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Split Mode</span>
-              <span className="sm:hidden">Split</span>
-            </button>
-
-            <button
-              onClick={() => setLayoutMode('board-only')}
-              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg font-bold transition-all ${
-                layoutMode === 'board-only'
-                  ? 'bg-brand-600 text-white shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              <Presentation className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Whiteboard Full</span>
-              <span className="sm:hidden">Board</span>
-            </button>
-          </div>
+          <Segmented
+            ariaLabel="Workspace layout"
+            options={LAYOUT_OPTIONS}
+            value={layoutMode}
+            onChange={setLayoutMode}
+          />
         </div>
 
-        {/* Main Workspace Area */}
-        <div className={`grid gap-3 transition-all ${
-          isPresentationMode ? 'flex-1 min-h-0' : ''
-        } ${
-          layoutMode === 'split' ? 'grid-cols-1 xl:grid-cols-2' : 'grid-cols-1'
-        }`}>
-          
-          {/* Left / Top: Interactive Whiteboard */}
-          {(layoutMode === 'split' || layoutMode === 'board-only') && (
-            <div className={`flex flex-col gap-2 ${isPresentationMode ? 'h-full flex-1 min-h-0' : ''}`}>
-              <WhiteboardToolbar
+        {/* ---------------------------------------------------- workspace */}
+        <div
+          className={`grid gap-3 ${isPresentationMode ? 'min-h-0 flex-1' : ''} ${
+            layoutMode === 'split' ? 'grid-cols-1 xl:grid-cols-2' : 'grid-cols-1'
+          }`}
+        >
+          {/* Board */}
+          <section
+            ref={boardRef}
+            aria-label="Whiteboard"
+            className={`flex flex-col gap-2 ${isPresentationMode ? 'min-h-0 flex-1' : ''}`}
+          >
+            <WhiteboardToolbar
+              activeTool={activeTool}
+              setActiveTool={setActiveTool}
+              strokeColor={strokeColor}
+              setStrokeColor={setStrokeColor}
+              strokeWidth={strokeWidth}
+              setStrokeWidth={setStrokeWidth}
+              bgType={bgType}
+              setBgType={setBgType}
+              isDarkBoard={isDarkBoard}
+              setIsDarkBoard={setIsDarkBoard}
+              onUndo={() => setUndoTrigger((c) => c + 1)}
+              onRedo={() => setRedoTrigger((c) => c + 1)}
+              canUndo={canUndo}
+              canRedo={canRedo}
+              onClear={() => setClearTrigger((c) => c + 1)}
+              onExport={() => setExportTrigger((c) => c + 1)}
+              isPresentationMode={isPresentationMode}
+              setIsPresentationMode={setIsPresentationMode}
+              onLoadTemplate={(tmplId) => setTemplateTrigger({ id: tmplId, ts: Date.now() })}
+            />
+
+            <div
+              className={`panel overflow-hidden ${
+                isPresentationMode ? 'h-full min-h-0 flex-1' : 'h-[420px] sm:h-[520px] xl:h-[560px]'
+              }`}
+            >
+              <WhiteboardCanvas
                 activeTool={activeTool}
-                setActiveTool={setActiveTool}
                 strokeColor={strokeColor}
-                setStrokeColor={setStrokeColor}
                 strokeWidth={strokeWidth}
-                setStrokeWidth={setStrokeWidth}
                 bgType={bgType}
-                setBgType={setBgType}
                 isDarkBoard={isDarkBoard}
-                setIsDarkBoard={setIsDarkBoard}
-                onUndo={() => setUndoTrigger((c) => c + 1)}
-                onRedo={() => setRedoTrigger((c) => c + 1)}
-                canUndo={canUndo}
-                canRedo={canRedo}
-                onClear={() => setClearTrigger((c) => c + 1)}
-                onExport={() => setExportTrigger((c) => c + 1)}
-                isPresentationMode={isPresentationMode}
-                setIsPresentationMode={setIsPresentationMode}
-                onLoadTemplate={(tmplId) => setTemplateTrigger({ id: tmplId, ts: Date.now() })}
+                undoTrigger={undoTrigger}
+                redoTrigger={redoTrigger}
+                clearTrigger={clearTrigger}
+                exportTrigger={exportTrigger}
+                templateTrigger={templateTrigger}
+                onHistoryChange={handleHistoryChange}
+                persistentSnapshot={persistentSnapshotRef.current}
+                onSnapshotChange={(data) => {
+                  persistentSnapshotRef.current = data;
+                }}
               />
-
-              <div className={`border border-slate-300 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xl ${
-                isPresentationMode ? 'flex-1 min-h-0 h-full' : 'h-[560px]'
-              }`}>
-                <WhiteboardCanvas
-                  activeTool={activeTool}
-                  strokeColor={strokeColor}
-                  strokeWidth={strokeWidth}
-                  bgType={bgType}
-                  isDarkBoard={isDarkBoard}
-                  undoTrigger={undoTrigger}
-                  redoTrigger={redoTrigger}
-                  clearTrigger={clearTrigger}
-                  exportTrigger={exportTrigger}
-                  templateTrigger={templateTrigger}
-                  onHistoryChange={handleHistoryChange}
-                  persistentSnapshot={persistentSnapshotRef.current}
-                  onSnapshotChange={(data) => {
-                    persistentSnapshotRef.current = data;
-                  }}
-                />
-              </div>
             </div>
-          )}
+          </section>
 
-          {/* Right / Bottom: Live Code Playground */}
-          {(layoutMode === 'split') && (
-            <div className={`border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-lg p-2 bg-slate-900 flex flex-col ${
-              isPresentationMode ? 'h-full flex-1 min-h-0' : ''
-            }`}>
-              <div className="px-3 py-1.5 border-b border-slate-800 flex items-center justify-between text-xs mb-2 shrink-0">
-                <span className="font-mono text-slate-300 font-bold flex items-center gap-1.5">
-                  <Terminal className="w-3.5 h-3.5 text-indigo-400" /> Interactive Code Runner
-                </span>
-                <span className="text-[11px] text-slate-400">
-                  Ctrl + Enter to run
-                </span>
-              </div>
-              <div className="flex-1 min-h-0">
+          {/* Code */}
+          {layoutMode === 'split' && (
+            <section
+              aria-label="Live code editor"
+              className={`flex flex-col ${isPresentationMode ? 'min-h-0 flex-1' : ''}`}
+            >
+              <div className="min-h-0 flex-1">
                 <SandboxEditor />
               </div>
-            </div>
+            </section>
           )}
-
         </div>
-
       </div>
     </FullscreenPortal>
   );

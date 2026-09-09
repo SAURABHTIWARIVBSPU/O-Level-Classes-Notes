@@ -1,165 +1,804 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ==========================================================================
+   1. TOKENS
+   Colour values are stored as "R G B" triples so Tailwind's <alpha-value>
+   syntax works (bg-surface/60, border-line/50, …).
+   ========================================================================== */
+
 :root {
-  --bg-primary: #FFF8F3;    /* Background */
-  --bg-secondary: #FFFFFF;  /* Surface */
-  --bg-surface: #FFFFFF;    /* Surface */
-  --text-primary: #111827;  /* Text */
-  --text-secondary: #6B7280;/* Muted Text */
-  --border-color: #E5E7EB;  /* Border */
-  --primary: #F19A27;       /* Primary Orange */
-  --primary-dark: #D97706;  /* Primary Dark */
-  --navy: #232850;          /* Navy */
-  --accent-blue: #1F64C9;   /* Blue Accent */
+  /* Surfaces */
+  --c-ground: 250 250 251;
+  --c-surface: 255 255 255;
+  --c-sunken: 244 245 247;
+  --c-overlay: 255 255 255;
+
+  /* Lines */
+  --c-line: 226 229 234;
+  --c-line-strong: 205 210 218;
+
+  /* Text */
+  --c-ink: 17 19 24;
+  --c-ink-2: 71 78 90;
+  --c-ink-3: 110 118 130;
+  --c-ink-4: 152 159 170;
+  --c-ink-inv: 255 255 255;
+
+  /* Accent — the only decorative hue in the system */
+  --c-accent: 31 100 201;
+  --c-accent-hover: 25 80 165;
+  --c-accent-soft: 238 244 254;
+  --c-accent-line: 190 212 250;
+  --c-accent-ink: 21 58 108;
+
+  /* Semantic */
+  --c-ok: 13 122 100;
+  --c-ok-soft: 236 248 245;
+  --c-ok-line: 186 226 216;
+  --c-ok-ink: 8 76 62;
+
+  --c-warn: 176 82 11;
+  --c-warn-soft: 253 245 234;
+  --c-warn-line: 244 214 174;
+  --c-warn-ink: 112 52 6;
+
+  --c-danger: 193 48 74;
+  --c-danger-soft: 253 240 242;
+  --c-danger-line: 246 199 208;
+  --c-danger-ink: 128 29 47;
+
+  --c-exam: 106 66 196;
+  --c-exam-soft: 244 241 254;
+  --c-exam-line: 216 206 248;
+  --c-exam-ink: 66 38 132;
+
+  /* Course markers — thin identity stripes only, never fills */
+  --c-olevel: 31 100 201;
+  --c-ccc: 13 122 100;
+
+  /* Devanagari label tint */
+  --c-hindi: 74 85 120;
+
+  /* Elevation — exactly three levels */
+  --e1: 0 1px 2px 0 rgb(16 24 40 / 0.04);
+  --e2: 0 1px 3px 0 rgb(16 24 40 / 0.07), 0 1px 2px -1px rgb(16 24 40 / 0.04);
+  --e3: 0 8px 24px -6px rgb(16 24 40 / 0.12), 0 2px 6px -2px rgb(16 24 40 / 0.06);
+
+  /* Layout rhythm */
+  --header-h: 3.5rem;
+  --measure: 68ch;
+
+  /* Typography stacks (next/font overrides the first entry) */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-hi: 'Noto Sans Devanagari', 'Nirmala UI', 'Mangal', var(--font-sans);
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  color-scheme: light;
 }
 
 .dark {
-  --bg-primary: #232D36;    /* Dark */
-  --bg-secondary: #1C242C;  /* Surface Dark */
-  --bg-surface: #232850;    /* Navy Surface */
-  --text-primary: #F9FAFB;  /* Text Light */
-  --text-secondary: #9CA3AF;/* Muted Text Light */
-  --border-color: #374151;  /* Border Dark */
-  --primary: #F19A27;       /* Primary Orange */
-  --primary-dark: #D97706;  /* Primary Dark */
-  --navy: #232850;          /* Navy */
-  --accent-blue: #3B82F6;   /* Blue Accent Light */
+  --c-ground: 13 17 23;
+  --c-surface: 20 26 33;
+  --c-sunken: 16 21 28;
+  --c-overlay: 24 31 39;
+
+  --c-line: 36 45 57;
+  --c-line-strong: 52 64 79;
+
+  --c-ink: 232 236 241;
+  --c-ink-2: 170 181 195;
+  --c-ink-3: 126 137 153;
+  --c-ink-4: 96 106 121;
+  --c-ink-inv: 12 16 21;
+
+  --c-accent: 116 163 246;
+  --c-accent-hover: 148 186 250;
+  --c-accent-soft: 22 35 55;
+  --c-accent-line: 38 62 98;
+  --c-accent-ink: 191 214 252;
+
+  --c-ok: 52 194 162;
+  --c-ok-soft: 12 34 30;
+  --c-ok-line: 24 62 54;
+  --c-ok-ink: 156 231 214;
+
+  --c-warn: 234 168 70;
+  --c-warn-soft: 40 30 14;
+  --c-warn-line: 72 53 22;
+  --c-warn-ink: 247 214 165;
+
+  --c-danger: 245 118 140;
+  --c-danger-soft: 44 19 25;
+  --c-danger-line: 79 33 44;
+  --c-danger-ink: 250 191 202;
+
+  --c-exam: 167 143 246;
+  --c-exam-soft: 29 24 48;
+  --c-exam-line: 53 43 88;
+  --c-exam-ink: 210 197 252;
+
+  --c-olevel: 116 163 246;
+  --c-ccc: 52 194 162;
+
+  --c-hindi: 152 166 202;
+
+  --e1: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --e2: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --e3: 0 8px 24px -6px rgb(0 0 0 / 0.55), 0 2px 6px -2px rgb(0 0 0 / 0.35);
+
+  color-scheme: dark;
 }
 
-body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
+/* ==========================================================================
+   2. BASE
+   ========================================================================== */
+
+@layer base {
+  * {
+    border-color: rgb(var(--c-line));
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-h) + 1.25rem);
+  }
+
+  body {
+    background-color: rgb(var(--c-ground));
+    color: rgb(var(--c-ink));
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Headings never exceed 700 — hierarchy comes from size + space, not weight */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 650;
+    color: rgb(var(--c-ink));
+    text-wrap: balance;
+  }
+
+  p, li {
+    text-wrap: pretty;
+  }
+
+  /* Single, consistent focus treatment across the whole product */
+  :focus-visible {
+    outline: 2px solid rgb(var(--c-accent));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: rgb(var(--c-accent) / 0.16);
+    color: rgb(var(--c-ink));
+  }
+
+  /* Scrollbars — quiet, themed */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--c-line-strong));
+    border-radius: 999px;
+    border: 3px solid rgb(var(--c-ground));
+  }
+  ::-webkit-scrollbar-thumb:hover { background: rgb(var(--c-ink-4)); }
+  * { scrollbar-width: thin; scrollbar-color: rgb(var(--c-line-strong)) transparent; }
 }
 
-/* Custom Scrollbars */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Devanagari: needs more leading and a face that actually has the glyphs */
+.hindi-text,
+[lang='hi'] {
+  font-family: var(--font-hi);
+  line-height: 1.85;
+  letter-spacing: 0;
+  font-feature-settings: 'kern', 'liga';
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+/* ==========================================================================
+   3. COMPONENT PRIMITIVES
+   ========================================================================== */
+
+@layer components {
+
+  /* ---------- Layout shell ---------- */
+  .shell {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) { .shell { padding-inline: 1.5rem; } }
+  @media (min-width: 1024px) { .shell { padding-inline: 2rem; } }
+
+  .shell-wide { max-width: 1360px; }
+
+  /* Skip link — visible only on keyboard focus */
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -100%;
+    z-index: 100;
+    padding: 0.625rem 1rem;
+    border-radius: 8px;
+    background: rgb(var(--c-accent));
+    color: rgb(255 255 255);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    transition: top 150ms ease-out;
+  }
+  .skip-link:focus { top: 0.75rem; }
+
+  /* ---------- Surfaces ---------- */
+  .panel {
+    background: rgb(var(--c-surface));
+    border: 1px solid rgb(var(--c-line));
+    border-radius: 12px;
+  }
+  .panel-flat {
+    background: rgb(var(--c-surface));
+    border: 1px solid rgb(var(--c-line));
+    border-radius: 12px;
+    box-shadow: none;
+  }
+  .well {
+    background: rgb(var(--c-sunken));
+    border: 1px solid rgb(var(--c-line));
+    border-radius: 10px;
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.375rem;
+    padding-inline: 0.875rem;
+    border-radius: 8px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+    cursor: pointer;
+    user-select: none;
+  }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-sm { height: 2rem; padding-inline: 0.625rem; font-size: 0.75rem; border-radius: 6px; }
+  .btn-lg { height: 2.75rem; padding-inline: 1.25rem; font-size: 0.875rem; }
+  .btn-icon { width: 2.375rem; padding-inline: 0; }
+  .btn-icon.btn-sm { width: 2rem; }
+
+  .btn-primary {
+    background: rgb(var(--c-accent));
+    color: #fff;
+  }
+  .btn-primary:hover:not(:disabled) { background: rgb(var(--c-accent-hover)); }
+  .dark .btn-primary { color: rgb(var(--c-ink-inv)); }
+
+  .btn-secondary {
+    background: rgb(var(--c-surface));
+    border-color: rgb(var(--c-line-strong));
+    color: rgb(var(--c-ink));
+  }
+  .btn-secondary:hover:not(:disabled) { background: rgb(var(--c-sunken)); }
+
+  .btn-ghost {
+    background: transparent;
+    color: rgb(var(--c-ink-2));
+  }
+  .btn-ghost:hover:not(:disabled) {
+    background: rgb(var(--c-sunken));
+    color: rgb(var(--c-ink));
+  }
+
+  .btn-soft {
+    background: rgb(var(--c-accent-soft));
+    border-color: rgb(var(--c-accent-line));
+    color: rgb(var(--c-accent-ink));
+  }
+  .btn-soft:hover:not(:disabled) { border-color: rgb(var(--c-accent)); }
+
+  /* ---------- Badges ---------- */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3125rem;
+    padding: 0.125rem 0.4375rem;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+  .badge-neutral { background: rgb(var(--c-sunken)); border-color: rgb(var(--c-line)); color: rgb(var(--c-ink-2)); }
+  .badge-accent  { background: rgb(var(--c-accent-soft)); border-color: rgb(var(--c-accent-line)); color: rgb(var(--c-accent-ink)); }
+  .badge-ok      { background: rgb(var(--c-ok-soft)); border-color: rgb(var(--c-ok-line)); color: rgb(var(--c-ok-ink)); }
+  .badge-warn    { background: rgb(var(--c-warn-soft)); border-color: rgb(var(--c-warn-line)); color: rgb(var(--c-warn-ink)); }
+  .badge-danger  { background: rgb(var(--c-danger-soft)); border-color: rgb(var(--c-danger-line)); color: rgb(var(--c-danger-ink)); }
+  .badge-exam    { background: rgb(var(--c-exam-soft)); border-color: rgb(var(--c-exam-line)); color: rgb(var(--c-exam-ink)); }
+
+  .badge-mono {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.02em;
+  }
+
+  /* ---------- Eyebrow / section label ---------- */
+  .eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgb(var(--c-ink-3));
+  }
+
+  /* ---------- Interactive card ---------- */
+  .card-link {
+    display: block;
+    background: rgb(var(--c-surface));
+    border: 1px solid rgb(var(--c-line));
+    border-radius: 12px;
+    transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .card-link:hover {
+    border-color: rgb(var(--c-line-strong));
+    box-shadow: var(--e2);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .card-link:hover { transform: translateY(-1px); }
+  }
+
+  /* ---------- Inputs ---------- */
+  .input {
+    width: 100%;
+    height: 2.375rem;
+    padding-inline: 0.75rem;
+    border-radius: 8px;
+    background: rgb(var(--c-surface));
+    border: 1px solid rgb(var(--c-line-strong));
+    color: rgb(var(--c-ink));
+    font-size: 0.875rem;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .input::placeholder { color: rgb(var(--c-ink-4)); }
+  .input:focus {
+    outline: none;
+    border-color: rgb(var(--c-accent));
+    box-shadow: 0 0 0 3px rgb(var(--c-accent) / 0.15);
+  }
+
+  /* ---------- Segmented control ---------- */
+  .segment {
+    display: inline-flex;
+    padding: 2px;
+    gap: 2px;
+    border-radius: 8px;
+    background: rgb(var(--c-sunken));
+    border: 1px solid rgb(var(--c-line));
+  }
+  .segment-item {
+    padding: 0.25rem 0.625rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgb(var(--c-ink-3));
+    transition: background-color 150ms ease, color 150ms ease;
+    cursor: pointer;
+  }
+  .segment-item:hover { color: rgb(var(--c-ink)); }
+  .segment-item[data-active='true'] {
+    background: rgb(var(--c-surface));
+    color: rgb(var(--c-ink));
+    box-shadow: var(--e1);
+  }
+
+  /* ---------- Touch targets ----------
+     Desktop stays compact; anything driven by a finger grows to the 44px
+     minimum. Doing it by pointer type avoids a chunky desktop UI and avoids
+     every call site having to remember `min-h-11`. */
+  @media (pointer: coarse) {
+    .btn { height: 2.75rem; padding-inline: 1rem; }
+    .btn-sm { height: 2.5rem; padding-inline: 0.75rem; }
+    .btn-icon { width: 2.75rem; }
+    .btn-icon.btn-sm { width: 2.5rem; }
+    .input { height: 2.75rem; }
+    .segment-item { padding: 0.625rem 0.875rem; font-size: 0.8125rem; }
+    .code-block__copy { height: 2.25rem; padding-inline: 0.75rem; }
+    .toc-link { padding-block: 0.5rem; }
+  }
+
+  /* ---------- Divider with label ---------- */
+  .rule {
+    height: 1px;
+    background: rgb(var(--c-line));
+    border: 0;
+  }
+
+  /* ---------- Skeletons ---------- */
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background: rgb(var(--c-sunken));
+    border-radius: 6px;
+  }
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgb(var(--c-line) / 0.7), transparent);
+    animation: shimmer 1.6s infinite;
+  }
+  @keyframes shimmer { 100% { transform: translateX(100%); } }
 }
 
-::-webkit-scrollbar-thumb {
-  background: #94a3b8;
-  border-radius: 4px;
-}
+/* ==========================================================================
+   4. READING SYSTEM  (.prose-notes)
+   Applied to long-form note bodies. Controls measure, rhythm and every
+   element a student meets while reading for 20–30 minutes.
+   ========================================================================== */
 
-.dark ::-webkit-scrollbar-thumb {
-  background: #334155;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
-}
-
-/* Glassmorphism Panel */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-}
-
-.dark .glass-panel {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(30, 41, 59, 0.8);
-}
-
-/* Hindi Typography Accent with generous line-height to prevent diacritic clipping */
-.hindi-text {
-  font-feature-settings: "kern";
-  letter-spacing: 0.01em;
+.prose-notes {
+  font-size: 1rem;
   line-height: 1.75;
+  color: rgb(var(--c-ink-2));
+  overflow-wrap: break-word;
 }
 
-/* Code Blocks */
-pre, code {
-  font-family: 'Fira Code', monospace;
+@media (min-width: 1024px) {
+  .prose-notes { font-size: 1.0625rem; }
 }
 
-/* Responsive Table Wrapper */
+.prose-notes > * + * { margin-top: 1.1em; }
+
+/* Headings: space above is what creates the section break, not a card */
+.prose-notes h1,
+.prose-notes h2,
+.prose-notes h3,
+.prose-notes h4 {
+  color: rgb(var(--c-ink));
+  scroll-margin-top: calc(var(--header-h) + 1.5rem);
+}
+
+.prose-notes h2 {
+  margin-top: 2.5em;
+  margin-bottom: 0.15em;
+  padding-bottom: 0.4em;
+  border-bottom: 1px solid rgb(var(--c-line));
+  font-size: 1.3125rem;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  font-weight: 650;
+}
+
+.prose-notes h3 {
+  margin-top: 2em;
+  margin-bottom: 0.1em;
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  font-weight: 650;
+}
+
+.prose-notes h4 {
+  margin-top: 1.6em;
+  margin-bottom: 0.1em;
+  font-size: 0.9375rem;
+  font-weight: 650;
+  color: rgb(var(--c-ink));
+}
+
+.prose-notes h1:first-child,
+.prose-notes h2:first-child,
+.prose-notes h3:first-child { margin-top: 0; }
+
+.prose-notes strong { color: rgb(var(--c-ink)); font-weight: 650; }
+
+.prose-notes a {
+  color: rgb(var(--c-accent));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: rgb(var(--c-accent) / 0.35);
+}
+.prose-notes a:hover { text-decoration-color: rgb(var(--c-accent)); }
+
+/* Lists — tight enough to scan, loose enough to read */
+.prose-notes ul,
+.prose-notes ol { padding-left: 1.25rem; }
+.prose-notes ul { list-style: none; padding-left: 1.1rem; }
+.prose-notes ul > li { position: relative; padding-left: 0.35rem; }
+.prose-notes ul > li::before {
+  content: '';
+  position: absolute;
+  left: -0.75rem;
+  top: 0.72em;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgb(var(--c-ink-4));
+}
+.prose-notes ol { list-style: decimal; }
+.prose-notes ol > li::marker { color: rgb(var(--c-ink-3)); font-weight: 600; font-size: 0.9em; }
+.prose-notes li + li { margin-top: 0.4em; }
+.prose-notes li > ul,
+.prose-notes li > ol { margin-top: 0.4em; }
+
+/* Inline code */
+.prose-notes :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  padding: 0.12em 0.36em;
+  border-radius: 4px;
+  background: rgb(var(--c-sunken));
+  border: 1px solid rgb(var(--c-line));
+  color: rgb(var(--c-ink));
+  white-space: nowrap;
+}
+
+.prose-notes hr {
+  margin-block: 2em;
+  border: 0;
+  border-top: 1px solid rgb(var(--c-line));
+}
+
+.prose-notes img { border-radius: 10px; border: 1px solid rgb(var(--c-line)); }
+
+/* ==========================================================================
+   5. CODE BLOCKS
+   ========================================================================== */
+
+.code-block {
+  margin-block: 1.5em;
+  border-radius: 12px;
+  border: 1px solid rgb(var(--c-line));
+  background: rgb(var(--c-sunken));
+  overflow: hidden;
+}
+
+.code-block__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.4375rem 0.5rem 0.4375rem 0.875rem;
+  border-bottom: 1px solid rgb(var(--c-line));
+  background: rgb(var(--c-surface));
+}
+
+.code-block__lang {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(var(--c-ink-3));
+}
+
+.code-block__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  height: 1.75rem;
+  padding-inline: 0.5rem;
+  border-radius: 6px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: rgb(var(--c-ink-3));
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+.code-block__copy:hover {
+  background: rgb(var(--c-sunken));
+  color: rgb(var(--c-ink));
+  border-color: rgb(var(--c-line));
+}
+
+.code-block pre,
+.prose-notes pre {
+  margin: 0;
+  padding: 0.9375rem 1rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: rgb(var(--c-ink));
+  tab-size: 2;
+  -webkit-overflow-scrolling: touch;
+}
+
+.code-block pre code,
+.prose-notes pre code {
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  white-space: pre;
+  color: inherit;
+}
+
+/* Minimal, restrained syntax palette — derived from the accent + semantics */
+.tok-com { color: rgb(var(--c-ink-4)); font-style: italic; }
+.tok-str { color: rgb(var(--c-ok)); }
+.tok-num { color: rgb(var(--c-warn)); }
+.tok-kw  { color: rgb(var(--c-exam)); font-weight: 600; }
+.tok-tag { color: rgb(var(--c-accent)); }
+.tok-att { color: rgb(var(--c-warn)); }
+.tok-fn  { color: rgb(var(--c-accent)); }
+.tok-sel { color: rgb(var(--c-exam)); }
+.tok-prop{ color: rgb(var(--c-accent)); }
+.tok-punc{ color: rgb(var(--c-ink-3)); }
+
+/* ==========================================================================
+   6. SEMANTIC CALLOUTS
+   One shape, six meanings. Colour + icon carry the meaning; the shape never
+   changes so the page keeps a single rhythm.
+   ========================================================================== */
+
+.callout {
+  display: flex;
+  gap: 0.75rem;
+  margin-block: 1.5em;
+  padding: 0.875rem 1rem;
+  border-radius: 10px;
+  border: 1px solid;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+
+.callout__icon {
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: 0.16em;
+}
+
+.callout__body > * + * { margin-top: 0.5em; }
+.callout__body > *:first-child { margin-top: 0; }
+
+.callout__label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.callout p:last-child { margin-bottom: 0; }
+
+.callout-note      { background: rgb(var(--c-accent-soft)); border-color: rgb(var(--c-accent-line)); color: rgb(var(--c-ink-2)); }
+.callout-note .callout__label,
+.callout-note .callout__icon { color: rgb(var(--c-accent)); }
+
+.callout-tip       { background: rgb(var(--c-ok-soft)); border-color: rgb(var(--c-ok-line)); color: rgb(var(--c-ink-2)); }
+.callout-tip .callout__label,
+.callout-tip .callout__icon { color: rgb(var(--c-ok)); }
+
+.callout-important { background: rgb(var(--c-ok-soft)); border-color: rgb(var(--c-ok-line)); color: rgb(var(--c-ink-2)); }
+.callout-important .callout__label,
+.callout-important .callout__icon { color: rgb(var(--c-ok)); }
+
+.callout-warning   { background: rgb(var(--c-warn-soft)); border-color: rgb(var(--c-warn-line)); color: rgb(var(--c-ink-2)); }
+.callout-warning .callout__label,
+.callout-warning .callout__icon { color: rgb(var(--c-warn)); }
+
+.callout-danger    { background: rgb(var(--c-danger-soft)); border-color: rgb(var(--c-danger-line)); color: rgb(var(--c-ink-2)); }
+.callout-danger .callout__label,
+.callout-danger .callout__icon { color: rgb(var(--c-danger)); }
+
+.callout-exam      { background: rgb(var(--c-exam-soft)); border-color: rgb(var(--c-exam-line)); color: rgb(var(--c-ink-2)); }
+.callout-exam .callout__label,
+.callout-exam .callout__icon { color: rgb(var(--c-exam)); }
+
+.callout-analogy   { background: rgb(var(--c-sunken)); border-color: rgb(var(--c-line)); color: rgb(var(--c-ink-2)); }
+.callout-analogy .callout__label,
+.callout-analogy .callout__icon { color: rgb(var(--c-ink-3)); }
+
+/* Legacy alias so older markup keeps rendering */
+.callout-box { @apply callout callout-note; }
+
+/* ==========================================================================
+   7. TABLES
+   Comparison tables are a primary learning surface — they get real design.
+   ========================================================================== */
+
+.table-wrap {
+  position: relative;
+  margin-block: 1.5em;
+  border: 1px solid rgb(var(--c-line));
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgb(var(--c-surface));
+}
+
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-wrap table,
+.table-responsive table,
+.prose-notes table {
+  width: 100%;
+  min-width: 34rem;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.table-wrap thead th,
+.prose-notes thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: rgb(var(--c-sunken));
+  text-align: left;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(var(--c-ink-3));
+  padding: 0.625rem 0.875rem;
+  border-bottom: 1px solid rgb(var(--c-line));
+  white-space: nowrap;
+}
+
+.table-wrap tbody td,
+.prose-notes tbody td {
+  padding: 0.6875rem 0.875rem;
+  border-bottom: 1px solid rgb(var(--c-line));
+  color: rgb(var(--c-ink-2));
+  vertical-align: top;
+}
+
+.table-wrap tbody tr:last-child td,
+.prose-notes tbody tr:last-child td { border-bottom: 0; }
+
+.table-wrap tbody tr:nth-child(even),
+.prose-notes tbody tr:nth-child(even) { background: rgb(var(--c-sunken) / 0.45); }
+
+/* First column of a comparison table reads as a row header */
+.table-wrap tbody td:first-child { color: rgb(var(--c-ink)); font-weight: 600; }
+
+/* Horizontal-scroll affordance */
+.table-scroll[data-overflowing='true']::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 2rem;
+  pointer-events: none;
+  background: linear-gradient(to left, rgb(var(--c-surface)), transparent);
+}
+
 .table-responsive {
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  border-radius: 0.75rem;
+  border-radius: 12px;
+  border: 1px solid rgb(var(--c-line));
 }
 
-.table-responsive table {
-  width: 100%;
-  border-collapse: collapse;
-}
+/* ==========================================================================
+   8. STEP PROCESS
+   ========================================================================== */
 
-/* Educational Semantic Callouts */
-.callout-box {
-  margin: 1.25rem 0;
-  border-radius: 0.875rem;
-  border-left-width: 4px;
-  padding: 1rem 1.25rem;
-  font-size: 0.875rem;
-  line-height: 1.65;
-  transition: border-color 0.2s;
-}
-
-.callout-note {
-  border-left-color: #1F64C9;
-  background-color: rgba(31, 100, 201, 0.06);
-}
-.dark .callout-note {
-  border-left-color: #3b82f6;
-  background-color: rgba(31, 100, 201, 0.12);
-}
-
-.callout-tip {
-  border-left-color: #d97706;
-  background-color: rgba(217, 119, 6, 0.06);
-}
-.dark .callout-tip {
-  border-left-color: #f59e0b;
-  background-color: rgba(245, 158, 11, 0.08);
-}
-
-.callout-warning {
-  border-left-color: #e11d48;
-  background-color: rgba(225, 29, 72, 0.06);
-}
-.dark .callout-warning {
-  border-left-color: #f43f5e;
-  background-color: rgba(244, 63, 94, 0.08);
-}
-
-.callout-important {
-  border-left-color: #059669;
-  background-color: rgba(5, 150, 105, 0.06);
-}
-.dark .callout-important {
-  border-left-color: #10b981;
-  background-color: rgba(16, 185, 129, 0.08);
-}
-
-.callout-analogy {
-  border-left-color: #6366f1;
-  background-color: rgba(99, 102, 241, 0.06);
-}
-.dark .callout-analogy {
-  border-left-color: #818cf8;
-  background-color: rgba(129, 140, 248, 0.08);
-}
-
-/* Step-by-Step Educational Process */
 .step-process-list {
   counter-reset: step-counter;
   position: relative;
-  margin: 1.5rem 0;
+  margin-block: 1.5rem;
   padding-left: 0;
   list-style: none;
 }
@@ -167,100 +806,145 @@ pre, code {
 .step-process-item {
   counter-increment: step-counter;
   position: relative;
-  padding-left: 3rem;
-  margin-bottom: 1.5rem;
+  padding-left: 2.5rem;
+  padding-bottom: 1.25rem;
 }
 
 .step-process-item::before {
   content: counter(step-counter);
   position: absolute;
   left: 0;
-  top: 0;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 9999px;
-  background-color: #0270c3;
-  color: #ffffff;
-  font-size: 0.75rem;
-  font-weight: 800;
+  top: -0.1rem;
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: 999px;
+  background: rgb(var(--c-accent-soft));
+  border: 1px solid rgb(var(--c-accent-line));
+  color: rgb(var(--c-accent));
+  font-size: 0.6875rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.dark .step-process-item::before {
-  background-color: #36a9f6;
-  color: #040711;
 }
 
 .step-process-item::after {
   content: '';
   position: absolute;
-  left: 0.9375rem;
-  top: 2.25rem;
-  bottom: -0.75rem;
-  width: 2px;
-  background-color: #e2e8f0;
+  left: 0.8125rem;
+  top: 1.75rem;
+  bottom: 0;
+  width: 1px;
+  background: rgb(var(--c-line));
 }
 
-.dark .step-process-item::after {
-  background-color: #1e293b;
+.step-process-item:last-child { padding-bottom: 0; }
+.step-process-item:last-child::after { display: none; }
+
+/* ==========================================================================
+   9. TABLE OF CONTENTS
+   ========================================================================== */
+
+.toc-link {
+  display: block;
+  position: relative;
+  padding: 0.3125rem 0 0.3125rem 0.875rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: rgb(var(--c-ink-3));
+  border-left: 2px solid rgb(var(--c-line));
+  transition: color 140ms ease, border-color 140ms ease;
+}
+.toc-link:hover { color: rgb(var(--c-ink)); border-left-color: rgb(var(--c-line-strong)); }
+.toc-link[data-active='true'] {
+  color: rgb(var(--c-accent));
+  border-left-color: rgb(var(--c-accent));
+  font-weight: 600;
+}
+.toc-link[data-depth='3'] { padding-left: 1.625rem; font-size: 0.78125rem; }
+.toc-link[data-depth='4'] { padding-left: 2.25rem; font-size: 0.78125rem; color: rgb(var(--c-ink-4)); }
+
+/* ==========================================================================
+   10. UTILITIES
+   ========================================================================== */
+
+.measure { max-width: var(--measure); }
+
+/* `.prose-notes > * + *` only reaches direct children. Grouped <section>s
+   inside an article need their own rhythm — this is that. */
+.prose-flow > * + * { margin-top: 1.1em; }
+
+.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Retained for older markup — flattened to a plain surface, no blur */
+.glass-panel {
+  background: rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-line));
 }
 
-.step-process-item:last-child::after {
-  display: none;
-}
-
-/* Definition highlight term */
-.def-term {
-  font-weight: 700;
-  color: #0f172a;
-}
-.dark .def-term {
-  color: #f8fafc;
-}
-
-/* =========================================================================
-   EDUCATIONAL CARD DESIGN SYSTEM UTILITIES
-   Consistent radius (12px), subtle border, and structured hierarchy
-   ========================================================================= */
 .edu-card {
-  border-radius: 0.75rem; /* 12px (rounded-xl) */
-  border-width: 1px;
-  border-color: var(--border-color);
-  background-color: #ffffff;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 12px;
+  border: 1px solid rgb(var(--c-line));
+  background: rgb(var(--c-surface));
+  box-shadow: var(--e1);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
 }
-.dark .edu-card {
-  background-color: #0f172a;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
-}
-
-.edu-card-interactive {
-  cursor: pointer;
-}
-.edu-card-interactive:hover {
-  border-color: rgba(241, 154, 39, 0.8);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
-}
-.dark .edu-card-interactive:hover {
-  border-color: rgba(241, 154, 39, 0.7);
-}
+.edu-card-interactive { cursor: pointer; }
+.edu-card-interactive:hover { border-color: rgb(var(--c-line-strong)); box-shadow: var(--e2); }
 
 .edu-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.125rem 0.5rem;
-  border-radius: 0.375rem; /* 6px */
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.625rem; /* 10px */
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-width: 1px;
+  padding: 0.125rem 0.4375rem;
+  border-radius: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border: 1px solid rgb(var(--c-line));
+  background: rgb(var(--c-sunken));
+  color: rgb(var(--c-ink-2));
 }
 
+.def-term { font-weight: 650; color: rgb(var(--c-ink)); }
 
+/* ==========================================================================
+   11. MOTION
+   Animation is used for state change only, and always opts out for users
+   who ask it to.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   12. PRINT — students print notes before exams
+   ========================================================================== */
+
+@media print {
+  .no-print,
+  body > header,
+  body > footer,
+  body > nav,
+  aside[data-print='hide'] { display: none !important; }
+  .callout { display: flex !important; }
+  body { background: #fff; color: #000; font-size: 11pt; }
+  .prose-notes { font-size: 11pt; max-width: none; }
+  .panel, .card-link, .callout, .table-wrap { break-inside: avoid; border-color: #ccc; }
+  a[href^='http']::after { content: ' (' attr(href) ')'; font-size: 9pt; color: #555; }
+}
