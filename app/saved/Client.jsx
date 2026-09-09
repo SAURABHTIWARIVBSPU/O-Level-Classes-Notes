@@ -187,7 +187,7 @@ export default function SavedClient() {
     <div className="shell py-8 sm:py-10">
       <Breadcrumbs className="mb-5" items={[{ label: 'Saved items' }]} />
 
-      <PageHeader
+      <PageHeader icon="Bookmark" tone="amber"
         eyebrow="Your workspace"
         title="Saved items"
         hindiTitle="सहेजी गई सामग्री"

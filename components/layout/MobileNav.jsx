@@ -83,10 +83,10 @@ export default function MobileNav({ open, onClose, course, nav, modules, pathnam
         {/* Header */}
         <div className="flex items-center justify-between gap-2 h-[var(--header-h)] px-4 border-b border-line shrink-0">
           <span className="flex items-center gap-2">
-            <span className="w-7 h-7 rounded-lg bg-ink grid place-items-center">
-              <GraduationCap className="w-4 h-4 text-ink-inv" aria-hidden="true" />
+            <span className="w-9 h-9 rounded-xl bg-accent grid place-items-center">
+              <GraduationCap className="w-5 h-5 text-white" aria-hidden="true" />
             </span>
-            <span className="text-base font-semibold text-ink">NIELIT</span>
+            <span className="text-base font-bold text-ink">NIELIT<span className="text-accent">Learn</span></span>
           </span>
           <button type="button" onClick={onClose} className="btn btn-ghost btn-sm btn-icon" aria-label="Close menu">
             <X className="w-4 h-4" />
@@ -94,6 +94,14 @@ export default function MobileNav({ open, onClose, course, nav, modules, pathnam
         </div>
 
         <div className="flex-1 overflow-y-auto overscroll-contain">
+          <div className="p-3 border-b border-line">
+            <Link
+              href={course.key === 'ccc' ? '/ccc/chapters/chapter-1' : '/units/unit-1'}
+              className="btn btn-primary w-full rounded-xl"
+            >
+              Start learning
+            </Link>
+          </div>
           {/* Course choice */}
           <div className="p-3 border-b border-line">
             <p className="eyebrow px-1 mb-2">Course</p>
@@ -108,7 +116,7 @@ export default function MobileNav({ open, onClose, course, nav, modules, pathnam
                       active ? 'border-accent-line bg-accent-soft' : 'border-line hover:bg-sunken'
                     }`}
                   >
-                    <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: `rgb(var(${c.accentVar}))` }} aria-hidden="true" />
+                    <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: `rgb(var(${c.accentVar}))` }} aria-hidden="true" />
                     <span className="min-w-0 flex-1">
                       <span className={`block text-base font-semibold ${active ? 'text-accent' : 'text-ink'}`}>{c.name}</span>
                       <span className="block text-xs text-ink-3 truncate">{c.subject}</span>

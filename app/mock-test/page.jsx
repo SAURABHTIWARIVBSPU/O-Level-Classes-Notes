@@ -69,7 +69,7 @@ export default function MockTestPage() {
     <div className="shell py-8 sm:py-10">
       <Breadcrumbs items={[{ label: 'Mock test' }]} className="mb-5" />
 
-      <PageHeader
+      <PageHeader icon="Timer" tone="rose"
         eyebrow="O Level · Module M2-R5.1"
         title="Mock test"
         hindiTitle="मॉक टेस्ट"

@@ -55,7 +55,7 @@ export default function ClassroomPage({ searchParams }) {
       <div className="shell shell-wide">
         <Breadcrumbs className="mb-5" items={[{ label: 'Practice', href: '/syllabus' }, { label: 'Digital classroom' }]} />
 
-        <PageHeader
+        <PageHeader icon="Presentation" tone="sky"
           eyebrow="Teaching tool"
           title="Digital classroom"
           hindiTitle="डिजिटल क्लासरूम"

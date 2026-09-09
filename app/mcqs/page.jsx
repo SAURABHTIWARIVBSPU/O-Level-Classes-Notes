@@ -11,7 +11,10 @@ import {
   PageHeader,
   Panel,
   SectionHeading,
+  IconTile,
+  ModuleIcon,
 } from '@/components/ui';
+import { moduleVisual } from '@/lib/navigation';
 import { LastScore } from '@/components/mcq/QuizCard';
 import { masterMcqs } from '@/data/mcqsData';
 import { unitsData } from '@/data/syllabusData';
@@ -49,6 +52,8 @@ export default function McqsHubPage() {
       <Breadcrumbs items={[{ label: 'MCQ practice' }]} className="mb-5" />
 
       <PageHeader
+        icon={ListChecks}
+        tone="amber"
         eyebrow="O Level · Module M2-R5.1"
         title="MCQ practice"
         hindiTitle="बहुविकल्पीय प्रश्न अभ्यास"
@@ -104,14 +109,15 @@ export default function McqsHubPage() {
                 const body = (
                   <>
                     <div className="flex items-start justify-between gap-3">
-                      <p className="eyebrow">Unit {unit.label}</p>
+                      <IconTile tone={moduleVisual('olevel', unit.number).tone} icon={<ModuleIcon name={moduleVisual('olevel', unit.number).icon} />} />
                       {unit.count > 0 ? (
                         <Badge tone="neutral" className="tabular-nums">{unit.count} questions</Badge>
                       ) : (
                         <Badge tone="neutral">Coming soon</Badge>
                       )}
                     </div>
-                    <h3 className="mt-2 text-h4 font-semibold text-ink">{unit.title}</h3>
+                    <p className="mt-4 eyebrow text-accent">Unit {unit.label}</p>
+                    <h3 className="mt-1 text-h4 font-bold text-ink">{unit.title}</h3>
                     {unit.hindiTitle ? (
                       <p className="mt-0.5 text-sm text-hindi hindi-text" lang="hi">{unit.hindiTitle}</p>
                     ) : null}
@@ -152,8 +158,8 @@ export default function McqsHubPage() {
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <li>
               <CardLink href="/mcqs/all" className="h-full p-5">
-                <ListChecks className="w-5 h-5 text-ink-3" aria-hidden="true" />
-                <h3 className="mt-3 text-h4 font-semibold text-ink">All {total} questions</h3>
+                <span className="icon-tile tone-violet"><ListChecks className="w-5 h-5" aria-hidden="true" /></span>
+                <h3 className="mt-3 text-h4 font-bold text-ink">All {total} questions</h3>
                 <p className="mt-1.5 text-base text-ink-2 leading-relaxed">
                   The full bank in one place, with search and filters by unit and difficulty. Untimed.
                 </p>
@@ -165,8 +171,8 @@ export default function McqsHubPage() {
             </li>
             <li>
               <CardLink href="/mock-test" className="h-full p-5">
-                <Timer className="w-5 h-5 text-ink-3" aria-hidden="true" />
-                <h3 className="mt-3 text-h4 font-semibold text-ink">Mock test</h3>
+                <span className="icon-tile tone-rose"><Timer className="w-5 h-5" aria-hidden="true" /></span>
+                <h3 className="mt-3 text-h4 font-bold text-ink">Mock test</h3>
                 <p className="mt-1.5 text-base text-ink-2 leading-relaxed">
                   A timed paper on the official blueprint: 100 questions in 90 minutes, 1 mark each, no negative
                   marking.

@@ -10,7 +10,9 @@ isn't here, add it here first, then use it.
 1. **Restraint over decoration.** Premium = clarity + hierarchy + consistency + detail. Not more effects.
 2. **Space and size make hierarchy.** Not weight, not colour, not a box.
 3. **A card must earn itself.** A card means "this is a separate, clickable or self-contained thing". Body text in a card is a mistake.
-4. **One accent hue.** Blue. Everything else is neutral or carries a fixed meaning.
+4. **One accent hue.** Deep violet (`accent`), with a single warm-yellow **highlight** (`hl`) for the one
+   "look here" moment per view. Everything else is neutral, a fixed meaning, or a *tone* used only on icon
+   tiles and cover art.
 5. **Colour never carries meaning alone.** Always paired with an icon or a label.
 6. **Mobile is a design, not a fallback.** Every component is designed at 320px first.
 
@@ -45,11 +47,22 @@ themes, so **no `dark:` variant is needed**.
 | `text-ink-4` | faint, disabled, decorative icons |
 | `text-ink-inv` | text on a dark/ink fill |
 
-### Accent (single hue — blue)
+### Accent (single hue — violet)
 `text-accent` `bg-accent` `bg-accent-soft` `border-accent-line` `text-accent-ink` `bg-accent-hover`
 
 Use accent for: the primary action, the active nav item, links, focus, progress.
-**Do not** use it as a background for large areas or for decoration.
+**Do not** use it as a background for large areas or for decoration — the `.hero-band` and
+`.cta-band` classes are the only large accent surfaces.
+
+### Highlight (yellow) — one per view
+`bg-hl` `bg-hl-soft` `border-hl-line` `text-hl-ink` · `Button variant="highlight"` (`.btn-hl`).
+Used for the single most important CTA inside a `.cta-band`, the "Free" pill, the star/score marker.
+
+### Tones — icon tiles and cover art only
+`violet sky amber rose teal mint` → `.icon-tile.tone-*` (`<IconTile tone icon />`) and `.cover.cover-*`
+(the gradient header strip of a course/unit card). Never as a text colour, never behind body copy.
+`moduleVisual(courseKey, n)` in `lib/navigation` gives every unit/chapter a fixed tone + icon so all
+surfaces paint it the same way.
 
 ### Semantic — meaning only
 | Token | Means | Where |
@@ -66,8 +79,8 @@ Each has `.DEFAULT`, `-soft` (background), `-line` (border), `-ink` (text on sof
 to say which course you're in. Never as a page background or a gradient.
 
 ### Banned
-Gradients as surfaces · glow / blur orbs · glassmorphism · neon · `shadow-2xl` ·
-coloured drop shadows · more than 3 elevation levels · any hue outside the tokens.
+Gradients outside `.cover-*` / `.cta-band` · glow / blur orbs · glassmorphism · neon · `shadow-2xl` ·
+more than 3 elevation levels · any hue outside the tokens (`tone-*` included).
 
 ---
 
@@ -112,8 +125,9 @@ headings. `font-black` / `font-extrabold` are banned.
 
 ## 5. Radii & elevation
 
-- Radii: `rounded-md` (8px) controls · `rounded-xl` (12px) cards/panels ·
-  `rounded-2xl` (16px) sheets · `rounded-full` pills and dots.
+- Radii: `rounded-md` (8px) controls · `rounded-xl` (14px) tiles/inputs · panels & cards are 16px
+  (`.panel`, `.card-link`) · `rounded-2xl` (18px) sheets · `rounded-3xl` (24px) hero/CTA bands ·
+  `rounded-full` pills, chips and dots.
 - Elevation: `shadow-e1` resting · `shadow-e2` hover · `shadow-e3` floating
   (dialogs, drawers, sheets). Nothing else.
 
@@ -125,6 +139,7 @@ headings. `font-black` / `font-extrabold` are banned.
 import {
   Button, Badge, Panel, CardLink, PageHeader, SectionHeading, StatTile,
   ProgressBar, EmptyState, Skeleton, SkeletonText, Segmented, MetaItem,
+  IconTile, Chip, Ring, ModuleIcon,
   Callout, CodeBlock, Breadcrumbs, TableOfContents, ReadingProgress,
   PrevNext, ScrollTable, ComparisonTable,
 } from '@/components/ui';
@@ -136,7 +151,11 @@ import CourseSidebar from '@/components/layout/CourseSidebar';
 | `Button` | `variant`: primary (one per view) · secondary · ghost · soft. `size`: sm/md/lg. `icon`/`iconRight`. `href` makes it a link. |
 | `Badge` | `tone`: neutral/accent/ok/warn/danger/exam. `mono` for codes. |
 | `Panel` | static container. `CardLink` for a clickable one. |
-| `PageHeader` | every page starts with this: eyebrow, title, hindiTitle, description, actions, meta. |
+| `PageHeader` | every page starts with this: eyebrow, title, hindiTitle, description, actions, meta, plus `icon` (lucide component or a `ModuleIcon` name string) and `tone` for the identity tile. Renders inside a `.hero-band`; `band={false}` for the flat variant. |
+| `IconTile` | `icon`, `tone`, `size` sm/md/lg. The coloured square in front of a card title. |
+| `Chip` | pill link/button for explore rows and filters. `active`. |
+| `Ring` | conic progress ring, `value` 0–100, `size`. |
+| `Button variant="highlight"` | the yellow CTA; only inside a `.cta-band` or hero. |
 | `SectionHeading` | every section inside a page. |
 | `Callout` | `kind`: note/tip/important/warning/danger/exam/analogy. The **only** box allowed inside note bodies. |
 | `CodeBlock` | `code`, `language`, `runnable`, `output`, `explanation`. Always in that order. |

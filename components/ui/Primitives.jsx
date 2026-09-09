@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import ModuleIcon from './ModuleIcon';
 
 /* ==========================================================================
    Small building blocks used everywhere. Kept in one file on purpose: they
@@ -35,6 +36,7 @@ const BUTTON_VARIANTS = {
   secondary: 'btn-secondary',
   ghost: 'btn-ghost',
   soft: 'btn-soft',
+  highlight: 'btn-hl',
 };
 
 const BUTTON_SIZES = { sm: 'btn-sm', md: '', lg: 'btn-lg' };
@@ -142,6 +144,10 @@ export function CardLink({ href, className = '', children, ...props }) {
 
 /* ------------------------------------------------------------- Page header */
 
+/**
+ * Every inner page opens with this. `icon` + `tone` give the page a coloured
+ * identity tile (PW-style); `band` wraps the header in the soft hero wash.
+ */
 export function PageHeader({
   eyebrow,
   title,
@@ -149,26 +155,49 @@ export function PageHeader({
   description,
   actions,
   meta,
+  icon,
+  tone = 'violet',
+  band = true,
   className = '',
 }) {
-  return (
-    <header className={cx('pb-6 mb-8 border-b border-line', className)}>
+  const inner = (
+    <>
       <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-        <div className="min-w-0 max-w-measure-wide">
-          {eyebrow ? <p className="eyebrow mb-2">{eyebrow}</p> : null}
-          <h1 className="text-h1 sm:text-display font-semibold text-ink">{title}</h1>
-          {hindiTitle ? (
-            <p className="mt-1.5 text-lead text-hindi hindi-text" lang="hi">{hindiTitle}</p>
+        <div className="min-w-0 max-w-measure-wide flex items-start gap-4">
+          {icon ? (
+            <span className={cx('icon-tile icon-tile-lg hidden sm:inline-grid', `tone-${tone}`)}>
+              {typeof icon === 'string' ? <ModuleIcon name={icon} className="w-6 h-6" /> : renderIcon(icon, 'w-6 h-6')}
+            </span>
           ) : null}
-          {description ? (
-            <p className="mt-3 text-base text-ink-2 leading-relaxed max-w-measure">{description}</p>
-          ) : null}
+          <div className="min-w-0">
+            {eyebrow ? (
+              <p className="inline-flex items-center gap-2 mb-2.5 px-2.5 h-6 rounded-full bg-surface border border-accent-line text-2xs font-bold uppercase tracking-wider text-accent">
+                {eyebrow}
+              </p>
+            ) : null}
+            <h1 className="text-h1 sm:text-display font-bold text-ink">{title}</h1>
+            {hindiTitle ? (
+              <p className="mt-1.5 text-lead text-hindi hindi-text" lang="hi">{hindiTitle}</p>
+            ) : null}
+            {description ? (
+              <p className="mt-3 text-base sm:text-lead text-ink-2 leading-relaxed max-w-measure">{description}</p>
+            ) : null}
+          </div>
         </div>
         {actions ? <div className="flex flex-wrap items-center gap-2 shrink-0">{actions}</div> : null}
       </div>
       {meta ? <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2">{meta}</div> : null}
-    </header>
+    </>
   );
+
+  if (band) {
+    return (
+      <header className={cx('hero-band rounded-3xl border border-accent-line/60 px-5 py-6 sm:px-8 sm:py-8 mb-8', className)}>
+        {inner}
+      </header>
+    );
+  }
+  return <header className={cx('pb-6 mb-8 border-b border-line', className)}>{inner}</header>;
 }
 
 /* ---------------------------------------------------------- Section heading */
@@ -190,16 +219,66 @@ export function SectionHeading({ id, eyebrow, title, description, action, classN
 
 /* ---------------------------------------------------------------- Stat tile */
 
-export function StatTile({ label, value, hint, icon, className = '' }) {
+export function StatTile({ label, value, hint, icon, tone = 'violet', className = '' }) {
   return (
-    <div className={cx('panel p-4', className)}>
-      <div className="flex items-start justify-between gap-2">
+    <div className={cx('panel p-4 sm:p-5', className)}>
+      <div className="flex items-start justify-between gap-3">
         <p className="eyebrow">{label}</p>
-        {renderIcon(icon, 'w-4 h-4 text-ink-4 shrink-0')}
+        {icon ? (
+          <span className={cx('icon-tile icon-tile-sm', `tone-${tone}`)}>{renderIcon(icon, 'w-4 h-4')}</span>
+        ) : null}
       </div>
-      <p className="mt-2 text-h3 font-semibold text-ink tabular-nums">{value}</p>
+      <p className="mt-2 text-h2 font-bold text-ink tabular-nums">{value}</p>
       {hint ? <p className="mt-0.5 text-xs text-ink-3">{hint}</p> : null}
     </div>
+  );
+}
+
+/* ---------------------------------------------------------------- IconTile */
+
+export function IconTile({ icon, tone = 'violet', size = 'md', className = '' }) {
+  const sizeCls = { sm: 'icon-tile-sm', md: '', lg: 'icon-tile-lg' }[size] || '';
+  const iconCls = { sm: 'w-4 h-4', md: 'w-5 h-5', lg: 'w-6 h-6' }[size] || 'w-5 h-5';
+  return (
+    <span className={cx('icon-tile', sizeCls, `tone-${tone}`, className)}>
+      {renderIcon(icon, iconCls)}
+    </span>
+  );
+}
+
+/* -------------------------------------------------------------------- Chip */
+
+export function Chip({ href, icon, active = false, className = '', children, ...props }) {
+  const cls = cx('chip', className);
+  if (href) {
+    return (
+      <Link href={href} className={cls} data-active={active} {...props}>
+        {renderIcon(icon, 'w-4 h-4')}
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <button type="button" className={cls} data-active={active} {...props}>
+      {renderIcon(icon, 'w-4 h-4')}
+      {children}
+    </button>
+  );
+}
+
+/* -------------------------------------------------------------------- Ring */
+
+export function Ring({ value = 0, size = '3.5rem', label, className = '' }) {
+  const pct = Math.max(0, Math.min(100, Math.round(value)));
+  return (
+    <span
+      className={cx('ring', className)}
+      style={{ '--ring-value': pct, '--ring-size': size }}
+      role="img"
+      aria-label={label || `${pct}% complete`}
+    >
+      {pct}%
+    </span>
   );
 }
 
@@ -219,7 +298,7 @@ export function ProgressBar({ value = 0, label, showValue = true, tone = 'accent
         </div>
       )}
       <div
-        className="h-1.5 w-full rounded-full bg-sunken border border-line overflow-hidden"
+        className="h-2 w-full rounded-full bg-line/70 overflow-hidden"
         role="progressbar"
         aria-valuenow={pct}
         aria-valuemin={0}

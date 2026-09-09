@@ -78,7 +78,7 @@ export default async function CccChapterMcqsPage({ params }) {
         className="mb-5"
       />
 
-      <PageHeader
+      <PageHeader icon="ListChecks" tone="amber"
         eyebrow={chapter.isAll ? 'CCC · Whole course' : `CCC · Chapter ${chapter.label}`}
         title={chapter.isAll ? `All ${questions.length} questions` : `${chapter.title} — MCQs`}
         hindiTitle={chapter.isAll ? undefined : chapter.hindiTitle}

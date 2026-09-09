@@ -180,7 +180,7 @@ export default function CheatSheetsClient() {
     <div className="shell py-8 sm:py-10">
       <Breadcrumbs items={[{ label: 'Cheat sheets' }]} className="mb-5 no-print" />
 
-      <PageHeader
+      <PageHeader icon="FileText" tone="teal"
         eyebrow="O Level · Revision"
         title="Cheat sheets"
         hindiTitle="चीट शीट्स"

@@ -10,7 +10,7 @@
 
 :root {
   /* Surfaces */
-  --c-ground: 250 250 251;
+  --c-ground: 249 249 252;
   --c-surface: 255 255 255;
   --c-sunken: 244 245 247;
   --c-overlay: 255 255 255;
@@ -26,12 +26,26 @@
   --c-ink-4: 152 159 170;
   --c-ink-inv: 255 255 255;
 
-  /* Accent — the only decorative hue in the system */
-  --c-accent: 31 100 201;
-  --c-accent-hover: 25 80 165;
-  --c-accent-soft: 238 244 254;
-  --c-accent-line: 190 212 250;
-  --c-accent-ink: 21 58 108;
+  /* Accent — deep violet, the brand hue */
+  --c-accent: 91 76 216;
+  --c-accent-hover: 74 60 190;
+  --c-accent-soft: 240 238 253;
+  --c-accent-line: 208 202 246;
+  --c-accent-ink: 56 42 150;
+
+  /* Highlight — warm yellow, used for the one "look here" moment per view */
+  --c-hl: 255 196 0;
+  --c-hl-soft: 255 247 214;
+  --c-hl-line: 250 224 130;
+  --c-hl-ink: 112 74 0;
+
+  /* Tone palette — icon tiles and cover art only, never body surfaces */
+  --t-violet: 91 76 216;   --t-violet-soft: 240 238 253;
+  --t-teal: 13 148 136;    --t-teal-soft: 230 248 245;
+  --t-amber: 217 119 6;    --t-amber-soft: 255 244 224;
+  --t-rose: 225 29 72;     --t-rose-soft: 255 236 240;
+  --t-sky: 2 132 199;      --t-sky-soft: 229 243 253;
+  --t-mint: 22 163 74;     --t-mint-soft: 232 250 238;
 
   /* Semantic */
   --c-ok: 13 122 100;
@@ -49,22 +63,22 @@
   --c-danger-line: 246 199 208;
   --c-danger-ink: 128 29 47;
 
-  --c-exam: 106 66 196;
-  --c-exam-soft: 244 241 254;
-  --c-exam-line: 216 206 248;
-  --c-exam-ink: 66 38 132;
+  --c-exam: 190 24 130;
+  --c-exam-soft: 253 240 248;
+  --c-exam-line: 246 200 230;
+  --c-exam-ink: 130 14 88;
 
   /* Course markers — thin identity stripes only, never fills */
-  --c-olevel: 31 100 201;
-  --c-ccc: 13 122 100;
+  --c-olevel: 91 76 216;
+  --c-ccc: 13 148 136;
 
   /* Devanagari label tint */
-  --c-hindi: 74 85 120;
+  --c-hindi: 88 82 140;
 
-  /* Elevation — exactly three levels */
-  --e1: 0 1px 2px 0 rgb(16 24 40 / 0.04);
-  --e2: 0 1px 3px 0 rgb(16 24 40 / 0.07), 0 1px 2px -1px rgb(16 24 40 / 0.04);
-  --e3: 0 8px 24px -6px rgb(16 24 40 / 0.12), 0 2px 6px -2px rgb(16 24 40 / 0.06);
+  /* Elevation — exactly three levels, soft and tinted towards the brand */
+  --e1: 0 1px 2px 0 rgb(40 30 90 / 0.05);
+  --e2: 0 6px 16px -6px rgb(40 30 90 / 0.14), 0 1px 3px -1px rgb(40 30 90 / 0.06);
+  --e3: 0 16px 40px -12px rgb(40 30 90 / 0.22), 0 3px 8px -3px rgb(40 30 90 / 0.08);
 
   /* Layout rhythm */
   --header-h: 3.5rem;
@@ -93,11 +107,23 @@
   --c-ink-4: 96 106 121;
   --c-ink-inv: 12 16 21;
 
-  --c-accent: 116 163 246;
-  --c-accent-hover: 148 186 250;
-  --c-accent-soft: 22 35 55;
-  --c-accent-line: 38 62 98;
-  --c-accent-ink: 191 214 252;
+  --c-accent: 150 138 255;
+  --c-accent-hover: 176 166 255;
+  --c-accent-soft: 34 30 62;
+  --c-accent-line: 62 54 110;
+  --c-accent-ink: 205 198 255;
+
+  --c-hl: 255 205 40;
+  --c-hl-soft: 52 42 10;
+  --c-hl-line: 96 78 20;
+  --c-hl-ink: 255 224 130;
+
+  --t-violet: 150 138 255;  --t-violet-soft: 34 30 62;
+  --t-teal: 52 211 190;     --t-teal-soft: 12 40 38;
+  --t-amber: 251 176 60;    --t-amber-soft: 48 34 12;
+  --t-rose: 251 113 133;    --t-rose-soft: 50 20 28;
+  --t-sky: 56 189 248;      --t-sky-soft: 12 34 50;
+  --t-mint: 74 222 128;     --t-mint-soft: 12 42 24;
 
   --c-ok: 52 194 162;
   --c-ok-soft: 12 34 30;
@@ -114,15 +140,15 @@
   --c-danger-line: 79 33 44;
   --c-danger-ink: 250 191 202;
 
-  --c-exam: 167 143 246;
-  --c-exam-soft: 29 24 48;
-  --c-exam-line: 53 43 88;
-  --c-exam-ink: 210 197 252;
+  --c-exam: 240 120 200;
+  --c-exam-soft: 48 22 40;
+  --c-exam-line: 90 36 72;
+  --c-exam-ink: 250 190 230;
 
-  --c-olevel: 116 163 246;
-  --c-ccc: 52 194 162;
+  --c-olevel: 150 138 255;
+  --c-ccc: 52 211 190;
 
-  --c-hindi: 152 166 202;
+  --c-hindi: 170 164 214;
 
   --e1: 0 1px 2px 0 rgb(0 0 0 / 0.3);
   --e2: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3);
@@ -160,7 +186,7 @@
 
   /* Headings never exceed 700 — hierarchy comes from size + space, not weight */
   h1, h2, h3, h4, h5, h6 {
-    font-weight: 650;
+    font-weight: 700;
     color: rgb(var(--c-ink));
     text-wrap: balance;
   }
@@ -240,7 +266,8 @@
   .panel {
     background: rgb(var(--c-surface));
     border: 1px solid rgb(var(--c-line));
-    border-radius: 12px;
+    border-radius: 16px;
+    box-shadow: var(--e1);
   }
   .panel-flat {
     background: rgb(var(--c-surface));
@@ -260,28 +287,39 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    height: 2.375rem;
-    padding-inline: 0.875rem;
-    border-radius: 8px;
-    font-size: 0.8125rem;
+    height: 2.5rem;
+    padding-inline: 1rem;
+    border-radius: 10px;
+    font-size: 0.875rem;
     font-weight: 600;
     white-space: nowrap;
     border: 1px solid transparent;
-    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
     cursor: pointer;
     user-select: none;
   }
   .btn:disabled { opacity: 0.45; cursor: not-allowed; }
   .btn-sm { height: 2rem; padding-inline: 0.625rem; font-size: 0.75rem; border-radius: 6px; }
-  .btn-lg { height: 2.75rem; padding-inline: 1.25rem; font-size: 0.875rem; }
+  .btn-lg { height: 3rem; padding-inline: 1.5rem; font-size: 0.9375rem; border-radius: 12px; }
   .btn-icon { width: 2.375rem; padding-inline: 0; }
   .btn-icon.btn-sm { width: 2rem; }
 
   .btn-primary {
     background: rgb(var(--c-accent));
     color: #fff;
+    box-shadow: 0 6px 16px -6px rgb(var(--c-accent) / 0.55);
   }
-  .btn-primary:hover:not(:disabled) { background: rgb(var(--c-accent-hover)); }
+  .btn-primary:hover:not(:disabled) { background: rgb(var(--c-accent-hover)); box-shadow: 0 8px 20px -6px rgb(var(--c-accent) / 0.6); }
+  .btn-primary:active:not(:disabled) { transform: translateY(1px); }
+
+  /* Highlight button — the yellow "act now" button, one per view at most */
+  .btn-hl {
+    background: rgb(var(--c-hl));
+    color: rgb(30 22 0);
+    box-shadow: 0 6px 16px -6px rgb(var(--c-hl) / 0.6);
+  }
+  .btn-hl:hover:not(:disabled) { filter: brightness(1.04); }
+  .btn-hl:active:not(:disabled) { transform: translateY(1px); }
   .dark .btn-primary { color: rgb(var(--c-ink-inv)); }
 
   .btn-secondary {
@@ -347,15 +385,16 @@
     display: block;
     background: rgb(var(--c-surface));
     border: 1px solid rgb(var(--c-line));
-    border-radius: 12px;
-    transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 16px;
+    box-shadow: var(--e1);
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .card-link:hover {
-    border-color: rgb(var(--c-line-strong));
+    border-color: rgb(var(--c-accent-line));
     box-shadow: var(--e2);
   }
   @media (hover: hover) and (pointer: fine) {
-    .card-link:hover { transform: translateY(-1px); }
+    .card-link:hover { transform: translateY(-3px); }
   }
 
   /* ---------- Inputs ---------- */
@@ -400,6 +439,155 @@
     background: rgb(var(--c-surface));
     color: rgb(var(--c-ink));
     box-shadow: var(--e1);
+  }
+
+  /* ---------- Icon tiles (PW-style feature markers) ---------- */
+  .icon-tile {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 12px;
+    flex-shrink: 0;
+    background: rgb(var(--c-accent-soft));
+    color: rgb(var(--c-accent));
+  }
+  .icon-tile-sm { width: 2.25rem; height: 2.25rem; border-radius: 10px; }
+  .icon-tile-lg { width: 3.25rem; height: 3.25rem; border-radius: 14px; }
+  .tone-violet { background: rgb(var(--t-violet-soft)); color: rgb(var(--t-violet)); }
+  .tone-teal   { background: rgb(var(--t-teal-soft));   color: rgb(var(--t-teal)); }
+  .tone-amber  { background: rgb(var(--t-amber-soft));  color: rgb(var(--t-amber)); }
+  .tone-rose   { background: rgb(var(--t-rose-soft));   color: rgb(var(--t-rose)); }
+  .tone-sky    { background: rgb(var(--t-sky-soft));    color: rgb(var(--t-sky)); }
+  .tone-mint   { background: rgb(var(--t-mint-soft));   color: rgb(var(--t-mint)); }
+
+  /* ---------- Cover art (card media area) ----------
+     The one place a gradient is allowed: a decorative header strip on a
+     course / unit card, never behind text you have to read for long. */
+  .cover {
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+    isolation: isolate;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(120% 90% at 100% 0%, rgb(255 255 255 / 0.28), transparent 55%),
+      radial-gradient(80% 80% at 0% 100%, rgb(0 0 0 / 0.18), transparent 60%),
+      linear-gradient(135deg, rgb(var(--cover-a)) 0%, rgb(var(--cover-b)) 100%);
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(rgb(255 255 255 / 0.22) 1px, transparent 1.5px);
+    background-size: 14px 14px;
+    mask-image: linear-gradient(to left, rgb(0 0 0 / 0.9), transparent 70%);
+    -webkit-mask-image: linear-gradient(to left, rgb(0 0 0 / 0.9), transparent 70%);
+  }
+  .cover-violet { --cover-a: 99 82 236; --cover-b: 58 40 170; }
+  .cover-teal   { --cover-a: 20 170 156; --cover-b: 10 95 105; }
+  .cover-amber  { --cover-a: 245 158 11; --cover-b: 194 65 12; }
+  .cover-rose   { --cover-a: 244 63 94; --cover-b: 157 23 77; }
+  .cover-sky    { --cover-a: 14 165 233; --cover-b: 29 78 216; }
+  .cover-mint   { --cover-a: 34 197 94; --cover-b: 13 110 90; }
+  .cover-ink    { --cover-a: 55 48 90; --cover-b: 20 16 40; }
+
+  /* ---------- Hero band ---------- */
+  .hero-band {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+      radial-gradient(60% 70% at 85% 10%, rgb(var(--c-accent) / 0.14), transparent 60%),
+      radial-gradient(40% 50% at 10% 90%, rgb(var(--c-hl) / 0.16), transparent 60%),
+      rgb(var(--c-accent-soft) / 0.55);
+  }
+  .hero-band::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(rgb(var(--c-accent) / 0.16) 1px, transparent 1.5px);
+    background-size: 22px 22px;
+    mask-image: radial-gradient(70% 70% at 70% 30%, rgb(0 0 0 / 0.9), transparent 75%);
+    -webkit-mask-image: radial-gradient(70% 70% at 70% 30%, rgb(0 0 0 / 0.9), transparent 75%);
+  }
+
+  /* ---------- CTA band (last section of a landing page) ---------- */
+  .cta-band {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-radius: 24px;
+    color: #fff;
+    background:
+      radial-gradient(70% 90% at 100% 0%, rgb(255 255 255 / 0.18), transparent 55%),
+      radial-gradient(50% 70% at 0% 100%, rgb(var(--c-hl) / 0.35), transparent 60%),
+      linear-gradient(120deg, rgb(91 76 216) 0%, rgb(58 40 170) 100%);
+  }
+  .cta-band::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(rgb(255 255 255 / 0.18) 1px, transparent 1.5px);
+    background-size: 16px 16px;
+    mask-image: linear-gradient(to left, rgb(0 0 0 / 0.8), transparent 60%);
+    -webkit-mask-image: linear-gradient(to left, rgb(0 0 0 / 0.8), transparent 60%);
+  }
+
+  /* ---------- Chips (category / filter pills) ---------- */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 2.5rem;
+    padding-inline: 1rem;
+    border-radius: 999px;
+    border: 1px solid rgb(var(--c-line));
+    background: rgb(var(--c-surface));
+    color: rgb(var(--c-ink-2));
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: var(--e1);
+    transition: border-color 150ms ease, color 150ms ease, background-color 150ms ease, transform 150ms ease;
+  }
+  .chip:hover { border-color: rgb(var(--c-accent-line)); color: rgb(var(--c-accent)); background: rgb(var(--c-accent-soft)); }
+  .chip[data-active='true'] { background: rgb(var(--c-accent)); border-color: rgb(var(--c-accent)); color: #fff; }
+
+  /* ---------- Big number for stats ---------- */
+  .stat-num {
+    font-size: 2rem;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: rgb(var(--c-accent));
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Progress ring ---------- */
+  .ring {
+    --ring-size: 3.5rem;
+    --ring-value: 0;
+    width: var(--ring-size);
+    height: var(--ring-size);
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(closest-side, rgb(var(--c-surface)) 78%, transparent 80% 100%),
+      conic-gradient(rgb(var(--ring-fill, var(--c-accent))) calc(var(--ring-value) * 1%), rgb(var(--ring-track, var(--c-sunken))) 0);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgb(var(--c-ink));
+    font-variant-numeric: tabular-nums;
   }
 
   /* ---------- Touch targets ----------
@@ -542,7 +730,8 @@
   background: rgb(var(--c-sunken));
   border: 1px solid rgb(var(--c-line));
   color: rgb(var(--c-ink));
-  white-space: nowrap;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .prose-notes hr {
@@ -559,7 +748,7 @@
 
 .code-block {
   margin-block: 1.5em;
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid rgb(var(--c-line));
   background: rgb(var(--c-sunken));
   overflow: hidden;
@@ -651,9 +840,10 @@
   display: flex;
   gap: 0.75rem;
   margin-block: 1.5em;
-  padding: 0.875rem 1rem;
-  border-radius: 10px;
+  padding: 0.875rem 1rem 0.875rem 1.125rem;
+  border-radius: 12px;
   border: 1px solid;
+  border-left-width: 4px;
   font-size: 0.9375rem;
   line-height: 1.65;
 }
@@ -679,31 +869,31 @@
 
 .callout p:last-child { margin-bottom: 0; }
 
-.callout-note      { background: rgb(var(--c-accent-soft)); border-color: rgb(var(--c-accent-line)); color: rgb(var(--c-ink-2)); }
+.callout-note      { background: rgb(var(--c-accent-soft)); border-color: rgb(var(--c-accent-line)); border-left-color: rgb(var(--c-accent)); color: rgb(var(--c-ink-2)); }
 .callout-note .callout__label,
 .callout-note .callout__icon { color: rgb(var(--c-accent)); }
 
-.callout-tip       { background: rgb(var(--c-ok-soft)); border-color: rgb(var(--c-ok-line)); color: rgb(var(--c-ink-2)); }
+.callout-tip       { background: rgb(var(--c-ok-soft)); border-color: rgb(var(--c-ok-line)); border-left-color: rgb(var(--c-ok)); color: rgb(var(--c-ink-2)); }
 .callout-tip .callout__label,
 .callout-tip .callout__icon { color: rgb(var(--c-ok)); }
 
-.callout-important { background: rgb(var(--c-ok-soft)); border-color: rgb(var(--c-ok-line)); color: rgb(var(--c-ink-2)); }
+.callout-important { background: rgb(var(--c-ok-soft)); border-color: rgb(var(--c-ok-line)); border-left-color: rgb(var(--c-ok)); color: rgb(var(--c-ink-2)); }
 .callout-important .callout__label,
 .callout-important .callout__icon { color: rgb(var(--c-ok)); }
 
-.callout-warning   { background: rgb(var(--c-warn-soft)); border-color: rgb(var(--c-warn-line)); color: rgb(var(--c-ink-2)); }
+.callout-warning   { background: rgb(var(--c-warn-soft)); border-color: rgb(var(--c-warn-line)); border-left-color: rgb(var(--c-warn)); color: rgb(var(--c-ink-2)); }
 .callout-warning .callout__label,
 .callout-warning .callout__icon { color: rgb(var(--c-warn)); }
 
-.callout-danger    { background: rgb(var(--c-danger-soft)); border-color: rgb(var(--c-danger-line)); color: rgb(var(--c-ink-2)); }
+.callout-danger    { background: rgb(var(--c-danger-soft)); border-color: rgb(var(--c-danger-line)); border-left-color: rgb(var(--c-danger)); color: rgb(var(--c-ink-2)); }
 .callout-danger .callout__label,
 .callout-danger .callout__icon { color: rgb(var(--c-danger)); }
 
-.callout-exam      { background: rgb(var(--c-exam-soft)); border-color: rgb(var(--c-exam-line)); color: rgb(var(--c-ink-2)); }
+.callout-exam      { background: rgb(var(--c-exam-soft)); border-color: rgb(var(--c-exam-line)); border-left-color: rgb(var(--c-exam)); color: rgb(var(--c-ink-2)); }
 .callout-exam .callout__label,
 .callout-exam .callout__icon { color: rgb(var(--c-exam)); }
 
-.callout-analogy   { background: rgb(var(--c-sunken)); border-color: rgb(var(--c-line)); color: rgb(var(--c-ink-2)); }
+.callout-analogy   { background: rgb(var(--c-sunken)); border-color: rgb(var(--c-line)); border-left-color: rgb(var(--c-ink-4)); color: rgb(var(--c-ink-2)); }
 .callout-analogy .callout__label,
 .callout-analogy .callout__icon { color: rgb(var(--c-ink-3)); }
 

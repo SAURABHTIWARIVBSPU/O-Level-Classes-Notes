@@ -254,7 +254,7 @@ export default function DifferencesClient() {
     <div className="shell py-8 sm:py-10">
       <Breadcrumbs items={[{ label: 'Differences' }]} className="mb-5 no-print" />
 
-      <PageHeader
+      <PageHeader icon="Columns3" tone="sky"
         eyebrow="O Level · Revision"
         title="Differences & comparisons"
         hindiTitle="अंतर एवं तुलना"

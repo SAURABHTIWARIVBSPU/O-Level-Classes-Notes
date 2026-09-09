@@ -118,11 +118,11 @@ export default function CCCTopicPage({ params, topic }) {
         />
 
         <div className="order-2 min-w-0 lg:order-none lg:col-start-1 lg:row-start-1 xl:col-start-2">
-          <header className="pb-6 mb-8 border-b border-line">
+          <header className="hero-band rounded-3xl border border-accent-line/60 px-5 py-5 sm:px-7 sm:py-6 mb-8">
             <div className="flex flex-wrap items-center gap-2 mb-3">
-              <Badge tone="accent" mono>
+              <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-ccc text-white text-2xs font-bold uppercase tracking-wider">
                 Topic {index + 1} of {chapterTopics.length}
-              </Badge>
+              </span>
               {examLevel ? <Badge tone="exam">Exam weight: {examLevel}</Badge> : null}
               {isCompleted ? (
                 <Badge tone="ok" icon={CheckCircle2}>
@@ -131,7 +131,7 @@ export default function CCCTopicPage({ params, topic }) {
               ) : null}
             </div>
 
-            <h1 className="text-h1 font-semibold text-ink">{topic.title}</h1>
+            <h1 className="text-h1 sm:text-display font-bold text-ink">{topic.title}</h1>
 
             {showHindi && topic.hindiTitle ? (
               <p className="mt-1.5 text-lead text-hindi hindi-text" lang="hi">
@@ -150,7 +150,7 @@ export default function CCCTopicPage({ params, topic }) {
 
               <Button
                 size="sm"
-                variant={isCompleted ? 'soft' : 'secondary'}
+                variant={isCompleted ? 'soft' : 'primary'}
                 icon={isCompleted ? CheckCircle2 : Circle}
                 aria-pressed={isCompleted}
                 onClick={() => toggleTopicCompleted && toggleTopicCompleted(topic.slug)}

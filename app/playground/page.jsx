@@ -58,7 +58,7 @@ export default function PlaygroundPage({ searchParams }) {
       <div className="shell shell-wide">
         <Breadcrumbs className="mb-5" items={[{ label: 'Practice', href: '/syllabus' }, { label: 'Code playground' }]} />
 
-        <PageHeader
+        <PageHeader icon="Code2" tone="mint"
           eyebrow="Practice"
           title="Code playground"
           hindiTitle="कोड प्लेग्राउंड"

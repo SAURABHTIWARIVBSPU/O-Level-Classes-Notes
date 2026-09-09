@@ -45,7 +45,7 @@ export default function OneShotHubPage() {
     <div className="shell py-8 sm:py-10">
       <Breadcrumbs items={[{ label: 'One-shot revision' }]} className="mb-5" />
 
-      <PageHeader
+      <PageHeader icon="Rocket" tone="rose"
         eyebrow="O Level · Revision"
         title="One-shot revision"
         hindiTitle="एक बैठक में पूरी यूनिट"

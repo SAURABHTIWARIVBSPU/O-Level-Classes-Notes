@@ -11,7 +11,10 @@ import {
   MetaItem,
   PageHeader,
   StatTile,
+  IconTile,
+  ModuleIcon,
 } from '@/components/ui';
+import { moduleVisual } from '@/lib/navigation';
 import { oLevelNotesMeta, oLevelUnitNotesList } from '@/data/oLevelNotesData';
 
 export const metadata = {
@@ -50,7 +53,7 @@ export default function OLevelNotesLibraryPage() {
     <div className="shell py-8 sm:py-10">
       <Breadcrumbs items={[{ label: 'Full unit notes' }]} className="mb-5" />
 
-      <PageHeader
+      <PageHeader icon="FileText" tone="sky"
         eyebrow={`NIELIT O Level · ${oLevelNotesMeta.courseCode}`}
         title="Full unit notes"
         hindiTitle="संपूर्ण इकाई नोट्स"
@@ -68,8 +71,8 @@ export default function OLevelNotesLibraryPage() {
           What the library covers
         </h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <StatTile label="Units" value={oLevelNotesMeta.totalUnits} hint="Full syllabus coverage" />
-          <StatTile label="Topics" value={oLevelNotesMeta.totalTopics} hint="Every syllabus point" />
+          <StatTile label="Units" value={oLevelNotesMeta.totalUnits} hint="Full syllabus coverage" icon={Layers} tone="violet" />
+          <StatTile label="Topics" value={oLevelNotesMeta.totalTopics} hint="Every syllabus point" icon={BookOpen} tone="sky" />
           <StatTile
             label="Course hours"
             value={oLevelNotesMeta.totalHours}
@@ -113,6 +116,7 @@ export default function OLevelNotesLibraryPage() {
               return (
                 <li key={unit.slug} className="panel p-5 flex flex-col">
                   <div className="flex flex-wrap items-center gap-2">
+                    <IconTile tone={moduleVisual('olevel', unit.unitNumberPadded).tone} icon={<ModuleIcon name={moduleVisual('olevel', unit.unitNumberPadded).icon} />} />
                     <Badge tone="accent" mono>
                       Unit {unit.unitNumberPadded}
                     </Badge>
@@ -124,7 +128,7 @@ export default function OLevelNotesLibraryPage() {
                     </Badge>
                   </div>
 
-                  <h3 className="mt-3 text-h3 font-semibold text-ink">{unit.title}</h3>
+                  <h3 className="mt-3 text-h3 font-bold text-ink">{unit.title}</h3>
                   <p className="text-sm font-medium text-ink-3 hindi-text" lang="hi">
                     {unit.hindiTitle}
                   </p>

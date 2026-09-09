@@ -191,9 +191,9 @@ export default function QuizCard({
               onClick={() => select(opt.id)}
               onKeyDown={(e) => onOptionKeyDown(e, i)}
               className={cx(
-                'w-full min-h-[44px] flex items-start gap-3 p-3 sm:p-3.5 rounded-lg border text-left',
+                'w-full min-h-[44px] flex items-start gap-3 p-3 sm:p-3.5 rounded-xl border text-left',
                 'transition-colors duration-fast aria-disabled:cursor-default',
-                state === 'idle' && 'bg-surface border-line hover:border-line-strong hover:bg-sunken',
+                state === 'idle' && 'bg-surface border-line hover:border-accent-line hover:bg-accent-soft/60',
                 state === 'correct' && 'bg-ok-soft border-ok-line',
                 state === 'wrong' && 'bg-danger-soft border-danger-line',
                 state === 'muted' && 'bg-surface border-line opacity-70',
@@ -201,8 +201,8 @@ export default function QuizCard({
             >
               <span
                 className={cx(
-                  'shrink-0 w-6 h-6 mt-px rounded-md grid place-items-center text-xs font-semibold',
-                  state === 'idle' && 'bg-sunken border border-line text-ink-2',
+                  'shrink-0 w-7 h-7 rounded-lg grid place-items-center text-xs font-bold',
+                  state === 'idle' && 'bg-accent-soft text-accent',
                   state === 'correct' && 'bg-ok text-ink-inv',
                   state === 'wrong' && 'bg-danger text-ink-inv',
                   state === 'muted' && 'bg-sunken border border-line text-ink-4',

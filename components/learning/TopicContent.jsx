@@ -51,8 +51,9 @@ function boardTemplateFor(slug = '') {
 function Section({ id, title, hindiTitle, icon: Icon, children, className = '' }) {
   return (
     <section id={id} className={`scroll-mt-[calc(var(--header-h)+1.5rem)] ${className}`}>
-      <h2 className="flex items-center gap-2 text-h3 font-semibold text-ink mb-3">
-        {Icon ? <Icon className="w-[1.05rem] h-[1.05rem] text-ink-3 shrink-0" aria-hidden="true" /> : null}
+      <h2 className="flex items-center gap-2.5 text-h3 font-bold text-ink mb-3">
+        <span className="w-1 h-5 rounded-full bg-accent shrink-0" aria-hidden="true" />
+        {Icon ? <Icon className="w-[1.05rem] h-[1.05rem] text-accent shrink-0" aria-hidden="true" /> : null}
         {title}
         {hindiTitle ? (
           <span className="text-sm font-normal text-ink-4 hindi-text" lang="hi">{hindiTitle}</span>
@@ -138,13 +139,16 @@ export default function TopicContent({ topic, prevTopic, nextTopic, related = []
             />
 
             {/* Title block */}
-            <header className="pb-5 mb-6 border-b border-line">
+            <header className="hero-band rounded-3xl border border-accent-line/60 px-5 py-5 sm:px-7 sm:py-6 mb-6">
               <div className="flex flex-wrap items-center gap-2 mb-3">
-                <Badge tone="accent" mono>UNIT {unitNumber}</Badge>
+                <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-accent text-white text-2xs font-bold uppercase tracking-wider">
+                  Unit {unitNumber}
+                </span>
+                <span className="text-xs font-semibold text-ink-3 truncate">{topic.unitTitle}</span>
                 {isCompleted ? <Badge tone="ok" icon={CheckCircle2}>Completed</Badge> : null}
               </div>
 
-              <h1 className="text-h1 sm:text-display font-semibold text-ink">{topic.title}</h1>
+              <h1 className="text-h1 sm:text-display font-bold text-ink">{topic.title}</h1>
               {topic.hindiTitle ? (
                 <p className="mt-1.5 text-lead text-hindi hindi-text" lang="hi">{topic.hindiTitle}</p>
               ) : null}
@@ -152,7 +156,7 @@ export default function TopicContent({ topic, prevTopic, nextTopic, related = []
               {/* Study actions — quiet, secondary to the content */}
               <div className="mt-5 flex flex-wrap items-center gap-2">
                 <Button
-                  variant={isCompleted ? 'soft' : 'secondary'}
+                  variant={isCompleted ? 'soft' : 'primary'}
                   size="sm"
                   icon={isCompleted ? CheckCircle2 : Circle}
                   onClick={() => toggleTopicCompleted(topic.slug)}
@@ -162,7 +166,7 @@ export default function TopicContent({ topic, prevTopic, nextTopic, related = []
                 </Button>
 
                 <Button
-                  variant="ghost"
+                  variant="secondary"
                   size="sm"
                   icon={isSaved ? BookmarkCheck : Bookmark}
                   onClick={() => toggleBookmark(topic.slug)}
@@ -200,7 +204,7 @@ export default function TopicContent({ topic, prevTopic, nextTopic, related = []
 
               {/* Definition — the anchor of the page */}
               <Section id="definition" title="Definition">
-                <div className="border-l-2 border-accent pl-4 py-0.5 space-y-2">
+                <div className="rounded-2xl bg-accent-soft/60 border border-accent-line px-5 py-4 space-y-2">
                   {showEnglish && topic.definitionEnglish ? (
                     <p className="text-prose text-ink leading-relaxed">{topic.definitionEnglish}</p>
                   ) : null}

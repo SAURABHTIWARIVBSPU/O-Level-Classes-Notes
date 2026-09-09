@@ -22,7 +22,10 @@ import {
   PageHeader,
   SectionHeading,
   StatTile,
+  IconTile,
+  ModuleIcon,
 } from '@/components/ui';
+import { moduleVisual } from '@/lib/navigation';
 import { cccNotesMeta, cccUnitNotesList } from '@/data/cccNotesData';
 
 function checkPdfExists(relUrl) {
@@ -82,7 +85,7 @@ export default function CCCNotesLibraryPage({ searchParams }) {
         items={[{ label: 'CCC', href: '/ccc' }, { label: 'Full chapter notes' }]}
       />
 
-      <PageHeader
+      <PageHeader icon="FileText" tone="sky"
         eyebrow="Long-form notes"
         title="Full chapter notes"
         hindiTitle="सम्पूर्ण अध्याय नोट्स — अंग्रेज़ी एवं हिन्दी"
@@ -184,15 +187,18 @@ export default function CCCNotesLibraryPage({ searchParams }) {
                 return (
                   <li key={unit.slug} className="panel p-5 flex flex-col">
                     <div className="flex items-center justify-between gap-2 mb-3">
-                      <Badge tone="neutral" mono>
-                        Unit {unit.unitNumberPadded}
-                      </Badge>
+                      <span className="flex items-center gap-2">
+                        <IconTile size="sm" tone={moduleVisual('ccc', unit.unitNumber).tone} icon={<ModuleIcon name={moduleVisual('ccc', unit.unitNumber).icon} />} />
+                        <Badge tone="neutral" mono>
+                          Unit {unit.unitNumberPadded}
+                        </Badge>
+                      </span>
                       {unit.officialSection ? (
                         <span className="text-xs text-ink-4 font-mono">{unit.officialSection}</span>
                       ) : null}
                     </div>
 
-                    <h3 className="text-h4 font-medium text-ink leading-snug">
+                    <h3 className="text-h4 font-bold text-ink leading-snug">
                       <Link
                         href={readerHref(unit)}
                         className="hover:text-accent transition-colors duration-fast"

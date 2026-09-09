@@ -39,7 +39,7 @@ export default function OLevelSyllabusPage() {
     <div className="shell py-8 sm:py-10">
       <Breadcrumbs items={[{ label: 'Syllabus & blueprint' }]} className="mb-5" />
 
-      <PageHeader
+      <PageHeader icon="Layers" tone="violet"
         eyebrow={`NIELIT O Level · ${meta.moduleCode}`}
         title="Syllabus and exam blueprint"
         hindiTitle={`${meta.hindiModuleName} — पाठ्यक्रम एवं अंक विभाजन`}

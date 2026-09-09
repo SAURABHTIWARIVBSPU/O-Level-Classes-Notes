@@ -80,7 +80,7 @@ export default async function UnitMcqsPage({ params }) {
         className="mb-5"
       />
 
-      <PageHeader
+      <PageHeader icon="ListChecks" tone="amber"
         eyebrow={unit.isAll ? 'O Level · Whole syllabus' : `O Level · Unit ${unit.label}`}
         title={unit.isAll ? `All ${questions.length} questions` : `${unit.title} — MCQs`}
         hindiTitle={unit.isAll ? undefined : unit.hindiTitle}

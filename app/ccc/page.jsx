@@ -21,8 +21,10 @@ import {
   PageHeader,
   SectionHeading,
   StatTile,
+  IconTile,
+  ModuleIcon,
 } from '@/components/ui';
-import { COURSES, getCourseMeta, getModules } from '@/lib/navigation';
+import { COURSES, getCourseMeta, getModules, moduleVisual } from '@/lib/navigation';
 
 export const metadata = {
   title: 'CCC — Course on Computer Concepts',
@@ -132,7 +134,9 @@ export default function CCCLandingPage() {
     <div className="shell py-8 sm:py-10">
       {/* ------------------------------------------------------------- hero */}
       <PageHeader
-        eyebrow={`${course.module} · ${course.level}`}
+        icon={GraduationCap}
+        tone="teal"
+        eyebrow={`${course.module} · ${course.level} · Free`}
         title="Learn computers from zero"
         hindiTitle={meta.hindiCourseName}
         description="CCC is the starting course. If you have never used a computer for more than WhatsApp, this is written for you — nine short chapters, in English and हिन्दी, ending in a certificate exam you can pass with 50%."
@@ -203,14 +207,13 @@ export default function CCCLandingPage() {
               return (
                 <li key={chapter.key}>
                   <CardLink href={chapter.href} className="group h-full p-5 flex flex-col">
-                    <div className="flex items-center justify-between gap-2 mb-3">
-                      <Badge tone="neutral" mono>
-                        Chapter {number}
-                      </Badge>
+                    <div className="flex items-start justify-between gap-2 mb-4">
+                      <IconTile tone={moduleVisual('ccc', number).tone} icon={<ModuleIcon name={moduleVisual('ccc', number).icon} />} />
                       {chapter.marks ? <Badge tone="exam">{chapter.marks}</Badge> : null}
                     </div>
+                    <span className="font-mono text-2xs font-semibold text-ccc">CHAPTER {String(number).padStart(2, '0')}</span>
 
-                    <h3 className="text-h4 font-medium text-ink leading-snug group-hover:text-accent transition-colors duration-fast">
+                    <h3 className="mt-1 text-h4 font-bold text-ink leading-snug group-hover:text-accent transition-colors duration-fast">
                       {chapter.title}
                     </h3>
                     {chapter.hindiTitle ? (
@@ -247,12 +250,14 @@ export default function CCCLandingPage() {
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {TOOLS.map((tool) => (
               <li key={tool.href}>
-                <CardLink href={tool.href} className="group h-full p-5">
-                  <tool.icon className="w-5 h-5 text-ink-3 mb-3" aria-hidden="true" />
-                  <h3 className="text-h4 font-medium text-ink group-hover:text-accent transition-colors duration-fast">
-                    {tool.title}
-                  </h3>
-                  <p className="mt-1 text-sm text-ink-3 leading-relaxed">{tool.body}</p>
+                <CardLink href={tool.href} className="group h-full p-5 flex gap-4">
+                  <IconTile tone={['violet', 'rose', 'sky', 'amber', 'teal', 'mint'][TOOLS.indexOf(tool) % 6]} icon={tool.icon} />
+                  <span className="min-w-0">
+                    <h3 className="text-h4 font-bold text-ink group-hover:text-accent transition-colors duration-fast">
+                      {tool.title}
+                    </h3>
+                    <p className="mt-1 text-sm text-ink-3 leading-relaxed">{tool.body}</p>
+                  </span>
                 </CardLink>
               </li>
             ))}
@@ -274,9 +279,9 @@ export default function CCCLandingPage() {
               hint={`${meta.theoryHours}h theory + ${meta.practicalHours}h practical`}
               icon={Clock}
             />
-            <StatTile label="Questions" value="100" hint="MCQ and true/false" icon={ListChecks} />
-            <StatTile label="Time" value="90 min" hint="No negative marking" icon={Timer} />
-            <StatTile label="Pass mark" value="50%" hint="Grade D or higher" icon={GraduationCap} />
+            <StatTile label="Questions" value="100" hint="MCQ and true/false" icon={ListChecks} tone="sky" />
+            <StatTile label="Time" value="90 min" hint="No negative marking" icon={Timer} tone="amber" />
+            <StatTile label="Pass mark" value="50%" hint="Grade D or higher" icon={GraduationCap} tone="mint" />
           </div>
 
           <dl className="mt-6 grid gap-x-8 gap-y-5 sm:grid-cols-2 max-w-measure-wide">
@@ -304,7 +309,7 @@ export default function CCCLandingPage() {
         {/* --------------------------------------------------------------- FAQ */}
         <section aria-labelledby="faq">
           <SectionHeading id="faq" eyebrow="Before you start" title="Common questions" />
-          <div className="max-w-measure divide-y divide-line border-y border-line">
+          <div className="max-w-measure-wide panel divide-y divide-line overflow-hidden px-5">
             {faqs.map((faq) => (
               <details key={faq.q} className="group">
                 <summary className="flex items-center justify-between gap-4 py-4 min-h-11 cursor-pointer list-none [&::-webkit-details-marker]:hidden text-base font-medium text-ink hover:text-accent transition-colors duration-fast">
@@ -329,21 +334,23 @@ export default function CCCLandingPage() {
         </section>
 
         {/* --------------------------------------------------------- last word */}
-        <section aria-labelledby="get-going" className="pt-2">
-          <h2 id="get-going" className="text-h2 font-semibold text-ink">
-            Ready when you are
-          </h2>
-          <p className="mt-2 text-base text-ink-2 leading-relaxed max-w-measure">
-            Nothing to install and nothing to sign up for. Open Chapter 1 and read the first topic —
-            it takes about ten minutes.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-2">
-            <Button variant="primary" href="/ccc/chapters/chapter-1" iconRight={ArrowRight}>
+        <section aria-labelledby="get-going" className="cta-band p-6 sm:p-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="max-w-measure">
+            <h2 id="get-going" className="text-h1 sm:text-display font-bold">
+              Ready when you are
+            </h2>
+            <p className="mt-2 text-base text-white/85 leading-relaxed">
+              Nothing to install and nothing to sign up for. Open Chapter 1 and read the first topic —
+              it takes about ten minutes.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3 shrink-0">
+            <Button variant="highlight" size="lg" href="/ccc/chapters/chapter-1" iconRight={ArrowRight}>
               Start Chapter 1
             </Button>
-            <Button variant="secondary" href="/ccc/notes">
+            <Link href="/ccc/notes" className="btn btn-lg bg-white/15 text-white border-white/30 hover:bg-white/25">
               Browse the full notes
-            </Button>
+            </Link>
           </div>
         </section>
       </div>

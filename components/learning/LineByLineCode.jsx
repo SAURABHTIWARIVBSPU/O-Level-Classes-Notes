@@ -44,7 +44,7 @@ export default function LineByLineCode({ lines = [], language: lang = 'html' }) 
                   {i + 1}
                 </span>
                 <code
-                  className="flex-1 min-w-0 font-mono text-sm text-ink whitespace-pre overflow-x-auto no-scrollbar"
+                  className="block flex-1 min-w-0 font-mono text-sm text-ink whitespace-pre overflow-x-auto no-scrollbar"
                   dangerouslySetInnerHTML={{ __html: highlight(item.code || '', lang) }}
                 />
                 <ChevronDown

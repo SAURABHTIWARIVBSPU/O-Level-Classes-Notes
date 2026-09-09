@@ -24,11 +24,12 @@ import {
   EmptyState,
   MetaItem,
   PageHeader,
+  ModuleIcon,
   ProgressBar,
   SectionHeading,
   StatTile,
 } from '@/components/ui';
-import { getModule, getModules } from '@/lib/navigation';
+import { getModule, getModules, moduleVisual } from '@/lib/navigation';
 import { useProgress } from '@/lib/progressContext';
 
 /**
@@ -79,6 +80,8 @@ export default function CCCChapterPage({ params }) {
       />
 
       <PageHeader
+        icon={<ModuleIcon name={moduleVisual('ccc', chapter.number).icon} />}
+        tone={moduleVisual('ccc', chapter.number).tone}
         eyebrow={`Chapter ${chapterNumber} of ${position.total}`}
         title={chapter.title}
         hindiTitle={chapter.hindiTitle}
@@ -120,9 +123,9 @@ export default function CCCChapterPage({ params }) {
           />
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             <StatTile label="Theory" value={`${chapter.theoryHours ?? '—'}h`} hint="Classroom hours" icon={BookOpen} />
-            <StatTile label="Practical" value={`${chapter.practicalHours ?? '—'}h`} hint="Lab hours" icon={Timer} />
-            <StatTile label="Total" value={`${chapter.hours ?? '—'}h`} hint="Per NIELIT blueprint" icon={Clock} />
-            <StatTile label="Weightage" value={chapter.marks || '—'} hint="In the exam" icon={GraduationCap} />
+            <StatTile label="Practical" value={`${chapter.practicalHours ?? '—'}h`} hint="Lab hours" icon={Timer} tone="amber" />
+            <StatTile label="Total" value={`${chapter.hours ?? '—'}h`} hint="Per NIELIT blueprint" icon={Clock} tone="sky" />
+            <StatTile label="Weightage" value={chapter.marks || '—'} hint="In the exam" icon={GraduationCap} tone="rose" />
           </div>
 
           {topics.length ? (
@@ -171,10 +174,10 @@ export default function CCCChapterPage({ params }) {
                   <li key={topic.slug}>
                     <CardLink href={topic.href} className="group p-4 flex items-start gap-3.5">
                       <span
-                        className={`shrink-0 grid place-items-center w-8 h-8 rounded-full border text-xs font-semibold tabular-nums ${
+                        className={`shrink-0 grid place-items-center w-9 h-9 rounded-xl text-xs font-bold font-mono tabular-nums ${
                           isDone
-                            ? 'bg-ok-soft border-ok-line text-ok-ink'
-                            : 'bg-sunken border-line text-ink-3'
+                            ? 'bg-ok-soft text-ok'
+                            : 'bg-accent-soft text-accent'
                         }`}
                         aria-hidden="true"
                       >
@@ -182,7 +185,7 @@ export default function CCCChapterPage({ params }) {
                       </span>
 
                       <span className="min-w-0 flex-1">
-                        <span className="block text-h4 font-medium text-ink leading-snug">
+                        <span className="block text-h4 font-bold text-ink leading-snug group-hover:text-accent transition-colors">
                           {topic.title}
                         </span>
                         {topic.hindiTitle ? (
@@ -223,8 +226,8 @@ export default function CCCChapterPage({ params }) {
           />
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <CardLink href={`/ccc/mcqs/${chapter.key}`} className="p-5 group">
-              <HelpCircle className="w-5 h-5 text-ink-3 mb-3" aria-hidden="true" />
-              <span className="block text-h4 font-medium text-ink group-hover:text-accent transition-colors duration-fast">
+              <span className="icon-tile tone-violet mb-3"><HelpCircle className="w-5 h-5" aria-hidden="true" /></span>
+              <span className="block text-h4 font-bold text-ink group-hover:text-accent transition-colors duration-fast">
                 Chapter {chapterNumber} questions
               </span>
               <span className="block mt-1 text-sm text-ink-3">
@@ -233,8 +236,8 @@ export default function CCCChapterPage({ params }) {
             </CardLink>
 
             <CardLink href={notesHref} className="p-5 group">
-              <FileText className="w-5 h-5 text-ink-3 mb-3" aria-hidden="true" />
-              <span className="block text-h4 font-medium text-ink group-hover:text-accent transition-colors duration-fast">
+              <span className="icon-tile tone-sky mb-3"><FileText className="w-5 h-5" aria-hidden="true" /></span>
+              <span className="block text-h4 font-bold text-ink group-hover:text-accent transition-colors duration-fast">
                 Full chapter notes
               </span>
               <span className="block mt-1 text-sm text-ink-3">
@@ -243,8 +246,8 @@ export default function CCCChapterPage({ params }) {
             </CardLink>
 
             <CardLink href="/ccc/cheat-sheets" className="p-5 group">
-              <ListChecks className="w-5 h-5 text-ink-3 mb-3" aria-hidden="true" />
-              <span className="block text-h4 font-medium text-ink group-hover:text-accent transition-colors duration-fast">
+              <span className="icon-tile tone-amber mb-3"><ListChecks className="w-5 h-5" aria-hidden="true" /></span>
+              <span className="block text-h4 font-bold text-ink group-hover:text-accent transition-colors duration-fast">
                 Cheat sheets
               </span>
               <span className="block mt-1 text-sm text-ink-3">
@@ -253,8 +256,8 @@ export default function CCCChapterPage({ params }) {
             </CardLink>
 
             <CardLink href="/ccc/mock-test" className="p-5 group">
-              <GraduationCap className="w-5 h-5 text-ink-3 mb-3" aria-hidden="true" />
-              <span className="block text-h4 font-medium text-ink group-hover:text-accent transition-colors duration-fast">
+              <span className="icon-tile tone-rose mb-3"><GraduationCap className="w-5 h-5" aria-hidden="true" /></span>
+              <span className="block text-h4 font-bold text-ink group-hover:text-accent transition-colors duration-fast">
                 Full mock test
               </span>
               <span className="block mt-1 text-sm text-ink-3">

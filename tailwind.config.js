@@ -56,6 +56,22 @@ module.exports = {
           ink: withOpacity('--c-accent-ink'),
         },
 
+        /* ---------- Highlight (warm yellow, one per view) ---------- */
+        hl: {
+          DEFAULT: withOpacity('--c-hl'),
+          soft: withOpacity('--c-hl-soft'),
+          line: withOpacity('--c-hl-line'),
+          ink: withOpacity('--c-hl-ink'),
+        },
+
+        /* ---------- Tone palette (icon tiles + cover art only) ---------- */
+        't-violet': { DEFAULT: withOpacity('--t-violet'), soft: withOpacity('--t-violet-soft') },
+        't-teal':   { DEFAULT: withOpacity('--t-teal'),   soft: withOpacity('--t-teal-soft') },
+        't-amber':  { DEFAULT: withOpacity('--t-amber'),  soft: withOpacity('--t-amber-soft') },
+        't-rose':   { DEFAULT: withOpacity('--t-rose'),   soft: withOpacity('--t-rose-soft') },
+        't-sky':    { DEFAULT: withOpacity('--t-sky'),    soft: withOpacity('--t-sky-soft') },
+        't-mint':   { DEFAULT: withOpacity('--t-mint'),   soft: withOpacity('--t-mint-soft') },
+
         /* ---------- Semantic ---------- */
         ok: {
           DEFAULT: withOpacity('--c-ok'),
@@ -150,8 +166,9 @@ module.exports = {
         DEFAULT: '8px',
         md: '8px',
         lg: '10px',
-        xl: '12px',
-        '2xl': '16px',
+        xl: '14px',
+        '2xl': '18px',
+        '3xl': '24px',
       },
 
       boxShadow: {
@@ -213,6 +230,10 @@ module.exports = {
         shimmer: {
           '100%': { transform: 'translateX(100%)' },
         },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-8px)' },
+        },
       },
 
       animation: {
@@ -220,6 +241,8 @@ module.exports = {
         'fade-in': 'fade-in 180ms ease-out both',
         'slide-in-left': 'slide-in-left 240ms cubic-bezier(0.16, 1, 0.3, 1) both',
         'slide-up-sheet': 'slide-up-sheet 260ms cubic-bezier(0.16, 1, 0.3, 1) both',
+        float: 'float 6s ease-in-out infinite',
+        'float-delay': 'float 7s ease-in-out 1.2s infinite',
       },
 
       zIndex: {

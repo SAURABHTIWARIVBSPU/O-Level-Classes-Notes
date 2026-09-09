@@ -199,7 +199,7 @@ export default async function UnitOneShotPage({ params }) {
         className="mb-5 no-print"
       />
 
-      <PageHeader
+      <PageHeader icon="Rocket" tone="rose"
         eyebrow={`One-shot · Unit ${number}`}
         title={unit.title}
         hindiTitle={unit.hindiTitle}

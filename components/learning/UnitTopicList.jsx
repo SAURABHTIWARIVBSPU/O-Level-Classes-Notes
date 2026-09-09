@@ -57,11 +57,11 @@ export default function UnitTopicList({ topics = [], showProgress = true, unitWo
                 href={topic.href}
                 className="group flex-1 min-w-0 flex items-center gap-3 py-3 pr-3 hover:bg-sunken transition-colors"
               >
-                <span className="font-mono text-2xs text-ink-4 tabular-nums shrink-0 w-5">
+                <span className={`grid place-items-center w-8 h-8 rounded-lg font-mono text-xs font-bold tabular-nums shrink-0 ${isDone ? 'bg-ok-soft text-ok' : 'bg-accent-soft text-accent'}`}>
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className={`block text-base leading-snug ${isDone ? 'text-ink-3' : 'text-ink'} group-hover:text-accent transition-colors`}>
+                  <span className={`block text-base font-semibold leading-snug ${isDone ? 'text-ink-3' : 'text-ink'} group-hover:text-accent transition-colors`}>
                     {topic.title}
                   </span>
                   {topic.hindiTitle ? (

@@ -49,7 +49,7 @@ export default function CCCSyllabusPage() {
     <div className="shell py-8 sm:py-10">
       <Breadcrumbs className="mb-5" items={[{ label: 'CCC', href: '/ccc' }, { label: 'Syllabus' }]} />
 
-      <PageHeader
+      <PageHeader icon="Layers" tone="teal"
         eyebrow={`${meta.revision} · in force from ${meta.implementationDate}`}
         title="CCC syllabus and exam blueprint"
         hindiTitle={meta.hindiCourseName}

@@ -198,7 +198,7 @@ export default function ProjectsPage() {
     <div className="shell py-8 sm:py-10">
       <Breadcrumbs className="mb-5" items={[{ label: 'Practice', href: '/syllabus' }, { label: 'Projects' }]} />
 
-      <PageHeader
+      <PageHeader icon="FolderKanban" tone="violet"
         eyebrow="Practice"
         title="Build-along projects"
         hindiTitle="प्रोजेक्ट्स"

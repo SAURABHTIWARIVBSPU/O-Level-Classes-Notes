@@ -427,7 +427,7 @@ function SearchResults() {
     <div className="shell shell-wide py-8 sm:py-10">
       <Breadcrumbs className="mb-5" items={[{ label: 'Search' }]} />
 
-      <PageHeader
+      <PageHeader icon="Search" tone="violet"
         eyebrow="Search"
         title="Search everything"
         hindiTitle="खोजें"
@@ -669,7 +669,7 @@ function SearchResults() {
 function SearchFallback() {
   return (
     <div className="shell shell-wide py-8 sm:py-10">
-      <PageHeader eyebrow="Search" title="Search everything" description="Loading the index…" />
+      <PageHeader icon="Search" tone="violet" eyebrow="Search" title="Search everything" description="Loading the index…" />
       <Skeleton className="h-11 w-full rounded-md" />
       <div className="mt-8 space-y-3">
         {[0, 1, 2, 3].map((i) => (

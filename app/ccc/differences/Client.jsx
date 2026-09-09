@@ -232,7 +232,7 @@ export default function CccDifferencesClient() {
         className="mb-5 no-print"
       />
 
-      <PageHeader
+      <PageHeader icon="Columns3" tone="sky"
         eyebrow="CCC · Revision"
         title="Differences & comparisons"
         hindiTitle="अंतर एवं तुलना"

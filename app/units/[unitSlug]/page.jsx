@@ -5,9 +5,9 @@ import {
   BookOpen, Clock, ArrowRight, ListChecks, FileText, Zap, Target, GraduationCap,
 } from 'lucide-react';
 
-import { getModules, getModule, getCourseMeta } from '@/lib/navigation';
+import { getModules, getModule, getCourseMeta, moduleVisual } from '@/lib/navigation';
 import {
-  Button, Badge, Panel, PageHeader, SectionHeading, Breadcrumbs, PrevNext, MetaItem,
+  Button, Badge, Panel, PageHeader, SectionHeading, Breadcrumbs, PrevNext, MetaItem, IconTile, ModuleIcon,
 } from '@/components/ui';
 import CourseSidebar from '@/components/layout/CourseSidebar';
 import UnitTopicList from '@/components/learning/UnitTopicList';
@@ -37,10 +37,11 @@ export default function UnitOverviewPage({ params }) {
   const next = index < units.length - 1 ? units[index + 1] : null;
   const meta = getCourseMeta('olevel');
 
+  const vis = moduleVisual('olevel', unit.number);
   const RESOURCES = [
-    { icon: FileText, label: 'Full unit notes', desc: 'Long-form reader with PDFs', href: unit.notesHref },
-    { icon: ListChecks, label: 'Unit questions', desc: 'MCQs with explanations', href: unit.mcqHref },
-    { icon: Zap, label: 'One-shot revision', desc: 'The whole unit in one pass', href: unit.oneShotHref },
+    { icon: FileText, tone: 'sky', label: 'Full unit notes', desc: 'Long-form reader with PDFs', href: unit.notesHref },
+    { icon: ListChecks, tone: 'amber', label: 'Unit questions', desc: 'MCQs with explanations', href: unit.mcqHref },
+    { icon: Zap, tone: 'rose', label: 'One-shot revision', desc: 'The whole unit in one pass', href: unit.oneShotHref },
   ];
 
   return (
@@ -58,6 +59,8 @@ export default function UnitOverviewPage({ params }) {
           />
 
           <PageHeader
+            icon={<ModuleIcon name={vis.icon} />}
+            tone={vis.tone}
             eyebrow={`${meta.moduleCode} · Unit ${unit.number}`}
             title={unit.title}
             hindiTitle={unit.hindiTitle}
@@ -84,11 +87,11 @@ export default function UnitOverviewPage({ params }) {
                 eyebrow="By the end of this unit"
                 title="What you will be able to do"
               />
-              <ul className="space-y-2.5 max-w-measure">
+              <ul className="grid gap-3 sm:grid-cols-2">
                 {unit.objectives.map((o, i) => (
-                  <li key={i} className="flex gap-2.5">
-                    <Target className="w-4 h-4 mt-1 text-accent shrink-0" aria-hidden="true" />
-                    <span className="text-prose text-ink-2 leading-relaxed">{o}</span>
+                  <li key={i} className="panel p-4 flex gap-3">
+                    <span className="icon-tile icon-tile-sm tone-mint"><Target className="w-4 h-4" aria-hidden="true" /></span>
+                    <span className="text-base text-ink-2 leading-relaxed">{o}</span>
                   </li>
                 ))}
               </ul>
@@ -113,8 +116,8 @@ export default function UnitOverviewPage({ params }) {
               {RESOURCES.map((r) => (
                 <li key={r.href}>
                   <Link href={r.href} className="card-link group h-full p-4 flex flex-col">
-                    <r.icon className="w-4.5 h-4.5 text-ink-3 group-hover:text-accent transition-colors" aria-hidden="true" />
-                    <h3 className="mt-3 text-h4 font-semibold text-ink group-hover:text-accent transition-colors">
+                    <IconTile tone={r.tone} icon={r.icon} />
+                    <h3 className="mt-3 text-h4 font-bold text-ink group-hover:text-accent transition-colors">
                       {r.label}
                     </h3>
                     <p className="mt-1 text-sm text-ink-3">{r.desc}</p>

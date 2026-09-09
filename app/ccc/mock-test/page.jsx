@@ -23,7 +23,7 @@ export default function CccMockTestPage() {
         className="mb-5"
       />
 
-      <PageHeader
+      <PageHeader icon="Timer" tone="rose"
         eyebrow="CCC · Course on Computer Concepts"
         title="Mock test"
         hindiTitle="मॉक टेस्ट"

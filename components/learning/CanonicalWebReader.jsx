@@ -415,7 +415,7 @@ export default function CanonicalWebReader({
 
       <Breadcrumbs items={crumbs} className="mb-5" />
 
-      <PageHeader
+      <PageHeader icon="BookOpen" tone="sky"
         eyebrow={[courseShortName, courseCode].filter(Boolean).join(' · ')}
         title={title}
         hindiTitle={hindiTitle}

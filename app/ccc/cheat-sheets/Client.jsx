@@ -184,7 +184,7 @@ export default function CccCheatSheetsClient() {
         className="mb-5 no-print"
       />
 
-      <PageHeader
+      <PageHeader icon="FileText" tone="teal"
         eyebrow="CCC · Revision"
         title="Cheat sheets"
         hindiTitle="चीट शीट्स"

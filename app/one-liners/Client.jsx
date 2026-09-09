@@ -143,7 +143,7 @@ export default function OneLinersClient() {
     <div className="shell py-8 sm:py-10">
       <Breadcrumbs items={[{ label: 'One-liners' }]} className="mb-5 no-print" />
 
-      <PageHeader
+      <PageHeader icon="Zap" tone="amber"
         eyebrow="O Level · Revision"
         title="One-liners"
         hindiTitle="वन-लाइनर तथ्य"

@@ -11,7 +11,10 @@ import {
   PageHeader,
   Panel,
   SectionHeading,
+  IconTile,
+  ModuleIcon,
 } from '@/components/ui';
+import { moduleVisual } from '@/lib/navigation';
 import { LastScore } from '@/components/mcq/QuizCard';
 import { cccChaptersData } from '@/data/cccSyllabusData';
 import { cccMcqsData } from '@/data/cccMcqsData';
@@ -47,6 +50,8 @@ export default function CccMcqsHubPage() {
       />
 
       <PageHeader
+        icon={ListChecks}
+        tone="amber"
         eyebrow="CCC · Course on Computer Concepts"
         title="MCQ practice"
         hindiTitle="बहुविकल्पीय प्रश्न अभ्यास"
@@ -103,14 +108,15 @@ export default function CccMcqsHubPage() {
                 const body = (
                   <>
                     <div className="flex items-start justify-between gap-3">
-                      <p className="eyebrow">Chapter {chapter.label}</p>
+                      <IconTile tone={moduleVisual('ccc', chapter.label).tone} icon={<ModuleIcon name={moduleVisual('ccc', chapter.label).icon} />} />
                       {chapter.count > 0 ? (
                         <Badge tone="neutral" className="tabular-nums">{chapter.count} questions</Badge>
                       ) : (
                         <Badge tone="neutral">Coming soon</Badge>
                       )}
                     </div>
-                    <h3 className="mt-2 text-h4 font-semibold text-ink">{chapter.title}</h3>
+                    <p className="mt-4 eyebrow text-accent">Chapter {chapter.label}</p>
+                    <h3 className="mt-1 text-h4 font-bold text-ink">{chapter.title}</h3>
                     {chapter.hindiTitle ? (
                       <p className="mt-0.5 text-sm text-hindi hindi-text" lang="hi">{chapter.hindiTitle}</p>
                     ) : null}
@@ -151,8 +157,8 @@ export default function CccMcqsHubPage() {
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <li>
               <CardLink href="/ccc/mcqs/all" className="h-full p-5">
-                <ListChecks className="w-5 h-5 text-ink-3" aria-hidden="true" />
-                <h3 className="mt-3 text-h4 font-semibold text-ink">All {total} questions</h3>
+                <span className="icon-tile tone-violet"><ListChecks className="w-5 h-5" aria-hidden="true" /></span>
+                <h3 className="mt-3 text-h4 font-bold text-ink">All {total} questions</h3>
                 <p className="mt-1.5 text-base text-ink-2 leading-relaxed">
                   Every chapter in one set, with a search box and a chapter filter. Untimed.
                 </p>
@@ -164,8 +170,8 @@ export default function CccMcqsHubPage() {
             </li>
             <li>
               <CardLink href="/ccc/mock-test" className="h-full p-5">
-                <Timer className="w-5 h-5 text-ink-3" aria-hidden="true" />
-                <h3 className="mt-3 text-h4 font-semibold text-ink">Mock test</h3>
+                <span className="icon-tile tone-rose"><Timer className="w-5 h-5" aria-hidden="true" /></span>
+                <h3 className="mt-3 text-h4 font-bold text-ink">Mock test</h3>
                 <p className="mt-1.5 text-base text-ink-2 leading-relaxed">
                   A timed paper across all nine chapters — one mark per question, no negative marking, qualify at
                   50%.

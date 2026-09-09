@@ -335,17 +335,17 @@ function OptionRow({ id, option, index, checked, tabbable, onSelect, onKeyDown }
       onClick={() => onSelect(option.id)}
       onKeyDown={(e) => onKeyDown(e, index)}
       className={cx(
-        'w-full min-h-[44px] flex items-start gap-3 p-3 sm:p-3.5 rounded-lg border text-left',
+        'w-full min-h-[44px] flex items-start gap-3 p-3 sm:p-3.5 rounded-xl border text-left',
         'transition-colors duration-fast',
         checked
-          ? 'bg-accent-soft border-accent-line'
-          : 'bg-surface border-line hover:border-line-strong hover:bg-sunken',
+          ? 'bg-accent-soft border-accent'
+          : 'bg-surface border-line hover:border-accent-line hover:bg-accent-soft/60',
       )}
     >
       <span
         className={cx(
-          'shrink-0 w-6 h-6 mt-px rounded-md grid place-items-center text-xs font-semibold',
-          checked ? 'bg-accent text-ink-inv' : 'bg-sunken border border-line text-ink-2',
+          'shrink-0 w-7 h-7 rounded-lg grid place-items-center text-xs font-bold',
+          checked ? 'bg-accent text-white' : 'bg-accent-soft text-accent',
         )}
         aria-hidden="true"
       >

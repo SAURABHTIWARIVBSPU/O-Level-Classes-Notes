@@ -127,7 +127,7 @@ export default function CccOneLinersClient() {
         className="mb-5 no-print"
       />
 
-      <PageHeader
+      <PageHeader icon="Zap" tone="amber"
         eyebrow="CCC · Revision"
         title="One-liners"
         hindiTitle="वन-लाइनर तथ्य"

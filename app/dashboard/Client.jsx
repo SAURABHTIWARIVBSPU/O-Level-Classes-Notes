@@ -29,6 +29,8 @@ import {
   EmptyState,
   Skeleton,
   MetaItem,
+  Ring,
+  IconTile,
 } from '@/components/ui';
 import { getModules, getCourseTopics } from '@/lib/navigation';
 import { useProgress } from '@/lib/progressContext';
@@ -48,15 +50,18 @@ function accuracyTone(pct) {
 }
 
 /** One number, one plain-language line saying what it means. */
-function Stat({ label, value, suffix, meaning }) {
+function Stat({ label, value, suffix, meaning, icon, tone = 'violet' }) {
   return (
-    <div>
+    <div className="flex gap-4">
+      {icon ? <IconTile icon={icon} tone={tone} /> : null}
+      <div className="min-w-0">
       <p className="eyebrow">{label}</p>
-      <p className="mt-1.5 text-h2 font-semibold text-ink tabular-nums">
+      <p className="mt-1.5 text-h2 font-bold text-ink tabular-nums">
         {value}
         {suffix ? <span className="ml-1 text-base font-medium text-ink-3">{suffix}</span> : null}
       </p>
       <p className="mt-1.5 text-sm text-ink-3 leading-relaxed">{meaning}</p>
+      </div>
     </div>
   );
 }
@@ -183,7 +188,7 @@ export default function DashboardClient() {
   if (!isLoaded) {
     return (
       <div className="shell shell-wide py-8 sm:py-10">
-        <PageHeader
+        <PageHeader icon="BarChart3" tone="violet"
           eyebrow="Your progress"
           title="Dashboard"
           description="Reading your saved progress from this browser…"
@@ -220,7 +225,7 @@ export default function DashboardClient() {
     return (
       <div className="shell shell-wide py-8 sm:py-10">
         <Breadcrumbs className="mb-5" items={[{ label: 'Progress' }]} />
-        <PageHeader
+        <PageHeader icon="BarChart3" tone="violet"
           eyebrow="Your progress"
           title="Dashboard"
           hindiTitle="आपकी प्रगति"
@@ -280,7 +285,7 @@ export default function DashboardClient() {
     <div className="shell shell-wide py-8 sm:py-10">
       <Breadcrumbs className="mb-5" items={[{ label: 'Progress' }]} />
 
-      <PageHeader
+      <PageHeader icon="BarChart3" tone="violet"
         eyebrow="Your progress"
         title="Dashboard"
         hindiTitle="आपकी प्रगति"
@@ -308,15 +313,18 @@ export default function DashboardClient() {
           <h2 id="continue-heading" className="sr-only">
             Continue studying
           </h2>
-          <div className="rounded-xl border border-accent-line bg-accent-soft p-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="min-w-0">
-              <p className="eyebrow text-accent-ink">
+          <div className="cta-band p-5 sm:p-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0 flex items-center gap-4">
+              <Ring value={overallPct} size="4rem" className="shrink-0 [--c-surface:58_40_170] [--ring-fill:255_196_0] [--ring-track:255_255_255/0.25] text-white" />
+              <div className="min-w-0">
+              <p className="eyebrow text-white/80">
                 {nextUp.resumed ? 'Continue where you left off' : 'Next topic in the syllabus'}
               </p>
-              <p className="mt-1 text-h3 font-semibold text-ink truncate">{nextUp.title}</p>
-              <p className="mt-0.5 text-sm text-ink-2">{nextUp.context}</p>
+              <p className="mt-1 text-h3 font-bold text-white truncate">{nextUp.title}</p>
+              <p className="mt-0.5 text-sm text-white/80">{nextUp.context}</p>
+              </div>
             </div>
-            <Button href={nextUp.href} variant="primary" size="lg" iconRight={ArrowRight} className="shrink-0">
+            <Button href={nextUp.href} variant="highlight" size="lg" iconRight={ArrowRight} className="shrink-0">
               {nextUp.resumed ? 'Resume' : 'Start'}
             </Button>
           </div>
@@ -346,17 +354,23 @@ export default function DashboardClient() {
         <Panel className="p-5 sm:p-6">
           <div className="grid gap-6 sm:grid-cols-3">
             <Stat
+              icon={Target}
+              tone="violet"
               label="Syllabus covered"
               value={`${overallPct}%`}
               meaning={`You have marked ${doneCount} of the ${totalTopics} O Level topics as done.`}
             />
             <Stat
+              icon={CheckCircle2}
+              tone="mint"
               label="Topics done"
               value={doneCount}
               suffix={`/ ${totalTopics}`}
               meaning="Tick “mark as done” at the end of a topic page to move this."
             />
             <Stat
+              icon={Flame}
+              tone="rose"
               label="Day streak"
               value={streak}
               suffix={streak === 1 ? 'day' : 'days'}

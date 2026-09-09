@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  Search, Menu, X, Sun, Moon, ChevronDown, Check, Languages, GraduationCap,
+  Search, Menu, X, Sun, Moon, ChevronDown, Check, Languages, GraduationCap, Sparkles,
 } from 'lucide-react';
 
 import { useTheme } from '@/lib/themeContext';
@@ -48,8 +48,8 @@ function NavMenu({ group, pathname }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="true"
-        className={`inline-flex items-center gap-1 h-8 px-2.5 rounded-lg text-sm font-medium transition-colors ${
-          anyActive ? 'text-ink bg-sunken' : 'text-ink-2 hover:text-ink hover:bg-sunken'
+        className={`inline-flex items-center gap-1 h-9 px-3 rounded-full text-sm font-semibold transition-colors ${
+          anyActive ? 'text-accent bg-accent-soft' : 'text-ink-2 hover:text-accent hover:bg-accent-soft'
         }`}
       >
         {group.label}
@@ -58,15 +58,15 @@ function NavMenu({ group, pathname }) {
 
       {open ? (
         <div className="absolute left-0 top-full pt-1.5 z-header">
-          <div className="w-72 rounded-xl border border-line bg-overlay shadow-e3 p-1.5 animate-fade-in">
+          <div className="w-80 rounded-2xl border border-line bg-overlay shadow-e3 p-2 animate-fade-in">
             {group.items.map((item) => {
               const active = isActivePath(pathname, item.href, item.match);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`block px-2.5 py-2 rounded-lg transition-colors ${
-                    active ? 'bg-accent-soft' : 'hover:bg-sunken'
+                  className={`block px-3 py-2.5 rounded-xl transition-colors ${
+                    active ? 'bg-accent-soft' : 'hover:bg-accent-soft/60'
                   }`}
                 >
                   <span className={`block text-base font-medium ${active ? 'text-accent' : 'text-ink'}`}>
@@ -105,10 +105,10 @@ function CourseSwitcher({ course, pathname }) {
         aria-expanded={open}
         aria-haspopup="listbox"
         aria-label={`Current course: ${course.name}. Change course`}
-        className="inline-flex items-center gap-1.5 h-8 pl-2 pr-1.5 rounded-lg border border-line bg-surface hover:border-line-strong transition-colors"
+        className="inline-flex items-center gap-1.5 h-9 pl-2.5 pr-2 rounded-full border border-line bg-sunken hover:border-accent-line hover:bg-accent-soft transition-colors"
       >
         <span
-          className="w-1.5 h-1.5 rounded-full shrink-0"
+          className="w-2 h-2 rounded-full shrink-0"
           style={{ background: `rgb(var(${course.accentVar}))` }}
           aria-hidden="true"
         />
@@ -117,7 +117,7 @@ function CourseSwitcher({ course, pathname }) {
       </button>
 
       {open ? (
-        <div className="absolute left-0 top-full mt-1.5 w-[19rem] rounded-xl border border-line bg-overlay shadow-e3 p-1.5 z-header animate-fade-in" role="listbox">
+        <div className="absolute left-0 top-full mt-1.5 w-[19rem] rounded-2xl border border-line bg-overlay shadow-e3 p-2 z-header animate-fade-in" role="listbox">
           {Object.values(COURSES).map((c) => {
             const active = c.key === course.key;
             return (
@@ -253,39 +253,42 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-header bg-surface/95 supports-[backdrop-filter]:bg-surface/85 backdrop-blur-sm border-b border-line no-print">
+      <header className="sticky top-0 z-header bg-surface/95 supports-[backdrop-filter]:bg-surface/85 backdrop-blur-md border-b border-line shadow-e1 no-print">
         <div className="shell shell-wide flex items-center gap-3 h-[var(--header-h)]">
 
           {/* Brand + course */}
           <div className="flex items-center gap-2.5 min-w-0">
             <Link href={course.home} className="flex items-center gap-2 shrink-0 group" aria-label={`${course.fullName} home`}>
-              <span className="w-7 h-7 rounded-lg bg-ink grid place-items-center shrink-0">
-                <GraduationCap className="w-4 h-4 text-ink-inv" aria-hidden="true" />
+              <span className="w-9 h-9 rounded-xl bg-accent grid place-items-center shrink-0 shadow-e1">
+                <GraduationCap className="w-5 h-5 text-white" aria-hidden="true" />
               </span>
-              <span className="hidden sm:block text-base font-semibold text-ink tracking-tight">NIELIT</span>
+              <span className="hidden sm:flex flex-col leading-none">
+                <span className="text-base font-bold text-ink tracking-tight">NIELIT<span className="text-accent">Learn</span></span>
+                <span className="text-2xs font-semibold text-ink-3 tracking-wide uppercase mt-0.5">O Level · CCC</span>
+              </span>
             </Link>
-            <span className="hidden sm:block w-px h-5 bg-line" aria-hidden="true" />
+            <span className="hidden sm:block w-px h-6 bg-line mx-0.5" aria-hidden="true" />
             <CourseSwitcher course={course} pathname={pathname} />
           </div>
 
           {/* Primary nav */}
-          <nav className="hidden lg:flex items-center gap-0.5 ml-2" aria-label="Main">
+          <nav className="hidden lg:flex items-center gap-0.5 ml-1" aria-label="Main">
             {nav.map((group) => (
               <NavMenu key={group.label} group={group} pathname={pathname} />
             ))}
           </nav>
 
           {/* Utilities */}
-          <div className="ml-auto flex items-center gap-1">
+          <div className="ml-auto flex items-center gap-1.5">
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="hidden sm:flex items-center gap-2 h-8 pl-2.5 pr-1.5 rounded-lg border border-line bg-sunken text-ink-3 hover:border-line-strong hover:text-ink-2 transition-colors"
+              className="hidden sm:flex items-center gap-2 h-9 pl-3 pr-1.5 md:w-56 xl:w-72 rounded-full border border-line bg-sunken text-ink-3 hover:border-accent-line hover:bg-accent-soft/60 hover:text-ink-2 transition-colors"
               aria-label="Search (press Control K)"
             >
-              <Search className="w-3.5 h-3.5" aria-hidden="true" />
-              <span className="text-sm hidden md:inline">Search</span>
-              <kbd className="hidden md:inline-flex items-center h-5 px-1.5 rounded border border-line bg-surface font-mono text-2xs text-ink-4">⌘K</kbd>
+              <Search className="w-4 h-4 text-accent" aria-hidden="true" />
+              <span className="text-sm hidden md:inline flex-1 text-left">Search topics, MCQs…</span>
+              <kbd className="hidden md:inline-flex items-center h-5 px-1.5 rounded-md border border-line bg-surface font-mono text-2xs text-ink-4">⌘K</kbd>
             </button>
 
             <button
@@ -299,6 +302,14 @@ export default function Navbar() {
 
             <LanguageToggle />
             <ThemeToggle />
+
+            <Link
+              href={course.key === 'ccc' ? '/ccc/chapters/chapter-1' : '/units/unit-1'}
+              className="hidden lg:inline-flex btn btn-primary btn-sm rounded-full ml-1"
+            >
+              <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
+              Start learning
+            </Link>
 
             <button
               type="button"

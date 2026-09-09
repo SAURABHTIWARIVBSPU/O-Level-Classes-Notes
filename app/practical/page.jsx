@@ -77,7 +77,7 @@ export default function PracticalPage() {
     <div className="shell py-8 sm:py-10">
       <Breadcrumbs className="mb-5" items={[{ label: 'Practice', href: '/syllabus' }, { label: 'Practical lab' }]} />
 
-      <PageHeader
+      <PageHeader icon="ClipboardList" tone="mint"
         eyebrow="Practice"
         title="Practical lab exercises"
         hindiTitle="प्रैक्टिकल लैब अभ्यास"
