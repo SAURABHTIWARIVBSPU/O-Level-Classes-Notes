@@ -22,19 +22,40 @@ export default function CourseCard({
   icon = 'BookOpen', // ModuleIcon name
   badge,            // e.g. "Free" / "25 marks"
   cta = 'Start',
+  image,            // optional 16:9 banner image path
   className = '',
 }) {
   return (
     <Link href={href} className={`card-link group h-full flex flex-col overflow-hidden ${className}`}>
-      <div className="cover-16x9 relative">
-        <div className="absolute inset-0 flex items-center justify-between px-5">
-          <span className="text-sm font-semibold text-accent">{eyebrow}</span>
-          <span className="w-12 h-12 rounded-xl bg-surface border border-accent-line grid place-items-center text-accent">
-            <ModuleIcon name={icon} className="w-6 h-6" />
-          </span>
-        </div>
+      <div className="cover-16x9 relative overflow-hidden bg-sunken">
+        {image ? (
+          <>
+            <img
+              src={image}
+              alt={title || eyebrow || 'Course cover'}
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-ink/10 group-hover:bg-transparent transition-colors" />
+            <div className="absolute inset-0 flex items-start justify-between p-4">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-surface/95 border border-line text-xs font-semibold text-ink shadow-e1">
+                {eyebrow}
+              </span>
+              <span className="w-10 h-10 rounded-lg bg-surface/95 border border-line grid place-items-center text-accent shadow-e1">
+                <ModuleIcon name={icon} className="w-5 h-5" />
+              </span>
+            </div>
+          </>
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-between px-5">
+            <span className="text-sm font-semibold text-accent">{eyebrow}</span>
+            <span className="w-12 h-12 rounded-xl bg-surface border border-accent-line grid place-items-center text-accent">
+              <ModuleIcon name={icon} className="w-6 h-6" />
+            </span>
+          </div>
+        )}
         {badge ? (
-          <span className="absolute left-4 bottom-3 inline-flex items-center h-6 px-2 rounded-md bg-surface border border-line text-xs font-semibold text-ink">
+          <span className="absolute left-4 bottom-3 inline-flex items-center h-6 px-2 rounded-md bg-surface border border-line text-xs font-semibold text-ink shadow-e1">
             {badge}
           </span>
         ) : null}

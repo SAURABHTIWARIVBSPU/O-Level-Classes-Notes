@@ -43,23 +43,62 @@ export default function CCCLandingPage() {
     <div>
       {/* ------------------------------------------------------------- hero */}
       <section className="border-b border-line">
-        <div className="shell shell-wide py-12 lg:py-16 max-w-3xl">
-          <p className="eyebrow text-ccc">{course.module} · {course.level} · Free</p>
-          <h1 className="mt-2 text-display font-semibold text-ink">Course on Computer Concepts (CCC)</h1>
-          <p className="mt-1 text-lead text-hindi hindi-text" lang="hi">{meta.hindiCourseName}</p>
-          <p className="mt-3 text-base sm:text-lead text-ink-2 max-w-measure-wide">
-            CCC is the starting course. If you have never used a computer for more than WhatsApp, this is written
-            for you — nine short chapters in English and हिन्दी, chapter-wise questions, and a mock test on the real
-            pattern: 100 questions, 90 minutes, pass at 50%.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-2">
-            <Link href="/ccc/chapters/chapter-1" className="btn btn-primary">Start Chapter 1</Link>
-            <Link href="/ccc/mock-test" className="btn btn-secondary">Take the mock test</Link>
-            <Link href="/ccc/syllabus" className="btn btn-ghost">Syllabus</Link>
+        <div className="shell shell-wide py-12 lg:py-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-7 min-w-0">
+            <p className="eyebrow text-ccc">{course.module} · {course.level} · Free</p>
+            <h1 className="mt-2 text-display font-semibold text-ink">Course on Computer Concepts (CCC)</h1>
+            <p className="mt-1 text-lead text-hindi hindi-text" lang="hi">{meta.hindiCourseName}</p>
+            <p className="mt-3 text-base sm:text-lead text-ink-2 max-w-measure-wide">
+              CCC is the starting course. If you have never used a computer for more than WhatsApp, this is written
+              for you — nine short chapters in English and हिन्दी, chapter-wise questions, and a mock test on the real
+              pattern: 100 questions, 90 minutes, pass at 50%.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              <Link href="/ccc/chapters/chapter-1" className="btn btn-primary">Start Chapter 1</Link>
+              <Link href="/ccc/mock-test" className="btn btn-secondary">Take the mock test</Link>
+              <Link href="/ccc/syllabus" className="btn btn-ghost">Syllabus</Link>
+            </div>
+            <p className="mt-4 text-sm text-ink-3">
+              {chapters.length} chapters · {topicCount} topics · {meta.durationTotalHours} hours · no entry requirement
+            </p>
           </div>
-          <p className="mt-4 text-sm text-ink-3">
-            {chapters.length} chapters · {topicCount} topics · {meta.durationTotalHours} hours · no entry requirement
-          </p>
+
+          <div className="lg:col-span-5 min-w-0">
+            <div className="panel overflow-hidden border border-line shadow-e3 bg-surface group">
+              <div className="px-5 py-3 border-b border-line bg-surface flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-accent" />
+                  <span className="text-xs font-semibold text-ink">CCC Computer Concepts & Digital Literacy</span>
+                </div>
+                <span className="text-2xs font-semibold px-2 py-0.5 rounded bg-accent-soft text-accent">9 Chapters</span>
+              </div>
+              <div className="relative aspect-[4/3] bg-sunken overflow-hidden">
+                <img
+                  src="/images/hero-ccc-concepts.jpg"
+                  alt="CCC Course on Computer Concepts curriculum visual"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-ink/5" />
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-2">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-surface/95 border border-line text-ink shadow-e1">
+                    Official Exam Pattern
+                  </span>
+                  <Link
+                    href="/ccc/mock-test"
+                    className="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-md bg-accent text-accent-ink hover:bg-accent-hover transition-colors shadow-e1"
+                  >
+                    100 Qs Mock Test →
+                  </Link>
+                </div>
+              </div>
+              <div className="p-4 bg-surface border-t border-line">
+                <div className="flex items-center justify-between text-xs text-ink-2">
+                  <span className="font-medium">Word · Calc · Impress · Cyber Safety</span>
+                  <span className="text-ink-3">Pass at 50%</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

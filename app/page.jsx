@@ -91,30 +91,45 @@ export default function HomePage() {
             <p className="mt-5 text-sm text-ink-2">Free · No sign-up · Progress saved in your browser</p>
           </div>
 
-          {/* Product preview — one real topic page, not an illustration */}
+          {/* Visual Hero Showcase */}
           <div className="lg:col-span-5 min-w-0">
-            <div className="panel overflow-hidden">
-              <div className="px-5 py-3 border-b border-line flex items-center justify-between">
-                <span className="text-sm font-semibold text-ink">Unit 04 · CSS Box Model</span>
-                <span className="text-xs text-ink-2">4 min read</span>
+            <div className="panel overflow-hidden border border-line shadow-e3 bg-surface group">
+              <div className="px-5 py-3 border-b border-line bg-surface flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-accent" />
+                  <span className="text-xs font-semibold text-ink">NIELIT Learning Interactive Platform</span>
+                </div>
+                <span className="text-2xs font-semibold px-2 py-0.5 rounded bg-accent-soft text-accent">M2-R5.1 & CCC</span>
               </div>
-              <div className="p-5 space-y-4">
-                <div>
-                  <p className="text-xs font-semibold text-ink-2 uppercase tracking-wide">Definition</p>
-                  <p className="mt-1 text-sm text-ink leading-relaxed">
-                    The CSS box model describes every element as a box made of content, padding, border and margin.
-                  </p>
+
+              <div className="relative aspect-[4/3] bg-sunken overflow-hidden">
+                <img
+                  src="/images/hero-web-design.jpg"
+                  alt="NIELIT O Level Web Designing and Publishing curriculum visual"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-ink/5" />
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-2">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-surface/95 border border-line text-ink shadow-e1">
+                    <BookOpen className="w-3.5 h-3.5 text-accent" aria-hidden="true" />
+                    Unit 04 · CSS Box Model
+                  </span>
+                  <Link
+                    href="/units/unit-4/topics/css-box-model"
+                    className="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-md bg-accent text-accent-ink hover:bg-accent-hover transition-colors shadow-e1"
+                  >
+                    Open topic →
+                  </Link>
                 </div>
-                <div>
-                  <p className="text-xs font-semibold text-ink-2 uppercase tracking-wide">In plain terms</p>
-                  <p className="mt-1 text-sm text-ink-2 leading-relaxed hindi-text" lang="hi">
-                    हर element एक डिब्बा है — अंदर content, उसके चारों ओर padding, फिर border, और बाहर margin।
-                  </p>
-                </div>
-                <pre className="rounded-lg bg-sunken border border-line p-3 font-mono text-xs text-ink leading-relaxed overflow-x-auto">{`.card {\n  padding: 16px;\n  border: 1px solid #e5e7eb;\n  margin: 24px 0;\n}`}</pre>
-                <div className="flex items-center justify-between pt-1">
-                  <span className="text-xs text-ink-2">Self-check · 2 questions</span>
-                  <Link href="/units/unit-4/topics/css-box-model" className="text-sm font-semibold text-accent hover:underline underline-offset-2">Open this topic →</Link>
+              </div>
+
+              <div className="p-4 bg-surface border-t border-line">
+                <div className="flex items-center justify-between text-xs text-ink-2">
+                  <span className="flex items-center gap-1.5 font-medium">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-ok" aria-hidden="true" />
+                    English + हिन्दी Bilingual Notes
+                  </span>
+                  <span className="text-ink-3">Live Code & Self-checks</span>
                 </div>
               </div>
             </div>
@@ -184,6 +199,7 @@ export default function HomePage() {
                 icon="Code2"
                 badge="Free"
                 cta="Start course"
+                image="/images/cover-olevel-course.jpg"
               />
             </div>
             <div className="col-span-12 sm:col-span-6 lg:col-span-4">
@@ -198,6 +214,7 @@ export default function HomePage() {
                 icon="Monitor"
                 badge="Free"
                 cta="Start course"
+                image="/images/cover-ccc-course.jpg"
               />
             </div>
             {featuredUnits.map((u) => (
