@@ -157,7 +157,7 @@ export default function CccMcqsHubPage() {
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <li>
               <CardLink href="/ccc/mcqs/all" className="h-full p-5">
-                <span className="icon-tile tone-violet"><ListChecks className="w-5 h-5" aria-hidden="true" /></span>
+                <ListChecks className="w-5 h-5 text-accent" aria-hidden="true" />
                 <h3 className="mt-3 text-h4 font-bold text-ink">All {total} questions</h3>
                 <p className="mt-1.5 text-base text-ink-2 leading-relaxed">
                   Every chapter in one set, with a search box and a chapter filter. Untimed.
@@ -170,7 +170,7 @@ export default function CccMcqsHubPage() {
             </li>
             <li>
               <CardLink href="/ccc/mock-test" className="h-full p-5">
-                <span className="icon-tile tone-rose"><Timer className="w-5 h-5" aria-hidden="true" /></span>
+                <Timer className="w-5 h-5 text-accent" aria-hidden="true" />
                 <h3 className="mt-3 text-h4 font-bold text-ink">Mock test</h3>
                 <p className="mt-1.5 text-base text-ink-2 leading-relaxed">
                   A timed paper across all nine chapters — one mark per question, no negative marking, qualify at

@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 
 import { useLanguage } from '@/lib/languageContext';
+import { CONTENT_UPDATED, readingTime } from '@/lib/navigation';
 import { useProgress } from '@/lib/progressContext';
 
 import MarkdownRenderer, { extractHeadings } from '@/components/common/MarkdownRenderer';
@@ -51,9 +52,8 @@ function boardTemplateFor(slug = '') {
 function Section({ id, title, hindiTitle, icon: Icon, children, className = '' }) {
   return (
     <section id={id} className={`scroll-mt-[calc(var(--header-h)+1.5rem)] ${className}`}>
-      <h2 className="flex items-center gap-2.5 text-h3 font-bold text-ink mb-3">
-        <span className="w-1 h-5 rounded-full bg-accent shrink-0" aria-hidden="true" />
-        {Icon ? <Icon className="w-[1.05rem] h-[1.05rem] text-accent shrink-0" aria-hidden="true" /> : null}
+      <h2 className="flex items-center gap-2 text-h2 font-bold text-ink mb-3 pb-1.5 border-b border-line">
+        {Icon ? <Icon className="w-[1.1rem] h-[1.1rem] text-accent shrink-0" aria-hidden="true" /> : null}
         {title}
         {hindiTitle ? (
           <span className="text-sm font-normal text-ink-4 hindi-text" lang="hi">{hindiTitle}</span>
@@ -139,60 +139,60 @@ export default function TopicContent({ topic, prevTopic, nextTopic, related = []
             />
 
             {/* Title block */}
-            <header className="hero-band rounded-3xl border border-accent-line/60 px-5 py-5 sm:px-7 sm:py-6 mb-6">
-              <div className="flex flex-wrap items-center gap-2 mb-3">
-                <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-accent text-white text-2xs font-bold uppercase tracking-wider">
-                  Unit {unitNumber}
-                </span>
-                <span className="text-xs font-semibold text-ink-3 truncate">{topic.unitTitle}</span>
-                {isCompleted ? <Badge tone="ok" icon={CheckCircle2}>Completed</Badge> : null}
-              </div>
-
-              <h1 className="text-h1 sm:text-display font-bold text-ink">{topic.title}</h1>
+            <header className="mb-7">
+              <p className="text-sm text-ink-3">
+                <Link href={`/units/${topic.unitSlug}`} className="font-semibold text-accent hover:underline underline-offset-2">
+                  Unit {unitNumber} · {topic.unitTitle}
+                </Link>
+              </p>
+              <h1 className="mt-1.5 text-h1 sm:text-display font-bold text-ink">{topic.title}</h1>
               {topic.hindiTitle ? (
-                <p className="mt-1.5 text-lead text-hindi hindi-text" lang="hi">{topic.hindiTitle}</p>
+                <p className="mt-1 text-lead text-hindi hindi-text" lang="hi">{topic.hindiTitle}</p>
               ) : null}
 
-              {/* Study actions — quiet, secondary to the content */}
-              <div className="mt-5 flex flex-wrap items-center gap-2">
-                <Button
-                  variant={isCompleted ? 'soft' : 'primary'}
-                  size="sm"
-                  icon={isCompleted ? CheckCircle2 : Circle}
-                  onClick={() => toggleTopicCompleted(topic.slug)}
-                  aria-pressed={isCompleted}
-                >
-                  {isCompleted ? 'Marked as done' : 'Mark as done'}
-                </Button>
+              <div className="mt-4 pt-3 border-t border-line flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-ink-3">
+                <span>Last updated: <span className="text-ink-2">{CONTENT_UPDATED}</span></span>
+                <span>{readingTime(topic)} min read</span>
+                {isCompleted ? <Badge tone="ok" icon={CheckCircle2}>Completed</Badge> : null}
 
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  icon={isSaved ? BookmarkCheck : Bookmark}
-                  onClick={() => toggleBookmark(topic.slug)}
-                  aria-pressed={isSaved}
-                >
-                  {isSaved ? 'Saved' : 'Save'}
-                </Button>
-
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  icon={Presentation}
-                  href={boardTemplate ? `/classroom?template=${boardTemplate}` : '/classroom'}
-                >
-                  Smartboard
-                </Button>
-
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  icon={Printer}
-                  className="hidden sm:inline-flex no-print"
-                  onClick={() => window.print()}
-                >
-                  Print
-                </Button>
+                <span className="ml-auto flex items-center gap-1">
+                  <Button
+                    variant={isCompleted ? 'soft' : 'primary'}
+                    size="sm"
+                    icon={isCompleted ? CheckCircle2 : Circle}
+                    onClick={() => toggleTopicCompleted(topic.slug)}
+                    aria-pressed={isCompleted}
+                  >
+                    {isCompleted ? 'Marked as done' : 'Mark as done'}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    icon={isSaved ? BookmarkCheck : Bookmark}
+                    onClick={() => toggleBookmark(topic.slug)}
+                    aria-pressed={isSaved}
+                  >
+                    {isSaved ? 'Saved' : 'Save'}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    icon={Presentation}
+                    href={boardTemplate ? `/classroom?template=${boardTemplate}` : '/classroom'}
+                    className="hidden sm:inline-flex"
+                  >
+                    Smartboard
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    icon={Printer}
+                    className="hidden sm:inline-flex no-print"
+                    onClick={() => window.print()}
+                  >
+                    Print
+                  </Button>
+                </span>
               </div>
             </header>
 
@@ -200,11 +200,11 @@ export default function TopicContent({ topic, prevTopic, nextTopic, related = []
             <TableOfContents items={tocItems} className="mb-6 lg:hidden" refreshKey={language} variant="mobile" />
 
             {/* ------------------------------------------------- the note */}
-            <article data-toc-root className="prose-flow max-w-measure">
+            <article data-toc-root className="prose-flow max-w-measure-wide">
 
               {/* Definition — the anchor of the page */}
               <Section id="definition" title="Definition">
-                <div className="rounded-2xl bg-accent-soft/60 border border-accent-line px-5 py-4 space-y-2">
+                <div className="rounded-md bg-sunken border-l-4 border-accent px-5 py-4 space-y-2">
                   {showEnglish && topic.definitionEnglish ? (
                     <p className="text-prose text-ink leading-relaxed">{topic.definitionEnglish}</p>
                   ) : null}
@@ -338,27 +338,27 @@ export default function TopicContent({ topic, prevTopic, nextTopic, related = []
             </article>
 
             {/* --------------------------------------------- after the note */}
-            <div className="mt-12 max-w-measure space-y-8 no-print">
+            <div className="mt-12 max-w-measure-wide space-y-8 no-print">
               <TopicNotesEditor topicSlug={topic.slug} topicTitle={topic.title} />
 
               {related.length ? (
                 <section>
-                  <h2 className="text-h3 font-semibold text-ink mb-3 flex items-center gap-2">
-                    <Compass className="w-[1.05rem] h-[1.05rem] text-ink-3" aria-hidden="true" />
-                    Related topics
+                  <h2 className="text-h2 font-bold text-ink mb-3 pb-1.5 border-b border-line flex items-center gap-2">
+                    <Compass className="w-[1.1rem] h-[1.1rem] text-accent" aria-hidden="true" />
+                    Similar reads
                   </h2>
-                  <ul className="grid gap-2 sm:grid-cols-2">
+                  <ul className="divide-y divide-line">
                     {related.map((r) => (
                       <li key={r.slug}>
                         <Link
                           href={`/units/${r.unitSlug}/topics/${r.slug}`}
-                          className="card-link group flex items-center gap-2 p-3"
+                          className="group flex items-center gap-3 py-2.5"
                         >
                           <span className="min-w-0 flex-1">
-                            <span className="block text-base text-ink leading-snug truncate">{r.title}</span>
-                            <span className="block text-xs text-ink-4">Unit {String(r.unit).padStart(2, '0')}</span>
+                            <span className="block text-base font-medium text-ink group-hover:text-accent leading-snug">{r.title}</span>
+                            <span className="block text-xs text-ink-3">Unit {String(r.unit).padStart(2, '0')}</span>
                           </span>
-                          <ArrowRight className="w-4 h-4 text-ink-4 group-hover:text-accent transition-colors shrink-0" aria-hidden="true" />
+                          <ArrowRight className="w-4 h-4 text-ink-4 group-hover:text-accent shrink-0" aria-hidden="true" />
                         </Link>
                       </li>
                     ))}

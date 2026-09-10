@@ -157,7 +157,7 @@ export function PageHeader({
   meta,
   icon,
   tone = 'violet',
-  band = true,
+  band = false,
   className = '',
 }) {
   const inner = (
@@ -170,11 +170,7 @@ export function PageHeader({
             </span>
           ) : null}
           <div className="min-w-0">
-            {eyebrow ? (
-              <p className="inline-flex items-center gap-2 mb-2.5 px-2.5 h-6 rounded-full bg-surface border border-accent-line text-2xs font-bold uppercase tracking-wider text-accent">
-                {eyebrow}
-              </p>
-            ) : null}
+            {eyebrow ? <p className="eyebrow text-accent mb-2">{eyebrow}</p> : null}
             <h1 className="text-h1 sm:text-display font-bold text-ink">{title}</h1>
             {hindiTitle ? (
               <p className="mt-1.5 text-lead text-hindi hindi-text" lang="hi">{hindiTitle}</p>
@@ -192,12 +188,12 @@ export function PageHeader({
 
   if (band) {
     return (
-      <header className={cx('hero-band rounded-3xl border border-accent-line/60 px-5 py-6 sm:px-8 sm:py-8 mb-8', className)}>
+      <header className={cx('hero-band rounded-lg border border-line px-5 py-6 sm:px-8 sm:py-8 mb-8', className)}>
         {inner}
       </header>
     );
   }
-  return <header className={cx('pb-6 mb-8 border-b border-line', className)}>{inner}</header>;
+  return <header className={cx('pb-5 mb-8 border-b-2 border-ink', className)}>{inner}</header>;
 }
 
 /* ---------------------------------------------------------- Section heading */
@@ -224,9 +220,7 @@ export function StatTile({ label, value, hint, icon, tone = 'violet', className 
     <div className={cx('panel p-4 sm:p-5', className)}>
       <div className="flex items-start justify-between gap-3">
         <p className="eyebrow">{label}</p>
-        {icon ? (
-          <span className={cx('icon-tile icon-tile-sm', `tone-${tone}`)}>{renderIcon(icon, 'w-4 h-4')}</span>
-        ) : null}
+        {icon ? renderIcon(icon, 'w-4 h-4 text-ink-4 shrink-0') : null}
       </div>
       <p className="mt-2 text-h2 font-bold text-ink tabular-nums">{value}</p>
       {hint ? <p className="mt-0.5 text-xs text-ink-3">{hint}</p> : null}

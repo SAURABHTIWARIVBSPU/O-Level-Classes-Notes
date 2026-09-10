@@ -158,7 +158,7 @@ export default function McqsHubPage() {
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <li>
               <CardLink href="/mcqs/all" className="h-full p-5">
-                <span className="icon-tile tone-violet"><ListChecks className="w-5 h-5" aria-hidden="true" /></span>
+                <ListChecks className="w-5 h-5 text-accent" aria-hidden="true" />
                 <h3 className="mt-3 text-h4 font-bold text-ink">All {total} questions</h3>
                 <p className="mt-1.5 text-base text-ink-2 leading-relaxed">
                   The full bank in one place, with search and filters by unit and difficulty. Untimed.
@@ -171,7 +171,7 @@ export default function McqsHubPage() {
             </li>
             <li>
               <CardLink href="/mock-test" className="h-full p-5">
-                <span className="icon-tile tone-rose"><Timer className="w-5 h-5" aria-hidden="true" /></span>
+                <Timer className="w-5 h-5 text-accent" aria-hidden="true" />
                 <h3 className="mt-3 text-h4 font-bold text-ink">Mock test</h3>
                 <p className="mt-1.5 text-base text-ink-2 leading-relaxed">
                   A timed paper on the official blueprint: 100 questions in 90 minutes, 1 mark each, no negative

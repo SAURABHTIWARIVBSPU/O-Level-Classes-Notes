@@ -7,19 +7,8 @@ import { FullscreenProvider } from '@/lib/fullscreenContext';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 
-/*
- * Fonts are loaded with a preconnected <link> rather than next/font.
- * next/font fetches at BUILD time, so a machine without network access to
- * Google Fonts cannot build the site at all. A link tag degrades to the
- * fallback stacks below instead — and Devanagari still renders correctly on
- * Windows via Nirmala UI. Three families, six weights total, display=swap.
- */
-const FONT_HREF =
-  'https://fonts.googleapis.com/css2' +
-  '?family=Inter:wght@400;500;600;700' +
-  '&family=Noto+Sans+Devanagari:wght@400;500;600;700' +
-  '&family=JetBrains+Mono:wght@400;500' +
-  '&display=swap';
+/* Fonts are self-hosted from /public/fonts (see globals.css @font-face) —
+   the site builds and renders identically with or without Internet access. */
 
 export const metadata = {
   metadataBase: new URL('https://olevel-notes.local'),
@@ -52,7 +41,7 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#FAFAFB' },
+    { media: '(prefers-color-scheme: light)', color: '#212529' },
     { media: '(prefers-color-scheme: dark)', color: '#0D1117' },
   ],
 };
@@ -73,9 +62,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="stylesheet" href={FONT_HREF} />
+        <link rel="preload" href="/fonts/InterVariable.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
       </head>
       <body className="min-h-screen bg-ground text-ink antialiased flex flex-col">

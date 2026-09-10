@@ -315,7 +315,7 @@ export default function DashboardClient() {
           </h2>
           <div className="cta-band p-5 sm:p-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="min-w-0 flex items-center gap-4">
-              <Ring value={overallPct} size="4rem" className="shrink-0 [--c-surface:58_40_170] [--ring-fill:255_196_0] [--ring-track:255_255_255/0.25] text-white" />
+              <Ring value={overallPct} size="4rem" className="shrink-0 [--c-surface:33_37_41] [--ring-fill:82_196_118] [--ring-track:255_255_255/0.18] text-white" />
               <div className="min-w-0">
               <p className="eyebrow text-white/80">
                 {nextUp.resumed ? 'Continue where you left off' : 'Next topic in the syllabus'}

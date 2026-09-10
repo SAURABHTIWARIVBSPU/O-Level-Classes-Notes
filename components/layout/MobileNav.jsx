@@ -83,10 +83,10 @@ export default function MobileNav({ open, onClose, course, nav, modules, pathnam
         {/* Header */}
         <div className="flex items-center justify-between gap-2 h-[var(--header-h)] px-4 border-b border-line shrink-0">
           <span className="flex items-center gap-2">
-            <span className="w-9 h-9 rounded-xl bg-accent grid place-items-center">
-              <GraduationCap className="w-5 h-5 text-white" aria-hidden="true" />
+            <span className="w-8 h-8 rounded-md bg-accent grid place-items-center">
+              <GraduationCap className="w-[18px] h-[18px] text-white" aria-hidden="true" />
             </span>
-            <span className="text-base font-bold text-ink">NIELIT<span className="text-accent">Learn</span></span>
+            <span className="text-base font-bold text-ink">NIELIT<span className="text-accent">Notes</span></span>
           </span>
           <button type="button" onClick={onClose} className="btn btn-ghost btn-sm btn-icon" aria-label="Close menu">
             <X className="w-4 h-4" />
@@ -97,7 +97,7 @@ export default function MobileNav({ open, onClose, course, nav, modules, pathnam
           <div className="p-3 border-b border-line">
             <Link
               href={course.key === 'ccc' ? '/ccc/chapters/chapter-1' : '/units/unit-1'}
-              className="btn btn-primary w-full rounded-xl"
+              className="btn btn-primary w-full"
             >
               Start learning
             </Link>

@@ -1,30 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
-import {
-  ArrowRight,
-  BookOpen,
-  Clock,
-  Columns3,
-  FileText,
-  GraduationCap,
-  HelpCircle,
-  Layers,
-  ListChecks,
-  Timer,
-} from 'lucide-react';
+import { ArrowRight, ChevronRight, Clock } from 'lucide-react';
 
-import {
-  Badge,
-  Button,
-  CardLink,
-  MetaItem,
-  PageHeader,
-  SectionHeading,
-  StatTile,
-  IconTile,
-  ModuleIcon,
-} from '@/components/ui';
-import { COURSES, getCourseMeta, getModules, moduleVisual } from '@/lib/navigation';
+import { COURSES, getCourseMeta, getModules } from '@/lib/navigation';
+import { cccDifferencesData } from '@/data/cccDifferencesData';
+import { cccOneLinersData } from '@/data/cccOneLinersData';
+import { cccMcqsData } from '@/data/cccMcqsData';
 
 export const metadata = {
   title: 'CCC — Course on Computer Concepts',
@@ -32,68 +13,19 @@ export const metadata = {
     'Start computers from zero. The NIELIT CCC course in nine chapters — bilingual notes in English and हिन्दी, chapter questions, and a 100-question mock test. No prior experience needed.',
 };
 
-const STEPS = [
-  {
-    title: 'Read Chapter 1 first',
-    body:
-      'It starts at the very beginning — what a computer is, what the parts are called. Each topic is a short page you can finish in one sitting.',
-    href: '/ccc/chapters/chapter-1',
-    linkLabel: 'Open Chapter 1',
-  },
-  {
-    title: 'Answer the chapter questions',
-    body:
-      'After a chapter, work through its MCQs. Every answer comes with an explanation, so a wrong answer still teaches you something.',
-    href: '/ccc/mcqs',
-    linkLabel: 'Go to chapter questions',
-  },
-  {
-    title: 'Sit a full mock test',
-    body:
-      'When four or five chapters are behind you, take the timed paper: 100 questions in 90 minutes, exactly like the real exam.',
-    href: '/ccc/mock-test',
-    linkLabel: 'Start a mock test',
-  },
-];
-
-const TOOLS = [
-  {
-    href: '/ccc/mcqs',
-    icon: HelpCircle,
-    title: 'Chapter questions',
-    body: 'Chapter-wise MCQs and true/false, each with a worked explanation.',
-  },
-  {
-    href: '/ccc/mock-test',
-    icon: GraduationCap,
-    title: 'Mock test',
-    body: '100 questions, 90 minutes, no negative marking — the real pattern.',
-  },
-  {
-    href: '/ccc/notes',
-    icon: FileText,
-    title: 'Full chapter notes',
-    body: 'The long-form reader plus downloadable PDFs, English and हिन्दी.',
-  },
-  {
-    href: '/ccc/one-liners',
-    icon: ListChecks,
-    title: 'One-liners',
-    body: 'High-yield single facts for the last read-through before the exam.',
-  },
-  {
-    href: '/ccc/differences',
-    icon: Columns3,
-    title: 'Differences',
-    body: 'RAM vs ROM, LAN vs WAN — side by side, the way the paper asks them.',
-  },
-  {
-    href: '/ccc/cheat-sheets',
-    icon: BookOpen,
-    title: 'Cheat sheets',
-    body: 'LibreOffice shortcuts and quick tables you can keep open while practising.',
-  },
-];
+function SectionTitle({ id, children, action }) {
+  return (
+    <div className="flex items-end justify-between gap-4 pb-2.5 mb-4 border-b-2 border-ink">
+      <h2 id={id} className="text-h2 font-bold text-ink">{children}</h2>
+      {action ? (
+        <Link href={action.href} className="shrink-0 inline-flex items-center gap-1 text-sm font-semibold text-accent hover:underline underline-offset-2">
+          {action.label}
+          <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+        </Link>
+      ) : null}
+    </div>
+  );
+}
 
 export default function CCCLandingPage() {
   const course = COURSES.ccc;
@@ -101,257 +33,189 @@ export default function CCCLandingPage() {
   const chapters = getModules('ccc');
   const topicCount = chapters.reduce((sum, c) => sum + (c.topics ? c.topics.length : 0), 0);
 
-  const faqs = [
-    {
-      q: 'Do I need to know anything about computers first?',
-      a: meta.eligibility
-        ? `No. ${meta.eligibility} Chapter 1 starts with what a computer is and what each part does.`
-        : 'No. Chapter 1 starts with what a computer is and what each part does.',
-    },
-    {
-      q: 'How long does the course take?',
-      a: `${meta.durationTotalHours} hours in the official curriculum — ${meta.theoryHours} hours of theory and ${meta.practicalHours} hours of practical work across ${chapters.length} chapters.`,
-    },
-    {
-      q: 'What does the exam look like?',
-      a: meta.examPattern,
-    },
-    {
-      q: 'What counts as a pass?',
-      a: meta.passingCriteria,
-    },
-    {
-      q: 'Which software do I practise on?',
-      a: `${meta.practicalEnvironment} It is free to download, so you can practise the same software at home.`,
-    },
-    {
-      q: 'Can I read everything in Hindi?',
-      a: 'Yes. Titles, definitions and the plain-language explanations are bilingual, and the full chapter notes have a हिन्दी edition. Use the language control in the header to show English only, हिन्दी only, or both.',
-    },
-  ];
+  const mcqByChapter = new Map();
+  for (const q of cccMcqsData || []) {
+    mcqByChapter.set(q.chapterSlug, (mcqByChapter.get(q.chapterSlug) || 0) + 1);
+  }
 
   return (
-    <div className="shell py-8 sm:py-10">
+    <div>
       {/* ------------------------------------------------------------- hero */}
-      <PageHeader
-        icon={GraduationCap}
-        tone="teal"
-        eyebrow={`${course.module} · ${course.level} · Free`}
-        title="Learn computers from zero"
-        hindiTitle={meta.hindiCourseName}
-        description="CCC is the starting course. If you have never used a computer for more than WhatsApp, this is written for you — nine short chapters, in English and हिन्दी, ending in a certificate exam you can pass with 50%."
-        actions={
-          <>
-            <Button variant="primary" size="lg" href="/ccc/chapters/chapter-1" iconRight={ArrowRight}>
-              Start Chapter 1
-            </Button>
-            <Button variant="secondary" size="lg" href="/ccc/syllabus">
-              See the syllabus
-            </Button>
-          </>
-        }
-        meta={
-          <>
-            <MetaItem icon={Layers}>
-              {chapters.length} chapters · {topicCount} topics
-            </MetaItem>
-            <MetaItem icon={Clock}>{meta.durationTotalHours} hours</MetaItem>
-            <MetaItem icon={Timer}>90-minute exam</MetaItem>
-            <MetaItem icon={GraduationCap}>No entry requirement</MetaItem>
-          </>
-        }
-      />
-
-      <div className="space-y-12">
-        {/* ------------------------------------------------------ start here */}
-        <section aria-labelledby="start-here">
-          <SectionHeading
-            id="start-here"
-            eyebrow="Start here"
-            title="Three steps, in this order"
-            description="You do not have to plan anything. Follow these three steps and repeat them for each chapter."
-          />
-          <ol className="step-process-list max-w-measure">
-            {STEPS.map((step) => (
-              <li key={step.href} className="step-process-item">
-                <h3 className="text-h4 font-semibold text-ink">{step.title}</h3>
-                <p className="mt-1 text-base text-ink-2 leading-relaxed">{step.body}</p>
-                <Link
-                  href={step.href}
-                  className="mt-2 inline-flex items-center gap-1.5 min-h-11 text-sm font-medium text-accent hover:underline"
-                >
-                  {step.linkLabel}
-                  <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        {/* -------------------------------------------------- chapter directory */}
-        <section aria-labelledby="chapters">
-          <SectionHeading
-            id="chapters"
-            eyebrow="The course"
-            title={`All ${chapters.length} chapters`}
-            description="The official NIELIT chapter order. Work through them top to bottom the first time."
-            action={
-              <Button variant="ghost" href="/ccc/syllabus" iconRight={ArrowRight}>
-                Blueprint
-              </Button>
-            }
-          />
-          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {chapters.map((chapter) => {
-              const number = String(chapter.number || '').replace(/^0+/, '') || chapter.number;
-              return (
-                <li key={chapter.key}>
-                  <CardLink href={chapter.href} className="group h-full p-5 flex flex-col">
-                    <div className="flex items-start justify-between gap-2 mb-4">
-                      <IconTile tone={moduleVisual('ccc', number).tone} icon={<ModuleIcon name={moduleVisual('ccc', number).icon} />} />
-                      {chapter.marks ? <Badge tone="exam">{chapter.marks}</Badge> : null}
-                    </div>
-                    <span className="font-mono text-2xs font-semibold text-ccc">CHAPTER {String(number).padStart(2, '0')}</span>
-
-                    <h3 className="mt-1 text-h4 font-bold text-ink leading-snug group-hover:text-accent transition-colors duration-fast">
-                      {chapter.title}
-                    </h3>
-                    {chapter.hindiTitle ? (
-                      <p className="mt-0.5 text-sm text-hindi hindi-text" lang="hi">
-                        {chapter.hindiTitle}
-                      </p>
-                    ) : null}
-
-                    {chapter.description ? (
-                      <p className="mt-2.5 text-sm text-ink-3 leading-relaxed line-clamp-3">
-                        {chapter.description}
-                      </p>
-                    ) : null}
-
-                    <div className="mt-auto pt-4 flex flex-wrap items-center gap-x-4 gap-y-1">
-                      <MetaItem icon={Layers}>{(chapter.topics || []).length} topics</MetaItem>
-                      {chapter.hours ? <MetaItem icon={Clock}>{chapter.hours} hours</MetaItem> : null}
-                    </div>
-                  </CardLink>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-
-        {/* ---------------------------------------------- practice and revision */}
-        <section aria-labelledby="practice">
-          <SectionHeading
-            id="practice"
-            eyebrow="Practice and revision"
-            title="Everything else you get"
-            description="Use these after the reading, not instead of it."
-          />
-          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {TOOLS.map((tool) => (
-              <li key={tool.href}>
-                <CardLink href={tool.href} className="group h-full p-5 flex gap-4">
-                  <IconTile tone={['violet', 'rose', 'sky', 'amber', 'teal', 'mint'][TOOLS.indexOf(tool) % 6]} icon={tool.icon} />
-                  <span className="min-w-0">
-                    <h3 className="text-h4 font-bold text-ink group-hover:text-accent transition-colors duration-fast">
-                      {tool.title}
-                    </h3>
-                    <p className="mt-1 text-sm text-ink-3 leading-relaxed">{tool.body}</p>
-                  </span>
-                </CardLink>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* --------------------------------------------------- exam at a glance */}
-        <section aria-labelledby="exam-facts">
-          <SectionHeading
-            id="exam-facts"
-            eyebrow="The exam"
-            title="What you are working towards"
-            description={`${meta.organization} · ${meta.revision}, in force from ${meta.implementationDate}.`}
-          />
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <StatTile
-              label="Course length"
-              value={`${meta.durationTotalHours}h`}
-              hint={`${meta.theoryHours}h theory + ${meta.practicalHours}h practical`}
-              icon={Clock}
-            />
-            <StatTile label="Questions" value="100" hint="MCQ and true/false" icon={ListChecks} tone="sky" />
-            <StatTile label="Time" value="90 min" hint="No negative marking" icon={Timer} tone="amber" />
-            <StatTile label="Pass mark" value="50%" hint="Grade D or higher" icon={GraduationCap} tone="mint" />
+      <section className="hero-band border-b border-line">
+        <div className="shell py-8 sm:py-10">
+          <p className="eyebrow text-ccc">{course.module} · {course.level} · Free</p>
+          <h1 className="mt-2 text-h1 sm:text-display font-bold text-ink">Course on Computer Concepts (CCC)</h1>
+          <p className="mt-1 text-lead text-hindi hindi-text" lang="hi">{meta.hindiCourseName}</p>
+          <p className="mt-3 text-base sm:text-lead text-ink-2 max-w-measure-wide">
+            CCC is the starting course. If you have never used a computer for more than WhatsApp, this is written
+            for you — nine short chapters in English and हिन्दी, chapter-wise questions, and a mock test on the real
+            pattern: 100 questions, 90 minutes, pass at 50%.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            <Link href="/ccc/chapters/chapter-1" className="btn btn-primary">Start Chapter 1</Link>
+            <Link href="/ccc/mock-test" className="btn btn-secondary">Take the mock test</Link>
+            <Link href="/ccc/syllabus" className="btn btn-ghost">Syllabus</Link>
           </div>
+          <p className="mt-4 text-sm text-ink-3">
+            {chapters.length} chapters · {topicCount} topics · {meta.durationTotalHours} hours · no entry requirement
+          </p>
+        </div>
+      </section>
 
-          <dl className="mt-6 grid gap-x-8 gap-y-5 sm:grid-cols-2 max-w-measure-wide">
+      <div className="shell py-8 sm:py-10">
+        {/* ------------------------------------------------------ chapters */}
+        <section aria-labelledby="chapters" className="mb-12">
+          <SectionTitle id="chapters" action={{ href: '/ccc/notes', label: 'Full chapter notes' }}>
+            All {chapters.length} chapters, every topic
+          </SectionTitle>
+          <div className="grid gap-x-8 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
+            {chapters.map((c) => (
+              <div key={c.key} className="min-w-0">
+                <h3 className="text-base font-bold text-ink leading-snug">
+                  <Link href={c.href} className="hover:text-accent">
+                    <span className="font-mono text-xs text-ccc mr-1.5">{c.number}</span>
+                    {c.title}
+                  </Link>
+                </h3>
+                <p className="mt-0.5 mb-2 text-xs text-ink-3">
+                  {c.topics.length} topics · {c.hours}h{c.marks ? ` · ${c.marks}` : ''}
+                </p>
+                <ul className="space-y-1">
+                  {c.topics.map((t) => (
+                    <li key={t.slug}>
+                      <Link href={t.href} className="group flex items-start gap-2 py-0.5 text-[15px] leading-snug text-ink-2 hover:text-accent">
+                        <ChevronRight className="w-3.5 h-3.5 mt-1 text-ink-4 group-hover:text-accent shrink-0" aria-hidden="true" />
+                        <span>{t.title}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ------------------------------------------------- revision row */}
+        <div className="grid gap-10 lg:grid-cols-12 mb-12">
+          <section aria-labelledby="ccc-differences" className="lg:col-span-5">
+            <SectionTitle id="ccc-differences" action={{ href: '/ccc/differences', label: `All ${cccDifferencesData.length}` }}>
+              Differences the exam asks
+            </SectionTitle>
+            <ol className="divide-y divide-line">
+              {cccDifferencesData.slice(0, 8).map((d) => (
+                <li key={d.id}>
+                  <Link href={`/ccc/differences#${d.id}`} className="group flex items-center justify-between gap-3 py-2.5">
+                    <span className="text-[15px] font-medium text-ink group-hover:text-accent leading-snug">{d.englishTitle || d.title}</span>
+                    <ChevronRight className="w-4 h-4 text-ink-4 group-hover:text-accent shrink-0" aria-hidden="true" />
+                  </Link>
+                </li>
+              ))}
+            </ol>
+          </section>
+
+          <section aria-labelledby="ccc-one-liners" className="lg:col-span-7">
+            <SectionTitle id="ccc-one-liners" action={{ href: '/ccc/one-liners', label: `All ${cccOneLinersData.length}` }}>
+              One-liners for the last hour
+            </SectionTitle>
+            <ol className="space-y-2.5">
+              {cccOneLinersData.slice(0, 6).map((o, i) => (
+                <li key={o.id} className="flex gap-3">
+                  <span className="shrink-0 w-6 h-6 rounded bg-accent-soft text-accent font-mono text-xs font-bold grid place-items-center mt-0.5">{i + 1}</span>
+                  <p className="text-[15px] text-ink-2 leading-relaxed hindi-text" lang="hi">
+                    {o.fact}
+                    {o.category ? <span className="ml-2 text-xs text-ink-4 font-sans">{o.category}</span> : null}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </section>
+        </div>
+
+        {/* -------------------------------------------------------- practice */}
+        <section aria-labelledby="ccc-practice" className="mb-12">
+          <SectionTitle id="ccc-practice" action={{ href: '/ccc/mcqs', label: 'Question bank' }}>
+            Practice sets
+          </SectionTitle>
+          <div className="grid gap-8 lg:grid-cols-12">
+            <div className="lg:col-span-8 overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-2xs uppercase tracking-wider text-ink-3 border-b border-line">
+                    <th className="py-2 pr-3 font-semibold">Chapter</th>
+                    <th className="py-2 pr-3 font-semibold">Questions</th>
+                    <th className="py-2 pr-3 font-semibold">Weight</th>
+                    <th className="py-2 font-semibold sr-only">Open</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-line">
+                  {chapters.map((c) => (
+                    <tr key={c.key} className="group">
+                      <td className="py-2.5 pr-3">
+                        <Link href={c.mcqHref} className="font-medium text-ink group-hover:text-accent">
+                          <span className="font-mono text-xs text-ink-4 mr-1.5">{c.number}</span>
+                          {c.title}
+                        </Link>
+                      </td>
+                      <td className="py-2.5 pr-3 tabular-nums text-ink-2">{mcqByChapter.get(c.key) || '—'}</td>
+                      <td className="py-2.5 pr-3 text-ink-3">{c.marks || '—'}</td>
+                      <td className="py-2.5 text-right">
+                        <Link href={c.mcqHref} className="text-sm font-semibold text-accent hover:underline underline-offset-2">Practise</Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="lg:col-span-4 space-y-3">
+              <Link href="/ccc/mock-test" className="card-link p-4 block">
+                <span className="block text-base font-bold text-ink">CCC mock test</span>
+                <span className="block text-sm text-ink-3 mt-0.5">100 questions · 90 minutes · no negative marking</span>
+              </Link>
+              <Link href="/ccc/cheat-sheets" className="card-link p-4 block">
+                <span className="block text-base font-bold text-ink">Cheat sheets</span>
+                <span className="block text-sm text-ink-3 mt-0.5">LibreOffice shortcuts and quick tables</span>
+              </Link>
+              <Link href="/ccc/notes" className="card-link p-4 block">
+                <span className="block text-base font-bold text-ink">Full chapter notes</span>
+                <span className="block text-sm text-ink-3 mt-0.5">Long-form reader, English and हिन्दी</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ----------------------------------------------------- the exam */}
+        <section aria-labelledby="exam-facts" className="mb-12">
+          <SectionTitle id="exam-facts">About the CCC exam</SectionTitle>
+          <dl className="grid gap-x-8 gap-y-5 sm:grid-cols-2 max-w-measure-wide text-base">
             <div>
-              <dt className="eyebrow mb-1">Who it is for</dt>
-              <dd className="text-base text-ink-2 leading-relaxed">{meta.eligibility}</dd>
+              <dt className="font-bold text-ink">Pattern</dt>
+              <dd className="mt-1 text-ink-2 leading-relaxed">{meta.examPattern}</dd>
             </div>
             <div>
-              <dt className="eyebrow mb-1">Practical environment</dt>
-              <dd className="text-base text-ink-2 leading-relaxed">{meta.practicalEnvironment}</dd>
+              <dt className="font-bold text-ink">Passing</dt>
+              <dd className="mt-1 text-ink-2 leading-relaxed">{meta.passingCriteria}</dd>
             </div>
             <div>
-              <dt className="eyebrow mb-1">Jobs it maps to</dt>
-              <dd className="text-base text-ink-2 leading-relaxed">{meta.jobRoles.join(' · ')}</dd>
+              <dt className="font-bold text-ink">Who it is for</dt>
+              <dd className="mt-1 text-ink-2 leading-relaxed">{meta.eligibility}</dd>
             </div>
             <div>
-              <dt className="eyebrow mb-1">Certificate</dt>
-              <dd className="text-base text-ink-2 leading-relaxed">
-                {meta.courseName}, {meta.courseCode}.
-              </dd>
+              <dt className="font-bold text-ink">Practical software</dt>
+              <dd className="mt-1 text-ink-2 leading-relaxed">{meta.practicalEnvironment}</dd>
+            </div>
+            <div>
+              <dt className="font-bold text-ink">Jobs it maps to</dt>
+              <dd className="mt-1 text-ink-2 leading-relaxed">{meta.jobRoles.join(' · ')}</dd>
+            </div>
+            <div>
+              <dt className="font-bold text-ink">Certificate</dt>
+              <dd className="mt-1 text-ink-2 leading-relaxed">{meta.courseName}, {meta.courseCode}. {meta.organization} · {meta.revision}, in force from {meta.implementationDate}.</dd>
             </div>
           </dl>
-        </section>
-
-        {/* --------------------------------------------------------------- FAQ */}
-        <section aria-labelledby="faq">
-          <SectionHeading id="faq" eyebrow="Before you start" title="Common questions" />
-          <div className="max-w-measure-wide panel divide-y divide-line overflow-hidden px-5">
-            {faqs.map((faq) => (
-              <details key={faq.q} className="group">
-                <summary className="flex items-center justify-between gap-4 py-4 min-h-11 cursor-pointer list-none [&::-webkit-details-marker]:hidden text-base font-medium text-ink hover:text-accent transition-colors duration-fast">
-                  {faq.q}
-                  <span
-                    className="shrink-0 text-ink-3 text-lead leading-none group-open:hidden"
-                    aria-hidden="true"
-                  >
-                    +
-                  </span>
-                  <span
-                    className="shrink-0 text-ink-3 text-lead leading-none hidden group-open:inline"
-                    aria-hidden="true"
-                  >
-                    −
-                  </span>
-                </summary>
-                <p className="pb-4 -mt-1 text-base text-ink-2 leading-relaxed">{faq.a}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-
-        {/* --------------------------------------------------------- last word */}
-        <section aria-labelledby="get-going" className="cta-band p-6 sm:p-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="max-w-measure">
-            <h2 id="get-going" className="text-h1 sm:text-display font-bold">
-              Ready when you are
-            </h2>
-            <p className="mt-2 text-base text-white/85 leading-relaxed">
-              Nothing to install and nothing to sign up for. Open Chapter 1 and read the first topic —
-              it takes about ten minutes.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3 shrink-0">
-            <Button variant="highlight" size="lg" href="/ccc/chapters/chapter-1" iconRight={ArrowRight}>
-              Start Chapter 1
-            </Button>
-            <Link href="/ccc/notes" className="btn btn-lg bg-white/15 text-white border-white/30 hover:bg-white/25">
-              Browse the full notes
-            </Link>
-          </div>
+          <p className="mt-4 text-sm text-ink-3 inline-flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5" aria-hidden="true" />
+            {meta.durationTotalHours} hours — {meta.theoryHours}h theory, {meta.practicalHours}h practical.
+          </p>
         </section>
       </div>
     </div>

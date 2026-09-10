@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  Search, Menu, X, Sun, Moon, ChevronDown, Check, Languages, GraduationCap, Sparkles,
+  Search, Menu, X, Sun, Moon, ChevronDown, Check, Languages, GraduationCap,
 } from 'lucide-react';
 
 import { useTheme } from '@/lib/themeContext';
@@ -48,8 +48,8 @@ function NavMenu({ group, pathname }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="true"
-        className={`inline-flex items-center gap-1 h-9 px-3 rounded-full text-sm font-semibold transition-colors ${
-          anyActive ? 'text-accent bg-accent-soft' : 'text-ink-2 hover:text-accent hover:bg-accent-soft'
+        className={`inline-flex items-center gap-1 h-9 px-2.5 rounded-md text-sm font-medium transition-colors ${
+          anyActive ? 'text-nav-ink bg-nav-2' : 'text-nav-ink-2 hover:text-nav-ink hover:bg-nav-2'
         }`}
       >
         {group.label}
@@ -58,15 +58,15 @@ function NavMenu({ group, pathname }) {
 
       {open ? (
         <div className="absolute left-0 top-full pt-1.5 z-header">
-          <div className="w-80 rounded-2xl border border-line bg-overlay shadow-e3 p-2 animate-fade-in">
+          <div className="w-80 rounded-lg border border-line bg-overlay shadow-e3 p-1.5 animate-fade-in">
             {group.items.map((item) => {
               const active = isActivePath(pathname, item.href, item.match);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`block px-3 py-2.5 rounded-xl transition-colors ${
-                    active ? 'bg-accent-soft' : 'hover:bg-accent-soft/60'
+                  className={`block px-3 py-2 rounded-md transition-colors ${
+                    active ? 'bg-accent-soft' : 'hover:bg-sunken'
                   }`}
                 >
                   <span className={`block text-base font-medium ${active ? 'text-accent' : 'text-ink'}`}>
@@ -105,19 +105,19 @@ function CourseSwitcher({ course, pathname }) {
         aria-expanded={open}
         aria-haspopup="listbox"
         aria-label={`Current course: ${course.name}. Change course`}
-        className="inline-flex items-center gap-1.5 h-9 pl-2.5 pr-2 rounded-full border border-line bg-sunken hover:border-accent-line hover:bg-accent-soft transition-colors"
+        className="inline-flex items-center gap-1.5 h-9 pl-2.5 pr-2 rounded-md border border-nav-line bg-nav-2 hover:border-nav-ink-2 transition-colors"
       >
         <span
           className="w-2 h-2 rounded-full shrink-0"
           style={{ background: `rgb(var(${course.accentVar}))` }}
           aria-hidden="true"
         />
-        <span className="text-sm font-semibold text-ink">{course.name}</span>
-        <ChevronDown className={`w-3.5 h-3.5 text-ink-3 transition-transform duration-fast ${open ? 'rotate-180' : ''}`} aria-hidden="true" />
+        <span className="text-sm font-semibold text-nav-ink">{course.name}</span>
+        <ChevronDown className={`w-3.5 h-3.5 text-nav-ink-2 transition-transform duration-fast ${open ? 'rotate-180' : ''}`} aria-hidden="true" />
       </button>
 
       {open ? (
-        <div className="absolute left-0 top-full mt-1.5 w-[19rem] rounded-2xl border border-line bg-overlay shadow-e3 p-2 z-header animate-fade-in" role="listbox">
+        <div className="absolute left-0 top-full mt-1.5 w-[19rem] rounded-lg border border-line bg-overlay shadow-e3 p-1.5 z-header animate-fade-in" role="listbox">
           {Object.values(COURSES).map((c) => {
             const active = c.key === course.key;
             return (
@@ -177,7 +177,7 @@ function LanguageToggle() {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-label={`Reading language: ${current.label}. Change`}
-        className="btn btn-ghost btn-sm gap-1.5"
+        className="btn btn-sm gap-1.5 text-nav-ink-2 hover:text-nav-ink hover:bg-nav-2"
       >
         <Languages className="w-4 h-4" aria-hidden="true" />
         <span className="hidden md:inline">{current.short}</span>
@@ -211,7 +211,7 @@ function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className="btn btn-ghost btn-sm btn-icon"
+      className="btn btn-sm btn-icon text-nav-ink-2 hover:text-nav-ink hover:bg-nav-2"
       aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
     >
       {mounted && theme === 'dark'
@@ -253,74 +253,90 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-header bg-surface/95 supports-[backdrop-filter]:bg-surface/85 backdrop-blur-md border-b border-line shadow-e1 no-print">
-        <div className="shell shell-wide flex items-center gap-3 h-[var(--header-h)]">
+      <header className="sticky top-0 z-header no-print">
+        {/* Primary bar — dark, like every serious content site */}
+        <div className="bg-nav text-nav-ink border-b border-nav-line">
+          <div className="shell shell-wide flex items-center gap-3 h-[var(--header-h)]">
 
-          {/* Brand + course */}
-          <div className="flex items-center gap-2.5 min-w-0">
-            <Link href={course.home} className="flex items-center gap-2 shrink-0 group" aria-label={`${course.fullName} home`}>
-              <span className="w-9 h-9 rounded-xl bg-accent grid place-items-center shrink-0 shadow-e1">
-                <GraduationCap className="w-5 h-5 text-white" aria-hidden="true" />
-              </span>
-              <span className="hidden sm:flex flex-col leading-none">
-                <span className="text-base font-bold text-ink tracking-tight">NIELIT<span className="text-accent">Learn</span></span>
-                <span className="text-2xs font-semibold text-ink-3 tracking-wide uppercase mt-0.5">O Level · CCC</span>
-              </span>
-            </Link>
-            <span className="hidden sm:block w-px h-6 bg-line mx-0.5" aria-hidden="true" />
-            <CourseSwitcher course={course} pathname={pathname} />
-          </div>
+            {/* Brand + course */}
+            <div className="flex items-center gap-3 min-w-0">
+              <Link href={course.home} className="flex items-center gap-2 shrink-0" aria-label={`${course.fullName} home`}>
+                <span className="w-8 h-8 rounded-md bg-accent grid place-items-center shrink-0">
+                  <GraduationCap className="w-[18px] h-[18px] text-white" aria-hidden="true" />
+                </span>
+                <span className="hidden sm:block text-[17px] font-bold tracking-tight text-nav-ink">
+                  NIELIT<span className="text-accent">Notes</span>
+                </span>
+              </Link>
+              <CourseSwitcher course={course} pathname={pathname} />
+            </div>
 
-          {/* Primary nav */}
-          <nav className="hidden lg:flex items-center gap-0.5 ml-1" aria-label="Main">
-            {nav.map((group) => (
-              <NavMenu key={group.label} group={group} pathname={pathname} />
-            ))}
-          </nav>
+            {/* Primary nav */}
+            <nav className="hidden lg:flex items-center gap-0.5 ml-2" aria-label="Main">
+              {nav.map((group) => (
+                <NavMenu key={group.label} group={group} pathname={pathname} />
+              ))}
+            </nav>
 
-          {/* Utilities */}
-          <div className="ml-auto flex items-center gap-1.5">
+            {/* Search — the main control on a content site */}
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="hidden sm:flex items-center gap-2 h-9 pl-3 pr-1.5 md:w-56 xl:w-72 rounded-full border border-line bg-sunken text-ink-3 hover:border-accent-line hover:bg-accent-soft/60 hover:text-ink-2 transition-colors"
+              className="hidden sm:flex items-center gap-2 h-9 pl-3 pr-2 ml-auto w-56 md:w-72 xl:w-96 rounded-md bg-nav-2 border border-nav-line text-nav-ink-2 hover:border-nav-ink-2 transition-colors"
               aria-label="Search (press Control K)"
             >
-              <Search className="w-4 h-4 text-accent" aria-hidden="true" />
-              <span className="text-sm hidden md:inline flex-1 text-left">Search topics, MCQs…</span>
-              <kbd className="hidden md:inline-flex items-center h-5 px-1.5 rounded-md border border-line bg-surface font-mono text-2xs text-ink-4">⌘K</kbd>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setSearchOpen(true)}
-              className="sm:hidden btn btn-ghost btn-sm btn-icon"
-              aria-label="Search"
-            >
               <Search className="w-4 h-4" aria-hidden="true" />
+              <span className="text-sm flex-1 text-left truncate">Search topics, MCQs, differences…</span>
+              <kbd className="hidden md:inline-flex items-center h-5 px-1.5 rounded border border-nav-line font-mono text-2xs text-nav-ink-2">Ctrl K</kbd>
             </button>
 
-            <LanguageToggle />
-            <ThemeToggle />
+            {/* Utilities */}
+            <div className="flex items-center gap-0.5 ml-auto sm:ml-0">
+              <button
+                type="button"
+                onClick={() => setSearchOpen(true)}
+                className="sm:hidden btn btn-sm btn-icon text-nav-ink-2 hover:text-nav-ink hover:bg-nav-2"
+                aria-label="Search"
+              >
+                <Search className="w-4 h-4" aria-hidden="true" />
+              </button>
 
-            <Link
-              href={course.key === 'ccc' ? '/ccc/chapters/chapter-1' : '/units/unit-1'}
-              className="hidden lg:inline-flex btn btn-primary btn-sm rounded-full ml-1"
-            >
-              <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
-              Start learning
-            </Link>
+              <LanguageToggle />
+              <ThemeToggle />
 
-            <button
-              type="button"
-              onClick={() => setDrawerOpen(true)}
-              className="lg:hidden btn btn-ghost btn-sm btn-icon"
-              aria-label="Open menu"
-              aria-expanded={drawerOpen}
-            >
-              <Menu className="w-4.5 h-4.5" aria-hidden="true" />
-            </button>
+              <button
+                type="button"
+                onClick={() => setDrawerOpen(true)}
+                className="lg:hidden btn btn-sm btn-icon text-nav-ink-2 hover:text-nav-ink hover:bg-nav-2"
+                aria-label="Open menu"
+                aria-expanded={drawerOpen}
+              >
+                <Menu className="w-[18px] h-[18px]" aria-hidden="true" />
+              </button>
+            </div>
           </div>
+        </div>
+
+        {/* Secondary bar — the course's units, always one click away */}
+        <div className="hidden lg:block bg-surface border-b border-line">
+          <nav className="shell shell-wide flex items-center gap-1 h-10 overflow-x-auto no-scrollbar" aria-label={`${course.name} ${course.unitWordPlural.toLowerCase()}`}>
+            <span className="eyebrow shrink-0 mr-2">{course.unitWordPlural}</span>
+            {getModules(course.key).map((m) => {
+              const active = isActivePath(pathname, m.href) || pathname.includes(`/${m.key}/`) || pathname.endsWith(`/${m.key}`);
+              return (
+                <Link
+                  key={m.key}
+                  href={m.href}
+                  className={`shrink-0 inline-flex items-center gap-1.5 h-7 px-2.5 rounded text-sm transition-colors ${
+                    active ? 'bg-accent-soft text-accent font-semibold' : 'text-ink-2 hover:text-accent hover:bg-sunken'
+                  }`}
+                >
+                  <span className="font-mono text-2xs text-ink-4">{m.number}</span>
+                  {m.title}
+                </Link>
+              );
+            })}
+          </nav>
         </div>
       </header>
 

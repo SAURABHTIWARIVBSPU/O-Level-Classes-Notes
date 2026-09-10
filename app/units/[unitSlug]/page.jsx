@@ -87,11 +87,11 @@ export default function UnitOverviewPage({ params }) {
                 eyebrow="By the end of this unit"
                 title="What you will be able to do"
               />
-              <ul className="grid gap-3 sm:grid-cols-2">
+              <ul className="space-y-2 max-w-measure-wide">
                 {unit.objectives.map((o, i) => (
-                  <li key={i} className="panel p-4 flex gap-3">
-                    <span className="icon-tile icon-tile-sm tone-mint"><Target className="w-4 h-4" aria-hidden="true" /></span>
-                    <span className="text-base text-ink-2 leading-relaxed">{o}</span>
+                  <li key={i} className="flex gap-2.5">
+                    <Target className="w-4 h-4 mt-1.5 text-accent shrink-0" aria-hidden="true" />
+                    <span className="text-prose text-ink-2 leading-relaxed">{o}</span>
                   </li>
                 ))}
               </ul>
@@ -115,12 +115,12 @@ export default function UnitOverviewPage({ params }) {
             <ul className="grid gap-3 sm:grid-cols-3">
               {RESOURCES.map((r) => (
                 <li key={r.href}>
-                  <Link href={r.href} className="card-link group h-full p-4 flex flex-col">
-                    <IconTile tone={r.tone} icon={r.icon} />
-                    <h3 className="mt-3 text-h4 font-bold text-ink group-hover:text-accent transition-colors">
-                      {r.label}
-                    </h3>
-                    <p className="mt-1 text-sm text-ink-3">{r.desc}</p>
+                  <Link href={r.href} className="card-link group h-full p-4 flex items-start gap-3">
+                    <r.icon className="w-5 h-5 mt-0.5 text-accent shrink-0" aria-hidden="true" />
+                    <span>
+                      <h3 className="text-h4 font-bold text-ink group-hover:text-accent transition-colors">{r.label}</h3>
+                      <p className="mt-0.5 text-sm text-ink-3">{r.desc}</p>
+                    </span>
                   </Link>
                 </li>
               ))}

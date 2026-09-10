@@ -226,7 +226,7 @@ export default function CCCChapterPage({ params }) {
           />
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <CardLink href={`/ccc/mcqs/${chapter.key}`} className="p-5 group">
-              <span className="icon-tile tone-violet mb-3"><HelpCircle className="w-5 h-5" aria-hidden="true" /></span>
+              <HelpCircle className="w-5 h-5 text-accent mb-3" aria-hidden="true" />
               <span className="block text-h4 font-bold text-ink group-hover:text-accent transition-colors duration-fast">
                 Chapter {chapterNumber} questions
               </span>
@@ -236,7 +236,7 @@ export default function CCCChapterPage({ params }) {
             </CardLink>
 
             <CardLink href={notesHref} className="p-5 group">
-              <span className="icon-tile tone-sky mb-3"><FileText className="w-5 h-5" aria-hidden="true" /></span>
+              <FileText className="w-5 h-5 text-accent mb-3" aria-hidden="true" />
               <span className="block text-h4 font-bold text-ink group-hover:text-accent transition-colors duration-fast">
                 Full chapter notes
               </span>
@@ -246,7 +246,7 @@ export default function CCCChapterPage({ params }) {
             </CardLink>
 
             <CardLink href="/ccc/cheat-sheets" className="p-5 group">
-              <span className="icon-tile tone-amber mb-3"><ListChecks className="w-5 h-5" aria-hidden="true" /></span>
+              <ListChecks className="w-5 h-5 text-accent mb-3" aria-hidden="true" />
               <span className="block text-h4 font-bold text-ink group-hover:text-accent transition-colors duration-fast">
                 Cheat sheets
               </span>
@@ -256,7 +256,7 @@ export default function CCCChapterPage({ params }) {
             </CardLink>
 
             <CardLink href="/ccc/mock-test" className="p-5 group">
-              <span className="icon-tile tone-rose mb-3"><GraduationCap className="w-5 h-5" aria-hidden="true" /></span>
+              <GraduationCap className="w-5 h-5 text-accent mb-3" aria-hidden="true" />
               <span className="block text-h4 font-bold text-ink group-hover:text-accent transition-colors duration-fast">
                 Full mock test
               </span>

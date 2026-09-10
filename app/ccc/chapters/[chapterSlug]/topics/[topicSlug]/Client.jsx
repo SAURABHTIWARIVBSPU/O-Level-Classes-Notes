@@ -3,14 +3,13 @@
 import React, { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { CheckCircle2, Circle, Clock, Hash, Layers } from 'lucide-react';
+import { CheckCircle2, Circle } from 'lucide-react';
 
 import {
   Badge,
   Breadcrumbs,
   Button,
   Callout,
-  MetaItem,
   PrevNext,
   ReadingProgress,
   TableOfContents,
@@ -18,7 +17,7 @@ import {
 import CourseSidebar from '@/components/layout/CourseSidebar';
 import MarkdownRenderer from '@/components/common/MarkdownRenderer';
 import MicroQuiz from '@/components/learning/MicroQuiz';
-import { getModule, getAdjacentInCourse } from '@/lib/navigation';
+import { getModule, getAdjacentInCourse, CONTENT_UPDATED, readingTime } from '@/lib/navigation';
 import { useLanguage } from '@/lib/languageContext';
 import { useProgress } from '@/lib/progressContext';
 
@@ -118,36 +117,24 @@ export default function CCCTopicPage({ params, topic }) {
         />
 
         <div className="order-2 min-w-0 lg:order-none lg:col-start-1 lg:row-start-1 xl:col-start-2">
-          <header className="hero-band rounded-3xl border border-accent-line/60 px-5 py-5 sm:px-7 sm:py-6 mb-8">
-            <div className="flex flex-wrap items-center gap-2 mb-3">
-              <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-ccc text-white text-2xs font-bold uppercase tracking-wider">
-                Topic {index + 1} of {chapterTopics.length}
-              </span>
-              {examLevel ? <Badge tone="exam">Exam weight: {examLevel}</Badge> : null}
-              {isCompleted ? (
-                <Badge tone="ok" icon={CheckCircle2}>
-                  Completed
-                </Badge>
-              ) : null}
-            </div>
-
-            <h1 className="text-h1 sm:text-display font-bold text-ink">{topic.title}</h1>
-
+          <header className="mb-7">
+            <p className="text-sm text-ink-3">
+              <Link href={chapter.href} className="font-semibold text-accent hover:underline underline-offset-2">
+                Chapter {chapterNumber} · {chapter.title}
+              </Link>
+              <span className="mx-2 text-ink-4">·</span>
+              Topic {index + 1} of {chapterTopics.length}
+            </p>
+            <h1 className="mt-1.5 text-h1 sm:text-display font-bold text-ink">{topic.title}</h1>
             {showHindi && topic.hindiTitle ? (
-              <p className="mt-1.5 text-lead text-hindi hindi-text" lang="hi">
-                {topic.hindiTitle}
-              </p>
+              <p className="mt-1 text-lead text-hindi hindi-text" lang="hi">{topic.hindiTitle}</p>
             ) : null}
 
-            <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
-              <MetaItem icon={Layers}>
-                <Link href={chapter.href} className="hover:text-ink transition-colors duration-fast">
-                  Chapter {chapterNumber} · {chapter.title}
-                </Link>
-              </MetaItem>
-              {chapter.hours ? <MetaItem icon={Clock}>{chapter.hours} hours</MetaItem> : null}
-              {chapter.marks ? <MetaItem icon={Hash}>{chapter.marks}</MetaItem> : null}
-
+            <div className="mt-4 pt-3 border-t border-line flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-ink-3">
+              <span>Last updated: <span className="text-ink-2">{CONTENT_UPDATED}</span></span>
+              <span>{readingTime(topic)} min read</span>
+              {examLevel ? <span>Exam weight: <span className="text-ink-2">{examLevel}</span></span> : null}
+              {isCompleted ? <Badge tone="ok" icon={CheckCircle2}>Completed</Badge> : null}
               <Button
                 size="sm"
                 variant={isCompleted ? 'soft' : 'primary'}
@@ -162,7 +149,7 @@ export default function CCCTopicPage({ params, topic }) {
           </header>
 
           {/* ---------------------------------------------------- the reading */}
-          <article data-toc-root className="prose-notes max-w-measure">
+          <article data-toc-root className="prose-notes max-w-measure-wide">
             {topic.definitionEnglish || topic.definitionHindi ? (
               <>
                 <h2 id="definition">Definition</h2>

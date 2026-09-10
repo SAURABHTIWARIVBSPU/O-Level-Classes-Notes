@@ -3,6 +3,41 @@
 @tailwind utilities;
 
 /* ==========================================================================
+   0. SELF-HOSTED FONTS — no network dependency, no FOUT on slow links
+   ========================================================================== */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/InterVariable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Noto Sans Devanagari';
+  src: url('/fonts/NotoSansDevanagari-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Noto Sans Devanagari';
+  src: url('/fonts/NotoSansDevanagari-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* ==========================================================================
    1. TOKENS
    Colour values are stored as "R G B" triples so Tailwind's <alpha-value>
    syntax works (bg-surface/60, border-line/50, …).
@@ -10,9 +45,9 @@
 
 :root {
   /* Surfaces */
-  --c-ground: 249 249 252;
+  --c-ground: 255 255 255;
   --c-surface: 255 255 255;
-  --c-sunken: 244 245 247;
+  --c-sunken: 245 247 246;
   --c-overlay: 255 255 255;
 
   /* Lines */
@@ -26,12 +61,19 @@
   --c-ink-4: 152 159 170;
   --c-ink-inv: 255 255 255;
 
-  /* Accent — deep violet, the brand hue */
-  --c-accent: 91 76 216;
-  --c-accent-hover: 74 60 190;
-  --c-accent-soft: 240 238 253;
-  --c-accent-line: 208 202 246;
-  --c-accent-ink: 56 42 150;
+  /* Accent — content-site green, the brand hue */
+  --c-accent: 47 141 70;
+  --c-accent-hover: 36 116 56;
+  --c-accent-soft: 234 246 237;
+  --c-accent-line: 178 224 190;
+  --c-accent-ink: 22 82 40;
+
+  /* Navigation bar — dark charcoal, always */
+  --c-nav: 33 37 41;
+  --c-nav-2: 45 50 56;
+  --c-nav-line: 62 68 75;
+  --c-nav-ink: 248 249 250;
+  --c-nav-ink-2: 173 181 189;
 
   /* Highlight — warm yellow, used for the one "look here" moment per view */
   --c-hl: 255 196 0;
@@ -40,7 +82,7 @@
   --c-hl-ink: 112 74 0;
 
   /* Tone palette — icon tiles and cover art only, never body surfaces */
-  --t-violet: 91 76 216;   --t-violet-soft: 240 238 253;
+  --t-violet: 47 141 70;   --t-violet-soft: 234 246 237;
   --t-teal: 13 148 136;    --t-teal-soft: 230 248 245;
   --t-amber: 217 119 6;    --t-amber-soft: 255 244 224;
   --t-rose: 225 29 72;     --t-rose-soft: 255 236 240;
@@ -63,24 +105,24 @@
   --c-danger-line: 246 199 208;
   --c-danger-ink: 128 29 47;
 
-  --c-exam: 190 24 130;
-  --c-exam-soft: 253 240 248;
-  --c-exam-line: 246 200 230;
-  --c-exam-ink: 130 14 88;
+  --c-exam: 106 66 196;
+  --c-exam-soft: 244 241 254;
+  --c-exam-line: 216 206 248;
+  --c-exam-ink: 66 38 132;
 
   /* Course markers — thin identity stripes only, never fills */
-  --c-olevel: 91 76 216;
-  --c-ccc: 13 148 136;
+  --c-olevel: 47 141 70;
+  --c-ccc: 2 132 199;
 
   /* Devanagari label tint */
   --c-hindi: 88 82 140;
 
   /* Elevation — exactly three levels, soft and tinted towards the brand */
-  --e1: 0 1px 2px 0 rgb(40 30 90 / 0.05);
-  --e2: 0 6px 16px -6px rgb(40 30 90 / 0.14), 0 1px 3px -1px rgb(40 30 90 / 0.06);
-  --e3: 0 16px 40px -12px rgb(40 30 90 / 0.22), 0 3px 8px -3px rgb(40 30 90 / 0.08);
+  --e1: 0 1px 2px 0 rgb(16 24 40 / 0.05);
+  --e2: 0 4px 12px -4px rgb(16 24 40 / 0.12), 0 1px 3px -1px rgb(16 24 40 / 0.06);
+  --e3: 0 12px 32px -10px rgb(16 24 40 / 0.2), 0 3px 8px -3px rgb(16 24 40 / 0.08);
 
-  /* Layout rhythm */
+  /* Layout rhythm — the header grows a second (units) bar on large screens */
   --header-h: 3.5rem;
   --measure: 68ch;
 
@@ -107,18 +149,24 @@
   --c-ink-4: 96 106 121;
   --c-ink-inv: 12 16 21;
 
-  --c-accent: 150 138 255;
-  --c-accent-hover: 176 166 255;
-  --c-accent-soft: 34 30 62;
-  --c-accent-line: 62 54 110;
-  --c-accent-ink: 205 198 255;
+  --c-accent: 82 196 118;
+  --c-accent-hover: 110 212 140;
+  --c-accent-soft: 20 40 28;
+  --c-accent-line: 36 78 50;
+  --c-accent-ink: 170 232 190;
+
+  --c-nav: 17 20 24;
+  --c-nav-2: 26 30 36;
+  --c-nav-line: 42 48 56;
+  --c-nav-ink: 248 249 250;
+  --c-nav-ink-2: 160 168 178;
 
   --c-hl: 255 205 40;
   --c-hl-soft: 52 42 10;
   --c-hl-line: 96 78 20;
   --c-hl-ink: 255 224 130;
 
-  --t-violet: 150 138 255;  --t-violet-soft: 34 30 62;
+  --t-violet: 82 196 118;  --t-violet-soft: 20 40 28;
   --t-teal: 52 211 190;     --t-teal-soft: 12 40 38;
   --t-amber: 251 176 60;    --t-amber-soft: 48 34 12;
   --t-rose: 251 113 133;    --t-rose-soft: 50 20 28;
@@ -140,13 +188,13 @@
   --c-danger-line: 79 33 44;
   --c-danger-ink: 250 191 202;
 
-  --c-exam: 240 120 200;
-  --c-exam-soft: 48 22 40;
-  --c-exam-line: 90 36 72;
-  --c-exam-ink: 250 190 230;
+  --c-exam: 167 143 246;
+  --c-exam-soft: 29 24 48;
+  --c-exam-line: 53 43 88;
+  --c-exam-ink: 210 197 252;
 
-  --c-olevel: 150 138 255;
-  --c-ccc: 52 211 190;
+  --c-olevel: 82 196 118;
+  --c-ccc: 86 182 240;
 
   --c-hindi: 170 164 214;
 
@@ -176,7 +224,7 @@
     background-color: rgb(var(--c-ground));
     color: rgb(var(--c-ink));
     font-family: var(--font-sans);
-    font-size: 0.9375rem;
+    font-size: 1rem;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -217,6 +265,10 @@
   }
   ::-webkit-scrollbar-thumb:hover { background: rgb(var(--c-ink-4)); }
   * { scrollbar-width: thin; scrollbar-color: rgb(var(--c-line-strong)) transparent; }
+}
+
+@media (min-width: 1024px) {
+  :root { --header-h: 6rem; }
 }
 
 /* Devanagari: needs more leading and a face that actually has the glyphs */
@@ -266,8 +318,8 @@
   .panel {
     background: rgb(var(--c-surface));
     border: 1px solid rgb(var(--c-line));
-    border-radius: 16px;
-    box-shadow: var(--e1);
+    border-radius: 12px;
+    box-shadow: none;
   }
   .panel-flat {
     background: rgb(var(--c-surface));
@@ -289,7 +341,7 @@
     gap: 0.5rem;
     height: 2.5rem;
     padding-inline: 1rem;
-    border-radius: 10px;
+    border-radius: 6px;
     font-size: 0.875rem;
     font-weight: 600;
     white-space: nowrap;
@@ -300,16 +352,15 @@
   }
   .btn:disabled { opacity: 0.45; cursor: not-allowed; }
   .btn-sm { height: 2rem; padding-inline: 0.625rem; font-size: 0.75rem; border-radius: 6px; }
-  .btn-lg { height: 3rem; padding-inline: 1.5rem; font-size: 0.9375rem; border-radius: 12px; }
+  .btn-lg { height: 2.875rem; padding-inline: 1.375rem; font-size: 0.9375rem; border-radius: 8px; }
   .btn-icon { width: 2.375rem; padding-inline: 0; }
   .btn-icon.btn-sm { width: 2rem; }
 
   .btn-primary {
     background: rgb(var(--c-accent));
     color: #fff;
-    box-shadow: 0 6px 16px -6px rgb(var(--c-accent) / 0.55);
   }
-  .btn-primary:hover:not(:disabled) { background: rgb(var(--c-accent-hover)); box-shadow: 0 8px 20px -6px rgb(var(--c-accent) / 0.6); }
+  .btn-primary:hover:not(:disabled) { background: rgb(var(--c-accent-hover)); }
   .btn-primary:active:not(:disabled) { transform: translateY(1px); }
 
   /* Highlight button — the yellow "act now" button, one per view at most */
@@ -385,16 +436,12 @@
     display: block;
     background: rgb(var(--c-surface));
     border: 1px solid rgb(var(--c-line));
-    border-radius: 16px;
-    box-shadow: var(--e1);
-    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 12px;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
   }
   .card-link:hover {
-    border-color: rgb(var(--c-accent-line));
+    border-color: rgb(var(--c-accent));
     box-shadow: var(--e2);
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .card-link:hover { transform: translateY(-3px); }
   }
 
   /* ---------- Inputs ---------- */
@@ -503,20 +550,7 @@
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    background:
-      radial-gradient(60% 70% at 85% 10%, rgb(var(--c-accent) / 0.14), transparent 60%),
-      radial-gradient(40% 50% at 10% 90%, rgb(var(--c-hl) / 0.16), transparent 60%),
-      rgb(var(--c-accent-soft) / 0.55);
-  }
-  .hero-band::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-image: radial-gradient(rgb(var(--c-accent) / 0.16) 1px, transparent 1.5px);
-    background-size: 22px 22px;
-    mask-image: radial-gradient(70% 70% at 70% 30%, rgb(0 0 0 / 0.9), transparent 75%);
-    -webkit-mask-image: radial-gradient(70% 70% at 70% 30%, rgb(0 0 0 / 0.9), transparent 75%);
+    background: rgb(var(--c-sunken));
   }
 
   /* ---------- CTA band (last section of a landing page) ---------- */
@@ -524,22 +558,10 @@
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    border-radius: 24px;
-    color: #fff;
-    background:
-      radial-gradient(70% 90% at 100% 0%, rgb(255 255 255 / 0.18), transparent 55%),
-      radial-gradient(50% 70% at 0% 100%, rgb(var(--c-hl) / 0.35), transparent 60%),
-      linear-gradient(120deg, rgb(91 76 216) 0%, rgb(58 40 170) 100%);
-  }
-  .cta-band::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-image: radial-gradient(rgb(255 255 255 / 0.18) 1px, transparent 1.5px);
-    background-size: 16px 16px;
-    mask-image: linear-gradient(to left, rgb(0 0 0 / 0.8), transparent 60%);
-    -webkit-mask-image: linear-gradient(to left, rgb(0 0 0 / 0.8), transparent 60%);
+    border-radius: 12px;
+    color: rgb(var(--c-nav-ink));
+    background: rgb(var(--c-nav));
+    border: 1px solid rgb(var(--c-nav-line));
   }
 
   /* ---------- Chips (category / filter pills) ---------- */

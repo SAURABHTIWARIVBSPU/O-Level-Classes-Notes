@@ -36,6 +36,15 @@ module.exports = {
         sunken: withOpacity('--c-sunken'),        // wells, code, inset areas
         overlay: withOpacity('--c-overlay'),      // sheets, dropdowns
 
+        /* ---------- Navigation bar (always dark) ---------- */
+        nav: {
+          DEFAULT: withOpacity('--c-nav'),
+          2: withOpacity('--c-nav-2'),
+          line: withOpacity('--c-nav-line'),
+          ink: withOpacity('--c-nav-ink'),
+          'ink-2': withOpacity('--c-nav-ink-2'),
+        },
+
         /* ---------- Lines ---------- */
         line: withOpacity('--c-line'),
         'line-strong': withOpacity('--c-line-strong'),

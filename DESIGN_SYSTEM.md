@@ -10,9 +10,9 @@ isn't here, add it here first, then use it.
 1. **Restraint over decoration.** Premium = clarity + hierarchy + consistency + detail. Not more effects.
 2. **Space and size make hierarchy.** Not weight, not colour, not a box.
 3. **A card must earn itself.** A card means "this is a separate, clickable or self-contained thing". Body text in a card is a mistake.
-4. **One accent hue.** Deep violet (`accent`), with a single warm-yellow **highlight** (`hl`) for the one
-   "look here" moment per view. Everything else is neutral, a fixed meaning, or a *tone* used only on icon
-   tiles and cover art.
+4. **One accent hue.** Content-site green (`accent`). The header and footer are always dark (`nav-*`
+   tokens). Everything else is neutral or carries a fixed meaning. The `hl` highlight and `tone-*`
+   palette exist but are used sparingly — a directory page is text and rules, not tiles.
 5. **Colour never carries meaning alone.** Always paired with an icon or a label.
 6. **Mobile is a design, not a fallback.** Every component is designed at 320px first.
 
@@ -47,12 +47,16 @@ themes, so **no `dark:` variant is needed**.
 | `text-ink-4` | faint, disabled, decorative icons |
 | `text-ink-inv` | text on a dark/ink fill |
 
-### Accent (single hue — violet)
+### Accent (single hue — green)
 `text-accent` `bg-accent` `bg-accent-soft` `border-accent-line` `text-accent-ink` `bg-accent-hover`
 
 Use accent for: the primary action, the active nav item, links, focus, progress.
-**Do not** use it as a background for large areas or for decoration — the `.hero-band` and
-`.cta-band` classes are the only large accent surfaces.
+**Do not** use it as a background for large areas. `.hero-band` is a flat `sunken` wash;
+`.cta-band` is the dark nav colour — neither is a gradient.
+
+### Navigation (always dark)
+`bg-nav` `bg-nav-2` `border-nav-line` `text-nav-ink` `text-nav-ink-2` — header, footer and the
+dashboard resume band. They do not change with the theme.
 
 ### Highlight (yellow) — one per view
 `bg-hl` `bg-hl-soft` `border-hl-line` `text-hl-ink` · `Button variant="highlight"` (`.btn-hl`).
@@ -78,9 +82,17 @@ Each has `.DEFAULT`, `-soft` (background), `-line` (border), `-ink` (text on sof
 `--c-olevel` (blue) and `--c-ccc` (teal), used **only** as a 6px dot or a 2px rule
 to say which course you're in. Never as a page background or a gradient.
 
+### Content-first layout rules
+- Landing pages are **directories**: real topic titles as links, grouped by unit, in columns. No
+  marketing hero, no feature-card grids, no testimonials, no gradient CTA bands.
+- Article pages: flat title block → "Last updated · N min read" meta line → actions → the note →
+  "Similar reads" as list rows. Reading column is `max-w-measure-wide`.
+- A card is for a clickable object (a practice set, a tool). Lists of content are lists with rules.
+- Fonts are self-hosted in `public/fonts` (Inter variable, JetBrains Mono, Noto Sans Devanagari).
+
 ### Banned
-Gradients outside `.cover-*` / `.cta-band` · glow / blur orbs · glassmorphism · neon · `shadow-2xl` ·
-more than 3 elevation levels · any hue outside the tokens (`tone-*` included).
+Gradients as surfaces · glow / blur orbs · glassmorphism · neon · `shadow-2xl` · icon-tile grids as
+page decoration · more than 3 elevation levels · any hue outside the tokens.
 
 ---
 
