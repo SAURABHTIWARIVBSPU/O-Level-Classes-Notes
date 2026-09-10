@@ -29,13 +29,13 @@ const CCC_TOPICS = chapters.reduce((n, u) => n + u.topics.length, 0);
 
 /* Categories for the bento grid — each is a real destination with a real count. */
 const CATEGORIES = [
-  { href: '/units/unit-1', icon: BookOpen, title: 'Topic notes', desc: 'Definition → plain Hindi → detail → example. Every topic in the syllabus.', count: `${OLEVEL_TOPICS + CCC_TOPICS} pages`, big: true },
-  { href: '/mcqs', icon: ListChecks, title: 'MCQ practice', desc: 'Every answer explained.', count: `${masterMcqs.length}+ questions` },
+  { href: '/units/unit-1', icon: BookOpen, title: 'Topic notes', desc: 'Definition → plain Hindi → detail → example. Every topic in the syllabus.', count: `${OLEVEL_TOPICS + CCC_TOPICS} pages`, big: true, image: '/images/bento-notes.jpg' },
+  { href: '/mcqs', icon: ListChecks, title: 'MCQ practice', desc: 'Every answer explained.', count: `${masterMcqs.length}+ questions`, image: '/images/bento-mcq.jpg' },
   { href: '/mock-test', icon: Timer, title: 'Mock tests', desc: 'Timed, on the official pattern.', count: 'O Level · CCC' },
   { href: '/differences', icon: Columns3, title: 'Differences', desc: 'Side-by-side comparison tables.', count: `${differencesData.length} tables` },
   { href: '/one-liners', icon: Zap, title: 'One-liners', desc: 'High-yield facts for the last hour.', count: `${oneLinersData.length} facts` },
   { href: '/cheat-sheets', icon: FileText, title: 'Cheat sheets', desc: 'Tags, properties, shortcuts.', count: 'HTML · CSS · JS' },
-  { href: '/playground', icon: Code2, title: 'Playground', desc: 'Run HTML, CSS and JS in the browser.', count: 'Live editor' },
+  { href: '/playground', icon: Code2, title: 'Playground', desc: 'Run HTML, CSS and JS in the browser.', count: 'Live editor', image: '/images/bento-playground.jpg' },
   { href: '/practical', icon: ClipboardList, title: 'Practical lab', desc: 'Exercises for the practical paper.', count: 'Unit-wise' },
   { href: '/syllabus', icon: Layers, title: 'Syllabus & marks', desc: 'Every unit, its hours and weightage.', count: '100 marks mapped' },
 ];
@@ -43,9 +43,16 @@ const CATEGORIES = [
 const FEATURED_UNITS = ['unit-3', 'unit-4', 'unit-6'];
 const FEATURED_CHAPTER = 'chapter-6';
 
+const UNIT_COVERS = {
+  'unit-3': '/images/cover-unit3-publishing.jpg',
+  'unit-4': '/images/cover-unit4-css.jpg',
+  'unit-6': '/images/cover-unit6-javascript.jpg',
+  'chapter-6': '/images/cover-ccc-chapter6.jpg',
+};
+
 const WHY = [
-  { icon: Languages, title: 'English and हिन्दी together', desc: 'Definitions in English, explanations in the Hindi a teacher speaks in class. Switch to either language from the header.' },
-  { icon: Layers, title: 'Follows the official syllabus', desc: 'Every unit maps to its NIELIT section number and marks weightage, so you study what the paper actually asks.' },
+  { icon: Languages, title: 'English and हिन्दी together', desc: 'Definitions in English, explanations in the Hindi a teacher speaks in class. Switch to either language from the header.', image: '/images/why-bilingual.jpg' },
+  { icon: Layers, title: 'Follows the official syllabus', desc: 'Every unit maps to its NIELIT section number and marks weightage, so you study what the paper actually asks.', image: '/images/why-syllabus.jpg' },
   { icon: CheckCircle2, title: 'Practice built into every topic', desc: 'Each page ends with a self-check, and every unit has its own question set with explanations for wrong answers.' },
   { icon: Smartphone, title: 'Free, no sign-up, phone-first', desc: 'Progress, bookmarks and scores stay in your browser. Nothing to install, nothing to pay, nothing to log in to.' },
 ];
@@ -165,14 +172,32 @@ export default function HomePage() {
               <Link
                 key={c.href}
                 href={c.href}
-                className={`card-link group p-6 flex flex-col ${c.big ? 'col-span-12 md:col-span-6 md:row-span-2' : 'col-span-12 sm:col-span-6 md:col-span-3'}`}
+                className={`card-link group overflow-hidden flex flex-col ${c.big ? 'col-span-12 md:col-span-6 md:row-span-2' : 'col-span-12 sm:col-span-6 md:col-span-3'}`}
               >
-                <span className="w-11 h-11 rounded-lg bg-accent-soft text-accent grid place-items-center">
-                  <c.icon className="w-5 h-5" aria-hidden="true" />
-                </span>
-                <h3 className={`mt-4 font-semibold text-ink group-hover:text-accent transition-colors ${c.big ? 'text-h2' : 'text-h3'}`}>{c.title}</h3>
-                <p className={`mt-1.5 text-ink-2 leading-relaxed ${c.big ? 'text-base max-w-md' : 'text-sm'}`}>{c.desc}</p>
-                <p className="mt-auto pt-5 text-sm font-semibold text-ink-2">{c.count}</p>
+                {c.image ? (
+                  <div className={`${c.big ? 'aspect-[16/9]' : 'aspect-[2/1]'} w-full overflow-hidden bg-sunken relative border-b border-line`}>
+                    <img
+                      src={c.image}
+                      alt={c.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-ink/5" />
+                    <span className="absolute top-3 left-3 w-9 h-9 rounded-lg bg-surface/95 border border-line text-accent grid place-items-center shadow-e1">
+                      <c.icon className="w-4 h-4" aria-hidden="true" />
+                    </span>
+                  </div>
+                ) : null}
+                <div className="p-6 flex flex-col flex-1">
+                  {!c.image ? (
+                    <span className="w-11 h-11 rounded-lg bg-accent-soft text-accent grid place-items-center">
+                      <c.icon className="w-5 h-5" aria-hidden="true" />
+                    </span>
+                  ) : null}
+                  <h3 className={`font-semibold text-ink group-hover:text-accent transition-colors ${!c.image ? 'mt-4' : ''} ${c.big ? 'text-h2' : 'text-h3'}`}>{c.title}</h3>
+                  <p className={`mt-1.5 text-ink-2 leading-relaxed ${c.big ? 'text-base max-w-md' : 'text-sm'}`}>{c.desc}</p>
+                  <p className="mt-auto pt-5 text-sm font-semibold text-ink-2">{c.count}</p>
+                </div>
               </Link>
             ))}
           </div>
@@ -230,6 +255,7 @@ export default function HomePage() {
                   icon={moduleVisual('olevel', u.number).icon}
                   badge={u.marks?.split(' (')[0]}
                   cta="Start unit"
+                  image={UNIT_COVERS[u.key]}
                 />
               </div>
             ))}
@@ -246,6 +272,7 @@ export default function HomePage() {
                   icon={moduleVisual('ccc', featuredChapter.number).icon}
                   badge={featuredChapter.marks}
                   cta="Start chapter"
+                  image={UNIT_COVERS[featuredChapter.key]}
                 />
               </div>
             ) : null}
@@ -257,12 +284,25 @@ export default function HomePage() {
           <SectionHeader id="why" title="Why students use these notes" />
           <div className="grid grid-cols-12 gap-5">
             {WHY.map((w) => (
-              <div key={w.title} className="col-span-12 sm:col-span-6 lg:col-span-3 panel p-6 flex flex-col">
-                <span className="w-11 h-11 rounded-lg bg-accent-soft text-accent grid place-items-center">
-                  <w.icon className="w-5 h-5" aria-hidden="true" />
-                </span>
-                <h3 className="mt-4 text-h3 font-semibold text-ink">{w.title}</h3>
-                <p className="mt-1.5 text-sm text-ink-2 leading-relaxed">{w.desc}</p>
+              <div key={w.title} className="col-span-12 sm:col-span-6 lg:col-span-3 panel overflow-hidden flex flex-col">
+                {w.image ? (
+                  <div className="aspect-[16/9] w-full overflow-hidden bg-sunken border-b border-line relative">
+                    <img
+                      src={w.image}
+                      alt={w.title}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-ink/5" />
+                  </div>
+                ) : null}
+                <div className="p-6 flex flex-col flex-1">
+                  <span className="w-11 h-11 rounded-lg bg-accent-soft text-accent grid place-items-center">
+                    <w.icon className="w-5 h-5" aria-hidden="true" />
+                  </span>
+                  <h3 className="mt-4 text-h3 font-semibold text-ink">{w.title}</h3>
+                  <p className="mt-1.5 text-sm text-ink-2 leading-relaxed">{w.desc}</p>
+                </div>
               </div>
             ))}
           </div>
