@@ -10,9 +10,14 @@ isn't here, add it here first, then use it.
 1. **Restraint over decoration.** Premium = clarity + hierarchy + consistency + detail. Not more effects.
 2. **Space and size make hierarchy.** Not weight, not colour, not a box.
 3. **A card must earn itself.** A card means "this is a separate, clickable or self-contained thing". Body text in a card is a mistake.
-4. **One accent hue.** Content-site green (`accent`). The header and footer are always dark (`nav-*`
-   tokens). Everything else is neutral or carries a fixed meaning. The `hl` highlight and `tone-*`
-   palette exist but are used sparingly — a directory page is text and rules, not tiles.
+4. **Two colours.** White and one brand colour — indigo (`accent`). Headings are near-black, body
+   text is muted gray (`ink-2`, #6B7280). Semantic colours (`ok warn danger exam`) carry meaning
+   inside notes only; every `tone-*` class resolves to the brand colour.
+5. **Card system.** A card is white, has a 1px soft border, a subtle shadow (`e1`), 12px radius, and
+   sits on the 12-column grid with equal height to its neighbours (`h-full` inside `grid`). Media
+   areas are always 16:9 (`.cover-16x9`) with a flat brand tint — never a photo or gradient.
+6. **Typography.** One heading weight — 600. Five sizes: 12 · 14 · 16 · 18 · 28, plus 40 for the
+   page-level display heading. Do not introduce others.
 5. **Colour never carries meaning alone.** Always paired with an icon or a label.
 6. **Mobile is a design, not a fallback.** Every component is designed at 320px first.
 
@@ -47,16 +52,16 @@ themes, so **no `dark:` variant is needed**.
 | `text-ink-4` | faint, disabled, decorative icons |
 | `text-ink-inv` | text on a dark/ink fill |
 
-### Accent (single hue — green)
+### Accent (single hue — indigo)
 `text-accent` `bg-accent` `bg-accent-soft` `border-accent-line` `text-accent-ink` `bg-accent-hover`
 
 Use accent for: the primary action, the active nav item, links, focus, progress.
 **Do not** use it as a background for large areas. `.hero-band` is a flat `sunken` wash;
 `.cta-band` is the dark nav colour — neither is a gradient.
 
-### Navigation (always dark)
-`bg-nav` `bg-nav-2` `border-nav-line` `text-nav-ink` `text-nav-ink-2` — header, footer and the
-dashboard resume band. They do not change with the theme.
+### Navigation
+`bg-nav` `bg-nav-2` `border-nav-line` `text-nav-ink` `text-nav-ink-2` — the header (white) and
+the dashboard resume band. The footer sits on `bg-sunken`.
 
 ### Highlight (yellow) — one per view
 `bg-hl` `bg-hl-soft` `border-hl-line` `text-hl-ink` · `Button variant="highlight"` (`.btn-hl`).
@@ -82,9 +87,10 @@ Each has `.DEFAULT`, `-soft` (background), `-line` (border), `-ink` (text on sof
 `--c-olevel` (blue) and `--c-ccc` (teal), used **only** as a 6px dot or a 2px rule
 to say which course you're in. Never as a page background or a gradient.
 
-### Content-first layout rules
-- Landing pages are **directories**: real topic titles as links, grouped by unit, in columns. No
-  marketing hero, no feature-card grids, no testimonials, no gradient CTA bands.
+### Layout rules
+- Homepage order: Hero → Social proof → Bento categories → Featured courses (`CourseCard`) → Why us →
+  Testimonials. Every section is a 12-column grid (`grid-cols-12` + `col-span-*`).
+- Course pages: hero → `CourseCard` grid of units/chapters → differences / one-liners → practice table.
 - Article pages: flat title block → "Last updated · N min read" meta line → actions → the note →
   "Similar reads" as list rows. Reading column is `max-w-measure-wide`.
 - A card is for a clickable object (a practice set, a tool). Lists of content are lists with rules.
@@ -114,8 +120,8 @@ Inter (UI + English) · Noto Sans Devanagari (Hindi) · JetBrains Mono (code).
 | `text-xs` | 12 | meta, captions |
 | `text-2xs` | 11 | micro labels, kbd |
 
-**Weights: 400, 500, 600, 700 only.** `font-semibold` (600) is the ceiling for
-headings. `font-black` / `font-extrabold` are banned.
+**Weights: 400, 500, 600 only.** Every heading is `font-semibold` (600) — there is no
+other heading weight. `font-bold`, `font-black`, `font-extrabold` are banned.
 
 - Hindi text: always add `hindi-text` and `lang="hi"`.
 - Reading columns: `max-w-measure` (68ch). Never let note text run the full width.
@@ -163,7 +169,8 @@ import CourseSidebar from '@/components/layout/CourseSidebar';
 | `Button` | `variant`: primary (one per view) · secondary · ghost · soft. `size`: sm/md/lg. `icon`/`iconRight`. `href` makes it a link. |
 | `Badge` | `tone`: neutral/accent/ok/warn/danger/exam. `mono` for codes. |
 | `Panel` | static container. `CardLink` for a clickable one. |
-| `PageHeader` | every page starts with this: eyebrow, title, hindiTitle, description, actions, meta, plus `icon` (lucide component or a `ModuleIcon` name string) and `tone` for the identity tile. Renders inside a `.hero-band`; `band={false}` for the flat variant. |
+| `PageHeader` | every inner page starts with this: eyebrow, title, hindiTitle, description, actions, meta. Flat by default. |
+| `CourseCard` | the card for anything course-shaped (course, unit, chapter): 16:9 cover, title, meta, description, CTA. Always `h-full` in a grid. |
 | `IconTile` | `icon`, `tone`, `size` sm/md/lg. The coloured square in front of a card title. |
 | `Chip` | pill link/button for explore rows and filters. `active`. |
 | `Ring` | conic progress ring, `value` 0–100, `size`. |

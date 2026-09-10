@@ -117,7 +117,7 @@ export default function McqsHubPage() {
                       )}
                     </div>
                     <p className="mt-4 eyebrow text-accent">Unit {unit.label}</p>
-                    <h3 className="mt-1 text-h4 font-bold text-ink">{unit.title}</h3>
+                    <h3 className="mt-1 text-h4 font-semibold text-ink">{unit.title}</h3>
                     {unit.hindiTitle ? (
                       <p className="mt-0.5 text-sm text-hindi hindi-text" lang="hi">{unit.hindiTitle}</p>
                     ) : null}
@@ -159,7 +159,7 @@ export default function McqsHubPage() {
             <li>
               <CardLink href="/mcqs/all" className="h-full p-5">
                 <ListChecks className="w-5 h-5 text-accent" aria-hidden="true" />
-                <h3 className="mt-3 text-h4 font-bold text-ink">All {total} questions</h3>
+                <h3 className="mt-3 text-h4 font-semibold text-ink">All {total} questions</h3>
                 <p className="mt-1.5 text-base text-ink-2 leading-relaxed">
                   The full bank in one place, with search and filters by unit and difficulty. Untimed.
                 </p>
@@ -172,7 +172,7 @@ export default function McqsHubPage() {
             <li>
               <CardLink href="/mock-test" className="h-full p-5">
                 <Timer className="w-5 h-5 text-accent" aria-hidden="true" />
-                <h3 className="mt-3 text-h4 font-bold text-ink">Mock test</h3>
+                <h3 className="mt-3 text-h4 font-semibold text-ink">Mock test</h3>
                 <p className="mt-1.5 text-base text-ink-2 leading-relaxed">
                   A timed paper on the official blueprint: 100 questions in 90 minutes, 1 mark each, no negative
                   marking.

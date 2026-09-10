@@ -154,19 +154,20 @@ module.exports = {
 
       /* Type scale — 1.200 minor third, optically corrected at the ends */
       fontSize: {
-        '2xs': ['0.6875rem', { lineHeight: '1.45', letterSpacing: '0.01em' }],   // 11 — micro labels
-        xs: ['0.75rem', { lineHeight: '1.5' }],                                   // 12 — meta
-        sm: ['0.8125rem', { lineHeight: '1.55' }],                                // 13 — UI
-        base: ['0.9375rem', { lineHeight: '1.6' }],                               // 15 — UI body
-        prose: ['1rem', { lineHeight: '1.75' }],                                  // 16 — reading body
-        'prose-lg': ['1.0625rem', { lineHeight: '1.75' }],                         // 17 — reading body lg
-        lead: ['1.0625rem', { lineHeight: '1.65' }],                              // 17 — lead paragraph
-        h4: ['1rem', { lineHeight: '1.4', letterSpacing: '-0.005em' }],
-        h3: ['1.125rem', { lineHeight: '1.4', letterSpacing: '-0.01em' }],
-        h2: ['1.375rem', { lineHeight: '1.32', letterSpacing: '-0.015em' }],
-        h1: ['1.75rem', { lineHeight: '1.22', letterSpacing: '-0.02em' }],
-        display: ['2.25rem', { lineHeight: '1.12', letterSpacing: '-0.028em' }],
-        'display-lg': ['3rem', { lineHeight: '1.06', letterSpacing: '-0.032em' }],
+        /* Five sizes only: 12 · 14 · 16 · 18 · 28 (+ 40 display). Aliases map onto them. */
+        '2xs': ['0.75rem', { lineHeight: '1.5', letterSpacing: '0.02em' }],      // 12
+        xs: ['0.75rem', { lineHeight: '1.5' }],                                   // 12
+        sm: ['0.875rem', { lineHeight: '1.55' }],                                 // 14
+        base: ['1rem', { lineHeight: '1.6' }],                                    // 16
+        prose: ['1rem', { lineHeight: '1.75' }],                                  // 16
+        'prose-lg': ['1.0625rem', { lineHeight: '1.75' }],                        // 17 reading
+        lead: ['1.125rem', { lineHeight: '1.6' }],                                // 18
+        h4: ['1rem', { lineHeight: '1.4' }],                                      // 16
+        h3: ['1.125rem', { lineHeight: '1.4', letterSpacing: '-0.005em' }],       // 18
+        h2: ['1.75rem', { lineHeight: '1.25', letterSpacing: '-0.015em' }],       // 28
+        h1: ['1.75rem', { lineHeight: '1.25', letterSpacing: '-0.015em' }],       // 28
+        display: ['2.5rem', { lineHeight: '1.15', letterSpacing: '-0.02em' }],    // 40
+        'display-lg': ['2.5rem', { lineHeight: '1.15', letterSpacing: '-0.02em' }],
       },
 
       borderRadius: {
@@ -182,6 +183,7 @@ module.exports = {
 
       boxShadow: {
         e1: 'var(--e1)',
+        card: 'var(--e1)',
         e2: 'var(--e2)',
         e3: 'var(--e3)',
         none: 'none',

@@ -2,7 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, ChevronRight, Clock } from 'lucide-react';
 
-import { COURSES, getCourseMeta, getModules } from '@/lib/navigation';
+import { COURSES, getCourseMeta, getModules, moduleVisual } from '@/lib/navigation';
+import { CourseCard } from '@/components/ui';
 import { cccDifferencesData } from '@/data/cccDifferencesData';
 import { cccOneLinersData } from '@/data/cccOneLinersData';
 import { cccMcqsData } from '@/data/cccMcqsData';
@@ -15,8 +16,8 @@ export const metadata = {
 
 function SectionTitle({ id, children, action }) {
   return (
-    <div className="flex items-end justify-between gap-4 pb-2.5 mb-4 border-b-2 border-ink">
-      <h2 id={id} className="text-h2 font-bold text-ink">{children}</h2>
+    <div className="flex items-end justify-between gap-4 mb-6">
+      <h2 id={id} className="text-h2 font-semibold text-ink">{children}</h2>
       {action ? (
         <Link href={action.href} className="shrink-0 inline-flex items-center gap-1 text-sm font-semibold text-accent hover:underline underline-offset-2">
           {action.label}
@@ -41,10 +42,10 @@ export default function CCCLandingPage() {
   return (
     <div>
       {/* ------------------------------------------------------------- hero */}
-      <section className="hero-band border-b border-line">
-        <div className="shell py-8 sm:py-10">
+      <section className="border-b border-line">
+        <div className="shell shell-wide py-12 lg:py-16 max-w-3xl">
           <p className="eyebrow text-ccc">{course.module} · {course.level} · Free</p>
-          <h1 className="mt-2 text-h1 sm:text-display font-bold text-ink">Course on Computer Concepts (CCC)</h1>
+          <h1 className="mt-2 text-display font-semibold text-ink">Course on Computer Concepts (CCC)</h1>
           <p className="mt-1 text-lead text-hindi hindi-text" lang="hi">{meta.hindiCourseName}</p>
           <p className="mt-3 text-base sm:text-lead text-ink-2 max-w-measure-wide">
             CCC is the starting course. If you have never used a computer for more than WhatsApp, this is written
@@ -62,34 +63,27 @@ export default function CCCLandingPage() {
         </div>
       </section>
 
-      <div className="shell py-8 sm:py-10">
+      <div className="shell shell-wide py-12">
         {/* ------------------------------------------------------ chapters */}
         <section aria-labelledby="chapters" className="mb-12">
           <SectionTitle id="chapters" action={{ href: '/ccc/notes', label: 'Full chapter notes' }}>
             All {chapters.length} chapters, every topic
           </SectionTitle>
-          <div className="grid gap-x-8 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-12 gap-5">
             {chapters.map((c) => (
-              <div key={c.key} className="min-w-0">
-                <h3 className="text-base font-bold text-ink leading-snug">
-                  <Link href={c.href} className="hover:text-accent">
-                    <span className="font-mono text-xs text-ccc mr-1.5">{c.number}</span>
-                    {c.title}
-                  </Link>
-                </h3>
-                <p className="mt-0.5 mb-2 text-xs text-ink-3">
-                  {c.topics.length} topics · {c.hours}h{c.marks ? ` · ${c.marks}` : ''}
-                </p>
-                <ul className="space-y-1">
-                  {c.topics.map((t) => (
-                    <li key={t.slug}>
-                      <Link href={t.href} className="group flex items-start gap-2 py-0.5 text-[15px] leading-snug text-ink-2 hover:text-accent">
-                        <ChevronRight className="w-3.5 h-3.5 mt-1 text-ink-4 group-hover:text-accent shrink-0" aria-hidden="true" />
-                        <span>{t.title}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+              <div key={c.key} className="col-span-12 sm:col-span-6 lg:col-span-4">
+                <CourseCard
+                  href={c.href}
+                  eyebrow={`Chapter ${c.n}`}
+                  title={c.title}
+                  hindiTitle={c.hindiTitle}
+                  description={c.description}
+                  topics={c.topics.length}
+                  hours={c.hours}
+                  icon={moduleVisual('ccc', c.number).icon}
+                  badge={c.marks}
+                  cta="Start chapter"
+                />
               </div>
             ))}
           </div>
@@ -105,7 +99,7 @@ export default function CCCLandingPage() {
               {cccDifferencesData.slice(0, 8).map((d) => (
                 <li key={d.id}>
                   <Link href={`/ccc/differences#${d.id}`} className="group flex items-center justify-between gap-3 py-2.5">
-                    <span className="text-[15px] font-medium text-ink group-hover:text-accent leading-snug">{d.englishTitle || d.title}</span>
+                    <span className="text-base font-medium text-ink group-hover:text-accent leading-snug">{d.englishTitle || d.title}</span>
                     <ChevronRight className="w-4 h-4 text-ink-4 group-hover:text-accent shrink-0" aria-hidden="true" />
                   </Link>
                 </li>
@@ -120,8 +114,8 @@ export default function CCCLandingPage() {
             <ol className="space-y-2.5">
               {cccOneLinersData.slice(0, 6).map((o, i) => (
                 <li key={o.id} className="flex gap-3">
-                  <span className="shrink-0 w-6 h-6 rounded bg-accent-soft text-accent font-mono text-xs font-bold grid place-items-center mt-0.5">{i + 1}</span>
-                  <p className="text-[15px] text-ink-2 leading-relaxed hindi-text" lang="hi">
+                  <span className="shrink-0 w-6 h-6 rounded bg-accent-soft text-accent font-mono text-xs font-semibold grid place-items-center mt-0.5">{i + 1}</span>
+                  <p className="text-base text-ink-2 leading-relaxed hindi-text" lang="hi">
                     {o.fact}
                     {o.category ? <span className="ml-2 text-xs text-ink-4 font-sans">{o.category}</span> : null}
                   </p>
@@ -168,15 +162,15 @@ export default function CCCLandingPage() {
             </div>
             <div className="lg:col-span-4 space-y-3">
               <Link href="/ccc/mock-test" className="card-link p-4 block">
-                <span className="block text-base font-bold text-ink">CCC mock test</span>
+                <span className="block text-base font-semibold text-ink">CCC mock test</span>
                 <span className="block text-sm text-ink-3 mt-0.5">100 questions · 90 minutes · no negative marking</span>
               </Link>
               <Link href="/ccc/cheat-sheets" className="card-link p-4 block">
-                <span className="block text-base font-bold text-ink">Cheat sheets</span>
+                <span className="block text-base font-semibold text-ink">Cheat sheets</span>
                 <span className="block text-sm text-ink-3 mt-0.5">LibreOffice shortcuts and quick tables</span>
               </Link>
               <Link href="/ccc/notes" className="card-link p-4 block">
-                <span className="block text-base font-bold text-ink">Full chapter notes</span>
+                <span className="block text-base font-semibold text-ink">Full chapter notes</span>
                 <span className="block text-sm text-ink-3 mt-0.5">Long-form reader, English and हिन्दी</span>
               </Link>
             </div>
@@ -188,27 +182,27 @@ export default function CCCLandingPage() {
           <SectionTitle id="exam-facts">About the CCC exam</SectionTitle>
           <dl className="grid gap-x-8 gap-y-5 sm:grid-cols-2 max-w-measure-wide text-base">
             <div>
-              <dt className="font-bold text-ink">Pattern</dt>
+              <dt className="font-semibold text-ink">Pattern</dt>
               <dd className="mt-1 text-ink-2 leading-relaxed">{meta.examPattern}</dd>
             </div>
             <div>
-              <dt className="font-bold text-ink">Passing</dt>
+              <dt className="font-semibold text-ink">Passing</dt>
               <dd className="mt-1 text-ink-2 leading-relaxed">{meta.passingCriteria}</dd>
             </div>
             <div>
-              <dt className="font-bold text-ink">Who it is for</dt>
+              <dt className="font-semibold text-ink">Who it is for</dt>
               <dd className="mt-1 text-ink-2 leading-relaxed">{meta.eligibility}</dd>
             </div>
             <div>
-              <dt className="font-bold text-ink">Practical software</dt>
+              <dt className="font-semibold text-ink">Practical software</dt>
               <dd className="mt-1 text-ink-2 leading-relaxed">{meta.practicalEnvironment}</dd>
             </div>
             <div>
-              <dt className="font-bold text-ink">Jobs it maps to</dt>
+              <dt className="font-semibold text-ink">Jobs it maps to</dt>
               <dd className="mt-1 text-ink-2 leading-relaxed">{meta.jobRoles.join(' · ')}</dd>
             </div>
             <div>
-              <dt className="font-bold text-ink">Certificate</dt>
+              <dt className="font-semibold text-ink">Certificate</dt>
               <dd className="mt-1 text-ink-2 leading-relaxed">{meta.courseName}, {meta.courseCode}. {meta.organization} · {meta.revision}, in force from {meta.implementationDate}.</dd>
             </div>
           </dl>

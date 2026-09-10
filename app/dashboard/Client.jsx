@@ -56,7 +56,7 @@ function Stat({ label, value, suffix, meaning, icon, tone = 'violet' }) {
       {icon ? <IconTile icon={icon} tone={tone} /> : null}
       <div className="min-w-0">
       <p className="eyebrow">{label}</p>
-      <p className="mt-1.5 text-h2 font-bold text-ink tabular-nums">
+      <p className="mt-1.5 text-h2 font-semibold text-ink tabular-nums">
         {value}
         {suffix ? <span className="ml-1 text-base font-medium text-ink-3">{suffix}</span> : null}
       </p>
@@ -320,7 +320,7 @@ export default function DashboardClient() {
               <p className="eyebrow text-white/80">
                 {nextUp.resumed ? 'Continue where you left off' : 'Next topic in the syllabus'}
               </p>
-              <p className="mt-1 text-h3 font-bold text-white truncate">{nextUp.title}</p>
+              <p className="mt-1 text-h3 font-semibold text-white truncate">{nextUp.title}</p>
               <p className="mt-0.5 text-sm text-white/80">{nextUp.context}</p>
               </div>
             </div>

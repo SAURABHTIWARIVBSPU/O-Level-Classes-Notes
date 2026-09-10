@@ -1,12 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, Search, ChevronRight, Clock, BookOpen } from 'lucide-react';
+import {
+  ArrowRight, BookOpen, ListChecks, Timer, Zap, Columns3, FileText, Code2,
+  ClipboardList, Languages, Layers, Smartphone, CheckCircle2, Quote,
+} from 'lucide-react';
 
-import { COURSES, getModules, getCourseMeta } from '@/lib/navigation';
+import { COURSES, getModules, getCourseMeta, moduleVisual } from '@/lib/navigation';
+import { masterMcqs } from '@/data/mcqsData';
 import { differencesData } from '@/data/differencesData';
 import { oneLinersData } from '@/data/oneLinersData';
-import { cheatSheetsData } from '@/data/cheatSheetsData';
-import { masterMcqs } from '@/data/mcqsData';
+import { testimonialsData } from '@/data/testimonialsData';
+import { CourseCard } from '@/components/ui';
 import ContinueLearning from '@/components/learning/ContinueLearning';
 
 export const metadata = {
@@ -18,350 +22,258 @@ export const metadata = {
 
 const units = getModules('olevel');
 const chapters = getModules('ccc');
-const meta = getCourseMeta('olevel');
+const olevelMeta = getCourseMeta('olevel');
+const cccMeta = getCourseMeta('ccc');
 const OLEVEL_TOPICS = units.reduce((n, u) => n + u.topics.length, 0);
 const CCC_TOPICS = chapters.reduce((n, u) => n + u.topics.length, 0);
 
-const MCQ_BY_UNIT = new Map();
-for (const q of masterMcqs) MCQ_BY_UNIT.set(Number(q.unit), (MCQ_BY_UNIT.get(Number(q.unit)) || 0) + 1);
-
-const QUICK_SEARCHES = [
-  'HTML tags', 'CSS box model', 'Internet vs WWW', 'RAM vs ROM', 'JavaScript events',
-  'W3.CSS grid', 'LibreOffice shortcuts', 'Digital payments',
+/* Categories for the bento grid — each is a real destination with a real count. */
+const CATEGORIES = [
+  { href: '/units/unit-1', icon: BookOpen, title: 'Topic notes', desc: 'Definition → plain Hindi → detail → example. Every topic in the syllabus.', count: `${OLEVEL_TOPICS + CCC_TOPICS} pages`, big: true },
+  { href: '/mcqs', icon: ListChecks, title: 'MCQ practice', desc: 'Every answer explained.', count: `${masterMcqs.length}+ questions` },
+  { href: '/mock-test', icon: Timer, title: 'Mock tests', desc: 'Timed, on the official pattern.', count: 'O Level · CCC' },
+  { href: '/differences', icon: Columns3, title: 'Differences', desc: 'Side-by-side comparison tables.', count: `${differencesData.length} tables` },
+  { href: '/one-liners', icon: Zap, title: 'One-liners', desc: 'High-yield facts for the last hour.', count: `${oneLinersData.length} facts` },
+  { href: '/cheat-sheets', icon: FileText, title: 'Cheat sheets', desc: 'Tags, properties, shortcuts.', count: 'HTML · CSS · JS' },
+  { href: '/playground', icon: Code2, title: 'Playground', desc: 'Run HTML, CSS and JS in the browser.', count: 'Live editor' },
+  { href: '/practical', icon: ClipboardList, title: 'Practical lab', desc: 'Exercises for the practical paper.', count: 'Unit-wise' },
+  { href: '/syllabus', icon: Layers, title: 'Syllabus & marks', desc: 'Every unit, its hours and weightage.', count: '100 marks mapped' },
 ];
 
-/* ------------------------------------------------------------ helpers */
+const FEATURED_UNITS = ['unit-3', 'unit-4', 'unit-6'];
+const FEATURED_CHAPTER = 'chapter-6';
 
-function SectionTitle({ id, children, action }) {
+const WHY = [
+  { icon: Languages, title: 'English and हिन्दी together', desc: 'Definitions in English, explanations in the Hindi a teacher speaks in class. Switch to either language from the header.' },
+  { icon: Layers, title: 'Follows the official syllabus', desc: 'Every unit maps to its NIELIT section number and marks weightage, so you study what the paper actually asks.' },
+  { icon: CheckCircle2, title: 'Practice built into every topic', desc: 'Each page ends with a self-check, and every unit has its own question set with explanations for wrong answers.' },
+  { icon: Smartphone, title: 'Free, no sign-up, phone-first', desc: 'Progress, bookmarks and scores stay in your browser. Nothing to install, nothing to pay, nothing to log in to.' },
+];
+
+function SectionHeader({ id, title, description, action }) {
   return (
-    <div className="flex items-end justify-between gap-4 pb-2.5 mb-4 border-b-2 border-ink">
-      <h2 id={id} className="text-h2 font-bold text-ink">{children}</h2>
+    <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
+      <div className="max-w-2xl">
+        <h2 id={id} className="text-h2 font-semibold text-ink">{title}</h2>
+        {description ? <p className="mt-1.5 text-base text-ink-2">{description}</p> : null}
+      </div>
       {action ? (
-        <Link href={action.href} className="shrink-0 inline-flex items-center gap-1 text-sm font-semibold text-accent hover:underline underline-offset-2">
-          {action.label}
-          <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+        <Link href={action.href} className="inline-flex items-center gap-1 text-sm font-semibold text-accent hover:underline underline-offset-2">
+          {action.label} <ArrowRight className="w-4 h-4" aria-hidden="true" />
         </Link>
       ) : null}
     </div>
   );
 }
 
-function TopicList({ module, limit }) {
-  const items = limit ? module.topics.slice(0, limit) : module.topics;
-  const rest = module.topics.length - items.length;
-  return (
-    <ul className="space-y-1">
-      {items.map((t) => (
-        <li key={t.slug}>
-          <Link href={t.href} className="group flex items-start gap-2 py-0.5 text-[15px] leading-snug text-ink-2 hover:text-accent">
-            <ChevronRight className="w-3.5 h-3.5 mt-1 text-ink-4 group-hover:text-accent shrink-0" aria-hidden="true" />
-            <span>{t.title}</span>
-          </Link>
-        </li>
-      ))}
-      {rest > 0 ? (
-        <li>
-          <Link href={module.href} className="inline-block pl-5 py-0.5 text-sm font-semibold text-accent hover:underline underline-offset-2">
-            + {rest} more {rest === 1 ? 'topic' : 'topics'}
-          </Link>
-        </li>
-      ) : null}
-    </ul>
-  );
-}
-
-/* --------------------------------------------------------------- page */
-
 export default function HomePage() {
+  const featuredUnits = FEATURED_UNITS.map((k) => units.find((u) => u.key === k)).filter(Boolean);
+  const featuredChapter = chapters.find((c) => c.key === FEATURED_CHAPTER);
+
   return (
     <div>
-      {/* ------------------------------------------------------ search hero */}
-      <section className="hero-band border-b border-line">
-        <div className="shell py-10 sm:py-14 text-center">
-          <p className="eyebrow text-accent">Free · English + हिन्दी · Updated for the current syllabus</p>
-          <h1 className="mt-2 text-h1 sm:text-display font-bold text-ink">
-            NIELIT O Level &amp; CCC study notes
-          </h1>
-          <p className="mt-3 text-base sm:text-lead text-ink-2 max-w-2xl mx-auto">
-            {OLEVEL_TOPICS + CCC_TOPICS} topic pages, {masterMcqs.length}+ explained questions, comparison tables,
-            one-liners and timed mock tests — written the way a teacher explains, in the language you think in.
-          </p>
-
-          <form action="/search" method="get" role="search" className="mt-6 max-w-2xl mx-auto">
-            <label htmlFor="home-search" className="sr-only">Search topics</label>
-            <div className="flex items-center h-12 sm:h-14 rounded-lg bg-surface border-2 border-line-strong focus-within:border-accent shadow-e1 pl-4 pr-1.5">
-              <Search className="w-5 h-5 text-ink-3 shrink-0" aria-hidden="true" />
-              <input
-                id="home-search"
-                name="q"
-                type="search"
-                placeholder="Search a topic, e.g. CSS box model, MICR, media query…"
-                className="flex-1 min-w-0 h-full px-3 bg-transparent text-base text-ink placeholder:text-ink-4 outline-none"
-                autoComplete="off"
-              />
-              <button type="submit" className="btn btn-primary h-9 sm:h-10 px-4">Search</button>
+      {/* ============================================================ 1. HERO */}
+      <section className="border-b border-line">
+        <div className="shell shell-wide py-14 lg:py-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-7 min-w-0">
+            <p className="text-sm font-semibold text-accent">NIELIT O Level M2-R5.1 · CCC</p>
+            <h1 className="mt-3 text-display font-semibold text-ink max-w-2xl">
+              Study notes that explain each topic once, properly.
+            </h1>
+            <p className="mt-4 text-lead text-ink-2 max-w-xl">
+              Every topic in the syllabus, written the way a teacher explains it — in English and हिन्दी —
+              with the questions, comparisons and revision sheets you need for the exam.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/units/unit-1" className="btn btn-primary btn-lg">Start O Level</Link>
+              <Link href="/ccc" className="btn btn-secondary btn-lg">Start CCC</Link>
             </div>
-          </form>
+            <p className="mt-5 text-sm text-ink-2">Free · No sign-up · Progress saved in your browser</p>
+          </div>
 
-          <ul className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1.5">
-            {QUICK_SEARCHES.map((s) => (
-              <li key={s}>
-                <Link href={`/search?q=${encodeURIComponent(s)}`} className="text-sm text-ink-3 hover:text-accent underline-offset-2 hover:underline">
-                  {s}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {/* Product preview — one real topic page, not an illustration */}
+          <div className="lg:col-span-5 min-w-0">
+            <div className="panel overflow-hidden">
+              <div className="px-5 py-3 border-b border-line flex items-center justify-between">
+                <span className="text-sm font-semibold text-ink">Unit 04 · CSS Box Model</span>
+                <span className="text-xs text-ink-2">4 min read</span>
+              </div>
+              <div className="p-5 space-y-4">
+                <div>
+                  <p className="text-xs font-semibold text-ink-2 uppercase tracking-wide">Definition</p>
+                  <p className="mt-1 text-sm text-ink leading-relaxed">
+                    The CSS box model describes every element as a box made of content, padding, border and margin.
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-ink-2 uppercase tracking-wide">In plain terms</p>
+                  <p className="mt-1 text-sm text-ink-2 leading-relaxed hindi-text" lang="hi">
+                    हर element एक डिब्बा है — अंदर content, उसके चारों ओर padding, फिर border, और बाहर margin।
+                  </p>
+                </div>
+                <pre className="rounded-lg bg-sunken border border-line p-3 font-mono text-xs text-ink leading-relaxed overflow-x-auto">{`.card {\n  padding: 16px;\n  border: 1px solid #e5e7eb;\n  margin: 24px 0;\n}`}</pre>
+                <div className="flex items-center justify-between pt-1">
+                  <span className="text-xs text-ink-2">Self-check · 2 questions</span>
+                  <Link href="/units/unit-4/topics/css-box-model" className="text-sm font-semibold text-accent hover:underline underline-offset-2">Open this topic →</Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <div className="shell py-8 sm:py-10">
-        <ContinueLearning className="mb-8" />
-
-        {/* ------------------------------------------------------ courses */}
-        <section aria-labelledby="courses" className="mb-12">
-          <SectionTitle id="courses">Courses</SectionTitle>
-          <div className="divide-y divide-line border-y border-line">
-            {Object.values(COURSES).map((course) => {
-              const mods = getModules(course.key);
-              const topicCount = mods.reduce((n, m) => n + m.topics.length, 0);
-              const cm = getCourseMeta(course.key);
-              return (
-                <div key={course.key} className="py-4 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full" style={{ background: `rgb(var(${course.accentVar}))` }} aria-hidden="true" />
-                      <Link href={course.home} className="text-h3 font-bold text-ink hover:text-accent">
-                        {course.fullName}
-                      </Link>
-                      <span className="badge badge-neutral badge-mono">{course.module}</span>
-                    </div>
-                    <p className="mt-1 text-base text-ink-2">{course.description}</p>
-                    <p className="mt-1.5 text-sm text-ink-3">
-                      {mods.length} {course.unitWordPlural.toLowerCase()} · {topicCount} topics · {cm.durationTotalHours} hours · {course.level}
-                    </p>
-                  </div>
-                  <div className="flex gap-2 sm:flex-col sm:items-stretch">
-                    <Link href={mods[0]?.href || course.home} className="btn btn-primary btn-sm">Start {course.unitWord} 1</Link>
-                    <Link href={course.key === 'ccc' ? '/ccc/syllabus' : '/syllabus'} className="btn btn-secondary btn-sm">Syllabus</Link>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* ---------------------------------------------- O Level directory */}
-        <section aria-labelledby="olevel-topics" className="mb-12">
-          <SectionTitle id="olevel-topics" action={{ href: '/syllabus', label: 'Full syllabus & marks' }}>
-            O Level M2-R5.1 — all topics
-          </SectionTitle>
-          <div className="grid gap-x-8 gap-y-7 sm:grid-cols-2 lg:grid-cols-4">
-            {units.map((u) => (
-              <div key={u.key} className="min-w-0">
-                <h3 className="text-base font-bold text-ink leading-snug">
-                  <Link href={u.href} className="hover:text-accent">
-                    <span className="font-mono text-xs text-accent mr-1.5">{u.number}</span>
-                    {u.title}
-                  </Link>
-                </h3>
-                <p className="mt-0.5 mb-2 text-xs text-ink-3">
-                  {u.topics.length} topics · {u.hours}h
-                </p>
-                <TopicList module={u} limit={6} />
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* -------------------------------------------------- CCC directory */}
-        <section aria-labelledby="ccc-topics" className="mb-12">
-          <SectionTitle id="ccc-topics" action={{ href: '/ccc', label: 'CCC home' }}>
-            CCC — all chapters
-          </SectionTitle>
-          <div className="grid gap-x-8 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
-            {chapters.map((c) => (
-              <div key={c.key} className="min-w-0">
-                <h3 className="text-base font-bold text-ink leading-snug">
-                  <Link href={c.href} className="hover:text-accent">
-                    <span className="font-mono text-xs text-ccc mr-1.5">{c.number}</span>
-                    {c.title}
-                  </Link>
-                </h3>
-                <p className="mt-0.5 mb-2 text-xs text-ink-3">{c.topics.length} topics · {c.hours}h</p>
-                <TopicList module={c} limit={4} />
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* --------------------------------------------------- revision row */}
-        <div className="grid gap-10 lg:grid-cols-12 mb-12">
-          {/* Differences */}
-          <section aria-labelledby="differences" className="lg:col-span-5">
-            <SectionTitle id="differences" action={{ href: '/differences', label: `All ${differencesData.length}` }}>
-              Differences the exam asks
-            </SectionTitle>
-            <ol className="divide-y divide-line">
-              {differencesData.slice(0, 8).map((d) => (
-                <li key={d.id}>
-                  <Link href={`/differences#${d.id}`} className="group flex items-center justify-between gap-3 py-2.5">
-                    <span className="min-w-0">
-                      <span className="block text-[15px] font-medium text-ink group-hover:text-accent leading-snug">{d.title}</span>
-                      <span className="block text-xs text-ink-3">Unit {d.unit} · {d.unitName}</span>
-                    </span>
-                    <ChevronRight className="w-4 h-4 text-ink-4 group-hover:text-accent shrink-0" aria-hidden="true" />
-                  </Link>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          {/* One-liners */}
-          <section aria-labelledby="one-liners" className="lg:col-span-7">
-            <SectionTitle id="one-liners" action={{ href: '/one-liners', label: `All ${oneLinersData.length}` }}>
-              One-liners for the last hour
-            </SectionTitle>
-            <ol className="space-y-2.5">
-              {oneLinersData.slice(0, 6).map((o, i) => (
-                <li key={o.id} className="flex gap-3">
-                  <span className="shrink-0 w-6 h-6 rounded bg-accent-soft text-accent font-mono text-xs font-bold grid place-items-center mt-0.5">{i + 1}</span>
-                  <p className="text-[15px] text-ink-2 leading-relaxed hindi-text" lang="hi">
-                    {o.text}
-                    <span className="ml-2 text-xs text-ink-4 font-sans">Unit {o.unit}</span>
-                  </p>
-                </li>
-              ))}
-            </ol>
-          </section>
+      {/* ==================================================== 2. SOCIAL PROOF */}
+      <section aria-label="At a glance" className="border-b border-line bg-sunken">
+        <div className="shell shell-wide py-6 grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            [`${OLEVEL_TOPICS + CCC_TOPICS}`, 'topic pages across 8 units and 9 chapters'],
+            [`${masterMcqs.length}+`, 'practice questions, every answer explained'],
+            [`${differencesData.length + oneLinersData.length}`, 'comparison tables and one-line facts'],
+            ['100%', 'free — follows NIELIT M2-R5.1 and CCC syllabi'],
+          ].map(([n, l]) => (
+            <div key={l}>
+              <p className="text-h2 font-semibold text-ink tabular-nums">{n}</p>
+              <p className="mt-0.5 text-sm text-ink-2">{l}</p>
+            </div>
+          ))}
         </div>
+      </section>
 
-        {/* -------------------------------------------------------- practice */}
-        <section aria-labelledby="practice" className="mb-12">
-          <SectionTitle id="practice" action={{ href: '/mcqs', label: 'Question bank' }}>
-            Practice sets
-          </SectionTitle>
-          <div className="grid gap-8 lg:grid-cols-12">
-            <div className="lg:col-span-8 overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="text-left text-2xs uppercase tracking-wider text-ink-3 border-b border-line">
-                    <th className="py-2 pr-3 font-semibold">Set</th>
-                    <th className="py-2 pr-3 font-semibold">Questions</th>
-                    <th className="py-2 pr-3 font-semibold">Marks weight</th>
-                    <th className="py-2 font-semibold sr-only">Open</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-line">
-                  {units.map((u) => (
-                    <tr key={u.key} className="group">
-                      <td className="py-2.5 pr-3">
-                        <Link href={u.mcqHref} className="font-medium text-ink group-hover:text-accent">
-                          <span className="font-mono text-xs text-ink-4 mr-1.5">{u.number}</span>
-                          {u.title}
-                        </Link>
-                      </td>
-                      <td className="py-2.5 pr-3 tabular-nums text-ink-2">{MCQ_BY_UNIT.get(u.n) || 0}</td>
-                      <td className="py-2.5 pr-3 text-ink-3">{u.marks}</td>
-                      <td className="py-2.5 text-right">
-                        <Link href={u.mcqHref} className="text-sm font-semibold text-accent hover:underline underline-offset-2">Practise</Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="lg:col-span-4 space-y-3">
-              {[
-                { href: '/mock-test', title: 'O Level mock test', desc: `${meta.writtenMarksMax} marks · timed · official pattern` },
-                { href: '/ccc/mock-test', title: 'CCC mock test', desc: '100 questions · 90 minutes · no negative marking' },
-                { href: '/practical', title: 'Practical lab', desc: 'Exercises for the O Level practical paper' },
-                { href: '/playground', title: 'Code playground', desc: 'Run HTML, CSS and JavaScript in the browser' },
-              ].map((x) => (
-                <Link key={x.href} href={x.href} className="card-link p-4 block">
-                  <span className="block text-base font-bold text-ink">{x.title}</span>
-                  <span className="block text-sm text-ink-3 mt-0.5">{x.desc}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
+      <div className="shell shell-wide">
+        <ContinueLearning className="mt-10" />
 
-        {/* ------------------------------------------------- cheat sheets */}
-        <section aria-labelledby="cheat-sheets" className="mb-12">
-          <SectionTitle id="cheat-sheets" action={{ href: '/cheat-sheets', label: 'All cheat sheets' }}>
-            Cheat sheets
-          </SectionTitle>
-          <ul className="grid gap-x-8 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
-            {cheatSheetsData.map((c) => (
-              <li key={c.id}>
-                <Link href={`/cheat-sheets#${c.id}`} className="group flex items-start gap-2 py-1">
-                  <BookOpen className="w-4 h-4 mt-0.5 text-ink-4 group-hover:text-accent shrink-0" aria-hidden="true" />
-                  <span>
-                    <span className="block text-[15px] font-medium text-ink group-hover:text-accent leading-snug">{c.title}</span>
-                    <span className="block text-xs text-ink-3">{c.category} · Unit {c.unit}</span>
-                  </span>
-                </Link>
-              </li>
+        {/* ================================================ 3. BENTO CATEGORIES */}
+        <section aria-labelledby="categories" className="pt-16">
+          <SectionHeader id="categories" title="Everything you need for the exam" description="Nine kinds of study material, each doing one job." />
+          <div className="grid grid-cols-12 gap-5 auto-rows-fr">
+            {CATEGORIES.map((c) => (
+              <Link
+                key={c.href}
+                href={c.href}
+                className={`card-link group p-6 flex flex-col ${c.big ? 'col-span-12 md:col-span-6 md:row-span-2' : 'col-span-12 sm:col-span-6 md:col-span-3'}`}
+              >
+                <span className="w-11 h-11 rounded-lg bg-accent-soft text-accent grid place-items-center">
+                  <c.icon className="w-5 h-5" aria-hidden="true" />
+                </span>
+                <h3 className={`mt-4 font-semibold text-ink group-hover:text-accent transition-colors ${c.big ? 'text-h2' : 'text-h3'}`}>{c.title}</h3>
+                <p className={`mt-1.5 text-ink-2 leading-relaxed ${c.big ? 'text-base max-w-md' : 'text-sm'}`}>{c.desc}</p>
+                <p className="mt-auto pt-5 text-sm font-semibold text-ink-2">{c.count}</p>
+              </Link>
             ))}
-          </ul>
+          </div>
         </section>
 
-        {/* ---------------------------------------------------- blueprint */}
-        <section aria-labelledby="blueprint" className="mb-12">
-          <SectionTitle id="blueprint" action={{ href: '/syllabus', label: 'Detailed blueprint' }}>
-            O Level paper — where the {meta.writtenMarksMax} marks sit
-          </SectionTitle>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-2xs uppercase tracking-wider text-ink-3 border-b border-line">
-                  <th className="py-2 pr-3 font-semibold">Group</th>
-                  <th className="py-2 pr-3 font-semibold">Units</th>
-                  <th className="py-2 pr-3 font-semibold w-40">Weight</th>
-                  <th className="py-2 font-semibold text-right">Marks</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-line">
-                {meta.marksDistribution.map((g) => (
-                  <tr key={g.id}>
-                    <td className="py-2.5 pr-3 font-medium text-ink">{g.groupName}</td>
-                    <td className="py-2.5 pr-3 text-ink-3">{g.unitsCovered.join(', ')}</td>
-                    <td className="py-2.5 pr-3">
-                      <div className="h-2 rounded-full bg-line/70 overflow-hidden">
-                        <div className="h-full bg-accent" style={{ width: `${g.marks}%` }} />
-                      </div>
-                    </td>
-                    <td className="py-2.5 text-right font-semibold tabular-nums text-ink">{g.marks}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* ================================================= 4. FEATURED COURSES */}
+        <section aria-labelledby="featured" className="pt-16">
+          <SectionHeader
+            id="featured"
+            title="Featured courses"
+            description="Start with a whole course, or jump straight to the unit your exam weighs most."
+            action={{ href: '/syllabus', label: 'All units and marks' }}
+          />
+          <div className="grid grid-cols-12 gap-5">
+            <div className="col-span-12 sm:col-span-6 lg:col-span-4">
+              <CourseCard
+                href="/units/unit-1"
+                eyebrow="Course · M2-R5.1"
+                title={COURSES.olevel.fullName}
+                hindiTitle={COURSES.olevel.hindiSubject}
+                description={COURSES.olevel.description}
+                topics={OLEVEL_TOPICS}
+                hours={olevelMeta.durationTotalHours}
+                icon="Code2"
+                badge="Free"
+                cta="Start course"
+              />
+            </div>
+            <div className="col-span-12 sm:col-span-6 lg:col-span-4">
+              <CourseCard
+                href="/ccc"
+                eyebrow="Course · CCC"
+                title={COURSES.ccc.fullName}
+                hindiTitle={COURSES.ccc.hindiSubject}
+                description={COURSES.ccc.description}
+                topics={CCC_TOPICS}
+                hours={cccMeta.durationTotalHours}
+                icon="Monitor"
+                badge="Free"
+                cta="Start course"
+              />
+            </div>
+            {featuredUnits.map((u) => (
+              <div key={u.key} className="col-span-12 sm:col-span-6 lg:col-span-4">
+                <CourseCard
+                  href={u.href}
+                  eyebrow={`O Level · Unit ${u.number}`}
+                  title={u.title}
+                  hindiTitle={u.hindiTitle}
+                  description={u.description}
+                  topics={u.topics.length}
+                  hours={u.hours}
+                  icon={moduleVisual('olevel', u.number).icon}
+                  badge={u.marks?.split(' (')[0]}
+                  cta="Start unit"
+                />
+              </div>
+            ))}
+            {featuredChapter ? (
+              <div className="col-span-12 sm:col-span-6 lg:col-span-4">
+                <CourseCard
+                  href={featuredChapter.href}
+                  eyebrow={`CCC · Chapter ${featuredChapter.n}`}
+                  title={featuredChapter.title}
+                  hindiTitle={featuredChapter.hindiTitle}
+                  description={featuredChapter.description}
+                  topics={featuredChapter.topics.length}
+                  hours={featuredChapter.hours}
+                  icon={moduleVisual('ccc', featuredChapter.number).icon}
+                  badge={featuredChapter.marks}
+                  cta="Start chapter"
+                />
+              </div>
+            ) : null}
           </div>
-          <p className="mt-3 text-sm text-ink-3 inline-flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5" aria-hidden="true" />
-            {meta.durationTotalHours} hours in the official syllabus — {meta.theoryHours}h theory, {meta.practicalHours}h practical.
-          </p>
         </section>
 
-        {/* ------------------------------------------------------- about */}
-        <section aria-labelledby="about" className="max-w-measure-wide">
-          <SectionTitle id="about">About these notes</SectionTitle>
-          <div className="prose-flow text-base text-ink-2 leading-relaxed">
-            <p>
-              Every topic page follows the same order: the definition you would write in the exam, the idea in plain
-              Hindi, the detail, one small example, the mistakes students actually make, and how the paper asks it.
-              Read a topic, mark it done, answer its questions, move on.
-            </p>
-            <p>
-              Nothing needs an account. Completed topics, bookmarks, notes and test scores are saved in your own
-              browser. Switch the reading language from the header — English only, हिन्दी only, or both.
-            </p>
-            <p>
-              The notes follow the NIELIT O Level (IT) Module M2-R5.1 syllabus, revision 5.1, and the current CCC
-              syllabus. Always confirm the live syllabus and exam pattern on the official NIELIT website.
-            </p>
+        {/* ========================================================== 5. WHY US */}
+        <section aria-labelledby="why" className="pt-16">
+          <SectionHeader id="why" title="Why students use these notes" />
+          <div className="grid grid-cols-12 gap-5">
+            {WHY.map((w) => (
+              <div key={w.title} className="col-span-12 sm:col-span-6 lg:col-span-3 panel p-6 flex flex-col">
+                <span className="w-11 h-11 rounded-lg bg-accent-soft text-accent grid place-items-center">
+                  <w.icon className="w-5 h-5" aria-hidden="true" />
+                </span>
+                <h3 className="mt-4 text-h3 font-semibold text-ink">{w.title}</h3>
+                <p className="mt-1.5 text-sm text-ink-2 leading-relaxed">{w.desc}</p>
+              </div>
+            ))}
           </div>
+        </section>
+
+        {/* ==================================================== 6. TESTIMONIALS */}
+        <section aria-labelledby="testimonials" className="pt-16 pb-4">
+          <SectionHeader id="testimonials" title="What students say" />
+          <div className="grid grid-cols-12 gap-5">
+            {testimonialsData.map((t) => (
+              <figure key={t.id} className="col-span-12 md:col-span-4 panel p-6 flex flex-col">
+                <Quote className="w-5 h-5 text-accent" aria-hidden="true" />
+                <blockquote className="mt-3 text-base text-ink leading-relaxed flex-1">{t.quote}</blockquote>
+                <figcaption className="mt-5 pt-4 border-t border-line flex items-center gap-3">
+                  <span className="w-9 h-9 rounded-full bg-accent-soft text-accent grid place-items-center text-sm font-semibold">
+                    {t.name[0]}
+                  </span>
+                  <span>
+                    <span className="block text-sm font-semibold text-ink">{t.name}</span>
+                    <span className="block text-xs text-ink-2">{t.meta}</span>
+                  </span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+          {testimonialsData.some((t) => t.sample) ? (
+            <p className="mt-3 text-xs text-ink-4">Sample feedback shown for layout — replace in <code>data/testimonialsData.js</code> with real student reviews.</p>
+          ) : null}
         </section>
       </div>
     </div>

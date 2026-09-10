@@ -128,7 +128,7 @@ export default function OLevelNotesLibraryPage() {
                     </Badge>
                   </div>
 
-                  <h3 className="mt-3 text-h3 font-bold text-ink">{unit.title}</h3>
+                  <h3 className="mt-3 text-h3 font-semibold text-ink">{unit.title}</h3>
                   <p className="text-sm font-medium text-ink-3 hindi-text" lang="hi">
                     {unit.hindiTitle}
                   </p>

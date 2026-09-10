@@ -86,7 +86,7 @@ export default function MobileNav({ open, onClose, course, nav, modules, pathnam
             <span className="w-8 h-8 rounded-md bg-accent grid place-items-center">
               <GraduationCap className="w-[18px] h-[18px] text-white" aria-hidden="true" />
             </span>
-            <span className="text-base font-bold text-ink">NIELIT<span className="text-accent">Notes</span></span>
+            <span className="text-base font-semibold text-ink">NIELIT<span className="text-accent">Notes</span></span>
           </span>
           <button type="button" onClick={onClose} className="btn btn-ghost btn-sm btn-icon" aria-label="Close menu">
             <X className="w-4 h-4" />

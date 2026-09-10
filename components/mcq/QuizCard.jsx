@@ -201,7 +201,7 @@ export default function QuizCard({
             >
               <span
                 className={cx(
-                  'shrink-0 w-7 h-7 rounded-lg grid place-items-center text-xs font-bold',
+                  'shrink-0 w-7 h-7 rounded-lg grid place-items-center text-xs font-semibold',
                   state === 'idle' && 'bg-accent-soft text-accent',
                   state === 'correct' && 'bg-ok text-ink-inv',
                   state === 'wrong' && 'bg-danger text-ink-inv',

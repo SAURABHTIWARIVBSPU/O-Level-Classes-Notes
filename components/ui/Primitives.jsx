@@ -171,7 +171,7 @@ export function PageHeader({
           ) : null}
           <div className="min-w-0">
             {eyebrow ? <p className="eyebrow text-accent mb-2">{eyebrow}</p> : null}
-            <h1 className="text-h1 sm:text-display font-bold text-ink">{title}</h1>
+            <h1 className="text-h1 sm:text-display font-semibold text-ink">{title}</h1>
             {hindiTitle ? (
               <p className="mt-1.5 text-lead text-hindi hindi-text" lang="hi">{hindiTitle}</p>
             ) : null}
@@ -222,7 +222,7 @@ export function StatTile({ label, value, hint, icon, tone = 'violet', className 
         <p className="eyebrow">{label}</p>
         {icon ? renderIcon(icon, 'w-4 h-4 text-ink-4 shrink-0') : null}
       </div>
-      <p className="mt-2 text-h2 font-bold text-ink tabular-nums">{value}</p>
+      <p className="mt-2 text-h2 font-semibold text-ink tabular-nums">{value}</p>
       {hint ? <p className="mt-0.5 text-xs text-ink-3">{hint}</p> : null}
     </div>
   );

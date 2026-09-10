@@ -118,7 +118,7 @@ export default function UnitOverviewPage({ params }) {
                   <Link href={r.href} className="card-link group h-full p-4 flex items-start gap-3">
                     <r.icon className="w-5 h-5 mt-0.5 text-accent shrink-0" aria-hidden="true" />
                     <span>
-                      <h3 className="text-h4 font-bold text-ink group-hover:text-accent transition-colors">{r.label}</h3>
+                      <h3 className="text-h4 font-semibold text-ink group-hover:text-accent transition-colors">{r.label}</h3>
                       <p className="mt-0.5 text-sm text-ink-3">{r.desc}</p>
                     </span>
                   </Link>

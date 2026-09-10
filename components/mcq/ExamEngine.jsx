@@ -344,7 +344,7 @@ function OptionRow({ id, option, index, checked, tabbable, onSelect, onKeyDown }
     >
       <span
         className={cx(
-          'shrink-0 w-7 h-7 rounded-lg grid place-items-center text-xs font-bold',
+          'shrink-0 w-7 h-7 rounded-lg grid place-items-center text-xs font-semibold',
           checked ? 'bg-accent text-white' : 'bg-accent-soft text-accent',
         )}
         aria-hidden="true"

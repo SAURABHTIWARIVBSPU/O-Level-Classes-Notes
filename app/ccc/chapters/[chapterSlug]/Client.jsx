@@ -174,7 +174,7 @@ export default function CCCChapterPage({ params }) {
                   <li key={topic.slug}>
                     <CardLink href={topic.href} className="group p-4 flex items-start gap-3.5">
                       <span
-                        className={`shrink-0 grid place-items-center w-9 h-9 rounded-xl text-xs font-bold font-mono tabular-nums ${
+                        className={`shrink-0 grid place-items-center w-9 h-9 rounded-xl text-xs font-semibold font-mono tabular-nums ${
                           isDone
                             ? 'bg-ok-soft text-ok'
                             : 'bg-accent-soft text-accent'
@@ -185,7 +185,7 @@ export default function CCCChapterPage({ params }) {
                       </span>
 
                       <span className="min-w-0 flex-1">
-                        <span className="block text-h4 font-bold text-ink leading-snug group-hover:text-accent transition-colors">
+                        <span className="block text-h4 font-semibold text-ink leading-snug group-hover:text-accent transition-colors">
                           {topic.title}
                         </span>
                         {topic.hindiTitle ? (
@@ -227,7 +227,7 @@ export default function CCCChapterPage({ params }) {
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <CardLink href={`/ccc/mcqs/${chapter.key}`} className="p-5 group">
               <HelpCircle className="w-5 h-5 text-accent mb-3" aria-hidden="true" />
-              <span className="block text-h4 font-bold text-ink group-hover:text-accent transition-colors duration-fast">
+              <span className="block text-h4 font-semibold text-ink group-hover:text-accent transition-colors duration-fast">
                 Chapter {chapterNumber} questions
               </span>
               <span className="block mt-1 text-sm text-ink-3">
@@ -237,7 +237,7 @@ export default function CCCChapterPage({ params }) {
 
             <CardLink href={notesHref} className="p-5 group">
               <FileText className="w-5 h-5 text-accent mb-3" aria-hidden="true" />
-              <span className="block text-h4 font-bold text-ink group-hover:text-accent transition-colors duration-fast">
+              <span className="block text-h4 font-semibold text-ink group-hover:text-accent transition-colors duration-fast">
                 Full chapter notes
               </span>
               <span className="block mt-1 text-sm text-ink-3">
@@ -247,7 +247,7 @@ export default function CCCChapterPage({ params }) {
 
             <CardLink href="/ccc/cheat-sheets" className="p-5 group">
               <ListChecks className="w-5 h-5 text-accent mb-3" aria-hidden="true" />
-              <span className="block text-h4 font-bold text-ink group-hover:text-accent transition-colors duration-fast">
+              <span className="block text-h4 font-semibold text-ink group-hover:text-accent transition-colors duration-fast">
                 Cheat sheets
               </span>
               <span className="block mt-1 text-sm text-ink-3">
@@ -257,7 +257,7 @@ export default function CCCChapterPage({ params }) {
 
             <CardLink href="/ccc/mock-test" className="p-5 group">
               <GraduationCap className="w-5 h-5 text-accent mb-3" aria-hidden="true" />
-              <span className="block text-h4 font-bold text-ink group-hover:text-accent transition-colors duration-fast">
+              <span className="block text-h4 font-semibold text-ink group-hover:text-accent transition-colors duration-fast">
                 Full mock test
               </span>
               <span className="block mt-1 text-sm text-ink-3">

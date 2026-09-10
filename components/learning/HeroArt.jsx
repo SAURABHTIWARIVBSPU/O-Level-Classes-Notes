@@ -20,8 +20,8 @@ export default function HeroArt({ className = '' }) {
         <div className="flex items-center gap-2 mb-3">
           <span className="icon-tile icon-tile-sm tone-violet"><BookOpen className="w-4 h-4" /></span>
           <span className="min-w-0">
-            <span className="block text-2xs font-bold uppercase tracking-wider text-accent">Unit 04 · Topic 03</span>
-            <span className="block text-sm font-bold text-ink truncate">CSS Box Model</span>
+            <span className="block text-2xs font-semibold uppercase tracking-wider text-accent">Unit 04 · Topic 03</span>
+            <span className="block text-sm font-semibold text-ink truncate">CSS Box Model</span>
           </span>
         </div>
         <div className="space-y-1.5">
@@ -47,9 +47,9 @@ export default function HeroArt({ className = '' }) {
       <div className="absolute right-[2%] top-[6%] w-[42%] rounded-2xl bg-surface border border-line shadow-e3 p-4 animate-float">
         <div className="flex items-center gap-2">
           <span className="icon-tile icon-tile-sm tone-amber"><Trophy className="w-4 h-4" /></span>
-          <span className="text-xs font-bold text-ink">Unit test</span>
+          <span className="text-xs font-semibold text-ink">Unit test</span>
         </div>
-        <p className="mt-2 text-h2 font-bold text-ink tabular-nums">18<span className="text-ink-4 text-base">/20</span></p>
+        <p className="mt-2 text-h2 font-semibold text-ink tabular-nums">18<span className="text-ink-4 text-base">/20</span></p>
         <div className="mt-2 h-2 rounded-full bg-sunken overflow-hidden">
           <div className="h-full w-[90%] rounded-full bg-hl" />
         </div>
@@ -60,7 +60,7 @@ export default function HeroArt({ className = '' }) {
       <div className="absolute right-0 bottom-[26%] rounded-2xl bg-surface border border-line shadow-e3 px-4 py-3 flex items-center gap-3 animate-float-delay">
         <span className="icon-tile icon-tile-sm tone-rose"><Flame className="w-4 h-4" /></span>
         <span>
-          <span className="block text-sm font-bold text-ink leading-tight">7-day streak</span>
+          <span className="block text-sm font-semibold text-ink leading-tight">7-day streak</span>
           <span className="block text-2xs text-ink-3">Keep it going</span>
         </span>
       </div>

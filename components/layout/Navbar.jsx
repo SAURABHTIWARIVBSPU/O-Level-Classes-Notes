@@ -261,10 +261,10 @@ export default function Navbar() {
             {/* Brand + course */}
             <div className="flex items-center gap-3 min-w-0">
               <Link href={course.home} className="flex items-center gap-2 shrink-0" aria-label={`${course.fullName} home`}>
-                <span className="w-8 h-8 rounded-md bg-accent grid place-items-center shrink-0">
+                <span className="w-8 h-8 rounded-lg bg-accent grid place-items-center shrink-0">
                   <GraduationCap className="w-[18px] h-[18px] text-white" aria-hidden="true" />
                 </span>
-                <span className="hidden sm:block text-[17px] font-bold tracking-tight text-nav-ink">
+                <span className="hidden sm:block text-[17px] font-semibold tracking-tight text-nav-ink">
                   NIELIT<span className="text-accent">Notes</span>
                 </span>
               </Link>
@@ -304,6 +304,13 @@ export default function Navbar() {
               <LanguageToggle />
               <ThemeToggle />
 
+              <Link
+                href={course.key === 'ccc' ? '/ccc/chapters/chapter-1' : '/units/unit-1'}
+                className="hidden lg:inline-flex btn btn-primary btn-sm ml-2"
+              >
+                Start learning
+              </Link>
+
               <button
                 type="button"
                 onClick={() => setDrawerOpen(true)}
@@ -318,7 +325,7 @@ export default function Navbar() {
         </div>
 
         {/* Secondary bar — the course's units, always one click away */}
-        <div className="hidden lg:block bg-surface border-b border-line">
+        <div className="hidden lg:block bg-sunken border-b border-line">
           <nav className="shell shell-wide flex items-center gap-1 h-10 overflow-x-auto no-scrollbar" aria-label={`${course.name} ${course.unitWordPlural.toLowerCase()}`}>
             <span className="eyebrow shrink-0 mr-2">{course.unitWordPlural}</span>
             {getModules(course.key).map((m) => {

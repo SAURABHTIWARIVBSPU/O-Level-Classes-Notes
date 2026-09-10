@@ -52,7 +52,7 @@ function boardTemplateFor(slug = '') {
 function Section({ id, title, hindiTitle, icon: Icon, children, className = '' }) {
   return (
     <section id={id} className={`scroll-mt-[calc(var(--header-h)+1.5rem)] ${className}`}>
-      <h2 className="flex items-center gap-2 text-h2 font-bold text-ink mb-3 pb-1.5 border-b border-line">
+      <h2 className="flex items-center gap-2 text-h2 font-semibold text-ink mb-3 pb-1.5 border-b border-line">
         {Icon ? <Icon className="w-[1.1rem] h-[1.1rem] text-accent shrink-0" aria-hidden="true" /> : null}
         {title}
         {hindiTitle ? (
@@ -145,7 +145,7 @@ export default function TopicContent({ topic, prevTopic, nextTopic, related = []
                   Unit {unitNumber} · {topic.unitTitle}
                 </Link>
               </p>
-              <h1 className="mt-1.5 text-h1 sm:text-display font-bold text-ink">{topic.title}</h1>
+              <h1 className="mt-1.5 text-h1 sm:text-display font-semibold text-ink">{topic.title}</h1>
               {topic.hindiTitle ? (
                 <p className="mt-1 text-lead text-hindi hindi-text" lang="hi">{topic.hindiTitle}</p>
               ) : null}
@@ -343,7 +343,7 @@ export default function TopicContent({ topic, prevTopic, nextTopic, related = []
 
               {related.length ? (
                 <section>
-                  <h2 className="text-h2 font-bold text-ink mb-3 pb-1.5 border-b border-line flex items-center gap-2">
+                  <h2 className="text-h2 font-semibold text-ink mb-3 pb-1.5 border-b border-line flex items-center gap-2">
                     <Compass className="w-[1.1rem] h-[1.1rem] text-accent" aria-hidden="true" />
                     Similar reads
                   </h2>

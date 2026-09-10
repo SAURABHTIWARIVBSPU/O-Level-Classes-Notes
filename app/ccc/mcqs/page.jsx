@@ -116,7 +116,7 @@ export default function CccMcqsHubPage() {
                       )}
                     </div>
                     <p className="mt-4 eyebrow text-accent">Chapter {chapter.label}</p>
-                    <h3 className="mt-1 text-h4 font-bold text-ink">{chapter.title}</h3>
+                    <h3 className="mt-1 text-h4 font-semibold text-ink">{chapter.title}</h3>
                     {chapter.hindiTitle ? (
                       <p className="mt-0.5 text-sm text-hindi hindi-text" lang="hi">{chapter.hindiTitle}</p>
                     ) : null}
@@ -158,7 +158,7 @@ export default function CccMcqsHubPage() {
             <li>
               <CardLink href="/ccc/mcqs/all" className="h-full p-5">
                 <ListChecks className="w-5 h-5 text-accent" aria-hidden="true" />
-                <h3 className="mt-3 text-h4 font-bold text-ink">All {total} questions</h3>
+                <h3 className="mt-3 text-h4 font-semibold text-ink">All {total} questions</h3>
                 <p className="mt-1.5 text-base text-ink-2 leading-relaxed">
                   Every chapter in one set, with a search box and a chapter filter. Untimed.
                 </p>
@@ -171,7 +171,7 @@ export default function CccMcqsHubPage() {
             <li>
               <CardLink href="/ccc/mock-test" className="h-full p-5">
                 <Timer className="w-5 h-5 text-accent" aria-hidden="true" />
-                <h3 className="mt-3 text-h4 font-bold text-ink">Mock test</h3>
+                <h3 className="mt-3 text-h4 font-semibold text-ink">Mock test</h3>
                 <p className="mt-1.5 text-base text-ink-2 leading-relaxed">
                   A timed paper across all nine chapters — one mark per question, no negative marking, qualify at
                   50%.

@@ -198,7 +198,7 @@ export default function CCCNotesLibraryPage({ searchParams }) {
                       ) : null}
                     </div>
 
-                    <h3 className="text-h4 font-bold text-ink leading-snug">
+                    <h3 className="text-h4 font-semibold text-ink leading-snug">
                       <Link
                         href={readerHref(unit)}
                         className="hover:text-accent transition-colors duration-fast"

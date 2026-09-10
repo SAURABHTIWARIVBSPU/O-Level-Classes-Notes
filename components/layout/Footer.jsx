@@ -16,31 +16,31 @@ export default function Footer() {
 
   const Column = ({ title, children }) => (
     <div className="min-w-0">
-      <h2 className="text-xs font-bold uppercase tracking-wider text-nav-ink mb-3">{title}</h2>
+      <h2 className="text-sm font-semibold text-ink mb-3">{title}</h2>
       {children}
     </div>
   );
 
-  const linkClass = 'block py-1 text-sm text-nav-ink-2 hover:text-nav-ink transition-colors truncate';
+  const linkClass = 'block py-1 text-sm text-ink-2 hover:text-accent transition-colors truncate';
 
   return (
-    <footer className="mt-16 bg-nav text-nav-ink border-t border-nav-line no-print">
+    <footer className="mt-20 bg-sunken text-ink border-t border-line no-print">
       <div className="shell shell-wide py-10">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
 
           {/* Identity */}
           <div className="lg:col-span-1 sm:col-span-2 lg:pr-6">
             <Link href="/" className="inline-flex items-center gap-2 mb-3">
-              <span className="w-8 h-8 rounded-md bg-accent grid place-items-center">
+              <span className="w-8 h-8 rounded-lg bg-accent grid place-items-center">
                 <GraduationCap className="w-[18px] h-[18px] text-white" aria-hidden="true" />
               </span>
-              <span className="text-[17px] font-bold tracking-tight">NIELIT<span className="text-accent">Notes</span></span>
+              <span className="text-[17px] font-semibold tracking-tight text-ink">NIELIT<span className="text-accent">Notes</span></span>
             </Link>
-            <p className="text-sm text-nav-ink-2 leading-relaxed">
+            <p className="text-sm text-ink-2 leading-relaxed">
               Free study notes, comparison tables, one-liners and practice questions for the
               NIELIT O&nbsp;Level (M2-R5.1) and CCC exams, in English and हिन्दी.
             </p>
-            <p className="mt-4 text-xs text-nav-ink-2/80 leading-relaxed">
+            <p className="mt-4 text-xs text-ink-4 leading-relaxed">
               An independent study resource, not affiliated with NIELIT. Confirm the current
               syllabus on the official NIELIT website before your exam.
             </p>
@@ -50,7 +50,7 @@ export default function Footer() {
             <nav aria-label="O Level units">
               {olevelUnits.map((u) => (
                 <Link key={u.key} href={u.href} className={linkClass}>
-                  <span className="font-mono text-xs text-nav-ink-2/70 mr-1.5">{u.number}</span>
+                  <span className="font-mono text-xs text-ink-4 mr-1.5">{u.number}</span>
                   {u.title}
                 </Link>
               ))}
@@ -61,7 +61,7 @@ export default function Footer() {
             <nav aria-label="CCC chapters">
               {cccChapters.map((c) => (
                 <Link key={c.key} href={c.href} className={linkClass}>
-                  <span className="font-mono text-xs text-nav-ink-2/70 mr-1.5">{c.number}</span>
+                  <span className="font-mono text-xs text-ink-4 mr-1.5">{c.number}</span>
                   {c.title}
                 </Link>
               ))}
@@ -87,19 +87,19 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-nav-line">
+      <div className="border-t border-line">
         <div className="shell shell-wide py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <p className="text-xs text-nav-ink-2">
+          <p className="text-xs text-ink-2">
             © {year} NIELITNotes. Study material for educational use.
           </p>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-            <Link href="/syllabus" className="text-xs text-nav-ink-2 hover:text-nav-ink transition-colors">O Level syllabus</Link>
-            <Link href="/ccc/syllabus" className="text-xs text-nav-ink-2 hover:text-nav-ink transition-colors">CCC syllabus</Link>
+            <Link href="/syllabus" className="text-xs text-ink-2 hover:text-accent transition-colors">O Level syllabus</Link>
+            <Link href="/ccc/syllabus" className="text-xs text-ink-2 hover:text-accent transition-colors">CCC syllabus</Link>
             <a
               href="https://www.nielit.gov.in"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs text-nav-ink-2 hover:text-nav-ink transition-colors"
+              className="inline-flex items-center gap-1 text-xs text-ink-2 hover:text-accent transition-colors"
             >
               Official NIELIT site
               <ArrowUpRight className="w-3 h-3" aria-hidden="true" />

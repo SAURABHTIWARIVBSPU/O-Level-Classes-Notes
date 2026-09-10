@@ -57,7 +57,7 @@ export default function UnitTopicList({ topics = [], showProgress = true, unitWo
                 href={topic.href}
                 className="group flex-1 min-w-0 flex items-center gap-3 py-3 pr-3 hover:bg-sunken transition-colors"
               >
-                <span className={`grid place-items-center w-8 h-8 rounded-lg font-mono text-xs font-bold tabular-nums shrink-0 ${isDone ? 'bg-ok-soft text-ok' : 'bg-accent-soft text-accent'}`}>
+                <span className={`grid place-items-center w-8 h-8 rounded-lg font-mono text-xs font-semibold tabular-nums shrink-0 ${isDone ? 'bg-ok-soft text-ok' : 'bg-accent-soft text-accent'}`}>
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 <span className="min-w-0 flex-1">

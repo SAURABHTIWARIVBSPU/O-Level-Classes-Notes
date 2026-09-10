@@ -64,7 +64,7 @@ export function CardHeader({ className = '', children, ...props }) {
 export function CardTitle({ as: Component = 'h3', className = '', children, ...props }) {
   return (
     <Component
-      className={`text-base font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors leading-snug ${className}`}
+      className={`text-base font-semibold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors leading-snug ${className}`}
       {...props}
     >
       {children}
@@ -115,7 +115,7 @@ export function CardBadge({ children, variant = 'brand', className = '' }) {
 
   return (
     <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-md font-mono text-[10px] font-bold uppercase tracking-wider border ${
+      className={`inline-flex items-center px-2 py-0.5 rounded-md font-mono text-[10px] font-semibold uppercase tracking-wider border ${
         badgeVariants[variant] || badgeVariants.brand
       } ${className}`}
     >

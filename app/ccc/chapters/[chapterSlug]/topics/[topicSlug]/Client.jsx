@@ -125,7 +125,7 @@ export default function CCCTopicPage({ params, topic }) {
               <span className="mx-2 text-ink-4">·</span>
               Topic {index + 1} of {chapterTopics.length}
             </p>
-            <h1 className="mt-1.5 text-h1 sm:text-display font-bold text-ink">{topic.title}</h1>
+            <h1 className="mt-1.5 text-h1 sm:text-display font-semibold text-ink">{topic.title}</h1>
             {showHindi && topic.hindiTitle ? (
               <p className="mt-1 text-lead text-hindi hindi-text" lang="hi">{topic.hindiTitle}</p>
             ) : null}
